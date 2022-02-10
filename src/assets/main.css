@@ -1,0 +1,91 @@
+/* common style */
+ul li {
+    /* float: left; */
+    list-style: none;
+}
+
+/* p,
+div,
+span,
+li,
+button {
+    color: #668b66
+} */
+
+.selectToken {
+    width: 100px;
+}
+
+/* connect wallet template */
+.refresh {
+    position: absolute;
+    top: -70px;
+    right: 0px;
+    z-index: 1;
+}
+
+.user {
+    min-height: 200px;
+    border: 1px solid #abcdef;
+    position: relative;
+}
+
+.user>.el-button {
+    margin-top: 70px;
+}
+
+/* .user>p {
+    float: right;
+} */
+
+.userW {
+    min-height: 200px;
+    border: 1px solid #abcdef;
+
+}
+
+.userW>ul li {
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    padding: 5px;
+}
+
+
+.nftlist {
+    width: 105px;
+    height: 100px;
+    padding: 0px;
+    margin-top: 15px;
+}
+
+.nftlist img {
+    width: 80px;
+    margin: 0;
+}
+
+.labels {
+    font-size: 20px;
+    line-height: 60px;
+}
+
+.el-select-dropdown__item.selected {
+    color: #668b66;
+}
+
+.el-select .el-input__inner {
+    border: #668b66 1px solid;
+}
+
+.el-select:hover .el-input__inner {
+    border: #d1fcd1 1px solid;
+}
+
+.closeInfo {
+    float: right;
+    position: relative;
+    right: -20px;
+    top: -20px;
+    border: none;
+}
