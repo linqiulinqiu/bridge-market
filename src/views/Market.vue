@@ -1,26 +1,28 @@
 <template>
   <div>
     <plotheader />
-    <el-col>
-      <p>PBT Market</p>
-      <ul>
-        <li v-for="(nft, name) in PBTSellingLists" :key="name">
-          <el-button class="nftlist">
-            <i>#{{ nft.id }}</i>
-            <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-            <el-badge
-              v-if="nft.pbxs"
-              :value="Object.keys(nft.pbxs).length"
-              class="item"
-            >
-            </el-badge>
-          </el-button>
-        </li>
-      </ul>
+    <div class="main">
+      <el-col >
+        <p>PBT Market</p>
+        <ul>
+          <li v-for="(nft, name) in PBTSellingLists" :key="name">
+            <el-button class="nftlist">
+              <i>#{{ nft.id }}</i>
+              <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+              <el-badge
+                v-if="nft.pbxs"
+                :value="Object.keys(nft.pbxs).length"
+                class="item"
+              >
+              </el-badge>
+            </el-button>
+          </li>
+        </ul>
       <el-button @click="mintNFT" size="mini">Mint PBT</el-button>
     </el-col>
+    </div>
     <mynft />
-    <pbx />
+    
     <plotfooter />
   </div>
 </template>
@@ -28,7 +30,6 @@
 <script>
 import Plotheader from "../components/content/Plotheader.vue";
 import Mynft from "../components/content/nftpanel/Mynft.vue";
-import Pbx from "../components/content/nftpanel/Pbx.vue";
 import Plotfooter from "../components/content/Plotfooter.vue";
 import { mapState } from "vuex";
 import market from "../market";
@@ -38,7 +39,6 @@ export default {
   components: {
     Plotheader,
     Mynft,
-    Pbx,
     Plotfooter,
   },
   computed: mapState({
@@ -78,5 +78,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped> 
+.main{
+  background-color: rgb(137, 180, 146);
+  width: 85vw;
+  height: calc(100vh - 163px);
+  margin-left: 15vw;
+  padding-left: 5px;
+  overflow: scroll;
+}
 </style>

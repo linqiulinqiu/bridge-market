@@ -42,12 +42,12 @@ export default {
     margin: 0;
     padding: 0;
   }
-  /* .container{
+  .container{
     width: 100vw;
     height: 100vh;
     background-color: rgb(229, 247, 240);
     position: relative;
-  } */
+  }
   .banner{
     /* background-color: red; */
     height: 435px;

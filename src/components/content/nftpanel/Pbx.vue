@@ -13,8 +13,8 @@ export default {
   width: 8vw;
   height: 76vh;
   background-color: rgb(194, 217, 240);
-  position: absolute;
+  position: fixed   ;
   right: 0;top:0;bottom:0;
-  margin: auto;
+  margin: 120px auto;
 }
 </style>

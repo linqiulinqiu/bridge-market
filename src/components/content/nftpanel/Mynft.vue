@@ -1,27 +1,27 @@
 <template>
   <el-col class="container">
     <h2>My NFT <el-button circle icon="el-icon-refresh"></el-button></h2>
-    <el-col>
-      <ul>
-        <li v-for="(nft, name) in this.mylist" :key="name">
-          <el-button class="nftlist">
-            <el-badge
-              v-if="nft.pbxs"
-              :value="Object.keys(nft.pbxs).length"
-              class="item"
-            >
-              <i>#{{ nft.id }}</i>
-              <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-            </el-badge>
-            <el-badge v-if="nft.seller == '-self'" value="On Sale" class="item">
-              <i>#{{ nft.id }}</i>
-              <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-            </el-badge>
-          </el-button>
-        </li>
-      </ul>
-    </el-col>
-    <el-col>
+      <el-col  class="nftlist">
+        <ul>
+          <li v-for="(nft, name) in this.mylist" :key="name">
+            <el-button class="nftlist">
+              <el-badge
+                v-if="nft.pbxs"
+                :value="Object.keys(nft.pbxs).length"
+                class="item"
+              >
+                <i>#{{ nft.id }}</i>
+                <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+              </el-badge>
+              <el-badge v-if="nft.seller == '-self'" value="On Sale" class="item">
+                <i>#{{ nft.id }}</i>
+                <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+              </el-badge>
+            </el-button>
+          </li>
+        </ul>
+      </el-col>
+    <el-col class="btn-bar">
       <el-pagination
         background
         layout="total,prev,pager,next"
@@ -112,12 +112,19 @@ export default {
 <style scoped>
 .container {
   width: 15vw;
-  height: 76vh;
+  height: calc(100vh - 163px);
   background-color: rgb(176, 203, 226);
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
+  position: fixed;
+  left: 0;top: 0;bottom: 0;
+  margin: 70px auto;
+  overflow: scroll;
 }
+.btn-bar {
+  position: absolute;
+  bottom: 0;
+  left: 2vw;
+}
+/* .nftlist{
+  
+} */
 </style>
