@@ -3,7 +3,7 @@
     <plotheader />
     <div class="main">
       <el-col >
-        <p>PBT Market</p>
+        <h2>PBT Market</h2>
         <div >
           <ul class="content">
             <li v-for="(nft, name) in PBTSellingLists" :key="name">
@@ -92,7 +92,7 @@ display: none;
   height: calc(100vh - 163px);
   margin-left: 15vw;
   /* margin-bottom: 70px; */
-  padding-left: 5px;
+  padding: 40px 40px;
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -100,6 +100,6 @@ display: none;
   display: flex;
 }
 .nftlist{
-  margin: 10px;
+  margin: 15px;
 }
 </style>

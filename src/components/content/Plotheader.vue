@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     liclick(link) {
-      this.$router.push(link);
+      this.$router.push(link).catch(err=> err);//加catch,在router.push的时候捕获异常，防止重复点击报错
     },
     get_lists: async function () {
       const tlist = await allData.getMyTokenList("PBT", this.baddr);
