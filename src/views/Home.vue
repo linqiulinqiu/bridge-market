@@ -42,11 +42,13 @@ export default {
     margin: 0;
     padding: 0;
   }
+  
   .container{
     width: 100vw;
     height: 100vh;
     background-color: rgb(229, 247, 240);
     position: relative;
+    overflow: hidden;
   }
   .banner{
     /* background-color: red; */

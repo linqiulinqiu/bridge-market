@@ -4,20 +4,23 @@
     <div class="main">
       <el-col >
         <p>PBT Market</p>
-        <ul>
-          <li v-for="(nft, name) in PBTSellingLists" :key="name">
-            <el-button class="nftlist">
-              <i>#{{ nft.id }}</i>
-              <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-              <el-badge
-                v-if="nft.pbxs"
-                :value="Object.keys(nft.pbxs).length"
-                class="item"
-              >
-              </el-badge>
-            </el-button>
-          </li>
-        </ul>
+        <div >
+          <ul class="content">
+            <li v-for="(nft, name) in PBTSellingLists" :key="name">
+              <el-button class="nftlist">
+                <i>#{{ nft.id }}</i>
+                <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+                <el-badge
+                  v-if="nft.pbxs"
+                  :value="Object.keys(nft.pbxs).length"
+                  class="item"
+                >
+                </el-badge>
+              </el-button>
+            </li>
+          </ul>
+        </div>
+        
       <el-button @click="mintNFT" size="mini">Mint PBT</el-button>
     </el-col>
     </div>
@@ -79,12 +82,24 @@ export default {
 </script>
 
 <style scoped> 
+::-webkit-scrollbar {
+/*隐藏滚轮*/
+display: none;
+}
 .main{
   background-color: rgb(137, 180, 146);
-  width: 85vw;
+  width: 84.7 vw;
   height: calc(100vh - 163px);
   margin-left: 15vw;
+  /* margin-bottom: 70px; */
   padding-left: 5px;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.content{
+  display: flex;
+}
+.nftlist{
+  margin: 10px;
 }
 </style>

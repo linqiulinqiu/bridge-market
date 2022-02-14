@@ -1,38 +1,41 @@
 <template>
-  <el-col class="container">
-    <h2>My NFT <el-button circle icon="el-icon-refresh"></el-button></h2>
-      <el-col  class="nftlist">
-        <ul>
-          <li v-for="(nft, name) in this.mylist" :key="name">
-            <el-button class="nftlist">
-              <el-badge
-                v-if="nft.pbxs"
-                :value="Object.keys(nft.pbxs).length"
-                class="item"
-              >
-                <i>#{{ nft.id }}</i>
-                <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-              </el-badge>
-              <el-badge v-if="nft.seller == '-self'" value="On Sale" class="item">
-                <i>#{{ nft.id }}</i>
-                <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-              </el-badge>
-            </el-button>
-          </li>
-        </ul>
-      </el-col>
-    <el-col class="btn-bar">
-      <el-pagination
-        background
-        layout="total,prev,pager,next"
-        :hide-on-single-page="showPagination"
-        :total="Object.keys(PBTMyLists).length"
-        @current-change="handleCurrentChange"
-        :current-page="this.pageNum"
-        :page-size="5"
-      ></el-pagination>
+  <div class="container">
+    <el-col class="area">
+      <h2>My NFT <el-button circle icon="el-icon-refresh"></el-button></h2>
+        <el-col  class="nftlist">
+          <ul>
+            <li v-for="(nft, name) in this.mylist" :key="name">
+              <el-button class="nftlist">
+                <el-badge
+                  v-if="nft.pbxs"
+                  :value="Object.keys(nft.pbxs).length"
+                  class="item"
+                >
+                  <i>#{{ nft.id }}</i>
+                  <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+                </el-badge>
+                <el-badge v-if="nft.seller == '-self'" value="On Sale" class="item">
+                  <i>#{{ nft.id }}</i>
+                  <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+                </el-badge>
+              </el-button>
+            </li>
+          </ul>
+        </el-col>
+        <el-col class="btn-bar">
+          <el-pagination
+            background
+            layout="total,prev,pager,next"
+            :hide-on-single-page="showPagination"
+            :total="Object.keys(PBTMyLists).length"
+            @current-change="handleCurrentChange"
+            :current-page="this.pageNum"
+            :page-size="5"
+          ></el-pagination>
+        </el-col>
     </el-col>
-  </el-col>
+  </div>
+  
 </template>
 
 <script>
@@ -110,21 +113,28 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.area {
   width: 15vw;
   height: calc(100vh - 163px);
   background-color: rgb(176, 203, 226);
-  position: fixed;
+  position: absolute;
   left: 0;top: 0;bottom: 0;
   margin: 70px auto;
   overflow: scroll;
+  /* display: flex;
+  justify-content: space-around; */
+  /* align-items: center; */
 }
 .btn-bar {
   position: absolute;
-  bottom: 0;
-  left: 2vw;
+  bottom: 10px;
+  left: 1vw;
 }
-/* .nftlist{
-  
-} */
+::-webkit-scrollbar {
+/*隐藏滚轮*/
+display: none;
+}
+.nftlist{
+  margin:30px 35px;
+}
 </style>
