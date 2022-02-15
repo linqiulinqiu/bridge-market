@@ -125,6 +125,9 @@ export default {
   justify-content: space-around; */
   /* align-items: center; */
 }
+h2{
+  margin: 20px  20px 0px 70px;
+}
 .btn-bar {
   position: absolute;
   bottom: 10px;

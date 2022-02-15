@@ -91,7 +91,6 @@ display: none;
   width: 84.7 vw;
   height: calc(100vh - 163px);
   margin-left: 15vw;
-  /* margin-bottom: 70px; */
   padding: 40px 40px;
   overflow-x: hidden;
   overflow-y: scroll;
