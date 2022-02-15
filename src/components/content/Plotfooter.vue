@@ -2,7 +2,13 @@
   <div>
     <footer>
       <nav class="bottom-info">
-        <div><a href="" style="text-decoration:none;color:black">© 2022 Plot Network Ltd,All rights reserved. Address</a></div>
+        <el-col>
+          <p>
+            <a href="" style="text-decoration: none; color: black"
+              >© 2022 Plot Network Ltd,All rights reserved. Address</a
+            >
+          </p>
+        </el-col>
       </nav>
     </footer>
   </div>
@@ -10,19 +16,21 @@
 
 <script>
 export default {
-    name:'Plotfooter'
-}
+  name: "Plotfooter",
+};
 </script>
 
 <style>
-footer{
-    height: 93px;
-    width: 100vw;
-    background-color: #D5D5D5;
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+footer {
+  height: 70px;
+  width: 100vw;
+  text-align: center;
+  padding-top: 40px;
+  background-color: #d5d5d5;
+  /* position: absolute; */
+  /* bottom: 0; */
+  /* display: b; */
+  justify-content: center;
+  align-items: center;
 }
 </style>

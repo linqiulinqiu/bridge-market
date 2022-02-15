@@ -2,30 +2,49 @@
   <div>
     <plotheader />
     <div class="main">
-      <el-col >
-        <h2>PBT Market</h2>
-        <div >
+      <el-col>
+        <h2>
+          PBT Market
+          <el-button @click="mintNFT" size="small" class="btn"
+            >Mint PBT</el-button
+          >
+        </h2>
+        <el-col class="cointy">
+          <h3>Chives</h3>
           <ul class="content">
-            <li v-for="(nft, name) in PBTSellingLists" :key="name">
+            <li v-for="(nft, name) in this.xcclist" :key="name">
               <el-button class="nftlist">
                 <i>#{{ nft.id }}</i>
                 <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-                <el-badge
-                  v-if="nft.pbxs"
-                  :value="Object.keys(nft.pbxs).length"
-                  class="item"
-                >
-                </el-badge>
+                <!-- <i v-if="nft.market.seller">
+                   <el-badge
+                    v-if="nft.market.seller == '-self'"
+                    value="My Sale"
+                    class="item simbol"
+                  >
+                  </el-badge 
+                  ></i
+                > -->
               </el-button>
             </li>
           </ul>
-        </div>
-        
-      <el-button @click="mintNFT" size="mini">Mint PBT</el-button>
-    </el-col>
+          <el-col :offset="10">
+            <el-pagination
+              :total="Object.keys(PBTSellingLists).length"
+              background
+              @current-change="handleCurrentChange_xcc"
+              :current-page="this.xccpageNum"
+              :page-size="10"
+              layout="total,prev,pager,next"
+            ></el-pagination>
+          </el-col>
+        </el-col>
+        <el-col class="cointy"></el-col>
+        <el-col class="cointy"></el-col>
+      </el-col>
     </div>
     <mynft />
-    
+
     <plotfooter />
   </div>
 </template>
@@ -56,19 +75,34 @@ export default {
     WBalance: "WBalance",
   }),
   watch: {
-    PBTlists: function (newLists) {
-      this.$store.commit("setPBTlists", newLists);
-    },
-    deep: true,
-    PBXlists: function (newLists) {
-      this.$store.commit("setPBXlists", newLists);
+    PBTSellingLists: function (newLists) {
+      this.$store.commit("setPBTSellingLists", newLists);
+      const start = newPage * 10 - 10;
+      const down = newPage * 10;
+      this.mylist = Object.fromEntries(
+        Object.entries(newLists).slice(start, down)
+      );
+      console.log("selllist", this.$store.state.PBTSellingLists, newLists);
     },
     deep: true,
   },
   data() {
-    return {};
+    return {
+      xccpageNum: 1,
+      xcclist: {},
+    };
   },
   methods: {
+    handleCurrentChange_xcc(newPage) {
+      console.log("当前页:", newPage);
+      this.xccpageNum = newPage;
+      console.log("all pbtlist", this.xcclist);
+      const start = newPage * 10 - 10;
+      const down = newPage * 10;
+      this.mylist = Object.fromEntries(
+        Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
+      );
+    },
     mintNFT: async function () {
       try {
         await market.mintPBT();
@@ -81,12 +115,12 @@ export default {
 };
 </script>
 
-<style scoped> 
+<style scoped>
 ::-webkit-scrollbar {
-/*隐藏滚轮*/
-display: none;
+  /*隐藏滚轮*/
+  display: none;
 }
-.main{
+.main {
   background-color: rgb(137, 180, 146);
   width: 84.7 vw;
   height: calc(100vh - 163px);
@@ -95,10 +129,10 @@ display: none;
   overflow-x: hidden;
   overflow-y: scroll;
 }
-.content{
+.content {
   display: flex;
 }
-.nftlist{
+.nftlist {
   margin: 15px;
 }
 </style>

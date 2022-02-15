@@ -54,25 +54,16 @@ export default {
   computed: mapState({
     baddr: "baddr",
     PBTlists: "PBTlists",
-    PBXlists: "PBXlists",
     PBTSellingLists: "PBTSellingLists",
-    PBXSellingLists: "PBXSellingLists",
   }),
   watch: {
     PBTlists: function (new_list) {
       this.$store.commit("setPBTlists", new_list);
     },
     deep: true,
-    PBXlists: function (newLists) {
-      this.$store.commit("setPBXlists", newLists);
-    },
-    deep: true,
+
     PBTSellingLists: function (newLists) {
       this.$store.commit("setPBTSellingLists", newLists);
-    },
-    deep: true,
-    PBXSellingLists: function (newLists) {
-      this.$store.commit("setPBXSellingLists", newLists);
     },
     deep: true,
   },
@@ -86,28 +77,43 @@ export default {
       ],
     };
   },
+  // mounted() {
+  //   this.getPBmarketList();
+  //   this.getMarketInfo();
+  // },
   methods: {
     liclick(link) {
-      this.$router.push(link).catch(err=> err);//加catch,在router.push的时候捕获异常，防止重复点击报错
+      this.$router.push(link).catch((err) => err); //加catch,在router.push的时候捕获异常，防止重复点击报错
+    },
+    getPBmarketList: async function () {
+      const tSaleList = await allData.getMarketList("PBT");
+      this.$store.commit("setPBTSellingLists", tSaleList);
+      console.log("PBTSellingLists", tSaleList);
+    },
+    getBrieflist: async function () {
+      // 获取my PBT NFT 简单信息
+      const tlist = await allData.getMyList("PBT");
+      this.$store.commit("setPBTlists", tlist);
+      //获取 matket PBT NFT 简单信息
+
+      console.log("PBT-nft-brief-info ", tlist);
+    },
+    getMarketInfo: async function () {
+      const saleList = await allData.getSaleList("PBT");
+      this.$store.commit("setPBTSellingLists", saleList);
+      console.log("market detail info=", saleList);
     },
     get_lists: async function () {
-      const tlist = await allData.getMyTokenList("PBT", this.baddr);
-      this.$store.commit("setPBTlists", tlist);
+      //获取PBT nft 详细信息
+      //my list
+      const mylist = await allData.getMyTokenList("PBT");
+      this.$store.commit("setPBTlists", mylist);
 
-      const xlist = await allData.getMyTokenList("PBX", this.baddr);
-      this.$store.commit("setPBXlists", xlist);
+      // My sale list
+      const mySaleList = await allData.getMySaleList("PBT");
+      this.$store.commit("setPBTMySaleLists", mySaleList);
 
-      console.log("tlist--xlists", tlist, xlist);
-      //market selling list
-      const tSaleList = await allData.getSaleList("PBT");
-      this.$store.commit("setPBTSellingLists", tSaleList);
-      const xSaleList = await allData.getSaleList("PBX");
-      this.$store.commit("setPBXSellingLists", xSaleList);
-      console.log("saleList", tSaleList, xSaleList);
-      //my Sall list
-      const tMySaleList = await allData.getMySaleList("PBT");
-      this.$store.commit("setPBTMySaleLists", tMySaleList);
-      console.log("PBTMySaleLists", tMySaleList);
+      console.log("PBT all-Lists", mylist, saleList, mySaleList);
 
       const oldToken = "0x134315EF3D11eEd8159fD1305af32119a046375A";
       const otBalance = await market.tokenBalance(oldToken);
@@ -115,6 +121,7 @@ export default {
       this.$store.commit("setRedeemBalance", otBalance);
       this.$store.commit("setRedeemAllowance", otAllowance);
     },
+
     connect_wallet: async function () {
       const commit = this.$store.commit;
       const loading = this.$loading({
@@ -124,12 +131,19 @@ export default {
       });
       try {
         const bsc = await allData.connectW();
+        // const obj = this;
         if (bsc) {
           commit("setBaddr", this.$store.state.bsc.addr);
-          await this.get_lists();
+          await this.getBrieflist();
           loading.close();
+          await this.getPBmarketList();
+          console.log("down");
         }
+        await this.getMarketInfo();
+        await this.get_lists();
+        console.log("downnnnnnnnnnn");
       } catch (e) {
+        console.log(e.message);
         this.$message(e.message);
       }
       loading.close();
