@@ -16,15 +16,14 @@
               <el-button class="nftlist">
                 <i>#{{ nft.id }}</i>
                 <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-                <!-- <i v-if="nft.market.seller">
-                   <el-badge
+                <i v-if="'seller' in nft.market">
+                  <el-badge
                     v-if="nft.market.seller == '-self'"
                     value="My Sale"
                     class="item simbol"
                   >
-                  </el-badge 
-                  ></i
-                > -->
+                  </el-badge
+                ></i>
               </el-button>
             </li>
           </ul>
@@ -41,6 +40,27 @@
         </el-col>
         <el-col class="cointy"></el-col>
         <el-col class="cointy"></el-col>
+        <el-col class="cointy">
+          <h3>My Selling PBT</h3>
+          <ul class="content">
+            <li v-for="(nft, name) in this.mylist" :key="name">
+              <el-button class="nftlist">
+                <i>#{{ nft.id }}</i>
+                <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+              </el-button>
+            </li>
+          </ul>
+          <el-col :offset="10">
+            <el-pagination
+              :total="Object.keys(PBTMySaleLists).length"
+              background
+              @current-change="handleCurrentChange_my"
+              :current-page="this.mypageNum"
+              :page-size="10"
+              layout="total,prev,pager,next"
+            ></el-pagination>
+          </el-col>
+        </el-col>
       </el-col>
     </div>
     <mynft />
@@ -85,11 +105,18 @@ export default {
       console.log("selllist", this.$store.state.PBTSellingLists, newLists);
     },
     deep: true,
+    PBTMySaleLists: function (newLists) {
+      this.$store.commit("setPBTMySaleLists", newLists);
+      console.log("mysale list", newLists);
+    },
+    deep: true,
   },
   data() {
     return {
       xccpageNum: 1,
+      mypageNum: 1,
       xcclist: {},
+      mylist: {},
     };
   },
   methods: {
@@ -101,6 +128,16 @@ export default {
       const down = newPage * 10;
       this.mylist = Object.fromEntries(
         Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
+      );
+    },
+    handleCurrentChange_my(newPage) {
+      console.log("当前页:", newPage);
+      this.mypageNum = newPage;
+      console.log("all pbtlist", this.mylist);
+      const start = newPage * 10 - 10;
+      const down = newPage * 10;
+      this.mylist = Object.fromEntries(
+        Object.entries(this.$store.state.PBTMySaleLists).slice(start, down)
       );
     },
     mintNFT: async function () {
