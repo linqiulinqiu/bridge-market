@@ -17,6 +17,17 @@ const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
     'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
 }
+async function ListenToWCoin(commit) {
+    const ctr = bsc.ctrs.wxcc
+    const decimals = await ctr.decimals()
+    async function updateBalance(evt) {
+        const balance = await ctr.balanceOf(bsc.addr)
+        console.log('wbalance', balance)
+        commit('setWBalance', ethers.utils.formatUnits(balance, decimals))
+    }
+    await updateBalance()
+    ctr.on(ctr.filters.Transfer, updateBalance)
+}
 async function connectW() {
     bsc = await pbwallet.connect(true)
     PBTList = {
@@ -37,6 +48,7 @@ async function connectW() {
         // getBsc()
 
         // await listenEvents(commit)
+        // await ListenToWCoin(commit)
         return bsc
     }
     console.log("bsc", bsc)
@@ -217,7 +229,7 @@ async function getSaleList(coin) {
 async function getMySaleList(coin) {
     let msList = {}
     if (coin == "PBT") {
-        const slist = PBTList.selling
+        const slist = state.PBTSellingLists
         const slistKeys = Object.keys(slist)
         for (let i in slistKeys) {
             if (slist[slistKeys[i]].seller == "-self") {

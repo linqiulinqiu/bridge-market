@@ -5,7 +5,11 @@
       <el-col>
         <h2>
           PBT Market
-          <el-button @click="mintNFT" size="small" class="btn"
+          <el-button
+            @click="mintVisible = true"
+            size="small"
+            class="btn"
+            v-if="baddr"
             >Mint PBT</el-button
           >
         </h2>
@@ -20,7 +24,20 @@
       </el-col>
     </div>
     <mynft />
-
+    <el-dialog :visible.sync="mintVisible" title="MINT NFT" width="50%">
+      <el-card>
+        <el-empty :image-size="200"></el-empty>
+        <el-col>
+          <p>
+            The price:
+            <span>{{ this.mintFee.price }}</span>
+            <span>{{ this.mintFee.token }}</span>
+          </p>
+          <p>Function: Chives</p>
+          <el-button @click="mintNFT">Mint</el-button>
+        </el-col>
+      </el-card>
+    </el-dialog>
     <plotfooter />
   </div>
 </template>
@@ -49,11 +66,20 @@ export default {
     curNFT: "curNFT",
     PBTSellingLists: "PBTSellingLists",
   }),
-
+  data() {
+    return {
+      mintVisible: false,
+      //use function get mintfee
+      mintFee: {
+        price: 0.01,
+        token: "BNB",
+      },
+    };
+  },
   methods: {
     mintNFT: async function () {
       try {
-        await market.mintPBT();
+         await market.mintPBT();
       } catch (e) {
         this.$message(e.data.message);
         console.log("mint err", e.message);

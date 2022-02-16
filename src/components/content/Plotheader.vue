@@ -4,7 +4,7 @@
       <div class="logo">
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
-      <el-col><h2>version: 2/16 2.0</h2></el-col>
+      <el-col><h2>version: 2/16 3.0</h2></el-col>
       <nav>
         <div class="navi">
           <ul class="navi-content">
@@ -112,11 +112,12 @@ export default {
       //my list
       const mylist = await allData.getMyTokenList("PBT");
       this.$store.commit("setPBTlists", mylist);
-      const saleList = await allData.getSaleList("PBT");
+      const saleList = await allData.getSaleList("PBT").then(async function () {
+        const mySaleList = await allData.getMySaleList("PBT");
+        this.$store.commit("setPBTMySaleLists", mySaleList);
+      });
       this.$store.commit("setPBTSellingLists", saleList);
       // My sale list
-      const mySaleList = await allData.getMySaleList("PBT");
-      this.$store.commit("setPBTMySaleLists", mySaleList);
 
       console.log("PBT all-Lists", mylist, saleList, mySaleList);
 
@@ -130,38 +131,34 @@ export default {
 
     connect_wallet: async function () {
       const commit = this.$store.commit;
-      const loading = this.$loading({
-        lock: true,
-        spinner: "el-icon-loading",
-        background: "rgba(200,230,200,0.6)",
-      });
-      try {
-        const bsc = await allData.connectW();
-        // const obj = this;
-        if (bsc) {
-          commit("setBaddr", this.$store.state.bsc.addr);
-          // const msg = await this.getBrieflist();
-          let msg = "";
-          while (msg != "ok") {
-            msg = await this.getBrieflist();
-          }
-          loading.close();
-          // await this.getPBmarketList();
-          console.log("down");
-        }
-        // await this.getMarketInfo();
-        // const suc = await this.get_lists();
-        let suc = "";
-        while (suc != "ok") {
-          suc = await this.get_lists();
-        }
-        // await this.get_lists();
-        console.log("downnnnnnnnnnn");
-      } catch (e) {
-        console.log(e.message);
-        this.$message(e.message);
+      // const loading = this.$loading({
+      //   lock: true,
+      //   spinner: "el-icon-loading",
+      //   background: "rgba(200,230,200,0.6)",
+      // });
+      // try {
+      const bsc = await allData.connectW();
+      // const obj = this;
+      if (bsc) {
+        commit("setBaddr", this.$store.state.bsc.addr);
+        // const msg = await this.getBrieflist();
+
+        await this.getBrieflist();
+
+        // loading.close();
+        // await this.getPBmarketList();
+        console.log("down");
       }
-      loading.close();
+      // await this.getMarketInfo();
+      // const suc = await this.get_lists();
+      await this.get_lists();
+      // await this.get_lists();
+      console.log("downnnnnnnnnnn");
+      // } catch (e) {
+      console.log(e.message);
+      this.$message(e.message);
+      // }
+      // loading.close();
     },
   },
 };

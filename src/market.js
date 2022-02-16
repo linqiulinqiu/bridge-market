@@ -15,264 +15,13 @@ const ptAddrs = {
     'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
 }
 
-//监听事件发生
-
-// async function listenNFTEvents(ctr, list, commit) {
-//     ctr.on(ctr.filters.Transfer, async function (evt) {
-
-//         if (evt.args.to == bsc.addr) {
-//             console.log("listen list0 =", list, evt, evt.args.tokenId)
-//             //mint event
-//             //list.owned.push(evt.args.tokenid)
-//             const id = evt.args.tokenId
-//             const info = await getNFTinfo("PBT", id)
-//             console.log("mint evt lisen", info)
-//             if ('owned' in list) {
-//                 list['owned'].push(info)
-//                 commit("setPBTlists", list.owned)
-//             }
 
 
-//             if (evt.args.from == bsc.ctrs.pbmarket.to) { //bind   
-//                 console.log("listen 111 ,", list, evt)
-//             }
-//         } else if (evt.args.from == bsc.addr) {
-//             if (evt.args.to == bsc.ctrs.pbx.to) { // retreat tx 
-//                 console.log("listen 222 ,", list, evt)
-//             }
-//             // else if () { }
-//         } else if (evt.args.to == bsc.ctrs.pbmarket.to) {
-//             //售卖nft，从owned到 mySale/selling 将pbt与pbx 在owned删除，添加到 selling 
-//             //区分selling 与 mysell   owner “”/--self
-//             console.log("listen onSale,list=", list, evt.args.tokenId)
-//             // const id = evt.args.tokenId.toNumber().toString()
-//             // console.log("id", id)
-//             // if (id in list) {
-//             //     delete(list.owned[evt.args.tokenId]) //owned中删除
-
-//             //     //根据变动的list去 判断 coin  list.owned[evt.args.tokenid].name
-//             //     //在 selling中增加
-//             //     if (list.owned[evt.args.tokenId].name == "PlotBridge Truck") {
-//             //         const coin = "PBT"
-//             //         const info = await getNFTinfo(coin, evt.args.tokenId)
-//             //         const key = info.id.toString()
-//             //         PBTList.selling[key] = info
-//             //         commit("setPBTlists", PBTList.owned)
-//             //         console.log("selling list", PBTList.selling, info)
-//             //     } else if (list.owned[evt.args.tokenId].name == "PlotBridge Xin") {
-//             //         const coin = "PBX"
-//             //         const info = await getNFTinfo(coin, evt.args.tokenId)
-//             //         const key = info.id.toString()
-//             //         PBXList.selling[key] = info
-//             //         commit("setPBXlists", PBXList.owned)
-//             //         console.log("selling list", PBXList.selling, info)
-//             //     }
-//             // }
-//         } else if (evt.args.from == bsc.addr) { // transfer out PBXBind
-//             commit("setPBXlists", list)
-//             console.log("listen list1 =", list, evt, evt.args.tokenId)
-
-//         } else if (evt.args.from == bsc.addr && evt.args.to == bsc.ctrs.pbmarket.to) { // on sale
-//             commit("setPBXlists", list)
-//             console.log("listen list2 =", list, evt, evt.args.tokenId)
-
-//         } else if (evt.args.from == bsc.ctrs.pbmarket.to) { // bought or offsale
-//             commit("setPBXlists", list)
-//             console.log("listen list3 =", list, evt, evt.args.tokenId)
-//         }
-//     })
-// }
-// // 在 PBlist.owned 查询 id,key 的信息
-// // function pbInList(key, list) {
-// //     console.log("list", list)
-// //     const arr = Object.keys(list)
-// //     console.log("arr1", arr)
-// //     const k = key.toString()
-// //     const index = arr.includes(k)
-// //     console.log("arr", arr, k, typeof k, index)
-// //     return index
-// // }
-// // 根据nftid 获取 nftinfo
-// // async function getNFTinfo(coin, nftid) {
-// //     let nftlist = {}
-// //     const pb = coin2pb(coin)
-// //     const uri = await pb.tokenURI(nftid)
-// //     const meta = await (await fetch(uri)).json()
-// //     const key = nftid.toString()
-// //     const info = {
-// //         id: nftid.toNumber(),
-// //         uri: uri,
-// //         meta: meta,
-// //     }
-// //     nftlist[key] = info
-// //     return nftlist
-// // }
-// //获取绑定的 pbx 信息 
-// // async function getPBXInfo(pbtId, pbxId) {
-// //     const xAddress = await bsc.ctrs.pbconnect.XAddressList(pbtId)
-// //     console.log("getPBXinfo", xAddress, xAddress[0].toString())
-// //     const depAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[1].toString(), "xcc")
-// //     const withAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[2].toString(), "xcc")
-// //     const info = {
-// //         id: pbxId,
-// //         coinTypes: xAddress[0].toString(),
-// //         depositAddr: depAddress.toString(),
-// //         withdrawAddr: withAddress.toString()
-// //     }
-// //     console.log("add bind pbx info", info);
-// //     return info
-// // }
-
-async function ListenToWCoin(commit) {
-    const ctr = bsc.ctrs.wxcc
-    const decimals = await ctr.decimals()
-    async function updateBalance(evt) {
-        const balance = await ctr.balanceOf(bsc.addr)
-        console.log('wbalance', balance)
-        commit('setWBalance', ethers.utils.formatUnits(balance, decimals))
-    }
-    await updateBalance()
-    ctr.on(ctr.filters.Transfer, updateBalance)
-}
-
-
-// //监听 PBT/PBX list 以及 事件evt的发生
-// async function listenEvents(commit) {
-//     ListenToWCoin(commit)
-//     listenNFTEvents(bsc.ctrs.pbt, PBTList, function (newlist) {
-//         // newlist = PBTList.owned
-//         console.log("pbt=list", PBTList, newlist, bsc.ctrs.pbt)
-//         // console.log("pbtlist,evt", )
-//         // commit('setPBTlists', newlist)
-//     })
-//     listenNFTEvents(bsc.ctrs.pbx, PBXList, function (newlist) {
-//         // newlist = PBXList.owned
-//         console.log("pbx=list", newlist)
-
-//         // commit('setPBXlists', newlist)
-//     })
-//     if (bsc.ctrs.pbconnect.filters.PBXBind) {
-//         bsc.ctrs.pbconnect.on(bsc.ctrs.pbconnect.filters.PBXBind, async function (evt) {
-
-//             // if PBTid in PBTList, update my PBT info
-//             let pbtnft = PBTList.owned[evt.args.pbtId]
-//             console.log("bind evt 1", evt, "PBTid--info = ", PBTList.owned[evt.args.pbtId], pbtnft)
-
-//             const index = pbInList(evt.args.pbtId.toString(), PBTList.owned) // id or false
-//             const coinTy = await getCoinTypes(evt.args.pbxId) // pbx cointypes
-//             console.log("coinTy-index 1", index, coinTy)
-//             //如果 pbtid in pbtlist
-//             if (index) {
-
-//                 // 获取 evt.pbtId 的详细信息  PBTList.owned[evt.pbtId]
-//                 console.log(" bind 2 pbtnft-info", pbtnft)
-//                 //遍历pbtnft上有没有pbxs
-//                 // const pbxsk = pbInList("pbxs", pbtnft)
-//                 if ("pbxs" in PBTList.owned[evt.args.pbtId]) { // 如果nft上已经有了pbxs属性
-//                     const type = pbInList(coinTy[0], pbtnft.pbxs)
-//                     // const type = (Object.keys(PBTList.owned[evt.args.pbtId].pbxs)).includes(coinTy[0]) // 查找pbxs上是否已经有相同属性 查找Key值
-//                     console.log("bind3 type", type, typeof coinTy[0], )
-
-//                     // 如果不存在该coinTy
-//                     if (!type) {
-//                         // 添加key值  
-//                         const pbxinfo = await getPBXInfo(evt.args.pbtId, evt.args.pbxId)
-//                         const key = coinTy[0]
-//                         pbtnft['pbxs'][key.toString()] = pbxinfo
-//                         console.log("bind 4 pntnft ", PBTList.owned)
-//                         commit("setPBTlists", PBTList.owned)
-
-//                     }
-//                 } else {
-//                     // 不存在pbxs，添加 pbxs
-//                     const key = 'pbxs'
-//                     const pbxinfo = await getPBXInfo(evt.args.pbtId, evt.args.pbxId)
-//                     if (pbxinfo.coinTypes != "") {
-//                         const xkey = pbxinfo.coinTypes.toString()
-//                         let pbxsInfo = {}
-//                         pbxsInfo[xkey] = pbxinfo
-//                         PBTList.owned[evt.args.pbtId][key] = pbxsInfo
-//                         console.log("bind 5", PBTList.owned)
-//                     }
-
-//                 }
-//                 console.log("bind 6 pbt nf", PBTList.owned)
-//                 commit("setPBTlists", PBTList.owned)
-
-//             }
-//             //在 PBXlist.owned 中查询 evt.args.pbxID
-//             const xIndex = pbInList(evt.args.pbxId.toNumber(), PBXList.owned) //id or false
-//             console.log("pbx bind 7", xIndex)
-//             if (xIndex) {
-//                 // 删除 pbxnft
-//                 delete(PBXList.owned[evt.args.pbxId])
-//                 console.log("bind 7 pbx nft", xIndex, PBXList.owned)
-//                 commit("setPBXlists", PBXList.owned)
-//             }
-//             bsc.ctrs.pbconnect.off(bsc.ctrs.pbconnect.filters.PBXBind)
-//         })
-//     }
-//     if (bsc.ctrs.pbconnect.filters.PBXRetreat) {
-//         bsc.ctrs.pbconnect.on(bsc.ctrs.pbconnect.filters.PBXRetreat, async function (evt) {
-//             // if PBTid in PBTList, update my PBT info
-
-//             const index = pbInList(evt.args.pbtId.toString(), PBTList.owned)
-//             // const coinTy = await getCoinTypes(evt.args.pbxId)
-//             const coinTy = await getCoinTypes(evt.args.pbxId) // pbx cointypes
-//             console.log("re 1 index", index, coinTy)
-
-//             if (index != false) {
-//                 let pbtnft = PBTList.owned[evt.args.pbtId]
-//                 // if ('pbxs' in PBTList.owned[(evt.args.pbtId).toString()]) { // 如果nft上已经有了pbxs属性
-//                 if ("pbxs" in pbtnft) {
-//                     //cointypes or false
-//                     if (coinTy[0] in pbtnft['pbxs']) { // 查看pbtnft.pbxs上是否有该type
-//                         // if (type) {
-//                         //如果pbx.length >1,删除该type,否则，删除pbxs
-//                         if (Object.keys(pbtnft['pbxs']).length > 1) {
-//                             delete(pbtnft.pbxs[coinTy[0].toString()])
-//                             console.log("re2 delete in pbtnft", PBTList.owned)
-//                         } else {
-//                             delete pbtnft.pbxs['id']
-//                             delete pbtnft['pbxs']
-//                             console.log("re2222 delete in pbtnft", PBTList.owned)
-//                         }
-//                         commit("setPBTlists", PBTList.owned)
-//                         console.log("re3 pbtnft", PBTList.owned)
-//                     }
-//                 }
-//             }
-//             const xIndex = pbInList(evt.args.pbxId.toNumber(), PBXList.owned)
-//             console.log("re 4 xIndex", xIndex)
-
-//             if (!xIndex) {
-//                 const pb = bsc.ctrs.pbx
-//                 const id = evt.args.pbxId
-//                 console.log("retreat 5 pbx id", id, evt.args.pbxId)
-//                 const uri = await pb.tokenURI(id)
-//                 const meta = await (await fetch(uri)).json()
-//                 const item = {
-//                     id: id.toNumber(),
-//                     meta: meta,
-//                     uri: uri,
-//                 }
-//                 console.log("item", item)
-//                 PBXList.owned[id.toString()] = item
-//                 console.log("pbx retreat 6 list push", PBXList.owned)
-//                 commit("setPBXlists", PBXList.owned)
-
-//             }
-//             console.log("retreat evt done,nftlists =", PBXList.owned)
-//             bsc.ctrs.pbconnect.off(bsc.ctrs.pbconnect.filters.PBXRetreat)
-//         })
-//     }
-// }
 //获取绑定的pbx类型
 async function getCoinTypes(pbxid) {
     const cointype = await bsc.ctrs.pbx.getCoinTypes([pbxid])
     return cointype
 }
-
 
 function priceName(token) {
     token = ethers.utils.getAddress(token)
@@ -289,8 +38,6 @@ function coin2pb(coin) {
     if (coin == 'PBX') return bsc.ctrs.pbx
     throw new Error('Unsupported coin:' + coin)
 }
-
-
 async function tokenBalance(tokenAddr) {
     bsc = store.state.bsc
     console.log("ctr", tokenAddr, "bsc", bsc)
@@ -301,7 +48,6 @@ async function tokenBalance(tokenAddr) {
     const decimals = await ctr.decimals()
     return ethers.utils.formatUnits(balance, decimals)
 }
-
 async function tokenAllowance(tokenAddr) {
     const ctr = pbwallet.erc20_contract(tokenAddr)
     const allowance = await ctr.allowance(bsc.addr, bsc.ctrs.tokenredeem.address)
@@ -309,13 +55,11 @@ async function tokenAllowance(tokenAddr) {
     console.log('token allowance', tokenAddr, allowance)
     return ethers.utils.formatUnits(allowance, decimals)
 }
-
 async function tokenApprove(tokenAddr) {
     const ctr = pbwallet.erc20_contract(tokenAddr)
     const supply = await ctr.totalSupply()
     await ctr.approve(bsc.ctrs.tokenredeem.address, supply.mul(1000)) // 1000x total supply, almost infinite
 }
-
 async function tokenRedeem(tokenAddr, amount) {
     const ctr = pbwallet.erc20_contract(tokenAddr)
     const decimals = await ctr.decimals()
@@ -323,7 +67,6 @@ async function tokenRedeem(tokenAddr, amount) {
     console.log('redeem amount', amount)
     await bsc.ctrs.tokenredeem.redeem(tokenAddr, amount)
 }
-
 async function bindTX(pbx_id, pbt) {
     const pbtId = ethers.utils.hexZeroPad(ethers.utils.hexValue(ethers.BigNumber.from(pbt.id)), 32)
     console.log("pbtid", pbtId, "pbx", pbx_id)
@@ -345,6 +88,7 @@ async function bindTX(pbx_id, pbt) {
 async function mintPBT() {
     try {
         const mintfee = await bsc.ctrs.pbt.mintFee()
+        console.log("mint fee", mintfee)
         const options = {}
         if (mintfee[0] == ethers.constants.AddressZero) {
             options.value = mintfee[1]
@@ -370,7 +114,6 @@ async function mintPBT() {
         return text
     }
 }
-
 //TODO: this can be a more versatile function, supports multiple wcoins
 async function burnWXCC(amount) {
     const ctr = bsc.ctrs.wcoin
@@ -380,20 +123,14 @@ async function burnWXCC(amount) {
     console.log('burn receipt', receipt)
     return receipt
 }
-
 async function waitEventDone(tx, done) {
     const ctr = pbwallet.erc721_contract(tx.to)
-
     ctr.on(ctr.filters.Transfer, function (evt) {
         if (evt.transactionHash == tx.hash) {
             done(tx, evt)
             ctr.off(ctr.filters.Transfer)
         }
     })
-}
-//查询绑定关系 PBT--PBX 
-async function sesrchlist() {
-
 }
 // 解除绑定
 async function unbind(pbx) {
@@ -408,7 +145,6 @@ async function unbind(pbx) {
         console.log("onbound error", e.message)
     }
 }
-
 //绑定取款地址
 async function bindAddr(waddr, pbxId) {
     // try {
@@ -427,11 +163,91 @@ async function bindAddr(waddr, pbxId) {
     // console.log("bindaddr errrrr", e.message)
     // }
 }
+async function sendToMarket(coin, id) {
+    const pb = coin2pb(coin)
+    const res = await pb["safeTransferFrom(address,address,uint256)"](bsc.addr, bsc.ctrs.pbmarket.address, id)
+    console.log('transfer receipt', res)
+    return res
+}
+async function setSellInfo(coin, id, ptName, price, desc) {
+    const pb = coin2pb(coin)
+    var ptAddr = ptAddrs[ptName]
+    if (!ptAddr) {
+        ptAddr = ethers.constants.AddressZero
+    }
+    console.log('onSale', pb.address, id, ptAddr, ethers.utils.parseEther(price), desc)
+    const res = await bsc.ctrs.pbmarket.onSale(pb.address, id, ptAddr, ethers.utils.parseEther(price), desc)
+    console.log('set sell info receipt', res)
+}
+async function checkAllowance(nft) {
+    console.log('checkAllowce', nft)
+    const priceToken = nft.market.priceToken
+    const price = ethers.utils.parseEther(nft.market.price)
+
+    const options = {}
+    if (priceToken == ethers.constants.AddressZero) {
+        options.value = price
+    } else {
+        try {
+            const ctr = pbwallet.erc20_contract(priceToken)
+            const allow = await ctr.allowance(bsc.addr, bsc.ctrs.pbmarket.address)
+            if (allow.lt(price)) {
+                return false
+            }
+            console.log("checkallowance", options, price, ctr, allow, allow.lt(price))
+            return allow
+        } catch (e) {
+            console.log("eee", e.message)
+        }
+    }
+}
+async function approveAllow(nft) {
+    const priceToken = nft.priceToken
+
+    const price = ethers.utils.parseEther(nft.price)
+    const ctr = pbwallet.erc20_contract(priceToken)
+    // uint256_MAX, priceToken_ctr.totalSupply()
+    const res = await ctr.approve(bsc.ctrs.pbmarket.address, price.mul(1000000))
+    res.fn = 'approve'
+    return res
+
+
+}
+async function buyNFT(coin, nft) {
+    const pb = coin2pb(coin)
+    const price = ethers.utils.parseEther(nft.market.price)
+    const priceToken = nft.market.priceToken
+    const id = ethers.BigNumber.from(nft.id)
+    console.log('buy', pb, "id", id, priceToken, price)
+    const options = {}
+    if (priceToken == ethers.constants.AddressZero) {
+        options.value = price
+    } else {
+        // check allowance
+        const allow = await checkAllowance(nft)
+        console.log("allow", allow)
+        if (allow.lt(price)) { // not enough allowance, approve first
+            const res = await approveAllow(nft)
+            console.log("res", res) // TODO: approve can use MAX_UINT256 for infinity
+            res.fn = 'approve'
+            // we need to wait for approve confirmed by BSC network, so return and let user buy again
+            // TODO: show "Approve" in button when allowance not enough, then show "Buy" when allowance enough
+            // TODO: check ERC20 balance then buy
+            return res
+        }
+    }
+    const res = await bsc.ctrs.pbmarket.buy(pb.address, id, options)
+    res.fn = 'buy'
+    return res
+}
+async function retreatNFT(coin, nft) {
+    const pb = coin2pb(coin)
+    const res = await bsc.ctrs.pbmarket.offSale(pb.address, nft.id)
+    console.log('retreat receipt', res)
+}
 export default {
-    // connect: connect,
     bindTX: bindTX,
     burnWXCC: burnWXCC,
-    // getMyTokenList: getMyTokenList,
     tokenAllowance: tokenAllowance,
     tokenApprove: tokenApprove,
     tokenBalance: tokenBalance,
@@ -440,4 +256,8 @@ export default {
     mintPBT: mintPBT,
     bindAddr: bindAddr,
     waitEventDone: waitEventDone,
+    retreatNFT: retreatNFT,
+    buyNFT: buyNFT,
+    setSellInfo: setSellInfo,
+    sendToMarket: sendToMarket,
 }
