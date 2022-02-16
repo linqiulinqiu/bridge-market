@@ -2,7 +2,16 @@
   <el-col>
     <h3>Chives</h3>
     <ul class="content">
-      <li v-for="(nft, name) in this.xcclist" :key="name">
+      <li
+        class="listLi"
+        v-for="(nft, name) in Object.fromEntries(
+          Object.entries(PBTSellingLists).slice(
+            this.xccpageNum * 10 - 10,
+            this.xccpageNum * 10
+          )
+        )"
+        :key="name"
+      >
         <el-button class="nftlist" @click="openNFT(nft)">
           <i>#{{ nft.id }}</i>
           <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
@@ -22,7 +31,7 @@
       <el-pagination
         :total="Object.keys(PBTSellingLists).length"
         background
-        @current-change="xccCurrentChange"
+        @current-change="handleCurrentChange"
         :current-page="this.xccpageNum"
         :page-size="10"
         layout="total,prev,pager,next"
@@ -59,12 +68,12 @@ export default {
     };
   },
   methods: {
-    xccCurrentChange(page_xcc) {
+    handleCurrentChange(page_xcc) {
       console.log("当前页:", page_xcc);
       this.xccpageNum = page_xcc;
       console.log("all pbtlist", this.xcclist);
-      const start = page_xcc * 10 - 10;
-      const down = page_xcc * 10;
+      const start = this.xccpageNum * 10 - 10;
+      const down = this.xccpageNum * 10;
       this.mylist = Object.fromEntries(
         Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
       );

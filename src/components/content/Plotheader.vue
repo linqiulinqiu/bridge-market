@@ -100,6 +100,7 @@ export default {
       this.$store.commit("setPBTSellingLists", tSaleList);
       // console.log("PBTSellingLists", tSaleList);
       console.log("PBT-nft-brief-info ", tlist, tSaleList);
+      return "ok";
     },
     // getMarketInfo: async function () {
     //   const saleList = await allData.getSaleList("PBT");
@@ -124,6 +125,7 @@ export default {
       const otAllowance = await market.tokenAllowance(oldToken);
       this.$store.commit("setRedeemBalance", otBalance);
       this.$store.commit("setRedeemAllowance", otAllowance);
+      return "ok";
     },
 
     connect_wallet: async function () {
@@ -138,13 +140,22 @@ export default {
         // const obj = this;
         if (bsc) {
           commit("setBaddr", this.$store.state.bsc.addr);
-          await this.getBrieflist();
+          // const msg = await this.getBrieflist();
+          let msg = "";
+          while (msg != "ok") {
+            msg = await this.getBrieflist();
+          }
           loading.close();
           // await this.getPBmarketList();
           console.log("down");
         }
         // await this.getMarketInfo();
-        await this.get_lists();
+        // const suc = await this.get_lists();
+        let suc = "";
+        while (suc != "ok") {
+          suc = await this.get_lists();
+        }
+        // await this.get_lists();
         console.log("downnnnnnnnnnn");
       } catch (e) {
         console.log(e.message);

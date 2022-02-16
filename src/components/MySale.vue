@@ -2,7 +2,16 @@
   <el-col>
     <h3>My Selling PBT</h3>
     <ul class="content">
-      <li v-for="(nft, name) in this.mylist" :key="name">
+      <li
+        v-for="(nft, name) in Object.fromEntries(
+          Object.entries(this.mypageNum).slice(
+            this.mypageNum * 10 - 10,
+            this.mypageNum * 10
+          )
+        )"
+        :key="name"
+        class="listLi"
+      >
         <el-button class="nftlist" @click="openNFT(nft)">
           <i>#{{ nft.id }}</i>
           <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
@@ -13,7 +22,7 @@
       <el-pagination
         :total="Object.keys(PBTMySaleLists).length"
         background
-        @current-change="myCurrentChange"
+        @current-change="handleCurrentChange"
         :current-page="this.mypageNum"
         :page-size="10"
         layout="total,prev,pager,next"
@@ -50,7 +59,7 @@ export default {
     };
   },
   methods: {
-    myCurrentChange(page) {
+    handleCurrentChange(page) {
       console.log("当前页:", page);
       this.mypageNum = page;
       console.log("all pbtlist", this.mylist);
