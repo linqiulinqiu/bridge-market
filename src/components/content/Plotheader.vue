@@ -4,7 +4,7 @@
       <div class="logo">
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
-      <el-col><h2>version: 2/15 3.0</h2></el-col>
+      <el-col><h2>version: 2/16 2.0</h2></el-col>
       <nav>
         <div class="navi">
           <ul class="navi-content">
@@ -85,30 +85,34 @@ export default {
     liclick(link) {
       this.$router.push(link).catch((err) => err); //加catch,在router.push的时候捕获异常，防止重复点击报错
     },
-    getPBmarketList: async function () {
-      const tSaleList = await allData.getMarketList("PBT");
-      this.$store.commit("setPBTSellingLists", tSaleList);
-      console.log("PBTSellingLists", tSaleList);
-    },
+    // getPBmarketList: async function () {
+    //   const tSaleList = await allData.getMarketList("PBT");
+    //   this.$store.commit("setPBTSellingLists", tSaleList);
+    //   console.log("PBTSellingLists", tSaleList);
+    // },
+
     getBrieflist: async function () {
       // 获取my PBT NFT 简单信息
       const tlist = await allData.getMyList("PBT");
       this.$store.commit("setPBTlists", tlist);
       //获取 matket PBT NFT 简单信息
-
-      console.log("PBT-nft-brief-info ", tlist);
+      const tSaleList = await allData.getMarketList("PBT");
+      this.$store.commit("setPBTSellingLists", tSaleList);
+      // console.log("PBTSellingLists", tSaleList);
+      console.log("PBT-nft-brief-info ", tlist, tSaleList);
     },
-    getMarketInfo: async function () {
-      const saleList = await allData.getSaleList("PBT");
-      this.$store.commit("setPBTSellingLists", saleList);
-      console.log("market detail info=", saleList);
-    },
+    // getMarketInfo: async function () {
+    //   const saleList = await allData.getSaleList("PBT");
+    //   this.$store.commit("setPBTSellingLists", saleList);
+    //   console.log("market detail info=", saleList);
+    // },
     get_lists: async function () {
       //获取PBT nft 详细信息
       //my list
       const mylist = await allData.getMyTokenList("PBT");
       this.$store.commit("setPBTlists", mylist);
-
+      const saleList = await allData.getSaleList("PBT");
+      this.$store.commit("setPBTSellingLists", saleList);
       // My sale list
       const mySaleList = await allData.getMySaleList("PBT");
       this.$store.commit("setPBTMySaleLists", mySaleList);
@@ -136,10 +140,10 @@ export default {
           commit("setBaddr", this.$store.state.bsc.addr);
           await this.getBrieflist();
           loading.close();
-          await this.getPBmarketList();
+          // await this.getPBmarketList();
           console.log("down");
         }
-        await this.getMarketInfo();
+        // await this.getMarketInfo();
         await this.get_lists();
         console.log("downnnnnnnnnnn");
       } catch (e) {

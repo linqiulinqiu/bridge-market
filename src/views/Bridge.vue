@@ -4,9 +4,10 @@
     <el-col>
       <p>bridge</p>
     </el-col>
-    <mynft />
-    <div class="main">
-    </div>
+    <el-col>
+      <mynft />
+    </el-col>
+    <div class="main"></div>
     <plotfooter />
   </div>
 </template>
@@ -29,7 +30,7 @@ export default {
 </script>
 
 <style scoped>
-.main{
+.main {
   background-color: rgb(137, 180, 146);
   width: 85vw;
   height: calc(100vh - 163px);
