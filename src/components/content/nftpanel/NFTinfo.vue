@@ -1,116 +1,151 @@
 <template>
-  <el-col>
-    <el-col v-if="curNFT && curNFT.mata">
-      <el-col>
-        <img :src="curNFT.meta.image" alt="Img" />
-        id:#{{ curNFT.id }}
-      </el-col>
+  <el-row type="flex">
+    <!-- <el-col v-if="curNFT && curNFT.mata"> -->
+    <el-col>
+      <img :src="curNFT.meta.image" alt="Img" />
+      <p>id:#{{ curNFT.id }}</p>
       <el-col v-if="curNFT.market">
-        <!-- My sale nft info -->
-        <el-col v-if="curNFT.market.seller">
-          <el-col v-if="curNFT.market.seller == '-self'">
-            <el-col>
-              <p>
-                <span>Change price to:</span>
-                <el-input v-model="nftPrice"></el-input>
-                <el-select v-model="priceToken" class="selecToken">
-                  <el-option value="BNB" key="BNB" label="BNB"></el-option>
-                  <el-option value="BUSD" key="BUSD" label="BUSD"></el-option>
-                </el-select>
-              </p>
-              <el-button @click="sellNFT">Change price</el-button>
-            </el-col>
-            <el-col>--- OR ---</el-col>
-            <el-col>
-              <e-button @click="retreatNFT"> retreat from market </e-button>
-            </el-col>
-          </el-col>
-          <!-- market NFT info Not mine -->
-          <el-col v-else>
-            <el-col>
-              <p>
-                The price :
-                <span v-if="curNFt.market.price">{{
-                  curNFt.market.price
-                }}</span>
-              </p>
-              <p>
-                Description:
-                <span v-if="curNFt.market.desc">{{ curNFt.market.desc }}</span>
-              </p>
-              <p>
-                Function:
-                <span v-if="curNFt.pbxs.coinTypes">
-                  <span v-if="curNFT.pbxs.coinTypes == '3'">
-                    Bridge for Chives
-                  </span>
-                  <span v-if="curNFT.pbxs.coinTypes == '2'">
-                    Bridge for HDDcoin
-                  </span>
-                  <span v-if="curNFT.pbxs.coinTypes == '1'"
-                    >Bridge for Chia</span
-                  >
-                </span>
-              </p>
-              <el-col>
-                <el-button @click="buyNFT"> Buy It </el-button>
-              </el-col>
-            </el-col>
+        <el-col v-if="curNFT.market.seller == '-self'">
+          <p v-if="curNFT.market.price">
+            price:<span>{{ curNFT.market.price }}&nbsp;</span>
+            <span>{{ curNFT.market.ptName }}</span>
+          </p>
+          <p v-if="curNFT.market.desc != ''">
+            Description:{{ curNFT.market.desc }}
+          </p>
+          <p v-else>No Description</p>
+        </el-col></el-col
+      >
+      <p>
+        Function:
+        <span v-if="curNFT.pbxs.coinType">
+          <span v-if="curNFT.pbxs.coinType == '3'"> Bridge for Chives </span>
+          <span v-if="curNFT.pbxs.coinType == '2'"> Bridge for HDDcoin </span>
+          <span v-if="curNFT.pbxs.coinType == '1'">Bridge for Chia</span>
+        </span>
+        <span v-else> no bind bridge </span>
+      </p>
+    </el-col>
+    <el-col v-if="curNFT.market">
+      <!-- My sale nft info -->
+      <!-- <el-col v-if="curNFT.market.seller"> -->
+      <el-col v-if="curNFT.market.seller == '-self'">
+        <el-col>
+          <p>
+            <span>Change price to:</span>
+            <el-input v-model="nftPrice" placeholder="input price"></el-input>
+            <el-select v-model="priceToken" class="selecToken">
+              <el-option value="BNB" key="BNB" label="BNB"></el-option>
+              <el-option value="BUSD" key="BUSD" label="BUSD"></el-option>
+            </el-select>
+          </p>
+          <el-button @click="sellNFT">Change price</el-button>
+        </el-col>
+        <el-col>--- OR ---</el-col>
+        <el-col>
+          <el-button @click="retreatNFT"> retreat from market </el-button>
+        </el-col>
+      </el-col>
+      <!-- market NFT info Not mine -->
+      <el-col v-if="curNFT.market.seller == ''">
+        <el-col>
+          <p>
+            The price :
+            <span v-if="curNFT.market.price"
+              >{{ curNFT.market.price }}&nbsp;</span
+            >
+            <span v-if="curNFT.market.ptName">{{ curNFT.market.ptName }}</span>
+          </p>
+          <p>
+            Description:
+            <span v-if="curNFT.market.desc">{{ curNFT.market.desc }}</span>
+          </p>
+          <p>
+            Function:
+            <span v-if="curNFT.pbxs">
+              <span
+                v-for="(item, index) in Object.keys(curNFT.pbxs)"
+                :key="index"
+              >
+                <span v-if="item == '3'"> Bridge for Chives </span>
+                <span v-if="item == '2'"> Bridge for HDDcoin </span>
+                <span v-if="item == '1'">Bridge for Chia</span>
+              </span>
+            </span>
+            <span v-else> no bind bridge </span>
+          </p>
+          <el-col>
+            <el-button @click="buyNFT"> Buy It </el-button>
           </el-col>
         </el-col>
       </el-col>
-      <!-- My NFT not sale -->
-      <el-col v-else>
-        <p>Set the sale info:</p>
-        <p>
-          <label for="price" class="labels">price </label>
-          <el-input
-            v-model="nftPrice"
-            placeholder="input price"
-            maxlength="20"
-            show-word-limit
-          ></el-input>
-          <el-select v-model="priceToken" class="selecToken">
-            <el-option value="BNB" key="BNB" label="BNB"></el-option>
-            <el-option key="BUSD" label="BUSD" value="BUSD"></el-option>
-          </el-select>
-        </p>
-        <p>
-          <label for="description" class="labels"> Description: </label>
-          <el-input
-            type="text"
-            placeholder="input description"
-            v-model="nftDesc"
-            maxlength="50"
-            show-word-limit
-            id="description"
-          />
-        </p>
-        <p>
-          <el-button @click="sendSell">Sell</el-button>
-        </p>
-      </el-col>
+      <!-- </el-col> -->
     </el-col>
-  </el-col>
+    <!-- My NFT not sale -->
+    <el-col v-else>
+      <p>Set the sale info:</p>
+      <p>
+        <label for="price" class="labels">price </label>
+        <el-input
+          v-model="nftPrice"
+          placeholder="input price"
+          maxlength="20"
+          show-word-limit
+        ></el-input>
+        <el-select v-model="priceToken" class="selecToken">
+          <el-option value="BNB" key="BNB" label="BNB"></el-option>
+          <el-option key="BUSD" label="BUSD" value="BUSD"></el-option>
+        </el-select>
+      </p>
+      <p>
+        <label for="description" class="labels"> Description: </label>
+        <el-input
+          type="text"
+          placeholder="input description"
+          v-model="nftDesc"
+          maxlength="50"
+          show-word-limit
+          id="description"
+        />
+      </p>
+      <p>
+        <el-button @click="sendSell">Sell</el-button>
+      </p>
+    </el-col>
+  </el-row>
+  <!-- </el-col> -->
 </template>
 <script>
 import market from "../../../market";
-import mapState from "vuex";
+import { mapState } from "vuex";
 export default {
-  name: NFTinfo,
+  name: "NFTinfo",
   computed: mapState({
-    coin: "coin",
+    bcoin: "bcoin",
     curNFT: "curNFT",
   }),
+  watch: {
+    price: function (newprice) {
+      console.log("price", newprice);
+    },
+    curNFT: function (newnft) {
+      this.$store.commit("setCurNFT", newnft);
+      console.log("curNFTTTTt", newnft);
+    },
+  },
   data() {
     const state = this.$store.state;
-    let price = state.curNFT;
+    let price = 0;
     let desc = "";
     let priceToken = "BNB";
-    if (state.curNFT.market) {
-      price = state.curNFT.market.price;
+    if ("market" in state.curNFT) {
+      if (state.curNFT.market.price != 0) {
+        price = state.curNFT.market.price;
+      } else {
+        price = 0;
+      }
       desc = state.curNFT.market.desc;
-      priceToken = state.curNFT.market.priceToken;
+      priceToken = state.curNFT.market.ptName;
     }
     return {
       nftPrice: price,
@@ -124,17 +159,20 @@ export default {
     send: async function () {
       const curNFT = this.$store.state.curNFT;
       const id = curNFT.id;
-      const tx = await market.sendToMarket(this.coin, id);
+      const coin = "PBT";
+      const tx = await market.sendToMarket(coin, id);
       console.log("send to market", tx);
     },
     sellNFT: async function () {
       const curNFT = this.$store.state.curNFT;
       const id = curNFT.id;
+      const coin = "PBT";
+
       if (this.nftPrice === 0 || this.nftPrice == null) {
         this.$message("price is empty");
       }
       const res = await market.setSellInfo(
-        this.coin,
+        coin,
         id,
         this.priceToken,
         this.nftPrice,
@@ -144,20 +182,23 @@ export default {
     },
     sendSell: async function () {
       const obj = this;
-      const evt_send = await obj.send().then(async function () {
-        const evt_sell = await obj.sellNFT();
-      });
+      const evt_send = await obj.send();
+      const evt_sell = await obj.sellNFT();
+
+      console.log("PBTsell", evt_sell);
+
+      console.log("PBTsend", evt_send);
     },
 
     retreatNFT: async function () {
       const id = this.curNFT.id;
-      console.log("retreat start", this.coin, id);
-      const res = await market.retreatNFT(this.coin, id);
+      console.log("retreat start", this.bcoin, id);
+      const res = await market.retreatNFT(this.bcoin, id);
       console.log("retreat ok", res);
     },
     buyNFT: async function () {
       const curNFT = this.$store.state.curNFT;
-      const res = await market.buyNFT(this.coin, curNFT);
+      const res = await market.buyNFT(this.bcoin, curNFT);
       console.log("buyNFT res", res);
     },
   },

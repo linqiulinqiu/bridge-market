@@ -22,18 +22,28 @@
       <el-pagination
         :total="Object.keys(PBTSellingLists).length"
         background
-        @current-change="handleCurrentChange()"
+        @current-change="handleXccPaegChange"
         :current-page="this.xccpageNum"
         :page-size="10"
         layout="total,prev,pager,next"
       ></el-pagination>
     </el-col>
+    <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
+      <el-card>
+        <NFTinfo />
+      </el-card>
+    </el-dialog>
   </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
 import market from "../market";
+import NFTinfo from "../components/content/nftpanel/NFTinfo.vue";
 export default {
+  name: "MarketXccList",
+  components: {
+    NFTinfo,
+  },
   computed: mapState({
     coin: "coin",
     baddr: "baddr",
@@ -56,10 +66,11 @@ export default {
     return {
       xccpageNum: 1,
       xcclist: {},
+      nftinfo_dialog: false,
     };
   },
   methods: {
-    handleCurrentChange(page_xcc) {
+    handleXccPaegChange: function (page_xcc) {
       console.log("当前页:", page_xcc);
       this.xccpageNum = page_xcc;
       console.log("all pbtlist", this.xcclist);
@@ -72,6 +83,7 @@ export default {
     openNFT: function (nft) {
       this.$store.commit("setCurNFT", nft);
       console.log("curNFT", nft);
+      this.nftinfo_dialog = true;
     },
   },
 };

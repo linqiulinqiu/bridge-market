@@ -40,14 +40,23 @@
         ></el-pagination>
       </el-col>
     </el-col>
+    <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
+      <el-card>
+        <NFTinfo />
+      </el-card>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import NFTinfo from "./NFTinfo.vue";
 
 export default {
   name: "Mynft",
+  components: {
+    NFTinfo,
+  },
   computed: mapState({
     coin: "coin",
     baddr: "baddr",
@@ -75,12 +84,14 @@ export default {
     return {
       mylist: {},
       pageNum: 1,
+      nftinfo_dialog: false,
     };
   },
   methods: {
     openNFT: async function (nft) {
       console.log("curNFT", nft);
       this.$store.commit("setCurNFT", nft);
+      this.nftinfo_dialog = true;
     },
     handleCurrentChange(newPage) {
       console.log("当前页:", newPage);

@@ -71,8 +71,8 @@ async function getNFTinfo(coin, nftid) {
     const coinType = await getCoinTypes(Number(pbx))
     console.log("coinYy-simple", coinType)
     const pbxsInfo = {
-        id: pbx,
-        coinType: coinType
+        id: pbx[0],
+        coinType: coinType[0].toString()
     }
     pbxs[coinType[0].toString()] = pbxsInfo
     const info = {
