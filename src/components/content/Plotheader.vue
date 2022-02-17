@@ -4,7 +4,7 @@
       <div class="logo">
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
-      <el-col><h2>version: 2/16 3.0</h2></el-col>
+      <el-col><h2>version: 2/17 3.0</h2></el-col>
       <nav>
         <div class="navi">
           <ul class="navi-content">
@@ -85,12 +85,6 @@ export default {
     liclick(link) {
       this.$router.push(link).catch((err) => err); //加catch,在router.push的时候捕获异常，防止重复点击报错
     },
-    // getPBmarketList: async function () {
-    //   const tSaleList = await allData.getMarketList("PBT");
-    //   this.$store.commit("setPBTSellingLists", tSaleList);
-    //   console.log("PBTSellingLists", tSaleList);
-    // },
-
     getBrieflist: async function () {
       // 获取my PBT NFT 简单信息
       const tlist = await allData.getMyList("PBT");
@@ -102,24 +96,40 @@ export default {
       console.log("PBT-nft-brief-info ", tlist, tSaleList);
       return "ok";
     },
-    // getMarketInfo: async function () {
-    //   const saleList = await allData.getSaleList("PBT");
-    //   this.$store.commit("setPBTSellingLists", saleList);
-    //   console.log("market detail info=", saleList);
-    // },
     get_lists: async function () {
       //获取PBT nft 详细信息
       //my list
       const mylist = await allData.getMyTokenList("PBT");
       this.$store.commit("setPBTlists", mylist);
-      const saleList = await allData.getSaleList("PBT").then(async function () {
-        const mySaleList = await allData.getMySaleList("PBT");
-        this.$store.commit("setPBTMySaleLists", mySaleList);
-      });
+      // const obj = this;
+      const saleList = await allData.getSaleList("PBT");
+      // const mySaleList = await allData.getMySaleList("PBT");
       this.$store.commit("setPBTSellingLists", saleList);
-      // My sale list
+      const slist = saleList;
+      const slistKeys = Object.keys(slist);
+      console.log("slistKeys", saleList, slistKeys);
+      const msList = {};
+      for (let i = 0; i < slistKeys.length; i++) {
+        console.log("12314564");
+        if (slist[slistKeys[i]].market.seller == "-self") {
+          const key = slist[slistKeys[i]].id.toString();
+          msList[key] = slist[slistKeys[i]];
+          this.$store.commit("setPBTMySaleLists", msList);
+          console.log(
+            "mysale 00000000000000000000000000000000000",
+            slist[slistKeys[i]],
+            msList
+          );
+        }
+      }
 
-      console.log("PBT all-Lists", mylist, saleList, mySaleList);
+      // My sale list
+      console.log(
+        "PBT all-Lists",
+        mylist,
+        saleList,
+        this.$store.state.mySaleList
+      );
 
       const oldToken = "0x134315EF3D11eEd8159fD1305af32119a046375A";
       const otBalance = await market.tokenBalance(oldToken);
@@ -155,8 +165,8 @@ export default {
       // await this.get_lists();
       console.log("downnnnnnnnnnn");
       // } catch (e) {
-      console.log(e.message);
-      this.$message(e.message);
+      // console.log(e.message);
+      // this.$message(e.message);
       // }
       // loading.close();
     },

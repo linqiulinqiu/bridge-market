@@ -45,7 +45,6 @@ async function connectW() {
     if (bsc) {
         store.commit("setBsc", bsc)
         console.log("bsc123", bsc)
-        // getBsc()
 
         // await listenEvents(commit)
         // await ListenToWCoin(commit)
@@ -56,12 +55,9 @@ async function connectW() {
 }
 // 在 PBlist.owned 查询 id,key 的信息
 function pbInList(key, list) {
-    console.log("list", list)
     const arr = Object.keys(list)
-    console.log("arr1", arr)
     const k = key.toString()
     const index = arr.includes(k)
-    console.log("arr", arr, k, typeof k, index)
     return index
 }
 
@@ -69,16 +65,11 @@ function pbInList(key, list) {
 async function getNFTinfo(coin, nftid) {
     const pb = coin2pb(coin)
     const uri = await pb.tokenURI(nftid.toNumber())
-    console.log("uri", uri)
     const meta = await (await fetch(uri)).json()
-    console.log("meta", meta)
-
     const pbxs = {}
-
     const pbx = await bsc.ctrs.pbconnect.PBXList(nftid)
-    console.log("pbx", pbx)
     const coinType = await getCoinTypes(Number(pbx))
-    console.log("cointy", coinType)
+    console.log("coinYy-simple", coinType)
     const pbxsInfo = {
         id: pbx,
         coinType: coinType
@@ -141,18 +132,14 @@ async function getBriefInfo(coin, addr) {
     const BriefList = {}
     for (let i = 0; i < cnt; i++) {
         const idx = await pb.tokenOfOwnerByIndex(addr, i)
-        console.log('idx', idx)
         const info = await getNFTinfo(coin, idx)
-        console.log("info", info)
         const key = idx.toString()
         BriefList[key] = info
     }
     if (addr == bsc.addr) {
-        store.commit("setPBTlists", BriefList)
         console.log("store.state.pbtlists", state.PBTlists)
     }
     if (addr == bsc.ctrs.pbmarket.address) {
-        store.commit("setPBTSellingLists", BriefList)
         console.log("store.state.pbtlists", state.PBTSellingLists)
     }
     return BriefList
@@ -183,11 +170,9 @@ async function getUserTokenList(coin, addr) {
     for (let i = 0; i < arrKeys.length; i++) {
         const idx = arrKeys[i] //key值 string
         const info = list[idx]
-        console.log("idx-info", idx, info)
         if (addr == bsc.ctrs.pbmarket.address) {
             const minfo = await getMarketNFT(coin, idx)
             info.market = minfo
-            console.log("info.market", info)
             store.commit('setPBTSellingLists', list)
         }
         //获取 PBT 与 PBX 的绑定信息 pbxs{coinTypes：{id：”“，coinTypes:"",depositAddr:"",withdrawAddr:""}}
@@ -197,11 +182,14 @@ async function getUserTokenList(coin, addr) {
                 if (pbxs.length > 0) {
                     const cointype = await getCoinTypes(pbxs.toString())
                     const coinTy = cointype[0].toString()
-                    console.log("cointy", coinTy)
-                    const bindXinfo = await getPBXInfo(Number(idx))
-                    info.pbxs[coinTy].depositAddr = bindXinfo.depositAddr
-                    info.pbxs[coinTy].withdrawAddr = bindXinfo.withdrawAddr
-                    store.commit("setPBTlists", list)
+                    console.log("cointy-details", coinTy)
+                    if (!info.market) {
+                        const bindXinfo = await getPBXInfo(Number(idx))
+                        info.pbxs[coinTy].depositAddr = bindXinfo.depositAddr
+                        info.pbxs[coinTy].withdrawAddr = bindXinfo.withdrawAddr
+                        store.commit("setPBTlists", list)
+                    }
+
                 }
             }
         }
@@ -231,13 +219,14 @@ async function getMySaleList(coin) {
     if (coin == "PBT") {
         const slist = state.PBTSellingLists
         const slistKeys = Object.keys(slist)
-        for (let i in slistKeys) {
+        console.log("slistKeys", slist, slistKeys)
+        for (let i = 0; i < slistKeys.length; i++) {
             if (slist[slistKeys[i]].seller == "-self") {
                 const key = slist[slistKeys[i]].id.toString()
                 msList[key] = slist[slistKeys[i]]
                 store.commit("setPBTMySaleLists", msList)
                 PBTList.mysale = msList
-                console.log("mysale", slist[slistKeys[i]], msList)
+                console.log("mysale 00000000000000000000000000000000000", slist[slistKeys[i]], msList)
             }
         }
         return msList
