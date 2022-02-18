@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Home
+    component: () => import('../views/Home'),
   },
   // {
   //   path: '/about',
@@ -27,29 +27,29 @@ const routes = [
   {
     path: '/bridge',
     name: 'Bridge',
-    component:  () => import('../views/Bridge')
+    component: () => import('../views/Bridge')
   },
   {
     path: '/market',
     name: 'Market',
-    component:  () => import('../views/Market')
+    component: () => import('../views/Market')
   },
   {
     path: '/doc',
     name: 'Doc',
-    component:  () => import('../views/Doc')
+    component: () => import('../views/Doc')
   },
   {
     path: '/message',
     name: 'Message',
-    component:  () => import('../views/Message')
+    component: () => import('../views/Message')
   },
   {
     path: '/settings',
     name: 'Settings',
-    component:  () => import('../views/Settings')
+    component: () => import('../views/Settings')
   },
-  
+
 ]
 
 const router = new VueRouter({

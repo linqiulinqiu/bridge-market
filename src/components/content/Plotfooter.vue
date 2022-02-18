@@ -21,15 +21,13 @@ export default {
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 footer {
   height: 70px;
   text-align: center;
-  /* background-color: #d5d5d5; */
-  /* padding-top: 40px; */
-  /* position: absolute; */
-  /* bottom: 0; */
-  /* display: b; */
-  /* justify-content: center;
-  align-items: center; */
 }
 </style>

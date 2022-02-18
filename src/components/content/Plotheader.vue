@@ -178,6 +178,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 .logo {
   height: 70px;
@@ -197,11 +198,6 @@ header {
 nav {
   display: flex;
 }
-/* .navi {
-  background-color: red;
-  display: flex; 
-  align-items: center;
-} */
 .navi-content {
   /* background-color: blue; */
   list-style: none;
