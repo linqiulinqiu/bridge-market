@@ -179,8 +179,11 @@ export default {
   margin: 0;
   padding: 0;
 }
+.logo {
+  height: 70px;
+}
 .m-logo {
-  height: 65px;
+  height: 70px;
   margin-left: 20px;
 }
 header {
@@ -194,11 +197,11 @@ header {
 nav {
   display: flex;
 }
-.navi {
-  /* background-color: red; */
-  display: flex;
+/* .navi {
+  background-color: red;
+  display: flex; 
   align-items: center;
-}
+} */
 .navi-content {
   /* background-color: blue; */
   list-style: none;
@@ -211,16 +214,18 @@ li {
 }
 .linkto {
   width: 180px;
+  height: 70px;
   display: flex;
   justify-content: space-evenly;
-  align-items: center;
+  /* align-items: center; */
   /* background-color: green; */
 }
 .l-coin {
   height: 32px;
+  margin-top: 18px;
 }
 .start {
   /* background-color: yellow; */
-  margin-right: 30px;
+  margin-left: 30px;
 }
 </style>

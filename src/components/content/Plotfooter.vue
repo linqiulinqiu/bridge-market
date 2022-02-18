@@ -23,14 +23,13 @@ export default {
 <style>
 footer {
   height: 70px;
-  width: 100vw;
   text-align: center;
-  padding-top: 40px;
-  background-color: #d5d5d5;
+  /* background-color: #d5d5d5; */
+  /* padding-top: 40px; */
   /* position: absolute; */
   /* bottom: 0; */
   /* display: b; */
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
 }
 </style>

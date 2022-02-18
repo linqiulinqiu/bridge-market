@@ -43,6 +43,11 @@ export default {
     padding: 0;
   }
   
+  ::-webkit-scrollbar {
+  /*隐藏滚轮*/
+  display: none;
+}
+  
   .container{
     width: 100vw;
     height: 100vh;
