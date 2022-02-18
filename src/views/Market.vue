@@ -16,8 +16,13 @@
         <el-col class="cointy">
           <MarketXccList />
         </el-col>
-        <el-col class="cointy"></el-col>
-        <el-col class="cointy"></el-col>
+        <!-- <el-col style="height: 600px">
+          <h2>nftinfo test</h2>
+          <el-col v-if="curNFT"><NFTinfo /></el-col>
+        </el-col> -->
+        <el-col class="cointy"><h3>HDDcoin</h3></el-col>
+        <el-col class="cointy"><h3>chia</h3></el-col>
+
         <el-col class="cointy">
           <MySale />
         </el-col>
@@ -50,7 +55,7 @@ import { mapState } from "vuex";
 import market from "../market";
 import MySale from "../components/MySale.vue";
 import MarketXccList from "../components/MarketXccList.vue";
-
+import NFTinfo from "../components/content/nftpanel/NFTinfo.vue";
 export default {
   name: "Market",
   components: {
@@ -59,6 +64,7 @@ export default {
     Plotfooter,
     MySale,
     MarketXccList,
+    NFTinfo,
   },
   computed: mapState({
     coin: "coin",
@@ -79,7 +85,7 @@ export default {
   methods: {
     mintNFT: async function () {
       try {
-         await market.mintPBT();
+        await market.mintPBT();
       } catch (e) {
         this.$message(e.data.message);
         console.log("mint err", e.message);

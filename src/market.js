@@ -240,9 +240,9 @@ async function buyNFT(coin, nft) {
     res.fn = 'buy'
     return res
 }
-async function retreatNFT(coin, nft) {
+async function retreatNFT(coin, id) {
     const pb = coin2pb(coin)
-    const res = await bsc.ctrs.pbmarket.offSale(pb.address, nft.id)
+    const res = await bsc.ctrs.pbmarket.offSale(pb.address, id)
     console.log('retreat receipt', res)
 }
 export default {

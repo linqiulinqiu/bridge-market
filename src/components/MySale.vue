@@ -2,7 +2,7 @@
   <el-col>
     <h3>My Selling PBT</h3>
     <ul class="content">
-      <li v-for="(nft, name) in this.mylist" :key="name" class="listLi">
+      <li v-for="nft in this.mylist" :key="nft.uri" class="listLi">
         <el-button class="nftlist" @click="openNFT(nft)">
           <i>#{{ nft.id }}</i>
           <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
@@ -13,20 +13,29 @@
       <el-pagination
         :total="Object.keys(PBTMySaleLists).length"
         background
-        @current-change="handleCurrentChange()"
+        @current-change="handleCurPageChange()"
         :current-page="this.mypageNum"
         :page-size="10"
         layout="total,prev,pager,next"
       ></el-pagination>
     </el-col>
+    <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
+      <el-card>
+        <NFTinfo />
+      </el-card>
+    </el-dialog>
   </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
 import market from "../market";
 import allData from "../getAllData";
+import NFTinfo from "./content/nftpanel/NFTinfo.vue";
 export default {
   name: "MySale",
+  components: {
+    NFTinfo,
+  },
   computed: mapState({
     PBTMySaleLists: "PBTMySaleLists",
     curNFT: "curNFT",
@@ -47,10 +56,11 @@ export default {
     return {
       mypageNum: 1,
       mylist: {},
+      nftinfo_dialog: false,
     };
   },
   methods: {
-    handleCurrentChange(page) {
+    handleCurPageChange(page) {
       console.log("当前页:", page);
       this.mypageNum = page;
       console.log("all pbtlist", this.mylist);
@@ -63,6 +73,7 @@ export default {
     openNFT: function (nft) {
       this.$store.commit("setCurNFT", nft);
       console.log("curNFT", nft);
+      this.nftinfo_dialog = true;
     },
   },
 };
