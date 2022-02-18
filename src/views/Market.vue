@@ -13,8 +13,11 @@
             >Mint PBT</el-button
           >
         </h2>
+
         <el-col class="cointy">
-          <MarketXccList />
+          <keep-alive>
+            <MarketXccList />
+          </keep-alive>
         </el-col>
         <!-- <el-col style="height: 600px">
           <h2>nftinfo test</h2>
@@ -24,7 +27,7 @@
         <el-col class="cointy"><h3>chia</h3></el-col>
 
         <el-col class="cointy">
-          <MySale />
+          <keep-alive><MySale /></keep-alive>
         </el-col>
       </el-col>
     </div>

@@ -125,7 +125,7 @@ export default {
     curNFT: "curNFT",
   }),
   watch: {
-    price: function (newprice) {
+    nftprice: function (newprice) {
       console.log("price", newprice);
     },
     curNFT: function (newnft) {
@@ -134,25 +134,23 @@ export default {
     },
   },
   data() {
-    const state = this.$store.state;
-    let price = 0;
-    let desc = "";
-    let priceToken = "BNB";
-    if ("market" in state.curNFT) {
-      if (state.curNFT.market.price != 0) {
-        price = state.curNFT.market.price;
-      } else {
-        price = 0;
-      }
-      desc = state.curNFT.market.desc;
-      priceToken = state.curNFT.market.ptName;
-    }
+    // const state = this.$store.state;
+    // let price = 0;
+    // let desc = "";
+    // let priceToken = "BNB";
+    // if ("market" in state.curNFT) {
+    //   if (state.curNFT.market.price != 0) {
+    //     price = state.curNFT.market.price;
+    //   } else {
+    //     price = 0;
+    //   }
+    //   desc = state.curNFT.market.desc;
+    //   priceToken = state.curNFT.market.ptName;
+    // }
     return {
-      nftPrice: price,
-      nftDesc: desc,
-      priceToken: priceToken,
-      // changePrice: state.curNFT.price,
-      // changePriceToken: state.curNFT.market.priceToken,
+      nftPrice: 0,
+      nftDesc: "",
+      priceToken: "BNB",
     };
   },
   methods: {
@@ -162,6 +160,7 @@ export default {
       const coin = "PBT";
       const tx = await market.sendToMarket(coin, id);
       console.log("send to market", tx);
+      return tx;
     },
     sellNFT: async function () {
       const curNFT = this.$store.state.curNFT;
@@ -179,13 +178,17 @@ export default {
         this.nftDesc
       );
       console.log("sellNFT res", res);
+      return res;
     },
     sendSell: async function () {
       const obj = this;
       const evt_send = await obj.send();
-      const evt_sell = await obj.sellNFT();
+      market.waitEventDone(evt_send, async function (evt_send, evt) {
+        const evt_sell = await obj.sellNFT();
+        console.log("evt_sell", evt_sell);
+      });
 
-      console.log("PBTsell", evt_sell);
+      // console.log("PBTsell", evt_sell);
 
       console.log("PBTsend", evt_send);
     },

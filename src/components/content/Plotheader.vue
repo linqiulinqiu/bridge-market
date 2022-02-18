@@ -4,7 +4,7 @@
       <div class="logo">
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
-      <el-col><h2>version: 2/17 5.0</h2></el-col>
+      <el-col><h2>version: 2/18 2.0</h2></el-col>
       <nav>
         <div class="navi">
           <ul class="navi-content">

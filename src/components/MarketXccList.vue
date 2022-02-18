@@ -1,8 +1,11 @@
 <template>
   <el-col>
     <h3>Chives</h3>
-    <ul class="content">
-      <li class="listLi" v-for="(nft, name) in this.xcclist" :key="name">
+    <ul class="content" v-for="(nft, name) in this.xcclist" :key="name">
+      <li
+        class="listLi"
+        v-if="nft.market && nft.market.price && nft.market.price != '0.0'"
+      >
         <el-button class="nftlist" @click="openNFT(nft)">
           <i>#{{ nft.id }}</i>
           <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
