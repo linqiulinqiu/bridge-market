@@ -123,10 +123,11 @@ button {
 /* /* tab 标签页面 */
 .el-tabs {
     width: 760px;
-    height: 400px;
+    height: 500px;
     text-align: center;
     background-color: #F5F7FA;
-    margin: 100px auto;
+    /* margin: 100px auto; */
+    position: relative;
 }
 
 .el-tabs {
@@ -170,4 +171,20 @@ button {
 .el-tabs--top.el-tabs--border-card>.el-tabs__header .el-tabs__item:last-child,
 .el-tabs--top.el-tabs--card>.el-tabs__header .el-tabs__item:last-child {
     padding: none;
+}
+
+/* getfee btnstyle */
+
+.fees {
+    position: relative;
+    margin: 0 auto;
+    margin-top: 100px;
+    /* width: 800px; */
+}
+
+.btn-fee {
+    position: absolute;
+    z-index: 3;
+    top: 15px;
+    right: 50px;
 }

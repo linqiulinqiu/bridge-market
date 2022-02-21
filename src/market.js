@@ -245,6 +245,48 @@ async function retreatNFT(coin, id) {
     const res = await bsc.ctrs.pbmarket.offSale(pb.address, id)
     console.log('retreat receipt', res)
 }
+
+//根据币种选择decimals
+async function getDecimals(coin) {
+    let wAddr = ''
+    if (coin == "XCC") {
+        wAddr = bsc.ctrs.wxcc.address
+    }
+    if (coin == "XCH") {}
+    if (coin == "HDD") {}
+    const ctr = pbwallet.erc20_contract(wAddr)
+    const decimals = await ctr.decimals()
+    return decimals
+}
+//获取费率 
+async function getfees(coin) {
+    const decimals = await getDecimals(coin)
+    let depfee = []
+    let wdfee = []
+    if (coin == "XCC") {
+        depfee = await bsc.ctrs.wxcc.getDepositFee()
+        wdfee = await bsc.ctrs.wxcc.getWithdrawFee()
+    }
+    if (coin == "XCH") {}
+    if (coin == "HDD") {}
+    const fee = {}
+    fee.depositeFee = ethers.utils.formatUnits(depfee[1], decimals)
+    fee.depositeFeeRate = depfee[0]
+    fee.withdrawFee = ethers.utils.formatUnits(wdfee[1], decimals)
+    fee.withdrawFeeRate = wdfee[0]
+    console.log("feeeeeeeeeeeeee", fee)
+    return fee
+
+}
+//获取最大值，最小值
+async function getLimit() {
+    let amount = await bsc.ctrs.wxcc.getCWAmount()
+    const decimals = await getDecimals('XCC')
+    const amountMax = ethers.utils.formatUnits(amount[1], decimals)
+    const amountMin = ethers.utils.formatUnits(amount[0], decimals)
+    amount = [amountMin, amountMax]
+    return amount
+}
 export default {
     bindTX: bindTX,
     burnWXCC: burnWXCC,
@@ -260,4 +302,6 @@ export default {
     buyNFT: buyNFT,
     setSellInfo: setSellInfo,
     sendToMarket: sendToMarket,
+    getLimit: getLimit,
+    getfees: getfees
 }

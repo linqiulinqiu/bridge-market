@@ -81,6 +81,9 @@ export default {
       this.$store.commit("setPBTMySaleLists", newLists);
     },
     deep: true,
+    curNFT: function (newNFT) {
+      console.log("this.curNFT", newNFT);
+    },
   },
   data() {
     return {

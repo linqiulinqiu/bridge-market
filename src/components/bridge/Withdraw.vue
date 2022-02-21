@@ -2,6 +2,7 @@
   <el-col id="withdraw">
     <el-col>
       取款{{ mcoin }} 将会发送到以下地址 : <br />
+      请确认取款地址是自己钱包的收款地址，并且确认地址是正确的。
       <p>
         <!-- <span v-if="mcoin == 'XCH'">
           <i v-if="curNFT.pbxs['1'].withdrawAddr"></i>
@@ -14,7 +15,7 @@
         </span> -->
       </p>
       <p>
-        <span>请先绑定一个关于{{mcoin}}的钱包取款地址</span>
+        <span>请先绑定一个关于{{ mcoin }}的钱包取款地址</span>
       </p>
       <p>
         <el-input v-model.number="wAmount" class="amount-input"></el-input>
@@ -35,12 +36,17 @@
         <el-button>Cancel</el-button>
       </p>
     </el-col>
+    <!-- <el-col><BridgeFee /></el-col> -->
   </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
 import market from "../../market";
+import BridgeFee from "./BridgeFee.vue";
 export default {
+  components: {
+    BridgeFee,
+  },
   computed: mapState({
     baddr: "baddr",
     mcoin: "mcoin",

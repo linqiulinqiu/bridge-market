@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-container>
-      <el-aside width="250px"> <mynft /></el-aside>
-      <el-main><BridgeMain/></el-main>
+      <el-aside width="350px"> <mynft /></el-aside>
+      <el-main><BridgeMain /></el-main>
     </el-container>
   </div>
 </template>

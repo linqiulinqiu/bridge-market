@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="content">
-      <el-aside width="250px">
+      <el-aside width="350px">
         <mynft />
       </el-aside>
       <el-main>
