@@ -4,7 +4,7 @@
       <div class="logo">
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
-      <el-col><h2>version: 2/18 2.0</h2></el-col>
+      <el-col><h2>version: 2/21 2.0</h2></el-col>
       <nav>
         <div class="navi">
           <ul class="navi-content">
@@ -55,6 +55,7 @@ export default {
     baddr: "baddr",
     PBTlists: "PBTlists",
     PBTSellingLists: "PBTSellingLists",
+    mode: "mode",
   }),
   watch: {
     PBTlists: function (new_list) {
@@ -83,6 +84,8 @@ export default {
   // },
   methods: {
     liclick(link) {
+      const curMode = link.toString().substr(1);
+      this.$store.commit("setMode", curMode);
       this.$router.push(link).catch((err) => err); //加catch,在router.push的时候捕获异常，防止重复点击报错
     },
     getBrieflist: async function () {

@@ -65,6 +65,7 @@ export default {
     PBTSellingLists: "PBTSellingLists",
     PBTMySaleLists: "PBTMySaleLists",
     WBalance: "WBalance",
+    mode: "mode",
   }),
   watch: {
     PBTlists: function (newLists) {
@@ -91,7 +92,9 @@ export default {
     openNFT: async function (nft) {
       console.log("curNFT", nft);
       this.$store.commit("setCurNFT", nft);
-      this.nftinfo_dialog = true;
+      if (this.mode == "market") {
+        this.nftinfo_dialog = true;
+      }
     },
     handleCurrentChange(newPage) {
       console.log("当前页:", newPage);

@@ -1,14 +1,11 @@
 <template>
   <div>
-    <plotheader />
-    <el-col>
-      <p>bridge</p>
-    </el-col>
-    <el-col>
-      <mynft />
-    </el-col>
-    <div class="main"></div>
-    <plotfooter />
+    <el-container>
+      <el-header> <plotheader /> </el-header>
+      <el-aside width="400px"> <mynft /></el-aside>
+      <el-main><BridgeMain /></el-main>
+      <el-footer> <plotfooter /> </el-footer>
+    </el-container>
   </div>
 </template>
 
@@ -16,6 +13,7 @@
 import Plotheader from "../components/content/Plotheader.vue";
 import Mynft from "../components/content/nftpanel/Mynft.vue";
 import Plotfooter from "../components/content/Plotfooter.vue";
+import BridgeMain from "../components/BridgeMain.vue";
 
 import { mapState } from "vuex";
 
@@ -25,6 +23,7 @@ export default {
     Plotheader,
     Mynft,
     Plotfooter,
+    BridgeMain,
   },
 };
 </script>

@@ -4,7 +4,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         bsc: {},
-        mcoin: "XCH",
+        mcoin: "XCC",
         bcoin: "PBT",
         baddr: false,
         curNFT: {},
@@ -18,7 +18,8 @@ export default new Vuex.Store({
         PBXMySaleLists: {},
         WBalance: 0,
         redeemBalance: "0",
-        redeemAllowance: "0"
+        redeemAllowance: "0",
+        mode: '', //bridge or market
     },
     mutations: {
         setBsc(state, bsc) {
@@ -28,16 +29,19 @@ export default new Vuex.Store({
             state.baddr = baddr
         },
         setBalance(state, balance) {
-            state.balance = balance
+            state.WBalance = balance
         },
-        setBcoin(state, coin) {
-            state.bcoin = coin
+        setBcoin(state, bsccoin) {
+            state.bcoin = bsccoin
         },
-        setMcoin(state, coin) {
-            state.mcoin = coin
+        setMcoin(state, marketcoin) {
+            state.mcoin = marketcoin
         },
         setCurNFT(state, curNFT) {
             state.curNFT = curNFT
+        },
+        setMode(state, mode) {
+            state.mode = mode
         },
         setNFTinfo(state, boolean) {
             state.NFTinfo = boolean
