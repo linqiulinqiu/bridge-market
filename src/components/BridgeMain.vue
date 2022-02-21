@@ -1,9 +1,9 @@
 <template>
   <el-col>
     <el-tabs type="border-card">
-      <el-tab-pane label="deposit"><Deposite /></el-tab-pane>
-      <el-tab-pane label="withdraw"><Withdraw /></el-tab-pane>
-      <el-tab-pane label="redeem"><Redeem /></el-tab-pane>
+      <el-tab-pane label="存款"><Deposite /></el-tab-pane>
+      <el-tab-pane label="取款"><Withdraw /></el-tab-pane>
+      <el-tab-pane label="兑换"><Redeem /></el-tab-pane>
     </el-tabs>
   </el-col>
 </template>

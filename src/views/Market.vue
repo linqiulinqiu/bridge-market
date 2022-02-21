@@ -14,7 +14,7 @@
                 size="small"
                 class="btn"
                 v-if="baddr"
-                >Mint PBT</el-button
+                >铸造 PBT</el-button
               >
             </h2>
 
@@ -29,7 +29,6 @@
         </el-col> -->
             <el-col class="cointy"><h3>HDDcoin</h3></el-col>
             <el-col class="cointy"><h3>chia</h3></el-col>
-
             <el-col class="cointy">
               <keep-alive><MySale /></keep-alive>
             </el-col>
@@ -40,12 +39,12 @@
             <el-empty :image-size="200"></el-empty>
             <el-col>
               <p>
-                The price:
+                价格:
                 <span>{{ this.mintFee.price }}</span>
                 <span>{{ this.mintFee.token }}</span>
               </p>
-              <p>Function: Chives</p>
-              <el-button @click="mintNFT">Mint</el-button>
+              <p>支持币种: Chives（韭菜）</p>
+              <el-button @click="mintNFT">铸造</el-button>
             </el-col>
           </el-card>
         </el-dialog>

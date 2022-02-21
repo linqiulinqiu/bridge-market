@@ -2,12 +2,12 @@
   <el-col id="deposite">
     <el-col>
       <p>
-        Deposit:<el-input type="text" class="amount-input" v-model.number="depAmount" />{{
+        存入:<el-input type="text" class="amount-input" v-model.number="depAmount" />{{
           mcoin
-        }}coins
+        }}币
       </p>
       <p>
-        to the address below: addr :
+        向以下的地址：
         testtttttttttttttttttttttttttttttttttttttttttt
         <!-- <span v-if="mcoin == 'XCH'">
           <i v-if="curNFT.pbxs['1'].depositAddr"></i>
@@ -20,8 +20,7 @@
         </span> -->
       </p>
       <p>
-        You will get <span>{{ getAmount }}</span> W{{ mcoin }} coins on your BSC
-        wallet
+        你将会得到<span>{{ getAmount }}</span> W{{ mcoin }} 币，在你的bsc钱包中。
       </p>
       <p>
         <span>bride fee</span>

@@ -1,10 +1,8 @@
 <template>
   <div>
     <el-container>
-      <el-header> <plotheader /> </el-header>
-      <el-aside width="400px"> <mynft /></el-aside>
-      <el-main><BridgeMain /></el-main>
-      <el-footer> <plotfooter /> </el-footer>
+      <el-aside width="250px"> <mynft /></el-aside>
+      <el-main><BridgeMain/></el-main>
     </el-container>
   </div>
 </template>
@@ -31,6 +29,7 @@ export default {
 <style scoped>
 .content {
   display: flex;
+  overflow: hidden;
 }
 .el-main {
   /* background-color: red; */

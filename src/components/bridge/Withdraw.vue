@@ -1,7 +1,7 @@
 <template>
   <el-col id="withdraw">
     <el-col>
-      Input count of {{ mcoin }} that will be sent to : <br />
+      取款{{ mcoin }} 将会发送到以下地址 : <br />
       <p>
         <!-- <span v-if="mcoin == 'XCH'">
           <i v-if="curNFT.pbxs['1'].withdrawAddr"></i>
@@ -14,16 +14,16 @@
         </span> -->
       </p>
       <p>
-        <span>Please bind a withdraw {{ mcoin }} wallet address first</span>
+        <span>请先绑定一个关于{{mcoin}}的钱包取款地址</span>
       </p>
       <p>
         <el-input v-model.number="wAmount" class="amount-input"></el-input>
-        <el-button>MAX</el-button>
-        you will receive <span> {{ getwAmount }}</span
-        >{{ mcoin }}coins
+        <el-button>全部</el-button>
+        你将会收到 <span> {{ getwAmount }}</span
+        >{{ mcoin }}币
       </p>
       <el-col>
-        <el-button>Withdraw</el-button>
+        <el-button>取款</el-button>
         <el-button>Change withdraw address</el-button>
       </el-col>
     </el-col>
