@@ -1,59 +1,61 @@
 <template>
   <div>
-    <plotheader />
-    <div class="main">
-      <el-col>
-        <h2>
-          PBT Market
-          <el-button
-            @click="mintVisible = true"
-            size="small"
-            class="btn"
-            v-if="baddr"
-            >Mint PBT</el-button
-          >
-        </h2>
+    <div class="content">
+      <el-aside width="250px">
+        <mynft />
+      </el-aside>
+      <el-main>
+        <div class="main">
+          <el-col>
+            <h2>
+              PBT Market
+              <el-button
+                @click="mintVisible = true"
+                size="small"
+                class="btn"
+                v-if="baddr"
+                >Mint PBT</el-button
+              >
+            </h2>
 
-        <el-col class="cointy">
-          <keep-alive>
-            <MarketXccList />
-          </keep-alive>
-        </el-col>
-        <!-- <el-col style="height: 600px">
+            <el-col class="cointy">
+              <keep-alive>
+                <MarketXccList />
+              </keep-alive>
+            </el-col>
+            <!-- <el-col style="height: 600px">
           <h2>nftinfo test</h2>
           <el-col v-if="curNFT"><NFTinfo /></el-col>
         </el-col> -->
-        <el-col class="cointy"><h3>HDDcoin</h3></el-col>
-        <el-col class="cointy"><h3>chia</h3></el-col>
+            <el-col class="cointy"><h3>HDDcoin</h3></el-col>
+            <el-col class="cointy"><h3>chia</h3></el-col>
 
-        <el-col class="cointy">
-          <keep-alive><MySale /></keep-alive>
-        </el-col>
-      </el-col>
+            <el-col class="cointy">
+              <keep-alive><MySale /></keep-alive>
+            </el-col>
+          </el-col>
+        </div>
+        <el-dialog :visible.sync="mintVisible" title="MINT NFT" width="50%">
+          <el-card>
+            <el-empty :image-size="200"></el-empty>
+            <el-col>
+              <p>
+                The price:
+                <span>{{ this.mintFee.price }}</span>
+                <span>{{ this.mintFee.token }}</span>
+              </p>
+              <p>Function: Chives</p>
+              <el-button @click="mintNFT">Mint</el-button>
+            </el-col>
+          </el-card>
+        </el-dialog>
+      </el-main>
     </div>
-    <mynft />
-    <el-dialog :visible.sync="mintVisible" title="MINT NFT" width="50%">
-      <el-card>
-        <el-empty :image-size="200"></el-empty>
-        <el-col>
-          <p>
-            The price:
-            <span>{{ this.mintFee.price }}</span>
-            <span>{{ this.mintFee.token }}</span>
-          </p>
-          <p>Function: Chives</p>
-          <el-button @click="mintNFT">Mint</el-button>
-        </el-col>
-      </el-card>
-    </el-dialog>
-    <plotfooter />
   </div>
 </template>
 
 <script>
-import Plotheader from "../components/content/Plotheader.vue";
 import Mynft from "../components/content/nftpanel/Mynft.vue";
-import Plotfooter from "../components/content/Plotfooter.vue";
 import { mapState } from "vuex";
 import market from "../market";
 import MySale from "../components/MySale.vue";
@@ -62,9 +64,7 @@ import NFTinfo from "../components/content/nftpanel/NFTinfo.vue";
 export default {
   name: "Market",
   components: {
-    Plotheader,
     Mynft,
-    Plotfooter,
     MySale,
     MarketXccList,
     NFTinfo,
@@ -100,17 +100,23 @@ export default {
 
 <style scoped>
 ::-webkit-scrollbar {
-  /*隐藏滚轮*/
   display: none;
 }
+.content {
+  display: flex;
+}
+.el-main {
+  /* background-color: red; */
+  height: calc(100vh - 140px);
+  width: calc(100vw - 250px);
+  padding: 0;
+}
 .main {
-  background-color: rgb(137, 180, 146);
-  width: 84.7 vw;
-  height: calc(100vh - 163px);
-  margin-left: 15vw;
+  /* background-color: rgb(137, 180, 146); */
+  height: calc(100vh - 140px);
   padding: 40px 40px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  /* overflow-x: hidden;
+  overflow-y: scroll; */
 }
 .content {
   display: flex;

@@ -29,10 +29,12 @@ export default {
 </script>
 
 <style scoped>
-.main {
-  background-color: rgb(137, 180, 146);
-  width: 85vw;
-  height: calc(100vh - 163px);
-  margin-left: 15vw;
+.content {
+  display: flex;
+}
+.el-main {
+  /* background-color: red; */
+  height: calc(100vh - 140px);
+  width: calc(100vw - 250px);
 }
 </style>

@@ -10,35 +10,36 @@
           class="btn"
         ></el-button>
       </h2>
-
-      <el-col class="nftlist">
-        <ul>
-          <li v-for="(nft, name) in this.mylist" :key="name">
-            <el-button class="nftlist" @click="openNFT(nft)">
-              <el-col>
-                <i>#{{ nft.id }}</i>
-                <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-              </el-col>
-              <el-badge
-                v-if="nft.pbxs.coinTypes == '3'"
-                value="Chives"
-                class="item"
-              >
-              </el-badge>
-            </el-button>
-          </li>
-        </ul>
-      </el-col>
-      <el-col class="btn-bar">
-        <el-pagination
-          background
-          layout="total,prev,pager,next"
-          :total="Object.keys(PBTlists).length"
-          @current-change="handleCurrentChange"
-          :current-page="this.pageNum"
-          :page-size="3"
-        ></el-pagination>
-      </el-col>
+      <div class="nftarea">
+        <el-col class="nftlist">
+          <ul>
+            <li v-for="(nft, name) in this.mylist" :key="name">
+              <el-button class="nftlist" @click="openNFT(nft)">
+                <el-col>
+                  <i>#{{ nft.id }}</i>
+                  <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+                </el-col>
+                <el-badge
+                  v-if="nft.pbxs.coinTypes == '3'"
+                  value="Chives"
+                  class="item"
+                >
+                </el-badge>
+              </el-button>
+            </li>
+          </ul>
+        </el-col>
+        <el-col class="btn-bar">
+          <el-pagination
+            background
+            layout="total,prev,pager,next"
+            :total="Object.keys(PBTlists).length"
+            @current-change="handleCurrentChange"
+            :current-page="this.pageNum"
+            :page-size="3"
+          ></el-pagination>
+        </el-col>
+      </div>
     </el-col>
     <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
       <el-card>
@@ -112,28 +113,20 @@ export default {
 
 <style scoped>
 .area {
-  width: 15vw;
-  height: calc(100vh - 163px);
+  width: 250px;
+  height: calc(100vh - 140px);
   min-height: 674px;
-  background-color: rgb(176, 203, 226);
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  margin: 70px auto;
-  overflow: scroll;
-  /* display: flex;
-  justify-content: space-around; */
-  /* align-items: center; */
 }
 h2 {
   padding: 20px 0 0 0;
   text-align: center;
 }
-.btn-bar {
-  position: absolute;
-  bottom: 10px;
-  left: 1vw;
+.nftarea {
+  height: 700px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* background-color: red; */
 }
 ::-webkit-scrollbar {
   /*隐藏滚轮*/
