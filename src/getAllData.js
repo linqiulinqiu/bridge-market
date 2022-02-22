@@ -28,7 +28,7 @@ async function ListenToWCoin(commit) {
     await updateBalance()
     ctr.on(ctr.filters.Transfer, updateBalance)
 }
-async function connectW() {
+async function connectW(commit) {
     bsc = await pbwallet.connect(true)
     PBTList = {
         // initial load all owned PBT
@@ -47,7 +47,7 @@ async function connectW() {
         console.log("bsc123", bsc)
 
         // await listenEvents(commit)
-        // await ListenToWCoin(commit)
+        await ListenToWCoin(commit)
         return bsc
     }
     console.log("bsc", bsc)

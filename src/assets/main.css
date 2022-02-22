@@ -11,6 +11,18 @@ li,
 button {
     color: #668b66
 } */
+.aa {
+    height: 50px;
+    background-color: #e3e9e3fd;
+    padding: 14px 0px;
+}
+
+.span {
+    width: 100px;
+    background-color: #e3e9e3fd;
+    display: inline-block;
+    text-align: center;
+}
 
 .selectToken {
     width: 100px;
@@ -124,7 +136,7 @@ button {
 .el-tabs {
     width: 760px;
     height: 500px;
-    text-align: center;
+    /* text-align: center; */
     background-color: #F5F7FA;
     /* margin: 100px auto; */
     position: relative;
@@ -145,10 +157,10 @@ button {
 
 .el-tabs__item {
     height: 70px;
-    width: 150px;
+    width: 120px;
     font-size: 24px;
     font-weight: 700;
-    margin: 0px 5px;
+    /* margin: 0px 5px; */
     padding: 12px 0px;
     text-align: center;
 }
@@ -162,7 +174,7 @@ button {
     border: none;
 }
 
-.el-tabs--bottom .el-tabs--left>.el-tabs__header .el-tabs__item:last-child,
+/* .el-tabs--bottom .el-tabs--left>.el-tabs__header .el-tabs__item:last-child,
 .el-tabs--bottom .el-tabs--right>.el-tabs__header .el-tabs__item:last-child,
 .el-tabs--bottom.el-tabs--border-card>.el-tabs__header .el-tabs__item:last-child,
 .el-tabs--bottom.el-tabs--card>.el-tabs__header .el-tabs__item:last-child,
@@ -171,7 +183,7 @@ button {
 .el-tabs--top.el-tabs--border-card>.el-tabs__header .el-tabs__item:last-child,
 .el-tabs--top.el-tabs--card>.el-tabs__header .el-tabs__item:last-child {
     padding: none;
-}
+} */
 
 /* getfee btnstyle */
 
@@ -187,4 +199,20 @@ button {
     z-index: 3;
     top: 15px;
     right: 50px;
+}
+
+#balance {
+    position: absolute;
+    top: 10px;
+    left: 0px;
+    width: 150px;
+    height: 50px;
+    background-color: rgb(226, 238, 224);
+    z-index: 5;
+    padding: 10px 0px;
+    border-radius: 20px;
+}
+
+.tabs {
+    padding-top: 30px;
 }

@@ -1,10 +1,10 @@
 <template>
-  <el-col id="redeem">
+  <el-col id="redeem" class="tabs">
     <h3>Redeem</h3>
     <el-col>
       <p>balnce:XXX</p>
       <el-col>
-        <el-input type="text" v-model.number="redeemNum"></el-input>
+        <el-input type="text" v-model.trim="redeemNum"></el-input>
         <p>
           <el-button>All</el-button>
           <el-button>Redeem</el-button>

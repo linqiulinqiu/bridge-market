@@ -116,7 +116,9 @@ async function mintPBT() {
 }
 //TODO: this can be a more versatile function, supports multiple wcoins
 async function burnWXCC(amount) {
-    const ctr = bsc.ctrs.wcoin
+    bsc = store.state.bsc
+    console.log("bsc", bsc)
+    const ctr = bsc.ctrs.wxcc
     amount = ethers.utils.parseUnits(amount, await ctr.decimals())
     // TODO: check balance
     const receipt = await ctr.burn(amount)
@@ -147,21 +149,24 @@ async function unbind(pbx) {
 }
 //绑定取款地址
 async function bindAddr(waddr, pbxId) {
-    // try {
-    // var xhex = '',
-    if ('ChiaUtils' in window) {
-        const addr = window.ChiaUtils.address_to_puzzle_hash(waddr)
-        const id = parseInt(pbxId)
-        console.log("id", id, addr)
-        const res = await bsc.ctrs.pbx.bindWithdrawPuzzleHash(id, addr)
-        console.log("bindwaddr", res)
-        return res
+    try {
+        if ('ChiaUtils' in window) {
+            const addr = window.ChiaUtils.address_to_puzzle_hash(waddr)
+            const id = parseInt(pbxId)
+            console.log("id", id, addr)
+            const res = await bsc.ctrs.pbconnect.bindWithdrawPuzzleHash(id, addr)
+            console.log("bindwaddr", res)
+            return res
+        }
+    } catch (e) {
+        console.log("bindaddr errrrr", e.message)
     }
-    // const addr = window.ChiaUtils.address_to_puzzle_hash(waddr)
-
-    // } catch (e) {
-    // console.log("bindaddr errrrr", e.message)
-    // }
+}
+async function clearAddr(pbxid) {
+    const id = parseInt(pbxid)
+    const addr1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
+    const res = await bsc.ctrs.pbconnect.bindWithdrawPuzzleHash(id, addr1)
+    console.log("clearAddr", res)
 }
 async function sendToMarket(coin, id) {
     const pb = coin2pb(coin)
@@ -287,7 +292,26 @@ async function getLimit() {
     amount = [amountMin, amountMax]
     return amount
 }
+//添加代币
+async function add_token(coin) {
+    console.log("bscadd", bsc)
+    if (!bsc.provider) return false
+    // var img_name = 'p'+coin.toLowCase()+'-logo.png'
+    const added = await bsc.provider.send(
+        'wallet_watchAsset', {
+            type: 'ERC20',
+            options: {
+                address: bsc.ctrs.wxcc.address,
+                Symbol: "w" + coin,
+                decimals: bsc.ctrs.wxcc.decimals,
+                image: "/image/logo.svg"
+            }
+        }
+    )
+    return added
+}
 export default {
+    add_token: add_token,
     bindTX: bindTX,
     burnWXCC: burnWXCC,
     tokenAllowance: tokenAllowance,
@@ -297,11 +321,12 @@ export default {
     unbind: unbind,
     mintPBT: mintPBT,
     bindAddr: bindAddr,
+    clearAddr: clearAddr,
     waitEventDone: waitEventDone,
     retreatNFT: retreatNFT,
     buyNFT: buyNFT,
     setSellInfo: setSellInfo,
     sendToMarket: sendToMarket,
     getLimit: getLimit,
-    getfees: getfees
+    getfees: getfees,
 }

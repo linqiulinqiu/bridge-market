@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <el-col class="area">
+  <div class="container" id="Mynft">
+    <el-col class="area" v-if="baddr">
       <h2>
         MY PBT NFT
         <el-button
@@ -10,11 +10,15 @@
           class="btn"
         ></el-button>
       </h2>
-      <div class="nftarea">
+      <el-col class="nftarea" v-if="Object.keys(PBTlists).length > 0">
         <el-col class="nftlist">
           <ul>
-            <li v-for="(nft, name) in this.mylist" :key="name">
-              <el-button class="nftlist" @click="openNFT(nft)">
+            <li v-for="(nft, name, index) in this.mylist" :key="name">
+              <el-button
+                class="nftlist"
+                :class="{ addclass: index == isAdd }"
+                @click="openNFT(nft, index)"
+              >
                 <el-col>
                   <i>#{{ nft.id }}</i>
                   <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
@@ -39,8 +43,12 @@
             :page-size="3"
           ></el-pagination>
         </el-col>
-      </div>
+      </el-col>
+      <el-col v-else>
+        <h2>请去往市场购买NFT</h2>
+      </el-col>
     </el-col>
+    <el-col v-else>连接钱包后查看</el-col>
     <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
       <el-card>
         <NFTinfo />
@@ -59,7 +67,7 @@ export default {
     NFTinfo,
   },
   computed: mapState({
-    coin: "coin",
+    mcoin: "mcoin",
     baddr: "baddr",
     curNFT: "curNFT",
     PBTlists: "PBTlists",
@@ -90,12 +98,14 @@ export default {
       mylist: {},
       pageNum: 1,
       nftinfo_dialog: false,
+      isAdd: "",
     };
   },
   methods: {
-    openNFT: async function (nft) {
-      console.log("curNFT", nft);
+    openNFT: async function (nft, index) {
+      console.log("curNFT", nft, index);
       this.$store.commit("setCurNFT", nft);
+      this.isAdd = index;
       if (this.mode == "market") {
         this.nftinfo_dialog = true;
       }
@@ -137,5 +147,11 @@ h2 {
 }
 .nftlist {
   margin: 15px 35px;
+}
+.addclass {
+  background: rgb(173, 195, 235);
+  width: 150px;
+  height: 150px;
+  transform: all 0.3 linear 0.2;
 }
 </style>

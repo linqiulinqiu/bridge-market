@@ -134,19 +134,6 @@ export default {
     },
   },
   data() {
-    // const state = this.$store.state;
-    // let price = 0;
-    // let desc = "";
-    // let priceToken = "BNB";
-    // if ("market" in state.curNFT) {
-    //   if (state.curNFT.market.price != 0) {
-    //     price = state.curNFT.market.price;
-    //   } else {
-    //     price = 0;
-    //   }
-    //   desc = state.curNFT.market.desc;
-    //   priceToken = state.curNFT.market.ptName;
-    // }
     return {
       nftPrice: 0,
       nftDesc: "",

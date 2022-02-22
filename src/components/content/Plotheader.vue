@@ -4,7 +4,7 @@
       <div class="logo">
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
-      <el-col><h2>version: 2/21 3.0</h2></el-col>
+      <el-col><h2>version: 2/22 3.0</h2></el-col>
       <nav>
         <div class="navi">
           <ul class="navi-content">
@@ -150,7 +150,7 @@ export default {
       //   background: "rgba(200,230,200,0.6)",
       // });
       // try {
-      const bsc = await allData.connectW();
+      const bsc = await allData.connectW(commit);
       // const obj = this;
       if (bsc) {
         commit("setBaddr", this.$store.state.bsc.addr);

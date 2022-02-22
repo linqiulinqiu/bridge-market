@@ -2,10 +2,10 @@
   <div>
     <div class="content">
       <el-aside width="350px">
-        <mynft />
+        <keep-alive> <mynft /></keep-alive>
       </el-aside>
       <el-main>
-        <div class="main">
+        <el-col class="main" v-if="baddr">
           <el-col>
             <h2>
               PBT Market
@@ -33,7 +33,8 @@
               <keep-alive><MySale /></keep-alive>
             </el-col>
           </el-col>
-        </div>
+        </el-col>
+        <el-col v-else>连接钱包后查看</el-col>
         <el-dialog :visible.sync="mintVisible" title="MINT NFT" width="50%">
           <el-card>
             <el-empty :image-size="200"></el-empty>
