@@ -293,25 +293,26 @@ async function getLimit() {
     return amount
 }
 //添加代币
-async function add_token(coin) {
+async function watchToken(coin) {
     console.log("bscadd", bsc)
     if (!bsc.provider) return false
     // var img_name = 'p'+coin.toLowCase()+'-logo.png'
+    const options = {
+            address: bsc.ctrs.wxcc.address,
+            symbol: "w" + coin,
+            decimals: await bsc.ctrs.wxcc.decimals(),
+            image: "https://www.plotbridge.io/images/big-logo.svg",
+        }
     const added = await bsc.provider.send(
         'wallet_watchAsset', {
             type: 'ERC20',
-            options: {
-                address: bsc.ctrs.wxcc.address,
-                Symbol: "w" + coin,
-                decimals: bsc.ctrs.wxcc.decimals,
-                image: "/image/logo.svg"
-            }
+            options: options
         }
     )
     return added
 }
 export default {
-    add_token: add_token,
+    watchToken: watchToken,
     bindTX: bindTX,
     burnWXCC: burnWXCC,
     tokenAllowance: tokenAllowance,

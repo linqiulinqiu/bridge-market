@@ -50,7 +50,7 @@ export default {
   methods: {
     addToken: async function () {
       const coin = this.mcoin;
-      const res = await market.add_token(coin);
+      const res = await market.watchToken(coin);
       console.log("add token", res);
     },
   },
