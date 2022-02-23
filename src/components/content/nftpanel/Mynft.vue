@@ -67,6 +67,7 @@ export default {
     NFTinfo,
   },
   computed: mapState({
+    bcoin: "bcoin",
     mcoin: "mcoin",
     baddr: "baddr",
     curNFT: "curNFT",
@@ -103,9 +104,23 @@ export default {
   },
   methods: {
     openNFT: async function (nft, index) {
-      console.log("curNFT", nft, index);
       this.$store.commit("setCurNFT", nft);
       this.isAdd = index;
+      const cointy = Object.keys(nft.pbxs);
+      let bridge_coin = "";
+      if (cointy.length == 1) {
+        if (cointy[0] == "3") {
+          bridge_coin = "XCC";
+        } else if (cointy[0] == "2") {
+          bridge_coin = "HDD";
+        } else if (cointy[0] == "3") {
+          bridge_coin = "XCH";
+        } else {
+          return false;
+        }
+      }
+      this.$store.commit("setMcoin", bridge_coin);
+      console.log("open cointy", cointy, bridge_coin);
       if (this.mode == "market") {
         this.nftinfo_dialog = true;
       }

@@ -26,7 +26,7 @@ import market from "../../market";
 export default {
   computed: mapState({
     baddr: "baddr",
-    mcoin: "mcoin",
+    bcoin: "bcoin",
     curNFT: "curNFT",
     WBalance: "WBalance",
     balance: "redeemBalance",

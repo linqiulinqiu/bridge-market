@@ -4,7 +4,7 @@
       <div class="logo">
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
-      <el-col><h2>version: 2/23 2.0</h2></el-col>
+      <el-col><h2>version: 2/23 3.0 pbwallet:#0.1.5</h2></el-col>
       <nav>
         <div class="navi">
           <ul class="navi-content">
@@ -32,7 +32,11 @@
           /></a>
         </div>
         <div class="start">
-          <el-button v-if="!baddr" type="primary" @click="connect_wallet"
+          <el-button
+            v-if="!baddr"
+            type="primary"
+            @click="connect_wallet"
+            id="start"
             >start</el-button
           >
           <span v-else>{{
@@ -48,6 +52,7 @@
 import { mapState } from "vuex";
 import market from "../../market";
 import allData from "../../getAllData";
+import AppVue from "../../App.vue";
 
 export default {
   name: "Plotheader",
@@ -78,10 +83,15 @@ export default {
       ],
     };
   },
-  // mounted() {
-  //   this.getPBmarketList();
-  //   this.getMarketInfo();
-  // },
+  mounted() {
+    // const start = document.querySelector("#statrt");
+    // start.addEventListener("keydown", async function (e) {
+    //   if (e.keyCode == "13") {
+    //     console.log("按下了回车键", this, AppVue);
+    //     await this.connect_wallet();
+    //   }
+    // });
+  },
   methods: {
     liclick(link) {
       const curMode = link.toString().substr(1);

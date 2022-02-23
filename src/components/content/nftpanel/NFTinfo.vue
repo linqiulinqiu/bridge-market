@@ -123,6 +123,7 @@ export default {
   computed: mapState({
     bcoin: "bcoin",
     curNFT: "curNFT",
+    mcoin: "mcoin",
   }),
   watch: {
     nftprice: function (newprice) {
@@ -182,13 +183,13 @@ export default {
 
     retreatNFT: async function () {
       const id = this.curNFT.id;
-      console.log("retreat start", this.bcoin, id);
-      const res = await market.retreatNFT(this.bcoin, id);
+      console.log("retreat start", this.mcoin, id);
+      const res = await market.retreatNFT(this.mcoin, id);
       console.log("retreat ok", res);
     },
     buyNFT: async function () {
       const curNFT = this.$store.state.curNFT;
-      const res = await market.buyNFT(this.bcoin, curNFT);
+      const res = await market.buyNFT(this.mcoin, curNFT);
       console.log("buyNFT res", res);
     },
   },

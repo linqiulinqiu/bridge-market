@@ -3,17 +3,19 @@
     <el-col class="fees" :span="12" v-if="baddr">
       <el-col :span="14" v-if="PBTlists != null"
         ><BridgeFee />
-        <el-col id="balance"
-          >余额：{{ WBalance }} <span class="minifont"> w{{ mcoin }}</span>
-          <el-button size="mini" type="primary" @click="addToken"
-            >添加代币</el-button
-          ></el-col
-        >
+        <el-col id="balance">
+          余额：{{ WBalance }}
+          <span class="minifont"> w{{ bcoin }}</span>
+          <el-button size="mini" type="primary" @click="addToken">
+            添加代币
+          </el-button>
+        </el-col>
         <el-tabs type="border-card">
           <el-tab-pane label="存款"><Deposite /></el-tab-pane>
           <el-tab-pane label="取款"><Withdraw /></el-tab-pane>
-          <el-tab-pane label="兑换"><Redeem /></el-tab-pane> </el-tabs
-      ></el-col>
+          <el-tab-pane label="兑换"><Redeem /></el-tab-pane>
+        </el-tabs>
+      </el-col>
       <el-col v-else>
         <h1>Bridge Guide</h1>
         <el-col>
@@ -43,13 +45,13 @@ export default {
   },
   computed: mapState({
     WBalance: "WBalance",
-    mcoin: "mcoin",
+    bcoin: "bcoin",
     baddr: "baddr",
     PBTlists: "PBTlists",
   }),
   methods: {
     addToken: async function () {
-      const coin = this.mcoin;
+      const coin = this.bcoin;
       const res = await market.watchToken(coin);
       console.log("add token", res);
     },

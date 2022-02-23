@@ -263,6 +263,33 @@ async function getDecimals(coin) {
     const decimals = await ctr.decimals()
     return decimals
 }
+
+async function afterFee(coin, mode, amount) {
+    const fees = await getfees(coin)
+    const nowfee = {}
+    const decimals = await getDecimals(coin)
+    amount = ethers.utils.parseUnits(amount.toString(), decimals)
+    console.log("afterfeeeeeeeeee", fees, decimals, amount)
+    if (mode == 'deposite') {
+        nowfee.min = fees.depositeFee
+        nowfee.rate = fees.depositeFeeRate
+    } else if (mode == 'withdraw') {
+        nowfee.min = fees.withdrawFee
+        nowfee.rate = fees.withdrawFeeRate
+        if (amount.gt(store.state.WBalance)) {
+            return "fund"
+        }
+    } else {
+        return "mode"
+    }
+    console.log("nowfee", nowfee)
+    var fee = amount.mul(nowfee.rate).div(10000)
+    if (fee.lt(nowfee.min)) {
+        fee = nowfee.min
+    }
+    if (amount.lte(fee)) return false
+    return ethers.utils.formatUnits(amount.sub(fee), decimals)
+}
 //获取费率 
 async function getfees(coin) {
     const decimals = await getDecimals(coin)
@@ -279,7 +306,7 @@ async function getfees(coin) {
     fee.depositeFeeRate = depfee[0]
     fee.withdrawFee = ethers.utils.formatUnits(wdfee[1], decimals)
     fee.withdrawFeeRate = wdfee[0]
-    console.log("feeeeeeeeeeeeee", fee)
+    // console.log("feeeeeeeeeeeeee", fee)
     return fee
 
 }
@@ -298,11 +325,11 @@ async function watchToken(coin) {
     if (!bsc.provider) return false
     // var img_name = 'p'+coin.toLowCase()+'-logo.png'
     const options = {
-            address: bsc.ctrs.wxcc.address,
-            symbol: "w" + coin,
-            decimals: await bsc.ctrs.wxcc.decimals(),
-            image: "https://www.plotbridge.io/images/big-logo.svg",
-        }
+        address: bsc.ctrs.wxcc.address,
+        symbol: "w" + coin,
+        decimals: await bsc.ctrs.wxcc.decimals(),
+        image: "https://www.plotbridge.io/images/big-logo.svg",
+    }
     const added = await bsc.provider.send(
         'wallet_watchAsset', {
             type: 'ERC20',
@@ -312,6 +339,7 @@ async function watchToken(coin) {
     return added
 }
 export default {
+    afterFee: afterFee,
     watchToken: watchToken,
     bindTX: bindTX,
     burnWXCC: burnWXCC,

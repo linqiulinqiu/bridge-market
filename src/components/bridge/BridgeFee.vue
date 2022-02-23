@@ -5,10 +5,10 @@
         单次存款限额为：{{ this.depAmount }}<br />
         单次取款限额：{{ this.wAmount }}<br />
         存款费率：{{ this.dFeeRate / 100 }}%，存款最小手续费：{{ this.dFee
-        }}{{ mcoin }}
+        }}{{ bcoin }}
         <br />
         取款费率：{{ this.wFeeRate / 100 }}%，取款最小手续费：{{ this.wFee
-        }}{{ mcoin }}
+        }}{{ bcoin }}
       </p>
       <el-button
         circle
@@ -24,7 +24,7 @@ import { mapState } from "vuex";
 import market from "../../market";
 export default {
   computed: mapState({
-    mcoin: "mcoin",
+    bcoin: "bcoin",
     baddr: "baddr",
     curNFT: "curNFT",
   }),
