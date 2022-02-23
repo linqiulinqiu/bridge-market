@@ -17,6 +17,10 @@ button {
     padding: 14px 0px;
 }
 
+.minifont {
+    font-size: 14px;
+}
+
 .span {
     width: 100px;
     background-color: #e3e9e3fd;

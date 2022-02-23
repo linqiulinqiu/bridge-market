@@ -58,8 +58,8 @@
 import Mynft from "../components/content/nftpanel/Mynft.vue";
 import { mapState } from "vuex";
 import market from "../market";
-import MySale from "../components/MySale.vue";
-import MarketXccList from "../components/MarketXccList.vue";
+import MySale from "../components/market/MySale.vue";
+import MarketXccList from "../components/market/MarketXccList.vue";
 import NFTinfo from "../components/content/nftpanel/NFTinfo.vue";
 export default {
   name: "Market",

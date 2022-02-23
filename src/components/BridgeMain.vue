@@ -4,7 +4,7 @@
       <el-col :span="14" v-if="PBTlists != null"
         ><BridgeFee />
         <el-col id="balance"
-          >余额：{{ WBalance }}{{ mcoin }}
+          >余额：{{ WBalance }} <span class="minifont"> w{{ mcoin }}</span>
           <el-button size="mini" type="primary" @click="addToken"
             >添加代币</el-button
           ></el-col

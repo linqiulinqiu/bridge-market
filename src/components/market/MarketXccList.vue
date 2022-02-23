@@ -40,8 +40,8 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import market from "../market";
-import NFTinfo from "../components/content/nftpanel/NFTinfo.vue";
+import market from "../../market";
+import NFTinfo from "../content/nftpanel/NFTinfo.vue";
 export default {
   name: "MarketXccList",
   components: {

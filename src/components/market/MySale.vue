@@ -28,9 +28,9 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import market from "../market";
-import allData from "../getAllData";
-import NFTinfo from "./content/nftpanel/NFTinfo.vue";
+import market from "../../market";
+import allData from "../../getAllData";
+import NFTinfo from "../content/nftpanel/NFTinfo.vue";
 export default {
   name: "MySale",
   components: {
