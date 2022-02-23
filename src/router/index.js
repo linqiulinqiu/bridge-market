@@ -39,16 +39,16 @@ const routes = [
     name: 'Doc',
     component: () => import('../views/Doc')
   },
-  {
-    path: '/message',
-    name: 'Message',
-    component: () => import('../views/Message')
-  },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import('../views/Settings')
-  },
+  // {
+  //   path: '/message',
+  //   name: 'Message',
+  //   component: () => import('../views/Message')
+  // },
+  // {
+  //   path: '/settings',
+  //   name: 'Settings',
+  //   component: () => import('../views/Settings')
+  // },
 
 ]
 

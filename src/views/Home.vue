@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-main style="width: 100vw">Main</el-main>
+  <div class="container">
+    <el-main style="width: 100vw">Home page</el-main>
   </div>
 </template>
 
@@ -11,4 +11,7 @@ export default {
 </script>
 
 <style>
+.container {
+  color: #ffffff;
+}
 </style>

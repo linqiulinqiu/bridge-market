@@ -2,10 +2,10 @@
   <div>
     <div class="content">
       <el-aside width="250px">
-        <mynft />
+        <Mynft />
       </el-aside>
       <el-main>
-        <div class="main">
+        <!-- <div class="main">
           <el-col>
             <h2>
               PBT Market
@@ -17,16 +17,11 @@
                 >铸造 PBT</el-button
               >
             </h2>
-
             <el-col class="cointy">
               <keep-alive>
                 <MarketXccList />
               </keep-alive>
             </el-col>
-            <!-- <el-col style="height: 600px">
-          <h2>nftinfo test</h2>
-          <el-col v-if="curNFT"><NFTinfo /></el-col>
-        </el-col> -->
             <el-col class="cointy"><h3>HDDcoin</h3></el-col>
             <el-col class="cointy"><h3>chia</h3></el-col>
             <el-col class="cointy">
@@ -47,7 +42,7 @@
               <el-button @click="mintNFT">铸造</el-button>
             </el-col>
           </el-card>
-        </el-dialog>
+        </el-dialog> -->
       </el-main>
     </div>
   </div>
@@ -104,18 +99,17 @@ export default {
 .content {
   display: flex;
 }
+.el-aside {
+  background: #25272E;
+}
 .el-main {
-  /* background-color: red; */
-  height: calc(100vh - 140px);
+  height: calc(100vh - 70px);
   width: calc(100vw - 250px);
   padding: 0;
 }
 .main {
-  /* background-color: rgb(137, 180, 146); */
-  height: calc(100vh - 140px);
+  height: calc(100vh - 70px);
   padding: 40px 40px;
-  /* overflow-x: hidden;
-  overflow-y: scroll; */
 }
 .content {
   display: flex;

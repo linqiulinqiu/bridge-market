@@ -1,6 +1,11 @@
 <template>
-  <div class="container">
-    <el-col class="area">
+  <div class="container"> <!-- v-if 没有nft-->
+    <div class="title">My NFTs</div>
+    <div class="content">You haven't got any NFTs. Please go to the market.</div>
+    <div class="bottom">
+      Go to Market
+    </div>
+    <!-- <el-col class="area">
       <h2>
         MY PBT NFT
         <el-button
@@ -45,8 +50,16 @@
       <el-card>
         <NFTinfo />
       </el-card>
-    </el-dialog>
+    </el-dialog> -->
   </div>
+  <!-- v-else 有nft -->
+  <!-- <div class="container"> 
+    <div class="title">My NFTs</div>
+    <div class="content">You haven't got any NFTs. Please go to the market.</div>
+    <div class="bottom">
+      Go to Market
+    </div>
+  </div> -->
 </template>
 
 <script>
@@ -112,7 +125,39 @@ export default {
 </script>
 
 <style scoped>
-.area {
+.container {
+   color: #ffffff;
+}
+.title {
+  height: 50px;
+  font-size: 36px;
+  line-height: 50px;
+  text-align: center;
+  margin: 20px;
+}
+.content{
+  height: calc(100vh - 220px);
+  font-size: 24px;
+  line-height: 36px;
+  padding: 40px;
+}
+.bottom {
+  background-color: #38F2AF;
+  height: 33px;
+  width: 132px;
+  margin: 0 auto;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 33px;
+  text-align: center;
+  color: #000000;
+}
+/* .container {
+  background: #25272E;
+} */
+
+/* .area {
   width: 250px;
   height: calc(100vh - 140px);
   min-height: 674px;
@@ -126,13 +171,11 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* background-color: red; */
 }
 ::-webkit-scrollbar {
-  /*隐藏滚轮*/
   display: none;
 }
 .nftlist {
   margin: 15px 35px;
-}
+} */
 </style>

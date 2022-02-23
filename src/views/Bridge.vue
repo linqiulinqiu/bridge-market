@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <el-container>
-      <el-aside width="250px"> <mynft /></el-aside>
-      <el-main><BridgeMain/></el-main>
-    </el-container>
+  <div class="content">
+    <el-aside width="250px"> <Mynft /></el-aside>
+    <el-main>main</el-main>
   </div>
 </template>
 
@@ -30,10 +28,14 @@ export default {
 .content {
   display: flex;
   overflow: hidden;
+  color: #ffffff;
 }
 .el-main {
   /* background-color: red; */
-  height: calc(100vh - 140px);
+  height: calc(100vh - 70px);
   width: calc(100vw - 250px);
+}
+.el-aside {
+  background: #25272E;
 }
 </style>

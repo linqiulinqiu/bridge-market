@@ -1,46 +1,12 @@
 <template>
-  <div>
-    <header>
-      <div class="logo">
-        <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
-      </div>
-      <el-col><h2>version: 2/21 3.0</h2></el-col>
-      <nav>
-        <div class="navi">
-          <ul class="navi-content">
-            <li
-              v-for="(item, index) in this.nav"
-              :key="index"
-              @click="liclick(item.link)"
-            >
-              {{ item.tag }}
-            </li>
-          </ul>
-        </div>
-        <div class="linkto">
-          <a href=""
-            ><img class="l-coin" src="../../assets/image/discord.png" alt=""
-          /></a>
-          <a href=""
-            ><img class="l-coin" src="../../assets/image/twitter.png" alt=""
-          /></a>
-          <a href=""
-            ><img class="l-coin" src="../../assets/image/facebook.png" alt=""
-          /></a>
-          <a href=""
-            ><img class="l-coin" src="../../assets/image/linkedin.png" alt=""
-          /></a>
-        </div>
-        <div class="start">
-          <el-button v-if="!baddr" type="primary" @click="connect_wallet"
-            >start</el-button
-          >
-          <span v-else>{{
-            baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
-          }}</span>
-        </div>
-      </nav>
-    </header>
+  <div class="container">
+    <div class="logo">PlotBridge</div>
+    <div class="nav">
+      <ul>
+        <li class="nav-item" v-for="(item, index) in this.nav" :key="index" @click="liclick(item.link,index)">{{item.tag}}</li>
+      </ul>
+    </div>
+    <div class="connect">connect</div>
   </div>
 </template>
 
@@ -83,7 +49,13 @@ export default {
   //   this.getMarketInfo();
   // },
   methods: {
-    liclick(link) {
+    liclick(link,index) {
+      let arr = document.getElementsByClassName('nav-item')
+      let array = Array.from(arr)
+      array.forEach(element =>{
+        element.classList.remove('active')
+      });
+      array[index].classList.add('active')
       const curMode = link.toString().substr(1);
       this.$store.commit("setMode", curMode);
       this.$router.push(link).catch((err) => err); //加catch,在router.push的时候捕获异常，防止重复点击报错
@@ -183,48 +155,47 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-.logo {
-  height: 70px;
-}
-.m-logo {
-  height: 70px;
-  margin-left: 20px;
-}
-header {
-  height: 70px;
-  width: 100%;
-  background-color: #616161;
+.container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
-nav {
-  display: flex;
-}
-.navi-content {
-  /* background-color: blue; */
-  list-style: none;
-  display: flex;
-  color: #ffffff;
-}
-li {
-  margin: 0 20px;
+.logo {
   cursor: pointer;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 70px;
+  color: #38F2AF;
+  flex: 2;
 }
-.linkto {
-  width: 180px;
+.connect{
+  background-color: #38F2AF;
+  color: #000000;
+  height: 33px;
+  width: 132px;
+  line-height: 33px;
+  flex:1;
+  border-radius: 4px;
+  margin-right: 30px;
+  cursor: pointer;
+  box-shadow: 0px 2px 2px 0px rgba(56, 242, 175, 0.08);
+}
+.nav {
+  flex:7;
+}
+.nav ul {
   height: 70px;
   display: flex;
-  justify-content: space-evenly;
-  /* align-items: center; */
-  /* background-color: green; */
+  list-style: none;
+  justify-content: flex-start;
+  
 }
-.l-coin {
-  height: 32px;
-  margin-top: 18px;
+li {
+  color: #ffffff;
+  margin:0 20px;
+  cursor: pointer;
 }
-.start {
-  /* background-color: yellow; */
-  margin-left: 30px;
+.active {
+  color: #38F2AF;
+  border-bottom:3px solid #38F2AF;
 }
 </style>
