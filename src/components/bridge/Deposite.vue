@@ -41,7 +41,9 @@
           你将会得到<span class="span">{{ getAmount }}</span> W{{ bcoin }}
           币，在你的bsc钱包中。
         </p>
-        <p v-if="this.tips_amount">{{ this.tips_amount }}}</p>
+        <p v-if="this.tips_amount">
+          <i v-if="this.depAmount.length > 0">{{ this.tips_amount }}</i>
+        </p>
       </el-col>
     </el-col>
   </el-col>
@@ -67,7 +69,6 @@ export default {
     };
   },
   watch: {
-    
     depAmount: async function () {
       var depamount = this.depAmount;
       console.log("depamount", this.bcoin, depamount);
@@ -90,6 +91,8 @@ export default {
         this.getAmount = after_fee;
         this.tips_amount = false;
       }
+      console.log("aft", after_fee, this.getAmount);
+      return after_fee;
     },
   },
   methods: {},

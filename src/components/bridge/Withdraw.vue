@@ -32,7 +32,7 @@
         </span>
       </el-col>
       <el-col>
-        <el-col>
+        <el-col style="height: 45px; margin-top: 10px">
           <p>
             烧掉
             <el-input
@@ -47,11 +47,11 @@
           </p>
         </el-col>
 
-        <el-col>
+        <el-col style="height: 70px">
           <p>
             你将会收到 <span class="span"> {{ getwAmount }}</span> {{ bcoin }}币
           </p>
-          <p v-if="this.tips_amount">
+          <p v-if="this.tips_amount" class="minifont">
             <i v-if="wAmount.length > 0">{{ this.tips_amount }}</i>
           </p>
         </el-col>
@@ -60,6 +60,13 @@
         <el-button type="primary" @click="withdraw">取款</el-button>
         <el-button @click="bind_dialog = true">更改取款地址</el-button>
         <el-button @click="clearAddr">清空存款地址</el-button>
+      </el-col>
+      <el-col style="margin-top: 20px">
+        <p>
+          <span class="minifont">
+            一个账户绑定多个钱包的多个地址时，钱款可能随机发送到其中一个钱包中，请注意查收
+          </span>
+        </p>
       </el-col>
     </el-col>
     <el-dialog title="绑定取款地址" :visible.sync="bind_dialog">
@@ -109,19 +116,21 @@ export default {
       console.log("wamount", this.bcoin, wamount);
       if (!wamount || isNaN(wamount) || wamount == "") {
         wamount = "0";
+        return false;
       }
       const after_fee = await market.afterFee(this.bcoin, "withdraw", wamount);
       console.log("afterfee", after_fee);
       if (!after_fee) {
         this.getwAmount = "";
         this.tips_amount = "数额过少，将什么都收不到呢！";
-      } else if (after_fee == "no") {
+      } else if (after_fee == "fund") {
         this.getwAmount = "";
         this.tips_amount = "数额过大，余额不够呢！";
       } else {
         this.getwAmount = after_fee;
         this.tips_amount = false;
       }
+      return after_fee;
     },
   },
   methods: {
@@ -140,9 +149,11 @@ export default {
     withdraw: async function () {
       const amount = this.wAmount;
       // const btn = this;
+      const coin = this.bcoin;
+      console.log("bcoin", coin);
       if (await this.amount_valid(this.wAmount)) {
         try {
-          const res = await market.burnWXCC(amount);
+          const res = await market.burnWXCC(amount, coin);
           console.log("withdraw res", res);
         } catch (e) {
           console.log("withdraw errrr", e.message);

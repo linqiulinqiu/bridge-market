@@ -5,6 +5,16 @@
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
       <el-col><h2>version: 2/23 3.0 pbwallet:#0.1.5</h2></el-col>
+      <el-col>
+        <el-select v-model="lang">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-col>
       <nav>
         <div class="navi">
           <ul class="navi-content">
@@ -52,7 +62,7 @@
 import { mapState } from "vuex";
 import market from "../../market";
 import allData from "../../getAllData";
-import AppVue from "../../App.vue";
+import { i18n, setup } from "../../locales";
 
 export default {
   name: "Plotheader",
@@ -72,9 +82,23 @@ export default {
       this.$store.commit("setPBTSellingLists", newLists);
     },
     deep: true,
+    lang: function () {
+      setup(this.lang);
+    },
   },
   data() {
     return {
+      options: [
+        {
+          value: "en",
+          label: "English",
+        },
+        {
+          value: "zh",
+          label: "简体中文",
+        },
+      ],
+      lang: i18n.locale,
       nav: [
         { tag: "Home", link: "/home" },
         { tag: "Bridge", link: "/bridge" },

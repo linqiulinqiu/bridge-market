@@ -88,10 +88,13 @@ export default {
     deep: true,
     PBTMySaleLists: function (newLists) {
       this.$store.commit("setPBTMySaleLists", newLists);
+      return this.PBTMySaleLists;
     },
     deep: true,
     curNFT: function (newNFT) {
       console.log("this.curNFT", newNFT);
+      this.$store.commit("setCurNFT", newNFT);
+      return this.curNFT;
     },
   },
   data() {
@@ -119,7 +122,7 @@ export default {
           return false;
         }
       }
-      this.$store.commit("setMcoin", bridge_coin);
+      this.$store.commit("setBcoin", bridge_coin);
       console.log("open cointy", cointy, bridge_coin);
       if (this.mode == "market") {
         this.nftinfo_dialog = true;

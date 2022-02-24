@@ -18,7 +18,17 @@ const ptAddrs = {
     'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
 }
 async function ListenToWCoin(commit) {
-    const ctr = bsc.ctrs.wxcc
+    const coin = store.state.bcoin
+    var ctr = {}
+    if (coin == "XCC") {
+        ctr = bsc.ctrs.wxcc
+    } else if (coin == "HDD") {
+        ctr = bsc.ctrs.whdd
+    } else if (coin == "XCH") {
+        ctr = bsc.ctrs.wxch
+    } else {
+        return false
+    }
     const decimals = await ctr.decimals()
     async function updateBalance(evt) {
         const balance = await ctr.balanceOf(bsc.addr)
@@ -86,10 +96,39 @@ async function getNFTinfo(coin, nftid) {
     return info
 }
 //获取绑定的 pbx 信息 
+function getprefix(coin) {
+    let prefix = ""
+    if (coin == "XCC") {
+        prefix = 'xcc'
+    } else if (coin == 'XCH') {
+        prefix = "xch"
+    } else if (coin == "HDD") {
+        prefix = "hdd"
+    } else {
+        return false
+    }
+    return prefix
+}
 async function getPBXInfo(pbtId) {
+    console.log()
+    const list = PBTList.owned[pbtId]
+    const coinArr = Object.keys(list.pbxs)
+    console.log(coinArr)
+    let coin = ""
+    if (coinArr.includes('1')) {
+        coin = 'XCH'
+    } else if (coinArr.includes('2')) {
+        coin = "HDD"
+    } else if (coinArr.includes('3')) {
+        coin = "XCC"
+    } else {
+        return false
+    }
+    console.log("coinnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", coin)
+    // const prefix = getprefix(coin)
     const xAddress = await bsc.ctrs.pbconnect.XAddressList(pbtId)
-    const depAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[1].toString(), "xcc")
-    const withAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[2].toString(), "xcc")
+    const depAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[1].toString(), coin.toLowerCase())
+    const withAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[2].toString(), coin.toLowerCase())
     const info = {
         depositAddr: depAddress.toString(),
         withdrawAddr: withAddress.toString()
@@ -160,7 +199,6 @@ async function getMarketList(coin) {
 
 //获取所有 list 信息
 async function getUserTokenList(coin, addr) {
-    //pb==coin（"PBT"/"PBX"）
     const pb = coin2pb(coin)
     // 获取 NFT 基础信息 object--key为nftID，value 为 nftInfo
     const list = await getBriefInfo(coin, addr)

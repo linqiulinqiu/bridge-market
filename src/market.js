@@ -114,15 +114,33 @@ async function mintPBT() {
         return text
     }
 }
-//TODO: this can be a more versatile function, supports multiple wcoins
-async function burnWXCC(amount) {
+
+function getBridgeTy(coin) {
     bsc = store.state.bsc
-    console.log("bsc", bsc)
-    const ctr = bsc.ctrs.wxcc
-    amount = ethers.utils.parseUnits(amount, await ctr.decimals())
+    let bCoinTy = ''
+    if (coin == "XCC") {
+        bCoinTy = bsc.ctrs.wxcc
+    }
+    if (coin == "HDD") {
+        bCoinTy = bsc.ctrs.whdd
+    }
+    if (coin == "XCH") {
+        bCoinTy = bsc.ctrs.wxch
+    }
+    return bCoinTy
+}
+//TODO: this can be a more versatile function, supports multiple wcoins
+async function burnWXCC(amount, coin) {
+    bsc = store.state.bsc
+    const ctr = getBridgeTy(coin)
+    const decimals = await getDecimals(coin)
+    amount = ethers.utils.parseUnits(amount, decimals)
     // TODO: check balance
+    const wBalance = ethers.utils.parseUnits(store.state.WBalance, decimals)
+    if (amount.gt(wBalance)) {
+        return false
+    }
     const receipt = await ctr.burn(amount)
-    console.log('burn receipt', receipt)
     return receipt
 }
 async function waitEventDone(tx, done) {
@@ -258,7 +276,9 @@ async function getDecimals(coin) {
         wAddr = bsc.ctrs.wxcc.address
     }
     if (coin == "XCH") {}
-    if (coin == "HDD") {}
+    if (coin == "HDD") {
+        wAddr = bsc.ctrs.whdd.address
+    }
     const ctr = pbwallet.erc20_contract(wAddr)
     const decimals = await ctr.decimals()
     return decimals
@@ -268,26 +288,26 @@ async function afterFee(coin, mode, amount) {
     const fees = await getfees(coin)
     const nowfee = {}
     const decimals = await getDecimals(coin)
-    amount = ethers.utils.parseUnits(amount.toString(), decimals)
-    console.log("afterfeeeeeeeeee", fees, decimals, amount)
+    amount = ethers.utils.parseUnits(amount, decimals)
     if (mode == 'deposite') {
-        nowfee.min = fees.depositeFee
+        nowfee.min = ethers.utils.parseUnits(fees.depositeFee, decimals)
         nowfee.rate = fees.depositeFeeRate
     } else if (mode == 'withdraw') {
-        nowfee.min = fees.withdrawFee
+        nowfee.min = ethers.utils.parseUnits(fees.withdrawFee, decimals)
         nowfee.rate = fees.withdrawFeeRate
-        if (amount.gt(store.state.WBalance)) {
+        if (amount.gt(ethers.utils.parseUnits(store.state.WBalance, decimals))) {
             return "fund"
         }
     } else {
         return "mode"
     }
-    console.log("nowfee", nowfee)
     var fee = amount.mul(nowfee.rate).div(10000)
     if (fee.lt(nowfee.min)) {
         fee = nowfee.min
     }
-    if (amount.lte(fee)) return false
+    if (amount.lte(fee)) {
+        return false
+    }
     return ethers.utils.formatUnits(amount.sub(fee), decimals)
 }
 //获取费率 
@@ -306,7 +326,6 @@ async function getfees(coin) {
     fee.depositeFeeRate = depfee[0]
     fee.withdrawFee = ethers.utils.formatUnits(wdfee[1], decimals)
     fee.withdrawFeeRate = wdfee[0]
-    // console.log("feeeeeeeeeeeeee", fee)
     return fee
 
 }

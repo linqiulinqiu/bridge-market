@@ -49,6 +49,13 @@ export default {
     baddr: "baddr",
     PBTlists: "PBTlists",
   }),
+  watch: {
+    bcoin: function (newcoin) {
+      console.log("coin", newcoin, this.bcoin);
+      this.$store.commit("setBcoin", newcoin);
+      return this.bcoin;
+    },
+  },
   methods: {
     addToken: async function () {
       const coin = this.bcoin;
