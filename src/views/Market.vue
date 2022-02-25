@@ -10,7 +10,7 @@
             <h2>
               PBT Market
               <el-button
-                @click="mintVisible = true"
+                @click="getMintfee"
                 size="small"
                 class="btn"
                 v-if="baddr"
@@ -93,6 +93,13 @@ export default {
         this.$message(e.data.message);
         console.log("mint err", e.message);
       }
+    },
+    getMintfee: async function () {
+      const bsc = this.$store.state.bsc;
+      const fee = await bsc.ctrs.pbt.mintFee();
+      console.log("mintfee", fee);
+
+      this.mintVisible = true;
     },
   },
 };

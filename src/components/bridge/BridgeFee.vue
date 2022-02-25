@@ -42,11 +42,12 @@ export default {
   methods: {
     getAmountLimit: async function () {
       console.log("getAmountLimit", this.curNFT);
-      const amount = await market.getLimit();
+      const coin = this.bcoin;
+      const amount = await market.getLimit(coin);
       console.log("getamount", amount, typeof amount[0]);
       this.depAmount = (amount[1] - amount[0]) / 2;
       this.wAmount = amount[0];
-      const fees = await market.getfees("XCC");
+      const fees = await market.getfees(coin);
       this.wFeeRate = fees.withdrawFeeRate;
       this.wFee = fees.withdrawFee;
       this.dFee = fees.depositeFee;

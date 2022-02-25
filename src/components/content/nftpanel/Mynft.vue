@@ -13,11 +13,11 @@
       <el-col class="nftarea" v-if="Object.keys(PBTlists).length > 0">
         <el-col class="nftlist">
           <ul>
-            <li v-for="(nft, name, index) in this.mylist" :key="name">
+            <li v-for="(nft, name) in this.mylist" :key="name">
               <el-button
                 class="nftlist"
-                :class="{ addclass: index == isAdd }"
-                @click="openNFT(nft, index)"
+                :class="{ addclass: name == isAdd }"
+                @click="openNFT(nft, name)"
               >
                 <el-col>
                   <i>#{{ nft.id }}</i>
@@ -48,7 +48,7 @@
         <h2>请去往市场购买NFT</h2>
       </el-col>
     </el-col>
-    <el-col v-else>连接钱包后查看</el-col>
+    <el-col v-else>{{ $t("look-info") }}</el-col>
     <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
       <el-card>
         <NFTinfo />
@@ -106,11 +106,14 @@ export default {
     };
   },
   methods: {
-    openNFT: async function (nft, index) {
+    openNFT: async function (nft, name) {
       this.$store.commit("setCurNFT", nft);
-      this.isAdd = index;
+      this.isAdd = name;
       const cointy = Object.keys(nft.pbxs);
       let bridge_coin = "";
+      if (this.mode == "market") {
+        this.nftinfo_dialog = true;
+      }
       if (cointy.length == 1) {
         if (cointy[0] == "3") {
           bridge_coin = "XCC";
@@ -124,9 +127,6 @@ export default {
       }
       this.$store.commit("setBcoin", bridge_coin);
       console.log("open cointy", cointy, bridge_coin);
-      if (this.mode == "market") {
-        this.nftinfo_dialog = true;
-      }
     },
     handleCurrentChange(newPage) {
       console.log("当前页:", newPage);

@@ -18,10 +18,16 @@
       >
       <p>
         Function:
-        <span v-if="curNFT.pbxs.coinType">
-          <span v-if="curNFT.pbxs.coinType == '3'"> Bridge for Chives </span>
-          <span v-if="curNFT.pbxs.coinType == '2'"> Bridge for HDDcoin </span>
-          <span v-if="curNFT.pbxs.coinType == '1'">Bridge for Chia</span>
+        <span v-if="curNFT.pbxs">
+          <span v-if="Object.keys(curNFT.pbxs).includes('3')">
+            Bridge for Chives
+          </span>
+          <span v-if="Object.keys(curNFT.pbxs).includes('2')">
+            Bridge for HDDcoin
+          </span>
+          <span v-if="Object.keys(curNFT.pbxs).includes('1')"
+            >Bridge for Chia</span
+          >
         </span>
         <span v-else> no bind bridge </span>
       </p>

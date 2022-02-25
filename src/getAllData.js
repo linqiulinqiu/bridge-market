@@ -17,47 +17,17 @@ const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
     'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
 }
-async function ListenToWCoin(commit) {
-    const coin = store.state.bcoin
-    var ctr = {}
-    if (coin == "XCC") {
-        ctr = bsc.ctrs.wxcc
-    } else if (coin == "HDD") {
-        ctr = bsc.ctrs.whdd
-    } else if (coin == "XCH") {
-        ctr = bsc.ctrs.wxch
-    } else {
-        return false
-    }
-    const decimals = await ctr.decimals()
-    async function updateBalance(evt) {
-        const balance = await ctr.balanceOf(bsc.addr)
-        console.log('wbalance', balance)
-        commit('setWBalance', ethers.utils.formatUnits(balance, decimals))
-    }
-    await updateBalance()
-    ctr.on(ctr.filters.Transfer, updateBalance)
-}
 async function connectW(commit) {
-    bsc = await pbwallet.connect(true)
+    bsc = await market.connect(commit)
+    console.log("bsc", bsc)
     PBTList = {
-        // initial load all owned PBT
         owned: {}, //setPBTlists 
         selling: {}, //setPBTSellingLists
-        mysale: {}
-    }
-    PBXList = {
-        // initial load all owned PBX
-        owned: {},
-        selling: {},
         mysale: {}
     }
     if (bsc) {
         store.commit("setBsc", bsc)
         console.log("bsc123", bsc)
-
-        // await listenEvents(commit)
-        await ListenToWCoin(commit)
         return bsc
     }
     console.log("bsc", bsc)
@@ -96,19 +66,6 @@ async function getNFTinfo(coin, nftid) {
     return info
 }
 //获取绑定的 pbx 信息 
-function getprefix(coin) {
-    let prefix = ""
-    if (coin == "XCC") {
-        prefix = 'xcc'
-    } else if (coin == 'XCH') {
-        prefix = "xch"
-    } else if (coin == "HDD") {
-        prefix = "hdd"
-    } else {
-        return false
-    }
-    return prefix
-}
 async function getPBXInfo(pbtId) {
     console.log()
     const list = PBTList.owned[pbtId]
@@ -124,7 +81,6 @@ async function getPBXInfo(pbtId) {
     } else {
         return false
     }
-    console.log("coinnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", coin)
     // const prefix = getprefix(coin)
     const xAddress = await bsc.ctrs.pbconnect.XAddressList(pbtId)
     const depAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[1].toString(), coin.toLowerCase())

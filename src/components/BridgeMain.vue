@@ -4,7 +4,8 @@
       <el-col :span="14" v-if="PBTlists != null"
         ><BridgeFee />
         <el-col id="balance">
-          余额：{{ WBalance }}
+          余额：{{ this.balance }}
+          <span v-if="WBalance"></span>
           <span class="minifont"> w{{ bcoin }}</span>
           <el-button size="mini" type="primary" @click="addToken">
             添加代币
@@ -52,15 +53,40 @@ export default {
   watch: {
     bcoin: function (newcoin) {
       console.log("coin", newcoin, this.bcoin);
+      const re = this.coinBalance(newcoin);
       this.$store.commit("setBcoin", newcoin);
+      console.log("bcoin   ", re, newcoin);
       return this.bcoin;
     },
+    WBalance: function (newb) {
+      console.log("newb", newb);
+      const re = this.coinBalance(this.bcoin);
+      console.log("newbvvv", newb, re);
+      return this.WBalance;
+    },
+    deep: true,
+  },
+  data() {
+    return {
+      balance: "",
+    };
   },
   methods: {
     addToken: async function () {
       const coin = this.bcoin;
       const res = await market.watchToken(coin);
       console.log("add token", res);
+    },
+    coinBalance: function (coin) {
+      const lcoin = coin.toString().toLowerCase();
+      if (lcoin in this.WBalance && this.WBalance[lcoin]) {
+        this.balance = this.WBalance[lcoin];
+        return this.WBalance[lcoin];
+      } else {
+        // WBalance[coin] not exist or WBalance[coin] == false
+        this.balance = "---";
+        return "---";
+      }
     },
   },
 };

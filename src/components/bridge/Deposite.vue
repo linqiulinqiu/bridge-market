@@ -38,7 +38,10 @@
       </el-col>
       <el-col>
         <p>
-          你将会得到<span class="span">{{ getAmount }}</span> W{{ bcoin }}
+          你将会得到<span class="span"
+            ><span v-if="this.depAmount"> {{ getAmount }}</span></span
+          >
+          W{{ bcoin }}
           币，在你的bsc钱包中。
         </p>
         <p v-if="this.tips_amount">
@@ -74,6 +77,8 @@ export default {
       console.log("depamount", this.bcoin, depamount);
       if (!depamount || isNaN(depamount) || depamount == "") {
         depamount = "0";
+        this.tips_amount = "请输入正确的金额";
+        return false;
       }
       const after_fee = await market.afterFee(
         this.bcoin,
@@ -82,10 +87,10 @@ export default {
       );
       console.log("aftrerfee", after_fee);
       if (!after_fee) {
-        this.getAmount = "";
+        this.getAmount = "0";
         this.tips_amount = "数额过少，将什么都收不到呢！";
       } else if (after_fee == "fund") {
-        this.getAmount = "";
+        this.getAmount = "0";
         this.tips_amount = "数额过大，余额不够呢！";
       } else {
         this.getAmount = after_fee;

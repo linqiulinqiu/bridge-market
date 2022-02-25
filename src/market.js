@@ -14,8 +14,65 @@ const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
     'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
 }
+//根据币种选择decimals
+async function getDecimals(coin) {
+    if (coin in coinDecimals) {
+        return coinDecimals[coin]
+    }
+    const decimals = await coinContract(coin).decimals()
+    return decimals
+}
 
+function coinContract(coin) {
+    const wcoin = 'w' + coin.toLowerCase()
+    return bsc.ctrs[wcoin]
+}
+async function ListenToWCoin(commit) {
+    let wBalance = {
+        xcc: '',
+        hdd: '',
+        // xch:""
+    }
+    var ctr_xcc = coinContract("XCC")
+    // var ctr_xch = coinContract("XCH")
+    var ctr_hdd = coinContract("HDD")
+    const decimals_xcc = await ctr_xcc.decimals()
+    // const decimals_xch = await ctr_xch.decimals()
+    const decimals_hdd = await ctr_hdd.decimals()
 
+    async function updateXCCBalance(evt) {
+        const xccbalance = await ctr_xcc.balanceOf(bsc.addr)
+        // const xchbalance = await ctr_xch.balanceOf(bsc.addr)
+        wBalance.xcc = ethers.utils.formatUnits(xccbalance, decimals_xcc)
+        // wBalance.xch = ethers.utils.formatUnits(xchbalance, decimals_xch)
+        console.log('wbalance', wBalance)
+        commit('setWBalance', wBalance)
+    }
+    async function updateHDDBalance(evt) {
+        // const xchbalance = await ctr_xch.balanceOf(bsc.addr)
+        const hddbalance = await ctr_hdd.balanceOf(bsc.addr)
+        // wBalance.xch = ethers.utils.formatUnits(xchbalance, decimals_xch)
+        wBalance.hdd = ethers.utils.formatUnits(hddbalance, decimals_hdd)
+        console.log('wbalance', wBalance)
+        commit('setWBalance', wBalance)
+    }
+    await updateXCCBalance()
+    await updateHDDBalance()
+    ctr_hdd.on(ctr_hdd.filters.Transfer, updateHDDBalance)
+    ctr_xcc.on(ctr_xcc.filters.Transfer, updateXCCBalance)
+}
+// 链接钱包
+async function connect(commit) {
+    bsc = await pbwallet.connect(true)
+    if (bsc) {
+        store.commit("setBsc", bsc)
+        console.log("fcgvbhnjmk,", bsc)
+        await ListenToWCoin(commit)
+        console.log("bsc111", bsc)
+        return bsc
+    }
+    return false
+}
 
 //获取绑定的pbx类型
 async function getCoinTypes(pbxid) {
@@ -39,12 +96,8 @@ function coin2pb(coin) {
     throw new Error('Unsupported coin:' + coin)
 }
 async function tokenBalance(tokenAddr) {
-    bsc = store.state.bsc
-    console.log("ctr", tokenAddr, "bsc", bsc)
     const ctr = pbwallet.erc20_contract(tokenAddr)
-    console.log("balance bsc.addr", bsc.addr, ctr)
     const balance = await ctr.balanceOf(bsc.addr)
-    console.log('token balance', tokenAddr, balance)
     const decimals = await ctr.decimals()
     return ethers.utils.formatUnits(balance, decimals)
 }
@@ -64,16 +117,13 @@ async function tokenRedeem(tokenAddr, amount) {
     const ctr = pbwallet.erc20_contract(tokenAddr)
     const decimals = await ctr.decimals()
     amount = ethers.utils.parseUnits(amount, decimals)
-    console.log('redeem amount', amount)
     await bsc.ctrs.tokenredeem.redeem(tokenAddr, amount)
 }
 async function bindTX(pbx_id, pbt) {
     const pbtId = ethers.utils.hexZeroPad(ethers.utils.hexValue(ethers.BigNumber.from(pbt.id)), 32)
-    console.log("pbtid", pbtId, "pbx", pbx_id)
     try {
         const res = await bsc.ctrs.pbx["safeTransferFrom(address,address,uint256,bytes)"](bsc.addr, bsc.ctrs.pbconnect.address, pbx_id, pbtId)
         console.log('bindTX receive', res)
-
         return res
     } catch (e) {
         let text = e.message
@@ -114,28 +164,11 @@ async function mintPBT() {
         return text
     }
 }
-
-function getBridgeTy(coin) {
-    bsc = store.state.bsc
-    let bCoinTy = ''
-    if (coin == "XCC") {
-        bCoinTy = bsc.ctrs.wxcc
-    }
-    if (coin == "HDD") {
-        bCoinTy = bsc.ctrs.whdd
-    }
-    if (coin == "XCH") {
-        bCoinTy = bsc.ctrs.wxch
-    }
-    return bCoinTy
-}
 //TODO: this can be a more versatile function, supports multiple wcoins
 async function burnWXCC(amount, coin) {
-    bsc = store.state.bsc
-    const ctr = getBridgeTy(coin)
+    const ctr = coinContract(coin)
     const decimals = await getDecimals(coin)
     amount = ethers.utils.parseUnits(amount, decimals)
-    // TODO: check balance
     const wBalance = ethers.utils.parseUnits(store.state.WBalance, decimals)
     if (amount.gt(wBalance)) {
         return false
@@ -157,9 +190,7 @@ async function unbind(pbx) {
     const pbconnect = bsc.ctrs.pbconnect
     try {
         const pbxid = parseInt(pbx.id)
-        console.log("unbinding with pbxID", pbx, pbxid)
         const res = await pbconnect.retreat(pbxid)
-        console.log("unbind res", res)
         return res
     } catch (e) {
         console.log("onbound error", e.message)
@@ -171,9 +202,7 @@ async function bindAddr(waddr, pbxId) {
         if ('ChiaUtils' in window) {
             const addr = window.ChiaUtils.address_to_puzzle_hash(waddr)
             const id = parseInt(pbxId)
-            console.log("id", id, addr)
             const res = await bsc.ctrs.pbconnect.bindWithdrawPuzzleHash(id, addr)
-            console.log("bindwaddr", res)
             return res
         }
     } catch (e) {
@@ -226,7 +255,6 @@ async function checkAllowance(nft) {
 }
 async function approveAllow(nft) {
     const priceToken = nft.priceToken
-
     const price = ethers.utils.parseEther(nft.price)
     const ctr = pbwallet.erc20_contract(priceToken)
     // uint256_MAX, priceToken_ctr.totalSupply()
@@ -268,21 +296,20 @@ async function retreatNFT(coin, id) {
     const res = await bsc.ctrs.pbmarket.offSale(pb.address, id)
     console.log('retreat receipt', res)
 }
-
-//根据币种选择decimals
-async function getDecimals(coin) {
-    let wAddr = ''
-    if (coin == "XCC") {
-        wAddr = bsc.ctrs.wxcc.address
+async function getmintfee() {
+    const options = {
+        ptName: '',
+        price: 0
     }
-    if (coin == "XCH") {}
-    if (coin == "HDD") {
-        wAddr = bsc.ctrs.whdd.address
+    const fee = await bsc.ctrs.pbt.mintFee();
+    if (fee[0] == '0x0000000000000000000000000000000000000000') {
+        options.ptName = "BNB"
+        options.price = ethers.utils.formatUnits(fee[1], bsc.ctrs.pbt.decimals)
     }
-    const ctr = pbwallet.erc20_contract(wAddr)
-    const decimals = await ctr.decimals()
-    return decimals
 }
+const coinDecimals = {}
+
+
 
 async function afterFee(coin, mode, amount) {
     const fees = await getfees(coin)
@@ -313,26 +340,23 @@ async function afterFee(coin, mode, amount) {
 //获取费率 
 async function getfees(coin) {
     const decimals = await getDecimals(coin)
-    let depfee = []
-    let wdfee = []
-    if (coin == "XCC") {
-        depfee = await bsc.ctrs.wxcc.getDepositFee()
-        wdfee = await bsc.ctrs.wxcc.getWithdrawFee()
-    }
-    if (coin == "XCH") {}
-    if (coin == "HDD") {}
+    const ctr = coinContract(coin)
+    const depfee = await ctr.getDepositFee()
+    const wdfee = await ctr.getWithdrawFee()
     const fee = {}
     fee.depositeFee = ethers.utils.formatUnits(depfee[1], decimals)
     fee.depositeFeeRate = depfee[0]
     fee.withdrawFee = ethers.utils.formatUnits(wdfee[1], decimals)
     fee.withdrawFeeRate = wdfee[0]
+    console.log("getfees", fee)
     return fee
 
 }
 //获取最大值，最小值
-async function getLimit() {
-    let amount = await bsc.ctrs.wxcc.getCWAmount()
-    const decimals = await getDecimals('XCC')
+async function getLimit(coin) {
+    const ctr = coinContract(coin)
+    let amount = await ctr.getCWAmount()
+    const decimals = await getDecimals(coin)
     const amountMax = ethers.utils.formatUnits(amount[1], decimals)
     const amountMin = ethers.utils.formatUnits(amount[0], decimals)
     amount = [amountMin, amountMax]
@@ -340,14 +364,14 @@ async function getLimit() {
 }
 //添加代币
 async function watchToken(coin) {
-    console.log("bscadd", bsc)
+    const ctr = coinContract(coin)
     if (!bsc.provider) return false
-    // var img_name = 'p'+coin.toLowCase()+'-logo.png'
+    var img_name = 'w' + coin.toLowerCase() + '-logo.svg'
     const options = {
-        address: bsc.ctrs.wxcc.address,
+        address: ctr.address,
         symbol: "w" + coin,
-        decimals: await bsc.ctrs.wxcc.decimals(),
-        image: "https://www.plotbridge.io/images/big-logo.svg",
+        decimals: await ctr.decimals(),
+        image: "https://www.plotbridge.net/img/" + img_name,
     }
     const added = await bsc.provider.send(
         'wallet_watchAsset', {
@@ -358,6 +382,7 @@ async function watchToken(coin) {
     return added
 }
 export default {
+    connect: connect,
     afterFee: afterFee,
     watchToken: watchToken,
     bindTX: bindTX,

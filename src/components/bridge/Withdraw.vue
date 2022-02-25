@@ -6,30 +6,26 @@
         请确认取款地址是自己钱包的收款地址，并且确认地址是正确的。
       </span>
       <el-col class="aa">
-        <span v-if="curNFT.pbxs">
-          <span v-if="curNFT.pbxs['0']">请绑定一个正确的取款地址</span>
-          <span v-else
-            ><span v-if="bcoin == 'XCH'">
-              <i v-if="curNFT.pbxs['1'].withdrawAddr">{{
-                curNFT.pbxs["1"].withdrawAddr
-              }}</i>
+        <p>
+          <span v-if="curNFT.pbxs">
+            <span v-for="(item, key, index) in curNFT.pbxs" :key="index">
+              <span v-if="key == '0'">暂不可用的PBT，绑定PBX后使用</span>
+              <span v-else>
+                <span
+                  v-if="curNFT.pbxs[key].withdrawAddr.substr(3, 6) == '1qqqqq'"
+                  >未绑定取款地址</span
+                >
+                <span v-else>{{ item.withdrawAddr }}</span>
+              </span>
             </span>
-            <span v-if="bcoin == 'HDD'">
-              <i v-if="curNFT.pbxs['2'].withdrawAddr">{{
-                curNFT.pbxs["2"].withdrawAddr
-              }}</i>
-            </span>
-            <span v-if="bcoin == 'XCC'">
-              <i v-if="curNFT.pbxs['3'].withdrawAddr">
-                <i v-if="curNFT.pbxs['3'].withdrawAddr == this.zeroAddr">
-                  取款地址已清空，请重新绑定
-                </i>
-                <i v-else>{{ curNFT.pbxs["3"].withdrawAddr }}</i>
-              </i>
-            </span>
-            <span v-else>请先绑定一个关于{{ bcoin }}的钱包取款地址</span></span
+          </span>
+        </p>
+        <p>
+          <el-button @click="bind_dialog = true" type="primary" size="small"
+            >更改取款地址</el-button
           >
-        </span>
+          <el-button @click="clearAddr" size="small">清空存款地址</el-button>
+        </p>
       </el-col>
       <el-col>
         <el-col style="height: 45px; margin-top: 10px">
@@ -43,23 +39,25 @@
               suffix-icon="el-icon-edit"
             ></el-input>
             <el-button type="primary" size="mini" circle>全部</el-button>
-            WXCC币，
+            W{{ bcoin }}币，
           </p>
         </el-col>
 
         <el-col style="height: 70px">
           <p>
-            你将会收到 <span class="span"> {{ getwAmount }}</span> {{ bcoin }}币
+            你将会收到
+            <span class="span">
+              <span v-if="this.wAmount != ''">{{ getwAmount }}</span>
+            </span>
+            {{ bcoin }}币
           </p>
           <p v-if="this.tips_amount" class="minifont">
-            <i v-if="wAmount.length > 0">{{ this.tips_amount }}</i>
+            <i v-if="this.wAmount.length > 0">{{ this.tips_amount }}</i>
           </p>
         </el-col>
       </el-col>
       <el-col>
         <el-button type="primary" @click="withdraw">取款</el-button>
-        <el-button @click="bind_dialog = true">更改取款地址</el-button>
-        <el-button @click="clearAddr">清空存款地址</el-button>
       </el-col>
       <el-col style="margin-top: 20px">
         <p>
@@ -78,10 +76,8 @@
           </span>
         </p>
         <el-input type="text" v-model.trim="wAddr"></el-input>
-        <p>
-          <el-button type="primary" @click="bindWaddr">Bind</el-button>
-          <el-button @click="bind_dialog = false">Cancel</el-button>
-        </p>
+        <el-button type="primary" @click="bindWaddr">Bind</el-button>
+        <el-button @click="bind_dialog = false">Cancel</el-button>
       </el-card>
     </el-dialog>
   </el-col>
@@ -106,8 +102,11 @@ export default {
       tips_amount: false,
       wAddr: "",
       bind_dialog: false,
-      zeroAddr:
-        "xcc1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqvt9px0",
+      cointy: {
+        XCC: "3",
+        HDD: "2",
+        XCH: "1",
+      },
     };
   },
   watch: {
@@ -116,6 +115,8 @@ export default {
       console.log("wamount", this.bcoin, wamount);
       if (!wamount || isNaN(wamount) || wamount == "") {
         wamount = "0";
+        console.log(wamount);
+        this.tips_amount = "请输入正确的金额";
         return false;
       }
       const after_fee = await market.afterFee(this.bcoin, "withdraw", wamount);
@@ -138,9 +139,7 @@ export default {
       if (!wAmount || isNaN(wAmount)) {
         return false;
       }
-      //amount = parseFloat(amount) // TODO: convert to bignum later
       const after_fee = await market.afterFee(this.bcoin, "withdraw", wAmount);
-      // console.log("after_fee", after_fee);
       if (!after_fee || isNaN(after_fee) || parseFloat(after_fee) <= 0) {
         return false;
       }
@@ -148,7 +147,6 @@ export default {
     },
     withdraw: async function () {
       const amount = this.wAmount;
-      // const btn = this;
       const coin = this.bcoin;
       console.log("bcoin", coin);
       if (await this.amount_valid(this.wAmount)) {
@@ -162,19 +160,17 @@ export default {
     },
     clearAddr: async function () {
       console.log("coin", this.bcoin);
-      if (this.bcoin == "XCC") {
-        const id = this.curNFT.pbxs["3"].id;
-        const res = await market.clearAddr(id);
-        console.log("clearAddr", res);
-      }
+      const cointy = this.cointy[this.bcoin];
+      const id = this.curNFT.pbxs[cointy].id;
+      const res = await market.clearAddr(id);
+      console.log("clearAddr", res);
     },
     bindWaddr: async function () {
-      if (this.bcoin == "XCC") {
-        const id = this.curNFT.pbxs["3"].id;
-        const addr = this.wAddr.toString();
-        const res = await market.bindAddr(addr, id);
-        console.log("bindWaddr", res);
-      }
+      const cointy = this.cointy[this.bcoin];
+      const id = this.curNFT.pbxs[cointy].id;
+      const addr = this.wAddr.toString();
+      const res = await market.bindAddr(addr, id);
+      console.log("bindWaddr", res);
     },
   },
 };

@@ -4,8 +4,12 @@
       <div class="logo">
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
-      <el-col><h2>version: 2/23 3.0 pbwallet:#0.1.5</h2></el-col>
-      <el-col>
+      <el-col :span="8"
+        ><p style="line-height: 15px">
+          version: 2/25 3.0 pbwallet:#0.1.6
+        </p></el-col
+      >
+      <el-col :span="8">
         <el-select v-model="lang">
           <el-option
             v-for="item in options"
@@ -15,8 +19,8 @@
           ></el-option>
         </el-select>
       </el-col>
-      <nav>
-        <div class="navi">
+      <el-col :span="8"
+        ><div class="navi">
           <ul class="navi-content">
             <li
               v-for="(item, index) in this.nav"
@@ -26,8 +30,10 @@
               {{ item.tag }}
             </li>
           </ul>
-        </div>
-        <div class="linkto">
+        </div></el-col
+      >
+      <el-col :span="2"
+        ><div class="linkto">
           <a href=""
             ><img class="l-coin" src="../../assets/image/discord.png" alt=""
           /></a>
@@ -39,21 +45,24 @@
           /></a>
           <a href=""
             ><img class="l-coin" src="../../assets/image/linkedin.png" alt=""
-          /></a>
-        </div>
-        <div class="start">
-          <el-button
-            v-if="!baddr"
-            type="primary"
-            @click="connect_wallet"
-            id="start"
-            >start</el-button
-          >
-          <span v-else>{{
-            baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
-          }}</span>
-        </div>
-      </nav>
+          /></a></div
+      ></el-col>
+      <el-col :span="2">
+        <nav>
+          <div class="start">
+            <el-button
+              v-if="!baddr"
+              type="primary"
+              @click="connect_wallet"
+              id="start"
+              >start</el-button
+            >
+            <span v-else>{{
+              baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
+            }}</span>
+          </div>
+        </nav>
+      </el-col>
     </header>
   </div>
 </template>
@@ -84,7 +93,13 @@ export default {
     deep: true,
     lang: function () {
       setup(this.lang);
+      console.log(this.lang, setup(this.lang));
     },
+    nav: function () {
+      console.log(this.nav);
+      return this.nav;
+    },
+    deep: true,
   },
   data() {
     return {
@@ -101,8 +116,8 @@ export default {
       lang: i18n.locale,
       nav: [
         { tag: "Home", link: "/home" },
-        { tag: "Bridge", link: "/bridge" },
-        { tag: "Market", link: "/market" },
+        { tag: this.$t("bridge"), link: "/bridge" },
+        { tag: this.$t("market"), link: "/market" },
         { tag: "Doc", link: "/doc" },
       ],
     };
@@ -233,17 +248,16 @@ header {
   align-items: center;
 }
 nav {
-  display: flex;
+  display: inline-block;
 }
 .navi-content {
-  /* background-color: blue; */
   list-style: none;
-  display: flex;
   color: #ffffff;
 }
 li {
-  margin: 0 20px;
+  margin: 0 15px;
   cursor: pointer;
+  float: left;
 }
 .linkto {
   width: 180px;
