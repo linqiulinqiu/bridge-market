@@ -1,5 +1,11 @@
 {
-    "market":"Market",
     "bridge":"Bridge",
-    "look-info":"Looking the details info after connect wallet"
+    "buy":"Buy it",
+    "deposite":"deposite",
+    "desc":"description",
+    "function":"Function",
+    "look-info":"Looking the details info after connect wallet",
+    "market":"Market",
+    "price":"The price",
+    "withdraw":"withdraw"
 }

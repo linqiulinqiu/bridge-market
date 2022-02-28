@@ -177,7 +177,7 @@ async function mintPBT() {
     }
 }
 //TODO: this can be a more versatile function, supports multiple wcoins
-async function burnWXCC(amount, coin) {
+async function burnWcoin(amount, coin) {
     const ctr = coinContract(coin)
     const decimals = await getDecimals(coin)
     amount = ethers.utils.parseUnits(amount, decimals)
@@ -212,6 +212,8 @@ async function unbind(pbx) {
 async function bindAddr(waddr, pbxId) {
     try {
         if ('ChiaUtils' in window) {
+            if (waddr.substr(0, 3) != store.state.bcoin) return false
+            console.log("this.xaddr", store.state.bcoin)
             const addr = window.ChiaUtils.address_to_puzzle_hash(waddr)
             const id = parseInt(pbxId)
             const res = await bsc.ctrs.pbconnect.bindWithdrawPuzzleHash(id, addr)
@@ -315,14 +317,16 @@ async function afterFee(coin, mode, amount) {
     const fees = await getfees(coin)
     const nowfee = {}
     const decimals = await getDecimals(coin)
-    amount = ethers.utils.parseUnits(amount, decimals)
+    amount = ethers.utils.parseUnits(amount.toString(), decimals)
     if (mode == 'deposite') {
         nowfee.min = ethers.utils.parseUnits(fees.depositeFee, decimals)
         nowfee.rate = fees.depositeFeeRate
     } else if (mode == 'withdraw') {
         nowfee.min = ethers.utils.parseUnits(fees.withdrawFee, decimals)
         nowfee.rate = fees.withdrawFeeRate
-        if (amount.gt(ethers.utils.parseUnits(store.state.WBalance, decimals))) {
+        console.log("after fee", store.state.WBalance.toString(), nowfee)
+        const key = coin.toLowerCase()
+        if (amount.gt(ethers.utils.parseUnits(store.state.WBalance[key], decimals))) {
             return "fund"
         }
     } else {
@@ -386,7 +390,7 @@ export default {
     afterFee: afterFee,
     watchToken: watchToken,
     bindTX: bindTX,
-    burnWXCC: burnWXCC,
+    burnWcoin: burnWcoin,
     tokenAllowance: tokenAllowance,
     tokenApprove: tokenApprove,
     tokenBalance: tokenBalance,

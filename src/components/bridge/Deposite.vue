@@ -18,18 +18,18 @@
             <span v-if="curNFT.pbxs['0']">请绑定PBX</span>
             <span v-else>
               <span v-if="bcoin == 'XCH'">
-                <i v-if="curNFT.pbxs['1'].depositAddr">{{
-                  curNFT.pbxs["1"].depositAddr
+                <i v-if="curNFT.pbxs['1'].depositeAddr">{{
+                  curNFT.pbxs["1"].depositeAddr
                 }}</i>
               </span>
               <span v-if="bcoin == 'HDD'">
-                <i v-if="curNFT.pbxs['2'].depositAddr">{{
-                  curNFT.pbxs["2"].depositAddr
+                <i v-if="curNFT.pbxs['2'].depositeAddr">{{
+                  curNFT.pbxs["2"].depositeAddr
                 }}</i>
               </span>
               <span v-if="bcoin == 'XCC'">
-                <i v-if="curNFT.pbxs['3'].depositAddr">{{
-                  curNFT.pbxs["3"].depositAddr
+                <i v-if="curNFT.pbxs['3'].depositeAddr">{{
+                  curNFT.pbxs["3"].depositeAddr
                 }}</i>
               </span>
             </span>

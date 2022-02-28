@@ -38,7 +38,7 @@
               maxlength="40"
               suffix-icon="el-icon-edit"
             ></el-input>
-            <el-button type="primary" size="mini" circle>全部</el-button>
+            <el-button type="primary" circle>全部</el-button>
             W{{ bcoin }}币，
           </p>
         </el-col>
@@ -151,7 +151,7 @@ export default {
       console.log("bcoin", coin);
       if (await this.amount_valid(this.wAmount)) {
         try {
-          const res = await market.burnWXCC(amount, coin);
+          const res = await market.burnWcoin(amount, coin);
           console.log("withdraw res", res);
         } catch (e) {
           console.log("withdraw errrr", e.message);

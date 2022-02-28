@@ -59,6 +59,7 @@
 
 <script>
 import { mapState } from "vuex";
+import getAllData from "../../../getAllData";
 import NFTinfo from "./NFTinfo.vue";
 
 export default {
@@ -103,30 +104,51 @@ export default {
       pageNum: 1,
       nftinfo_dialog: false,
       isAdd: "",
+      coinMap: {
+        XCC: "3",
+        XCH: "1",
+        HDD: "2",
+      },
     };
   },
   methods: {
     openNFT: async function (nft, name) {
-      this.$store.commit("setCurNFT", nft);
-      this.isAdd = name;
-      const cointy = Object.keys(nft.pbxs);
-      let bridge_coin = "";
+      const loading = this.$loading({
+        lock: true,
+        spinner: "el-icon-loading",
+        background: "rgba(200,230,200,0.6)",
+      });
+      if (this.mode == "bridge") {
+        const cointy = Object.keys(nft.pbxs);
+        let bridge_coin = "";
+        if (cointy.length == 1) {
+          if (cointy[0] == "3") {
+            bridge_coin = "XCC";
+          } else if (cointy[0] == "2") {
+            bridge_coin = "HDD";
+          } else if (cointy[0] == "3") {
+            bridge_coin = "XCH";
+          } else {
+            return false;
+          }
+        }
+        this.$store.commit("setBcoin", bridge_coin);
+
+        if (!("depositeAddr" in nft.pbxs[cointy[0]])) {
+          console.log("open", nft);
+          const nftinfo = await getAllData.nftAllinfo(nft);
+          console.log("open nft", nftinfo);
+          this.$store.commit("setCurNFT", nftinfo);
+        } else {
+          console.log("open nft", nft);
+          this.$store.commit("setCurNFT", nft);
+        }
+        this.isAdd = name;
+      }
       if (this.mode == "market") {
         this.nftinfo_dialog = true;
       }
-      if (cointy.length == 1) {
-        if (cointy[0] == "3") {
-          bridge_coin = "XCC";
-        } else if (cointy[0] == "2") {
-          bridge_coin = "HDD";
-        } else if (cointy[0] == "3") {
-          bridge_coin = "XCH";
-        } else {
-          return false;
-        }
-      }
-      this.$store.commit("setBcoin", bridge_coin);
-      console.log("open cointy", cointy, bridge_coin);
+      loading.close();
     },
     handleCurrentChange(newPage) {
       console.log("当前页:", newPage);

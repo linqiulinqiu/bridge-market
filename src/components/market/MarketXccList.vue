@@ -1,11 +1,12 @@
 <template>
   <el-col>
     <h3>Chives</h3>
-    <ul class="content" v-for="(nft, name) in this.xcclist" :key="name">
-      <li
+    <ul class="content" v-for="(nft, name) in PBTSellingLists" :key="name">
+      <!-- <li
         class="listLi"
         v-if="nft.market && nft.market.price && nft.market.price != '0.0'"
-      >
+      > -->
+      <li class="listLi">
         <el-button class="nftlist" @click="openNFT(nft)">
           <i>#{{ nft.id }}</i>
           <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
@@ -21,7 +22,7 @@
         </el-button>
       </li>
     </ul>
-    <el-col :offset="10">
+    <!-- <el-col :offset="10">
       <el-pagination
         :total="Object.keys(PBTSellingLists).length"
         background
@@ -30,7 +31,7 @@
         :page-size="10"
         layout="total,prev,pager,next"
       ></el-pagination>
-    </el-col>
+    </el-col> -->
     <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
       <el-card>
         <NFTinfo />
@@ -40,6 +41,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import getAllData from "../../getAllData";
 import market from "../../market";
 import NFTinfo from "../content/nftpanel/NFTinfo.vue";
 export default {
@@ -83,7 +85,9 @@ export default {
         Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
       );
     },
-    openNFT: function (nft) {
+    openNFT: async function (nft) {
+      const info = await getAllData.getMarketNFT("PBT", nft.id);
+      nft.market = info;
       this.$store.commit("setCurNFT", nft);
       console.log("curNFT", nft);
       this.nftinfo_dialog = true;

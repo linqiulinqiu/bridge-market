@@ -7,11 +7,11 @@
       <el-col v-if="curNFT.market">
         <el-col v-if="curNFT.market.seller == '-self'">
           <p v-if="curNFT.market.price">
-            price:<span>{{ curNFT.market.price }}&nbsp;</span>
+            {{ $t("price") }}<span>{{ curNFT.market.price }}&nbsp;</span>
             <span>{{ curNFT.market.ptName }}</span>
           </p>
           <p v-if="curNFT.market.desc != ''">
-            Description:{{ curNFT.market.desc }}
+            {{ $t("desc") }}{{ curNFT.market.desc }}
           </p>
           <p v-else>No Description</p>
         </el-col></el-col

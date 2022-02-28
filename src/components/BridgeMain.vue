@@ -12,8 +12,8 @@
           </el-button>
         </el-col>
         <el-tabs>
-          <el-tab-pane label="存款"><Deposite /></el-tab-pane>
-          <el-tab-pane label="取款"><Withdraw /></el-tab-pane>
+          <el-tab-pane :label="$t('deposite')"><Deposite /></el-tab-pane>
+          <el-tab-pane :label="$t('withdraw')"><Withdraw /></el-tab-pane>
           <el-tab-pane label="兑换"><Redeem /></el-tab-pane>
         </el-tabs>
       </el-col>
