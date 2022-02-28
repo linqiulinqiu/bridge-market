@@ -1,8 +1,8 @@
 <template>
   <el-row id="bridge-main" type="flex" justify="center">
     <el-col class="fees" :span="12" v-if="baddr">
-      <el-col :span="14" v-if="PBTlists != null"
-        ><BridgeFee />
+      <el-col :span="14" v-if="PBTlists != null" class="mainpanel">
+        <BridgeFee />
         <el-col id="balance">
           余额：{{ this.balance }}
           <span v-if="WBalance"></span>
@@ -11,7 +11,7 @@
             添加代币
           </el-button>
         </el-col>
-        <el-tabs type="border-card">
+        <el-tabs>
           <el-tab-pane label="存款"><Deposite /></el-tab-pane>
           <el-tab-pane label="取款"><Withdraw /></el-tab-pane>
           <el-tab-pane label="兑换"><Redeem /></el-tab-pane>

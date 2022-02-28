@@ -131,6 +131,8 @@ button {
     margin: 0px 0px 30px 30px;
 }
 
+
+
 /* 输入数字*/
 .amount-input {
     width: 200px;
@@ -140,15 +142,13 @@ button {
 .el-tabs {
     width: 760px;
     height: 500px;
-    /* text-align: center; */
     background-color: #F5F7FA;
-    /* margin: 100px auto; */
     position: relative;
 }
 
-.el-tabs {
+/* .el-tabs {
     border: none;
-}
+} */
 
 .el-tabs__nav-scroll {
     text-align: center;
@@ -157,6 +157,7 @@ button {
 .el-tabs__nav {
     width: 100%;
     height: 70px;
+    padding-top: 15px;
 }
 
 .el-tabs__item {
@@ -164,30 +165,39 @@ button {
     width: 120px;
     font-size: 24px;
     font-weight: 700;
-    /* margin: 0px 5px; */
-    padding: 12px 0px;
+    padding: 0px;
     text-align: center;
 }
 
-.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
-    color: #fff;
-    /* background-color: #abcdef; */
-    background: #616161;
+.el-tabs__active-bar {
+    background-color: #668b66;
+    width: 120px;
+}
 
-    /* border-radius: 18px; */
+.el-tabs__nav-scroll {
+    padding: 0px 25%;
+}
+
+.el-tab-pane {
+    padding: 30px 30px;
+}
+
+
+
+.el-tabs>.el-tabs__header .el-tabs__item.is-active {
+    color: #668b66;
     border: none;
 }
 
-/* .el-tabs--bottom .el-tabs--left>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--bottom .el-tabs--right>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--bottom.el-tabs--border-card>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--bottom.el-tabs--card>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--top .el-tabs--left>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--top .el-tabs--right>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--top.el-tabs--border-card>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--top.el-tabs--card>.el-tabs__header .el-tabs__item:last-child {
-    padding: none;
-} */
+.el-tabs>.el-tabs__header .el-tabs__item {
+    padding-left: -1px;
+}
+
+.el-tabs--top.el-tabs>.el-tabs__header .el-tabs__item:nth-child(2),
+.el-tabs--top.el-tabs>.el-tabs__header .el-tabs__item:last-child {
+    padding: 0;
+}
+
 
 /* getfee btnstyle */
 
@@ -198,11 +208,16 @@ button {
     /* width: 800px; */
 }
 
+.mainpanel {
+    position: relative;
+    /* width: 50%; */
+}
+
 .btn-fee {
     position: absolute;
     z-index: 3;
     top: 15px;
-    right: 50px;
+    right: -200px;
 }
 
 #balance {
@@ -217,6 +232,24 @@ button {
     border-radius: 20px;
 }
 
-.tabs {
+/* .tabs {
     padding-top: 30px;
+} */
+
+.el-tabs>.el-tabs__header .el-tabs__item:not(.is-active):hover {
+    color: #668b66;
+}
+
+
+.el-tabs>.el-tabs__header .el-tabs__item[class~=is-active]:hover {
+    color: #051105;
+}
+
+/* get info button */
+.el-icon-info:before {
+    font-size: xx-large;
+}
+
+.el-button.is-circle {
+    padding: 0px;
 }

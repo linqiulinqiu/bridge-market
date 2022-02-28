@@ -66,7 +66,6 @@ async function connect(commit) {
     bsc = await pbwallet.connect(true)
     if (bsc) {
         store.commit("setBsc", bsc)
-        console.log("fcgvbhnjmk,", bsc)
         await ListenToWCoin(commit)
         console.log("bsc111", bsc)
         return bsc
@@ -134,6 +133,19 @@ async function bindTX(pbx_id, pbt) {
         }
         return text
     }
+}
+async function getmintfee() {
+    const options = {}
+    const fee = await bsc.ctrs.pbt.mintFee();
+    if (fee[0] == ethers.constants.AddressZero) {
+        options.price = ethers.utils.formatUnits(fee[1])
+        options.ptName = "BNB"
+    } else if (fee[0] == ptAddrs.BUSD) {
+        options.price = ethers.utils.formatUnits(fee[1])
+        options.ptName = "BUSD"
+    }
+    console.log("options", options)
+    return options
 }
 async function mintPBT() {
     try {
@@ -276,7 +288,6 @@ async function buyNFT(coin, nft) {
     } else {
         // check allowance
         const allow = await checkAllowance(nft)
-        console.log("allow", allow)
         if (allow.lt(price)) { // not enough allowance, approve first
             const res = await approveAllow(nft)
             console.log("res", res) // TODO: approve can use MAX_UINT256 for infinity
@@ -296,20 +307,9 @@ async function retreatNFT(coin, id) {
     const res = await bsc.ctrs.pbmarket.offSale(pb.address, id)
     console.log('retreat receipt', res)
 }
-async function getmintfee() {
-    const options = {
-        ptName: '',
-        price: 0
-    }
-    const fee = await bsc.ctrs.pbt.mintFee();
-    if (fee[0] == '0x0000000000000000000000000000000000000000') {
-        options.ptName = "BNB"
-        options.price = ethers.utils.formatUnits(fee[1], bsc.ctrs.pbt.decimals)
-    }
-}
+
+
 const coinDecimals = {}
-
-
 
 async function afterFee(coin, mode, amount) {
     const fees = await getfees(coin)
@@ -402,4 +402,5 @@ export default {
     sendToMarket: sendToMarket,
     getLimit: getLimit,
     getfees: getfees,
+    getmintfee: getmintfee,
 }

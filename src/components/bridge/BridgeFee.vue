@@ -13,6 +13,7 @@
       </p>
       <el-button
         circle
+        type="primary"
         slot="reference"
         class="el-icon-info btn-fee"
         @click="getAmountLimit"

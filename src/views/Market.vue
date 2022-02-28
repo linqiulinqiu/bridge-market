@@ -78,9 +78,8 @@ export default {
   data() {
     return {
       mintVisible: false,
-      //use function get mintfee
       mintFee: {
-        price: 0.01,
+        price: 0,
         token: "BNB",
       },
     };
@@ -95,10 +94,9 @@ export default {
       }
     },
     getMintfee: async function () {
-      const bsc = this.$store.state.bsc;
-      const fee = await bsc.ctrs.pbt.mintFee();
-      console.log("mintfee", fee);
-
+      const fee = await market.getmintfee();
+      this.mintFee.price = fee.price;
+      this.mintFee.token = fee.ptName;
       this.mintVisible = true;
     },
   },
