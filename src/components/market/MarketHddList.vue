@@ -1,6 +1,6 @@
 <template>
   <el-col>
-    <h3>Chives</h3>
+    <h3>HDDcoin</h3>
     <ul class="content" v-for="(nft, name) in PBTSellingLists" :key="name">
       <li class="listLi" v-if="'2' in nft.pbxs">
         <el-button class="nftlist" @click="openNFT(nft)">

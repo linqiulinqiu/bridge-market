@@ -6,7 +6,7 @@
       </div>
       <el-col :span="8"
         ><p style="line-height: 15px">
-          version: 3/1 4.0 pbwallet:#0.1.6
+          version: 3/1 5.0 pbwallet:#0.1.6
         </p></el-col
       >
       <el-col :span="8">
