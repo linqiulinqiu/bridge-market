@@ -11,11 +11,15 @@
             <span v-for="(item, key, index) in curNFT.pbxs" :key="index">
               <span v-if="key == '0'">暂不可用的PBT，绑定PBX后使用</span>
               <span v-else>
-                <span
-                  v-if="curNFT.pbxs[key].withdrawAddr.substr(3, 6) == '1qqqqq'"
-                  >未绑定取款地址</span
-                >
-                <span v-else>{{ item.withdrawAddr }}</span>
+                <span v-if="curNFT.pbxs[key].withdrawAddr">
+                  <span
+                    v-if="
+                      curNFT.pbxs[key].withdrawAddr.substr(3, 6) == '1qqqqq'
+                    "
+                    >未绑定取款地址
+                  </span>
+                  <span v-else>{{ item.withdrawAddr }}</span>
+                </span>
               </span>
             </span>
           </span>

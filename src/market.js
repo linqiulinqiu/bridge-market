@@ -42,9 +42,7 @@ async function ListenToWCoin(commit) {
 
     async function updateXCCBalance(evt) {
         const xccbalance = await ctr_xcc.balanceOf(bsc.addr)
-        // const xchbalance = await ctr_xch.balanceOf(bsc.addr)
         wBalance.XCC = ethers.utils.formatUnits(xccbalance, decimals_xcc)
-        // wBalance.xch = ethers.utils.formatUnits(xchbalance, decimals_xch)
         console.log('wbalance', wBalance)
         commit('setWBalance', wBalance)
     }
@@ -181,8 +179,8 @@ async function burnWcoin(amount, coin) {
     const ctr = coinContract(coin)
     const decimals = await getDecimals(coin)
     amount = ethers.utils.parseUnits(amount, decimals)
-    const wBalance = ethers.utils.parseUnits(store.state.WBalance, decimals)
-    if (amount.gt(wBalance)) {
+    const wBalance = ethers.utils.parseUnits(store.state.WBalance[coin], decimals)
+    if (amount.gt(wBalance[coin])) {
         return false
     }
     const receipt = await ctr.burn(amount)
@@ -325,8 +323,7 @@ async function afterFee(coin, mode, amount) {
         nowfee.min = ethers.utils.parseUnits(fees.withdrawFee, decimals)
         nowfee.rate = fees.withdrawFeeRate
         console.log("after fee", store.state.WBalance.toString(), nowfee)
-        const key = coin.toLowerCase()
-        if (amount.gt(ethers.utils.parseUnits(store.state.WBalance[key], decimals))) {
+        if (amount.gt(ethers.utils.parseUnits(store.state.WBalance[coin], decimals))) {
             return "fund"
         }
     } else {
