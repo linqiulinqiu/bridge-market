@@ -27,7 +27,11 @@
           <h2>nftinfo test</h2>
           <el-col v-if="curNFT"><NFTinfo /></el-col>
         </el-col> -->
-            <el-col class="cointy"><h3>HDDcoin</h3></el-col>
+            <el-col class="cointy">
+              <keep-alive>
+                <MarketHddList />
+              </keep-alive>
+            </el-col>
             <el-col class="cointy"><h3>chia</h3></el-col>
             <el-col class="cointy">
               <keep-alive><MySale /></keep-alive>
@@ -60,6 +64,8 @@ import { mapState } from "vuex";
 import market from "../market";
 import MySale from "../components/market/MySale.vue";
 import MarketXccList from "../components/market/MarketXccList.vue";
+import MarketHddList from "../components/market/MarketHddList.vue";
+
 import NFTinfo from "../components/content/nftpanel/NFTinfo.vue";
 export default {
   name: "Market",
@@ -67,6 +73,7 @@ export default {
     Mynft,
     MySale,
     MarketXccList,
+    MarketHddList,
     NFTinfo,
   },
   computed: mapState({

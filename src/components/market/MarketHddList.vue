@@ -2,7 +2,7 @@
   <el-col>
     <h3>Chives</h3>
     <ul class="content" v-for="(nft, name) in PBTSellingLists" :key="name">
-      <li class="listLi" v-if="'3' in nft.pbxs">
+      <li class="listLi" v-if="'2' in nft.pbxs">
         <el-button class="nftlist" @click="openNFT(nft)">
           <i>#{{ nft.id }}</i>
           <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
@@ -54,8 +54,8 @@ export default {
   watch: {
     PBTSellingLists: function (newLists) {
       this.$store.commit("setPBTSellingLists", newLists);
-      const start = this.xccpageNum * 10 - 10;
-      const down = this.xccpageNum * 10;
+      const start = this.hddpageNum * 10 - 10;
+      const down = this.hddpageNum * 10;
       this.xcclist = Object.fromEntries(
         Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
       );
@@ -65,18 +65,18 @@ export default {
   },
   data() {
     return {
-      xccpageNum: 1,
-      xcclist: {},
+      hddpageNum: 1,
+      hddlist: {},
       nftinfo_dialog: false,
     };
   },
   methods: {
-    handleXccPaegChange: function (page_xcc) {
-      console.log("当前页:", page_xcc);
-      this.xccpageNum = page_xcc;
-      console.log("all pbtlist", this.xcclist);
-      const start = this.xccpageNum * 10 - 10;
-      const down = this.xccpageNum * 10;
+    handleXccPaegChange: function (page_hdd) {
+      console.log("当前页:", page_hdd);
+      this.hddpageNum = page_hdd;
+      console.log("all pbtlist", this.hddlist);
+      const start = this.hddpageNum * 10 - 10;
+      const down = this.hddpageNum * 10;
       this.mylist = Object.fromEntries(
         Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
       );

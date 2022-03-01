@@ -6,7 +6,7 @@
       </div>
       <el-col :span="8"
         ><p style="line-height: 15px">
-          version: 2/28 3.0 pbwallet:#0.1.6
+          version: 3/1 4.0 pbwallet:#0.1.6
         </p></el-col
       >
       <el-col :span="8">
@@ -144,7 +144,6 @@ export default {
       //获取 matket PBT NFT 简单信息
       const tSaleList = await allData.getMarketList("PBT");
       this.$store.commit("setPBTSellingLists", tSaleList);
-      // console.log("PBTSellingLists", tSaleList);
       console.log("PBT-nft-brief-info ", tlist, tSaleList);
       return "ok";
     },
@@ -152,29 +151,20 @@ export default {
       //获取PBT nft 详细信息
       //my list
       const mylist = await allData.getMyTokenList("PBT");
-      this.$store.commit("setPBTlists", mylist);
-      // const obj = this;
       const saleList = await allData.getSaleList("PBT");
-      // const mySaleList = await allData.getMySaleList("PBT");
-      this.$store.commit("setPBTSellingLists", saleList);
+      console.log("1231");
       const slist = saleList;
       const slistKeys = Object.keys(slist);
-      console.log("slistKeys", saleList, slistKeys);
       const msList = {};
+      console.log("111111111111111111");
       for (let i = 0; i < slistKeys.length; i++) {
-        console.log("12314564");
         if (slist[slistKeys[i]].market.seller == "-self") {
           const key = slist[slistKeys[i]].id.toString();
           msList[key] = slist[slistKeys[i]];
           this.$store.commit("setPBTMySaleLists", msList);
-          console.log(
-            "mysale 00000000000000000000000000000000000",
-            slist[slistKeys[i]],
-            msList
-          );
+          console.log("mysale 00000000000000000000000000000000000", msList);
         }
       }
-
       // My sale list
       console.log(
         "PBT all-Lists",
@@ -204,13 +194,13 @@ export default {
       if (bsc) {
         commit("setBaddr", this.$store.state.bsc.addr);
         await this.getBrieflist();
-        console.log("down");
+        console.log("downnn");
       }
       // await this.getMarketInfo();
       // const suc = await this.get_lists();
       // debugger;
       // await this.get_lists();
-      // await this.get_lists();
+      await this.get_lists();
       console.log("downnnnnnnnnnn");
       // } catch (e) {
       // console.log(e.message);

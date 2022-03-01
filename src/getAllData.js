@@ -22,6 +22,11 @@ const coinMap = {
     "XCH": '1',
     "HDD": "2"
 }
+const coinTyMap = {
+    3: "XCC",
+    2: "HDD",
+    1: "XCH"
+}
 async function connectW(commit) {
     bsc = await market.connect(commit)
     console.log("bsc", bsc)
@@ -52,6 +57,7 @@ async function nftAllinfo(nft) {
     if (bcoin in coinMap) {
         const key = coinMap[bcoin]
         const info = await getPBXInfo(nft.id)
+        console.log("nftAllinfo", key, info)
         nft.pbxs[key].depositeAddr = info.depositeAddr
         nft.pbxs[key].withdrawAddr = info.withdrawAddr
         console.log("this NFT", nft)
@@ -83,8 +89,9 @@ async function getNFTinfo(coin, nftid) {
 }
 //获取绑定的 pbx 信息 
 async function getPBXInfo(pbtId) {
-
-    const list = PBTList.owned[pbtId]
+    console.log("PBTlist", PBTList.owned)
+    const list = PBTList.owned[pbtId.toString()]
+    console.log("list", list)
     const coinArr = Object.keys(list.pbxs)
     let coin = ""
     if (coinArr.includes('1')) {
@@ -96,6 +103,7 @@ async function getPBXInfo(pbtId) {
     } else {
         return false
     }
+    console.log("coin", coin, list, coinArr)
     // const prefix = getprefix(coin)
     const xAddress = await bsc.ctrs.pbconnect.XAddressList(pbtId)
     const depAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[1].toString(), coin.toLowerCase())
@@ -151,14 +159,14 @@ async function getBriefInfo(coin, addr) {
 //获取mylist
 async function getMyList(coin) {
     if (coin == "PBT") PBTList.owned = await getBriefInfo(coin, bsc.addr)
-    if (coin == "PBX") PBXList.owned = await getBriefInfo(coin, bsc.addr)
-    console.log("PBT/PBX list =", PBTList, PBXList)
+    // if (coin == "PBX") PBXList.owned = await getBriefInfo(coin, bsc.addr)
+    console.log("PBT/PBX list =", PBTList.owned)
     return await getBriefInfo(coin, bsc.addr)
 }
 //获取market list
 async function getMarketList(coin) {
     if (coin == "PBT") PBTList.selling = await getBriefInfo(coin, bsc.ctrs.pbmarket.address)
-    if (coin == "PBX") PBXList.selling = await getBriefInfo(coin, bsc.ctrs.pbmarket.address)
+    // if (coin == "PBX") PBXList.selling = await getBriefInfo(coin, bsc.ctrs.pbmarket.address)
     return await getBriefInfo(coin, bsc.ctrs.pbmarket.address)
 }
 
@@ -166,38 +174,46 @@ async function getMarketList(coin) {
 async function getUserTokenList(coin, addr) {
     const pb = coin2pb(coin)
     // 获取 NFT 基础信息 object--key为nftID，value 为 nftInfo
-    const list = await getBriefInfo(coin, addr)
-    const arrKeys = Object.keys(list)
     //获取商城里的NFT 详细信息
-    for (let i = 0; i < arrKeys.length; i++) {
-        const idx = arrKeys[i] //key值 string
-        const info = list[idx]
-        if (addr == bsc.ctrs.pbmarket.address) {
-            const minfo = await getMarketNFT(coin, idx)
-            info.market = minfo
+    let list = {}
+    if (addr == bsc.ctrs.pbmarket.address) {
+        list = PBTList.selling
+        const arrKeys = Object.keys(list)
+        for (let i = 0; i < arrKeys.length; i++) {
+            const idx = arrKeys[i] //key值 string
+            const info = list[idx]
+            if (!('market' in list)) {
+                const minfo = await getMarketNFT(coin, idx)
+                info.market = minfo
+            }
+            PBTList.selling = list
             store.commit('setPBTSellingLists', list)
         }
-        //获取 PBT 与 PBX 的绑定信息 pbxs{coinTypes：{id：”“，coinTypes:"",depositAddr:"",withdrawAddr:""}}
-        if (pb == bsc.ctrs.pbt) {
-            if ('id' in info) {
-                const pbxs = await bsc.ctrs.pbconnect.PBXList(idx)
-                if (pbxs.length > 0) {
-                    const cointype = await getCoinTypes(pbxs.toString())
-                    const coinTy = cointype[0].toString()
-                    if (!info.market) {
-                        const bindXinfo = await getPBXInfo(Number(idx))
-                        if (!'depositeAddr' in info.pbxs[coinTy]) {
-                            info.pbxs[coinTy].depositeAddr = bindXinfo.depositeAddr
-                        }
-                        if (!'withdrawAddr' in info.pbxs[coinTy]) {
-                            info.pbxs[coinTy].withdrawAddr = bindXinfo.withdrawAddr
-                        }
-                        store.commit("setPBTlists", list)
-                    }
+    }
+    //获取 PBT 与 PBX 的绑定信息 pbxs{coinTypes：{id：”“，coinTypes:"",depositAddr:"",withdrawAddr:""}}
+    if (addr == bsc.addr) {
+        list = PBTList.owned
+        const arrmKeys = Object.keys(list)
+        for (let i = 0; i < arrmKeys[i]; i++) {
+            const idx = arrmKeys[i]
+            const minfo = list[idx]
+            const pbxs = await bsc.ctrs.pbconnect.PBXList(idx)
+            if (pbxs.length > 0) {
+                const cointype = await getCoinTypes(pbxs.toString())
+                const coinTy = cointype[0].toString()
+                const bindXinfo = await getPBXInfo(Number(idx))
+                if (!('depositeAddr' in minfo.pbxs[coinTy])) {
+                    minfo.pbxs[coinTy].depositeAddr = bindXinfo.depositeAddr
                 }
+                if (!('withdrawAddr' in minfo.pbxs[coinTy])) {
+                    minfo.pbxs[coinTy].withdrawAddr = bindXinfo.withdrawAddr
+                }
+                PBTList.owned = list
+                store.commit("setPBTlists", list)
             }
         }
     }
+    console.log("down", list)
     return list
 }
 
@@ -208,13 +224,13 @@ function coin2pb(coin) {
 }
 async function getMyTokenList(coin) {
     if (coin == "PBT") PBTList.owned = await getUserTokenList(coin, bsc.addr)
-    if (coin == "PBX") PBXList.owned = await getUserTokenList(coin, bsc.addr)
-    console.log("PBT/PBX list detail info=", PBTList)
+    // if (coin == "PBX") PBXList.owned = await getUserTokenList(coin, bsc.addr)
+    console.log("PBT/PBX list detail info=", PBTList.owned)
     return await getUserTokenList(coin, bsc.addr)
 }
 async function getSaleList(coin) {
     if (coin == "PBT") PBTList.selling = await getUserTokenList(coin, bsc.ctrs.pbmarket.address)
-    if (coin == "PBX") PBXList.selling = await getUserTokenList(coin, bsc.ctrs.pbmarket.address)
+    // if (coin == "PBX") PBXList.selling = await getUserTokenList(coin, bsc.ctrs.pbmarket.address)
     return await getUserTokenList(coin, bsc.ctrs.pbmarket.address)
 }
 async function getMySaleList(coin) {

@@ -4,7 +4,7 @@
       <el-col :span="14" v-if="PBTlists != null" class="mainpanel">
         <BridgeFee />
         <el-col id="balance">
-          余额：{{ this.balance }}
+          余额：{{ WBalance[bcoin] }}
           <span v-if="WBalance"></span>
           <span class="minifont"> w{{ bcoin }}</span>
           <el-button size="mini" type="primary" @click="addToken">

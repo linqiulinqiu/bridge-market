@@ -29,8 +29,8 @@ function coinContract(coin) {
 }
 async function ListenToWCoin(commit) {
     let wBalance = {
-        xcc: '',
-        hdd: '',
+        XCC: '',
+        HDD: '',
         // xch:""
     }
     var ctr_xcc = coinContract("XCC")
@@ -43,7 +43,7 @@ async function ListenToWCoin(commit) {
     async function updateXCCBalance(evt) {
         const xccbalance = await ctr_xcc.balanceOf(bsc.addr)
         // const xchbalance = await ctr_xch.balanceOf(bsc.addr)
-        wBalance.xcc = ethers.utils.formatUnits(xccbalance, decimals_xcc)
+        wBalance.XCC = ethers.utils.formatUnits(xccbalance, decimals_xcc)
         // wBalance.xch = ethers.utils.formatUnits(xchbalance, decimals_xch)
         console.log('wbalance', wBalance)
         commit('setWBalance', wBalance)
@@ -52,7 +52,7 @@ async function ListenToWCoin(commit) {
         // const xchbalance = await ctr_xch.balanceOf(bsc.addr)
         const hddbalance = await ctr_hdd.balanceOf(bsc.addr)
         // wBalance.xch = ethers.utils.formatUnits(xchbalance, decimals_xch)
-        wBalance.hdd = ethers.utils.formatUnits(hddbalance, decimals_hdd)
+        wBalance.HDD = ethers.utils.formatUnits(hddbalance, decimals_hdd)
         console.log('wbalance', wBalance)
         commit('setWBalance', wBalance)
     }

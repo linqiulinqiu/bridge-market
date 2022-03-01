@@ -17,7 +17,7 @@
         </el-col></el-col
       >
       <p>
-        Function:
+        {{ $t("function") }}:
         <span v-if="curNFT.pbxs">
           <span v-if="Object.keys(curNFT.pbxs).includes('3')">
             Bridge for Chives
@@ -45,9 +45,9 @@
               <el-option value="BUSD" key="BUSD" label="BUSD"></el-option>
             </el-select>
           </p>
-          <el-button @click="sellNFT">Change price</el-button>
+          <el-button @click="sellNFT">{{ $t("change-price") }}</el-button>
         </el-col>
-        <el-col>--- OR ---</el-col>
+        <el-col>--- {{ $t("or") }} ---</el-col>
         <el-col>
           <el-button @click="retreatNFT"> retreat from market </el-button>
         </el-col>
@@ -181,9 +181,6 @@ export default {
         const evt_sell = await obj.sellNFT();
         console.log("evt_sell", evt_sell);
       });
-
-      // console.log("PBTsell", evt_sell);
-
       console.log("PBTsend", evt_send);
     },
 

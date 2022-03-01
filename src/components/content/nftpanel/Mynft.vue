@@ -105,9 +105,9 @@ export default {
       nftinfo_dialog: false,
       isAdd: "",
       coinMap: {
-        XCC: "3",
-        XCH: "1",
-        HDD: "2",
+        3: "XCC",
+        2: "HDD",
+        1: "XCH",
       },
     };
   },
@@ -122,18 +122,10 @@ export default {
         const cointy = Object.keys(nft.pbxs);
         let bridge_coin = "";
         if (cointy.length == 1) {
-          if (cointy[0] == "3") {
-            bridge_coin = "XCC";
-          } else if (cointy[0] == "2") {
-            bridge_coin = "HDD";
-          } else if (cointy[0] == "3") {
-            bridge_coin = "XCH";
-          } else {
-            return false;
-          }
+          const key = cointy[0];
+          bridge_coin = this.coinMap[key];
+          this.$store.commit("setBcoin", bridge_coin);
         }
-        this.$store.commit("setBcoin", bridge_coin);
-
         if (!("depositeAddr" in nft.pbxs[cointy[0]])) {
           console.log("open", nft);
           const nftinfo = await getAllData.nftAllinfo(nft);
@@ -147,6 +139,7 @@ export default {
       }
       if (this.mode == "market") {
         this.nftinfo_dialog = true;
+        this.$store.commit("setCurNFT", nft);
       }
       loading.close();
     },

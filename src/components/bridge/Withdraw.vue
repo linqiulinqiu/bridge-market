@@ -38,7 +38,9 @@
               maxlength="40"
               suffix-icon="el-icon-edit"
             ></el-input>
-            <el-button type="primary" circle>全部</el-button>
+            <el-button type="primary" circle @click="wAmount = WBalance[bcoin]"
+              >全部</el-button
+            >
             W{{ bcoin }}币，
           </p>
         </el-col>
@@ -94,6 +96,7 @@ export default {
     baddr: "baddr",
     bcoin: "bcoin",
     curNFT: "curNFT",
+    WBalance: "WBalance",
   }),
   data() {
     return {
