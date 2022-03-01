@@ -4,11 +4,12 @@
       <div class="logo">
         <img class="m-logo" src="../../assets/image/big-logo.svg" alt="LOGO" />
       </div>
-      <el-col :span="8"
-        ><p style="line-height: 15px">
-          version: 3/1 6.0 pbwallet:#0.1.6
-        </p></el-col
-      >
+      <el-col :span="8" style="color: #fff">
+        <p style="line-height: 25px">version: 3/1 7.0 pbwallet:#0.1.6</p>
+        <h5 style="line-height: 20px">
+          该网站不支持自动刷新，请操作后手动刷新
+        </h5>
+      </el-col>
       <el-col :span="8">
         <el-select v-model="lang">
           <el-option
@@ -57,7 +58,7 @@
               id="start"
               >start</el-button
             >
-            <span v-else>{{
+            <span v-else style="color: #fff">{{
               baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
             }}</span>
           </div>

@@ -179,11 +179,13 @@ async function burnWcoin(amount, coin) {
     const ctr = coinContract(coin)
     const decimals = await getDecimals(coin)
     amount = ethers.utils.parseUnits(amount, decimals)
+    console.log("amount burn", amount, ethers.utils.formatUnits(amount, decimals))
     const wBalance = ethers.utils.parseUnits(store.state.WBalance[coin], decimals)
-    if (amount.gt(wBalance[coin])) {
+    if (amount.gt(wBalance)) {
         return false
     }
     const receipt = await ctr.burn(amount)
+    console.log("receipt", receipt)
     return receipt
 }
 async function waitEventDone(tx, done) {
@@ -210,7 +212,7 @@ async function unbind(pbx) {
 async function bindAddr(waddr, pbxId) {
     try {
         if ('ChiaUtils' in window) {
-            if (waddr.substr(0, 3) != store.state.bcoin) return false
+            if (waddr.substr(0, 3) != (store.state.bcoin).toLowerCase()) return false
             console.log("this.xaddr", store.state.bcoin)
             const addr = window.ChiaUtils.address_to_puzzle_hash(waddr)
             const id = parseInt(pbxId)
@@ -322,7 +324,7 @@ async function afterFee(coin, mode, amount) {
     } else if (mode == 'withdraw') {
         nowfee.min = ethers.utils.parseUnits(fees.withdrawFee, decimals)
         nowfee.rate = fees.withdrawFeeRate
-        console.log("after fee", store.state.WBalance.toString(), nowfee)
+        console.log("after fee", nowfee)
         if (amount.gt(ethers.utils.parseUnits(store.state.WBalance[coin], decimals))) {
             return "fund"
         }

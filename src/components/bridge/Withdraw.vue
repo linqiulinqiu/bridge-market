@@ -157,12 +157,13 @@ export default {
       const coin = this.bcoin;
       console.log("bcoin", coin);
       if (await this.amount_valid(this.wAmount)) {
-        try {
-          const res = await market.burnWcoin(amount, coin);
-          console.log("withdraw res", res);
-        } catch (e) {
-          console.log("withdraw errrr", e.message);
-        }
+        // try {
+        console.log("s");
+        const res = await market.burnWcoin(amount, coin);
+        console.log("withdraw res", res);
+        // } catch (e) {
+        //   console.log("withdraw errrr", e.message);
+        // }
       }
     },
     clearAddr: async function () {
