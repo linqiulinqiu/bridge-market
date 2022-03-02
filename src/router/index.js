@@ -6,8 +6,7 @@ import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/home',
     name: 'Home',
     component: () => import('../views/Home'),
@@ -22,7 +21,7 @@ const routes = [
   // },
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/Home'
   },
   {
     path: '/bridge',
@@ -39,17 +38,6 @@ const routes = [
     name: 'Doc',
     component: () => import('../views/Doc')
   },
-  // {
-  //   path: '/message',
-  //   name: 'Message',
-  //   component: () => import('../views/Message')
-  // },
-  // {
-  //   path: '/settings',
-  //   name: 'Settings',
-  //   component: () => import('../views/Settings')
-  // },
-
 ]
 
 const router = new VueRouter({

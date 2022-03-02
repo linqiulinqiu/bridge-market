@@ -3,7 +3,10 @@
     <el-row type="flex" justify="center">
       <el-col :span="2">PlotBridge</el-col>
       <el-col :span="7">
-        <h5>version:3/2 4.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.1.6</h5>
+        <h5 style="line-height: 35px">
+          version:3/2 5.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.1.6
+          <br />目前网站不支持自动更新
+        </h5>
       </el-col>
       <el-col class="nav" :span="8">
         <ul>
