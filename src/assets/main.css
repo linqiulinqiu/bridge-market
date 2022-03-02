@@ -11,6 +11,22 @@ li,
 button {
     color: #668b66
 } */
+.aa {
+    height: 100px;
+    background-color: #e3e9e3fd;
+    padding: 14px 10px;
+}
+
+.minifont {
+    font-size: 14px;
+}
+
+.span {
+    width: 100px;
+    background-color: #cbdbcbfd;
+    display: inline-block;
+    text-align: center;
+}
 
 .selectToken {
     width: 100px;
@@ -34,35 +50,50 @@ button {
     margin-top: 70px;
 }
 
-/* .user>p {
-    float: right;
-} */
-
-.userW {
-    min-height: 200px;
-    border: 1px solid #abcdef;
-
-}
-
-.userW>ul li {
-    float: left;
-    width: 100px;
-    height: 100px;
-    margin: 10px;
-    padding: 5px;
-}
-
-
 .nftlist {
-    width: 105px;
-    height: 100px;
-    padding: 0px;
+    height: 480px;
+    padding: 0px 100px;
     margin-top: 15px;
+    background-color: #d1fcd1;
 }
 
-.nftlist img {
+.nftli {
+    margin-bottom: 40px;
+}
+
+.nftli .el-button {
+    height: 108px;
+    width: 136px;
+    box-sizing: border-box;
+}
+
+.nftli img {
     width: 80px;
     margin: 0;
+}
+
+.marketlist {
+    margin: 10px;
+    float: left;
+    position: relative;
+}
+
+.marketlist .el-button {
+    height: 108px;
+    width: 136px;
+    box-sizing: border-box;
+}
+
+.marketlist img {
+    width: 80px;
+    margin: 0;
+}
+
+/* badge simbol */
+.simbol {
+    position: absolute;
+    top: 5px;
+    left: 5px;
 }
 
 .labels {
@@ -102,18 +133,6 @@ button {
     position: relative;
 }
 
-/* badge simbol */
-.simbol {
-    position: absolute;
-    top: 20px;
-    left: 10px;
-}
-
-/* li float? */
-.listLi {
-    float: left;
-    margin: 0px 0px 30px 30px;
-}
 
 /* 输入数字*/
 .amount-input {
@@ -123,15 +142,14 @@ button {
 /* /* tab 标签页面 */
 .el-tabs {
     width: 760px;
-    height: 400px;
-    text-align: center;
+    height: 500px;
     background-color: #F5F7FA;
-    margin: 100px auto;
+    position: relative;
 }
 
-.el-tabs {
+/* .el-tabs {
     border: none;
-}
+} */
 
 .el-tabs__nav-scroll {
     text-align: center;
@@ -140,34 +158,111 @@ button {
 .el-tabs__nav {
     width: 100%;
     height: 70px;
+    padding-top: 15px;
 }
 
 .el-tabs__item {
     height: 70px;
-    width: 150px;
+    width: 120px;
     font-size: 24px;
     font-weight: 700;
-    margin: 0px 5px;
-    padding: 12px 0px;
+    padding: 0px;
     text-align: center;
 }
 
-.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
-    color: #fff;
-    /* background-color: #abcdef; */
-    background: #616161;
+.el-tabs__active-bar {
+    background-color: #668b66;
+    width: 120px;
+}
 
-    /* border-radius: 18px; */
+.el-tabs__nav-scroll {
+    padding: 0px 27%;
+}
+
+.el-tab-pane {
+    padding: 30px 30px;
+}
+
+
+
+.el-tabs>.el-tabs__header .el-tabs__item.is-active {
+    color: #668b66;
     border: none;
 }
 
-.el-tabs--bottom .el-tabs--left>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--bottom .el-tabs--right>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--bottom.el-tabs--border-card>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--bottom.el-tabs--card>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--top .el-tabs--left>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--top .el-tabs--right>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--top.el-tabs--border-card>.el-tabs__header .el-tabs__item:last-child,
-.el-tabs--top.el-tabs--card>.el-tabs__header .el-tabs__item:last-child {
-    padding: none;
+.el-tabs>.el-tabs__header .el-tabs__item {
+    padding-left: -1px;
+}
+
+.el-tabs--top.el-tabs>.el-tabs__header .el-tabs__item:nth-child(2),
+.el-tabs--top.el-tabs>.el-tabs__header .el-tabs__item:last-child {
+    padding: 0;
+}
+
+
+/* getfee btnstyle */
+
+.fees {
+    position: relative;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+
+.mainpanel {
+    position: relative;
+    width: 760px;
+    height: 500px;
+    box-sizing: border-box;
+}
+
+.btn-fee {
+    position: absolute;
+    z-index: 3;
+    top: 15px;
+    right: 30px;
+}
+
+#balance {
+    position: absolute;
+    top: 10px;
+    left: 0px;
+    width: 150px;
+    height: 50px;
+    background-color: rgb(226, 238, 224);
+    z-index: 5;
+    padding: 10px 0px;
+    border-radius: 20px;
+}
+
+.el-tabs>.el-tabs__header .el-tabs__item:not(.is-active):hover {
+    color: #668b66;
+}
+
+
+.el-tabs>.el-tabs__header .el-tabs__item[class~=is-active]:hover {
+    color: #051105;
+}
+
+/* get info button */
+.el-icon-info:before {
+    font-size: xx-large;
+}
+
+.el-button.is-circle {
+    padding: 0px;
+}
+
+/* //mynft 页面 */
+#mynft {
+    background-color: #d1fcd1;
+    min-height: 650px;
+    height: calc(100vh - 140px);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 350px;
+}
+
+.nftarea {
+    margin-top: 20px;
+    min-height: 600px;
 }

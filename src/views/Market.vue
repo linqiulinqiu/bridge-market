@@ -1,34 +1,39 @@
 <template>
   <div>
     <div class="content">
-      <el-aside width="250px">
-        <Mynft />
+      <el-aside width="350px">
+        <keep-alive> <mynft /></keep-alive>
       </el-aside>
-      <el-main>
-        <!-- <div class="main">
+      <el-main style="color: #fff">
+        <el-col class="main" v-if="baddr">
           <el-col>
             <h2>
               PBT Market
-              <el-button
-                @click="mintVisible = true"
+              <!-- <el-button
+                @click="getMintfee"
                 size="small"
                 class="btn"
                 v-if="baddr"
                 >铸造 PBT</el-button
-              >
+              > -->
             </h2>
             <el-col class="cointy">
               <keep-alive>
                 <MarketXccList />
               </keep-alive>
             </el-col>
-            <el-col class="cointy"><h3>HDDcoin</h3></el-col>
-            <el-col class="cointy"><h3>chia</h3></el-col>
+            <el-col class="cointy">
+              <keep-alive>
+                <MarketHddList />
+              </keep-alive>
+            </el-col>
+            <el-col class="cointy"> <MarketXchList /> </el-col>
             <el-col class="cointy">
               <keep-alive><MySale /></keep-alive>
             </el-col>
           </el-col>
-        </div>
+        </el-col>
+        <el-col v-else>连接钱包后查看</el-col>
         <el-dialog :visible.sync="mintVisible" title="MINT NFT" width="50%">
           <el-card>
             <el-empty :image-size="200"></el-empty>
@@ -42,7 +47,7 @@
               <el-button @click="mintNFT">铸造</el-button>
             </el-col>
           </el-card>
-        </el-dialog> -->
+        </el-dialog>
       </el-main>
     </div>
   </div>
@@ -52,8 +57,10 @@
 import Mynft from "../components/content/nftpanel/Mynft.vue";
 import { mapState } from "vuex";
 import market from "../market";
-import MySale from "../components/MySale.vue";
-import MarketXccList from "../components/MarketXccList.vue";
+import MySale from "../components/market/MySale.vue";
+import MarketXccList from "../components/market/MarketXccList.vue";
+import MarketHddList from "../components/market/MarketHddList.vue";
+import MarketXchList from "../components/market/MarketXchList.vue";
 import NFTinfo from "../components/content/nftpanel/NFTinfo.vue";
 export default {
   name: "Market",
@@ -61,6 +68,8 @@ export default {
     Mynft,
     MySale,
     MarketXccList,
+    MarketHddList,
+    MarketXchList,
     NFTinfo,
   },
   computed: mapState({
@@ -72,9 +81,8 @@ export default {
   data() {
     return {
       mintVisible: false,
-      //use function get mintfee
       mintFee: {
-        price: 0.01,
+        price: 0,
         token: "BNB",
       },
     };
@@ -88,6 +96,12 @@ export default {
         console.log("mint err", e.message);
       }
     },
+    getMintfee: async function () {
+      const fee = await market.getmintfee();
+      this.mintFee.price = fee.price;
+      this.mintFee.token = fee.ptName;
+      this.mintVisible = true;
+    },
   },
 };
 </script>
@@ -96,20 +110,22 @@ export default {
 ::-webkit-scrollbar {
   display: none;
 }
-.content {
+/* .content {
   display: flex;
-}
-.el-aside {
-  background: #25272E;
-}
+  color: aliceblue;
+} */
 .el-main {
-  height: calc(100vh - 70px);
+  /* background-color: red; */
+  height: calc(100vh - 140px);
   width: calc(100vw - 250px);
   padding: 0;
 }
 .main {
-  height: calc(100vh - 70px);
+  /* background-color: rgb(137, 180, 146); */
+  height: calc(100vh - 140px);
   padding: 40px 40px;
+  /* overflow-x: hidden;
+  overflow-y: scroll; */
 }
 .content {
   display: flex;

@@ -1,12 +1,41 @@
 <template>
   <div class="container">
-    <div class="logo">PlotBridge</div>
-    <div class="nav">
-      <ul>
-        <li class="nav-item" v-for="(item, index) in this.nav" :key="index" @click="liclick(item.link,index)">{{item.tag}}</li>
-      </ul>
-    </div>
-    <div class="connect">connect</div>
+    <el-row type="flex" justify="center">
+      <el-col :span="2">PlotBridge</el-col>
+      <el-col :span="7">
+        <h5>version:3/2 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.1.6</h5>
+      </el-col>
+      <el-col class="nav" :span="8">
+        <ul>
+          <li
+            class="nav-item"
+            v-for="(item, index) in this.nav"
+            :key="index"
+            @click="liclick(item.link, index)"
+          >
+            {{ item.tag }}
+          </li>
+        </ul>
+      </el-col>
+      <el-col :span="4">
+        <el-button v-if="!baddr" @click="connect_wallet" class="connect"
+          >Connect Wallet</el-button
+        >
+        <span v-else style="color: #fff" class="baddr">{{
+          baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
+        }}</span>
+      </el-col>
+      <el-col :span="4">
+        <el-select v-model="lang">
+          <el-option
+            v-for="item in langs"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -14,6 +43,7 @@
 import { mapState } from "vuex";
 import market from "../../market";
 import allData from "../../getAllData";
+import { i18n, setup } from "../../locales";
 
 export default {
   name: "Plotheader",
@@ -33,9 +63,17 @@ export default {
       this.$store.commit("setPBTSellingLists", newLists);
     },
     deep: true,
+    lang: function () {
+      setup(this.lang);
+    },
   },
   data() {
     return {
+      langs: [
+        { value: "en", label: "English" },
+        { value: "zh", label: "简体中文" },
+      ],
+      lang: i18n.locale,
       nav: [
         { tag: "Home", link: "/home" },
         { tag: "Bridge", link: "/bridge" },
@@ -44,18 +82,15 @@ export default {
       ],
     };
   },
-  // mounted() {
-  //   this.getPBmarketList();
-  //   this.getMarketInfo();
-  // },
   methods: {
-    liclick(link,index) {
-      let arr = document.getElementsByClassName('nav-item')
-      let array = Array.from(arr)
-      array.forEach(element =>{
-        element.classList.remove('active')
+    liclick(link, index) {
+      console.log("link", link);
+      let arr = document.getElementsByClassName("nav-item");
+      let array = Array.from(arr);
+      array.forEach((element) => {
+        element.classList.remove("active");
       });
-      array[index].classList.add('active')
+      array[index].classList.add("active");
       const curMode = link.toString().substr(1);
       this.$store.commit("setMode", curMode);
       this.$router.push(link).catch((err) => err); //加catch,在router.push的时候捕获异常，防止重复点击报错
@@ -67,7 +102,6 @@ export default {
       //获取 matket PBT NFT 简单信息
       const tSaleList = await allData.getMarketList("PBT");
       this.$store.commit("setPBTSellingLists", tSaleList);
-      // console.log("PBTSellingLists", tSaleList);
       console.log("PBT-nft-brief-info ", tlist, tSaleList);
       return "ok";
     },
@@ -75,29 +109,17 @@ export default {
       //获取PBT nft 详细信息
       //my list
       const mylist = await allData.getMyTokenList("PBT");
-      this.$store.commit("setPBTlists", mylist);
-      // const obj = this;
       const saleList = await allData.getSaleList("PBT");
-      // const mySaleList = await allData.getMySaleList("PBT");
-      this.$store.commit("setPBTSellingLists", saleList);
       const slist = saleList;
       const slistKeys = Object.keys(slist);
-      console.log("slistKeys", saleList, slistKeys);
       const msList = {};
       for (let i = 0; i < slistKeys.length; i++) {
-        console.log("12314564");
         if (slist[slistKeys[i]].market.seller == "-self") {
           const key = slist[slistKeys[i]].id.toString();
           msList[key] = slist[slistKeys[i]];
           this.$store.commit("setPBTMySaleLists", msList);
-          console.log(
-            "mysale 00000000000000000000000000000000000",
-            slist[slistKeys[i]],
-            msList
-          );
         }
       }
-
       // My sale list
       console.log(
         "PBT all-Lists",
@@ -105,7 +127,6 @@ export default {
         saleList,
         this.$store.state.mySaleList
       );
-
       const oldToken = "0x134315EF3D11eEd8159fD1305af32119a046375A";
       const otBalance = await market.tokenBalance(oldToken);
       const otAllowance = await market.tokenAllowance(oldToken);
@@ -122,22 +143,13 @@ export default {
       //   background: "rgba(200,230,200,0.6)",
       // });
       // try {
-      const bsc = await allData.connectW();
-      // const obj = this;
+      const bsc = await allData.connectW(commit);
       if (bsc) {
         commit("setBaddr", this.$store.state.bsc.addr);
-        // const msg = await this.getBrieflist();
-
         await this.getBrieflist();
-
-        // loading.close();
-        // await this.getPBmarketList();
-        console.log("down");
+        console.log("downnn");
       }
-      // await this.getMarketInfo();
-      // const suc = await this.get_lists();
       await this.get_lists();
-      // await this.get_lists();
       console.log("downnnnnnnnnnn");
       // } catch (e) {
       // console.log(e.message);
@@ -155,47 +167,39 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-.container {
-  display: flex;
-  align-items: center;
+.el-col,
+.el-option {
+  color: #38f2af;
 }
-.logo {
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 70px;
-  color: #38F2AF;
-  flex: 2;
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+  color: #38f2af;
 }
-.connect{
-  background-color: #38F2AF;
+.el-select-dropdown__item {
+  color: black;
+}
+.connect {
+  background-color: #38f2af;
   color: #000000;
-  height: 33px;
-  width: 132px;
-  line-height: 33px;
-  flex:1;
-  border-radius: 4px;
-  margin-right: 30px;
+  width: 180px;
+  font-size: 22px;
   cursor: pointer;
   box-shadow: 0px 2px 2px 0px rgba(56, 242, 175, 0.08);
 }
-.nav {
-  flex:7;
-}
-.nav ul {
-  height: 70px;
-  display: flex;
-  list-style: none;
-  justify-content: flex-start;
-  
+.baddr {
+  color: #38f2af;
+  width: 180px;
+  font-size: 22px;
+  display: inline-block;
 }
 li {
-  color: #ffffff;
-  margin:0 20px;
+  float: left;
+  color: #fff;
+  margin: 0 20px;
   cursor: pointer;
 }
 .active {
-  color: #38F2AF;
-  border-bottom:3px solid #38F2AF;
+  color: #38f2af;
+  border-bottom: 3px solid #38f2af;
 }
 </style>

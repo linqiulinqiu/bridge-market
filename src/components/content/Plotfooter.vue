@@ -1,17 +1,11 @@
 <template>
-  <div>
-    <footer>
-      <nav class="bottom-info">
-        <el-col>
-          <p>
-            <a href="" style="text-decoration: none; color: black"
-              >© 2022 Plot Network Ltd,All rights reserved. Address</a
-            >
-          </p>
-        </el-col>
-      </nav>
-    </footer>
-  </div>
+  <el-row type="flex" justify="center" id="footer">
+    <el-col class="copyRight">
+      <p>
+        <a href=""> © 2022 Plot Network Ltd,All rights reserved. Address </a>
+      </p>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -26,8 +20,8 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-footer {
-  height: 70px;
-  text-align: center;
+.copyRight a {
+  color: #fff;
+  text-decoration: none;
 }
 </style>

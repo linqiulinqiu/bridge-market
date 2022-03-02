@@ -7,21 +7,27 @@
       <el-col v-if="curNFT.market">
         <el-col v-if="curNFT.market.seller == '-self'">
           <p v-if="curNFT.market.price">
-            price:<span>{{ curNFT.market.price }}&nbsp;</span>
+            {{ $t("price") }}<span>{{ curNFT.market.price }}&nbsp;</span>
             <span>{{ curNFT.market.ptName }}</span>
           </p>
           <p v-if="curNFT.market.desc != ''">
-            Description:{{ curNFT.market.desc }}
+            {{ $t("desc") }}{{ curNFT.market.desc }}
           </p>
           <p v-else>No Description</p>
         </el-col></el-col
       >
       <p>
-        Function:
-        <span v-if="curNFT.pbxs.coinType">
-          <span v-if="curNFT.pbxs.coinType == '3'"> Bridge for Chives </span>
-          <span v-if="curNFT.pbxs.coinType == '2'"> Bridge for HDDcoin </span>
-          <span v-if="curNFT.pbxs.coinType == '1'">Bridge for Chia</span>
+        {{ $t("function") }}:
+        <span v-if="curNFT.pbxs">
+          <span v-if="Object.keys(curNFT.pbxs).includes('3')">
+            Bridge for Chives
+          </span>
+          <span v-if="Object.keys(curNFT.pbxs).includes('2')">
+            Bridge for HDDcoin
+          </span>
+          <span v-if="Object.keys(curNFT.pbxs).includes('1')"
+            >Bridge for Chia</span
+          >
         </span>
         <span v-else> no bind bridge </span>
       </p>
@@ -39,9 +45,9 @@
               <el-option value="BUSD" key="BUSD" label="BUSD"></el-option>
             </el-select>
           </p>
-          <el-button @click="sellNFT">Change price</el-button>
+          <el-button @click="sellNFT">{{ $t("change-price") }}</el-button>
         </el-col>
-        <el-col>--- OR ---</el-col>
+        <el-col>--- {{ $t("or") }} ---</el-col>
         <el-col>
           <el-button @click="retreatNFT"> retreat from market </el-button>
         </el-col>
@@ -123,6 +129,7 @@ export default {
   computed: mapState({
     bcoin: "bcoin",
     curNFT: "curNFT",
+    mcoin: "mcoin",
   }),
   watch: {
     nftprice: function (newprice) {
@@ -134,19 +141,6 @@ export default {
     },
   },
   data() {
-    // const state = this.$store.state;
-    // let price = 0;
-    // let desc = "";
-    // let priceToken = "BNB";
-    // if ("market" in state.curNFT) {
-    //   if (state.curNFT.market.price != 0) {
-    //     price = state.curNFT.market.price;
-    //   } else {
-    //     price = 0;
-    //   }
-    //   desc = state.curNFT.market.desc;
-    //   priceToken = state.curNFT.market.ptName;
-    // }
     return {
       nftPrice: 0,
       nftDesc: "",
@@ -187,21 +181,18 @@ export default {
         const evt_sell = await obj.sellNFT();
         console.log("evt_sell", evt_sell);
       });
-
-      // console.log("PBTsell", evt_sell);
-
       console.log("PBTsend", evt_send);
     },
 
     retreatNFT: async function () {
       const id = this.curNFT.id;
-      console.log("retreat start", this.bcoin, id);
-      const res = await market.retreatNFT(this.bcoin, id);
+      console.log("retreat start", this.mcoin, id);
+      const res = await market.retreatNFT(this.mcoin, id);
       console.log("retreat ok", res);
     },
     buyNFT: async function () {
       const curNFT = this.$store.state.curNFT;
-      const res = await market.buyNFT(this.bcoin, curNFT);
+      const res = await market.buyNFT(this.mcoin, curNFT);
       console.log("buyNFT res", res);
     },
   },

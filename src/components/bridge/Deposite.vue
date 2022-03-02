@@ -1,47 +1,97 @@
 <template>
-  <el-col id="deposite">
-    <el-col>
+  <el-col id="deposite" class="tabs">
+    <el-col v-if="baddr">
       <p>
-        存入:<el-input type="text" class="amount-input" v-model.number="depAmount" />{{
-          mcoin
-        }}币
+        存入:<el-input
+          type="text"
+          clearable
+          maxlength="40"
+          class="amount-input"
+          suffix-icon="el-icon-edit"
+          v-model.trim="depAmount"
+        />{{ bcoin }}币
       </p>
-      <p>
-        向以下的地址：
-        testtttttttttttttttttttttttttttttttttttttttttt
-        <!-- <span v-if="mcoin == 'XCH'">
-          <i v-if="curNFT.pbxs['1'].depositAddr"></i>
-        </span>
-        <span v-if="mcoin == 'HDD'">
-          <i v-if="curNFT.pbxs['2'].depositAddr"></i>
-        </span>
-        <span v-if="mcoin == 'XCC'">
-          <i v-if="curNFT.pbxs['3'].depositAddr"></i>
-        </span> -->
-      </p>
-      <p>
-        你将会得到<span>{{ getAmount }}</span> W{{ mcoin }} 币，在你的bsc钱包中。
-      </p>
-      <p>
-        <span>bride fee</span>
-      </p>
+      <el-col>
+        在以下的地址：
+        <el-col class="aa">
+          <el-col v-if="curNFT.pbxs">
+            <span v-if="curNFT.pbxs['0']">请绑定PBX</span>
+            <span v-else>
+              <span v-if="'depositeAddr' in curNFT.pbxs[this.coinMap[bcoin]]">
+                {{ curNFT.pbxs[this.coinMap[bcoin]].depositeAddr }}
+              </span>
+            </span>
+          </el-col>
+        </el-col>
+      </el-col>
+      <el-col>
+        <p>
+          你将会得到<span class="span"
+            ><span v-if="this.depAmount"> {{ getAmount }}</span></span
+          >
+          W{{ bcoin }}
+          币，在你的bsc钱包中。
+        </p>
+        <p v-if="this.tips_amount">
+          <i v-if="this.depAmount.length > 0">{{ this.tips_amount }}</i>
+        </p>
+      </el-col>
     </el-col>
   </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
 import market from "../../market";
+import BridgeFee from "./BridgeFee.vue";
 export default {
+  components: {
+    BridgeFee,
+  },
   computed: mapState({
     baddr: "baddr",
-    mcoin: "mcoin",
+    bcoin: "bcoin",
     curNFT: "curNFT",
   }),
   data() {
     return {
-      depAmount: 0,
-      getAmount: 0,
+      depAmount: "",
+      getAmount: "",
+      tips_amount: false,
+      coinMap: {
+        XCC: "3",
+        XCH: "1",
+        HDD: "2",
+      },
     };
+  },
+  watch: {
+    depAmount: async function () {
+      var depamount = this.depAmount;
+      console.log("depamount", this.bcoin, depamount);
+      if (!depamount || isNaN(depamount) || depamount == "") {
+        depamount = "0";
+        this.tips_amount = "请输入正确的金额";
+        return false;
+      }
+      const after_fee = await market.afterFee(
+        this.bcoin,
+        "deposite",
+        depamount
+      );
+      console.log("aftrerfee", after_fee);
+      if (!after_fee) {
+        this.getAmount = "0";
+        this.tips_amount = "数额过少，将什么都收不到呢！";
+      } else if (after_fee == "fund") {
+        this.getAmount = "0";
+        this.tips_amount = "数额过大，余额不够呢！";
+      } else {
+        this.getAmount = after_fee;
+        this.tips_amount = false;
+      }
+      console.log("aft", after_fee, this.getAmount);
+      return after_fee;
+    },
   },
   methods: {},
 };

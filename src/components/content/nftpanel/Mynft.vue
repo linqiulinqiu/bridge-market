@@ -1,70 +1,66 @@
 <template>
-  <div class="container"> <!-- v-if 没有nft-->
-    <div class="title">My NFTs</div>
-    <div class="content">You haven't got any NFTs. Please go to the market.</div>
-    <div class="bottom">
-      Go to Market
-    </div>
-    <!-- <el-col class="area">
-      <h2>
-        MY PBT NFT
-        <el-button
-          circle
-          icon="el-icon-refresh"
-          size="small"
-          class="btn"
-        ></el-button>
-      </h2>
-      <div class="nftarea">
-        <el-col class="nftlist">
-          <ul>
-            <li v-for="(nft, name) in this.mylist" :key="name">
-              <el-button class="nftlist" @click="openNFT(nft)">
-                <el-col>
-                  <i>#{{ nft.id }}</i>
-                  <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-                </el-col>
-                <el-badge
-                  v-if="nft.pbxs.coinTypes == '3'"
-                  value="Chives"
-                  class="item"
-                >
-                </el-badge>
-              </el-button>
-            </li>
-          </ul>
-        </el-col>
-        <el-col class="btn-bar">
-          <el-pagination
-            background
-            layout="total,prev,pager,next"
-            :total="Object.keys(PBTlists).length"
-            @current-change="handleCurrentChange"
-            :current-page="this.pageNum"
-            :page-size="3"
-          ></el-pagination>
-        </el-col>
-      </div>
+  <el-col id="mynft">
+    <el-col class="title">My NFTs</el-col>
+    <el-col v-if="Object.keys(PBTlists).length > 0" class="nftarea">
+      <el-col class="nftlist">
+        <ul>
+          <li
+            v-for="(nft, name) in Object.fromEntries(
+              Object.entries(this.$store.state.PBTlists).slice(
+                pageNum * 3 - 3,
+                pageNum * 3
+              )
+            )"
+            :key="name"
+            class="nftli"
+          >
+            <el-button
+              :class="{ addclass: name == isAdd }"
+              @click="openNFT(nft, name)"
+            >
+              <el-col>
+                <i>#{{ nft.id }}</i>
+                <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+              </el-col>
+              <el-badge
+                v-if="nft.pbxs.coinTypes == '3'"
+                value="Chives"
+                class="item"
+              >
+              </el-badge>
+            </el-button>
+          </li>
+        </ul>
+      </el-col>
+      <el-col class="btn-bar">
+        <el-pagination
+          background
+          layout="total,prev,pager,next"
+          :total="Object.keys(PBTlists).length"
+          @current-change="handleCurrentChange"
+          :current-page="this.pageNum"
+          :page-size="3"
+        ></el-pagination>
+      </el-col>
+    </el-col>
+    <el-col v-else class="content">
+      You haven't got any NFTs. Please go to the market.
+    </el-col>
+    <el-col>
+      <el-button class="bottom">Go to Market </el-button>
     </el-col>
     <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
       <el-card>
         <NFTinfo />
       </el-card>
-    </el-dialog> -->
-  </div>
-  <!-- v-else 有nft -->
-  <!-- <div class="container"> 
-    <div class="title">My NFTs</div>
-    <div class="content">You haven't got any NFTs. Please go to the market.</div>
-    <div class="bottom">
-      Go to Market
-    </div>
-  </div> -->
+    </el-dialog>
+  </el-col>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import NFTinfo from "./NFTinfo.vue";
+import getAllData from "../../../getAllData";
 
 export default {
   name: "Mynft",
@@ -72,7 +68,8 @@ export default {
     NFTinfo,
   },
   computed: mapState({
-    coin: "coin",
+    bcoin: "bcoin",
+    mcoin: "mcoin",
     baddr: "baddr",
     curNFT: "curNFT",
     PBTlists: "PBTlists",
@@ -94,21 +91,56 @@ export default {
       this.$store.commit("setPBTMySaleLists", newLists);
     },
     deep: true,
+    curNFT: function (newNFT) {
+      console.log("this.curNFT", newNFT);
+      this.$store.commit("setCurNFT", newNFT);
+      return this.curNFT;
+    },
   },
   data() {
     return {
       mylist: {},
       pageNum: 1,
       nftinfo_dialog: false,
+      isAdd: "",
+      coinMap: {
+        3: "XCC",
+        2: "HDD",
+        1: "XCH",
+      },
     };
   },
   methods: {
-    openNFT: async function (nft) {
-      console.log("curNFT", nft);
-      this.$store.commit("setCurNFT", nft);
+    openNFT: async function (nft, name) {
+      const loading = this.$loading({
+        lock: true,
+        spinner: "el-icon-loading",
+        background: "rgba(200,230,200,0.6)",
+      });
+      if (this.mode == "bridge") {
+        const cointy = Object.keys(nft.pbxs);
+        let bridge_coin = "";
+        if (cointy.length == 1) {
+          const key = cointy[0];
+          bridge_coin = this.coinMap[key];
+          this.$store.commit("setBcoin", bridge_coin);
+        }
+        if (!("depositeAddr" in nft.pbxs[cointy[0]])) {
+          console.log("open", nft);
+          const nftinfo = await getAllData.nftAllinfo(nft);
+          console.log("open nft", nftinfo);
+          this.$store.commit("setCurNFT", nftinfo);
+        } else {
+          console.log("open nft", nft);
+          this.$store.commit("setCurNFT", nft);
+        }
+        this.isAdd = name;
+      }
       if (this.mode == "market") {
         this.nftinfo_dialog = true;
+        this.$store.commit("setCurNFT", nft);
       }
+      loading.close();
     },
     handleCurrentChange(newPage) {
       console.log("当前页:", newPage);
@@ -126,56 +158,34 @@ export default {
 
 <style scoped>
 .container {
-   color: #ffffff;
+  color: #ffffff;
+  background: #adefab25;
 }
 .title {
   height: 50px;
   font-size: 36px;
   line-height: 50px;
   text-align: center;
-  margin: 20px;
 }
-.content{
-  height: calc(100vh - 220px);
+.content {
+  height: calc(100vh - 235px);
+  min-height: 550px;
   font-size: 24px;
   line-height: 36px;
   padding: 40px;
 }
 .bottom {
-  background-color: #38F2AF;
-  height: 33px;
+  background-color: #38f2af;
   width: 132px;
-  margin: 0 auto;
-  border-radius: 4px;
-  cursor: pointer;
   font-size: 14px;
-  line-height: 33px;
-  text-align: center;
   color: #000000;
+  float: right;
+  margin: 0px 20px;
 }
-/* .container {
-  background: #25272E;
-} */
-
-/* .area {
-  width: 250px;
-  height: calc(100vh - 140px);
-  min-height: 674px;
+.addclass {
+  background: rgb(173, 195, 235);
+  width: 150px;
+  height: 150px;
+  transform: all 0.3 linear 0.2;
 }
-h2 {
-  padding: 20px 0 0 0;
-  text-align: center;
-}
-.nftarea {
-  height: 700px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-::-webkit-scrollbar {
-  display: none;
-}
-.nftlist {
-  margin: 15px 35px;
-} */
 </style>

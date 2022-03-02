@@ -4,8 +4,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         bsc: {},
-        mcoin: "XCC",
-        bcoin: "PBT",
+        bcoin: "XCC",
+        mcoin: "PBT",
         baddr: false,
         curNFT: {},
         NFTinfo: false,

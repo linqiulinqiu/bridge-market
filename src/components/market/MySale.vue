@@ -2,14 +2,14 @@
   <el-col>
     <h3>My Selling PBT</h3>
     <ul class="content">
-      <li v-for="nft in this.mylist" :key="nft.uri" class="listLi">
-        <el-button class="nftlist" @click="openNFT(nft)">
+      <li v-for="nft in PBTMySaleLists" :key="nft.uri" class="marketlist">
+        <el-button @click="openNFT(nft)">
           <i>#{{ nft.id }}</i>
           <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
         </el-button>
       </li>
     </ul>
-    <el-col :offset="10">
+    <!-- <el-col :offset="10">
       <el-pagination
         :total="Object.keys(PBTMySaleLists).length"
         background
@@ -18,7 +18,7 @@
         :page-size="10"
         layout="total,prev,pager,next"
       ></el-pagination>
-    </el-col>
+    </el-col> -->
     <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
       <el-card>
         <NFTinfo />
@@ -28,9 +28,9 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import market from "../market";
-import allData from "../getAllData";
-import NFTinfo from "./content/nftpanel/NFTinfo.vue";
+import market from "../../market";
+import allData from "../../getAllData";
+import NFTinfo from "../content/nftpanel/NFTinfo.vue";
 export default {
   name: "MySale",
   components: {
