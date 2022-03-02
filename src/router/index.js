@@ -21,7 +21,7 @@ const routes = [{
   // },
   {
     path: '/home',
-    redirect: '/home'
+    redirect: '/'
   },
   {
     path: '/bridge',
