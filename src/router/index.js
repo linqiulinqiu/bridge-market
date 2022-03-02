@@ -20,8 +20,8 @@ const routes = [{
   //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   // },
   {
-    path: '/',
-    redirect: '/Home'
+    path: '/home',
+    redirect: '/home'
   },
   {
     path: '/bridge',
