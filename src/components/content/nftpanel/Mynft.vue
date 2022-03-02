@@ -66,7 +66,6 @@
 import { mapState } from "vuex";
 import getAllData from "../../../getAllData";
 import NFTinfo from "./NFTinfo.vue";
-import getAllData from "../../../getAllData";
 
 export default {
   name: "Mynft",
