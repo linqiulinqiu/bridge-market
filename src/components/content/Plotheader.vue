@@ -76,8 +76,8 @@ export default {
       lang: i18n.locale,
       nav: [
         { tag: "Home", link: "/home" },
-        { tag: "Bridge", link: "/bridge" },
-        { tag: "Market", link: "/market" },
+        { tag: this.$t("bridge"), link: "/bridge" },
+        { tag: this.$t("market"), link: "/market" },
         { tag: "Doc", link: "/doc" },
       ],
     };
@@ -113,6 +113,7 @@ export default {
       const slist = saleList;
       const slistKeys = Object.keys(slist);
       const msList = {};
+      console.log("111111111111111111");
       for (let i = 0; i < slistKeys.length; i++) {
         if (slist[slistKeys[i]].market.seller == "-self") {
           const key = slist[slistKeys[i]].id.toString();
@@ -197,6 +198,7 @@ li {
   color: #fff;
   margin: 0 20px;
   cursor: pointer;
+  float: left;
 }
 .active {
   color: #38f2af;

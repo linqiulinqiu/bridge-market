@@ -1,6 +1,8 @@
 <template>
   <el-col id="mynft">
     <el-col class="title">My NFTs</el-col>
+    <el-col v-if="baddr">
+
     <el-col v-if="Object.keys(PBTlists).length > 0" class="nftarea">
       <el-col class="nftlist">
         <ul>
@@ -49,6 +51,9 @@
     <el-col>
       <el-button class="bottom">Go to Market </el-button>
     </el-col>
+    </el-col>
+
+    <el-col v-else>{{ $t("look-info") }}</el-col>
     <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
       <el-card>
         <NFTinfo />
@@ -59,6 +64,7 @@
 
 <script>
 import { mapState } from "vuex";
+import getAllData from "../../../getAllData";
 import NFTinfo from "./NFTinfo.vue";
 import getAllData from "../../../getAllData";
 
@@ -89,6 +95,7 @@ export default {
     deep: true,
     PBTMySaleLists: function (newLists) {
       this.$store.commit("setPBTMySaleLists", newLists);
+      return this.PBTMySaleLists;
     },
     deep: true,
     curNFT: function (newNFT) {
@@ -181,6 +188,12 @@ export default {
   color: #000000;
   float: right;
   margin: 0px 20px;
+}
+.addclass {
+  background: rgb(173, 195, 235);
+  width: 150px;
+  height: 150px;
+  transform: all 0.3 linear 0.2;
 }
 .addclass {
   background: rgb(173, 195, 235);
