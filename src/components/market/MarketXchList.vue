@@ -1,6 +1,6 @@
 <template>
   <el-col>
-    <h3>HDDcoin</h3>
+    <h3>Chia</h3>
     <ul class="content" v-for="(nft, name) in PBTSellingLists" :key="name">
       <li class="marketlist" v-if="'1' in nft.pbxs">
         <el-button @click="openNFT(nft)">
@@ -41,7 +41,7 @@ import getAllData from "../../getAllData";
 import market from "../../market";
 import NFTinfo from "../content/nftpanel/NFTinfo.vue";
 export default {
-  name: "MarketXccList",
+  name: "MarketXchList",
   components: {
     NFTinfo,
   },

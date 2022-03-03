@@ -27,7 +27,11 @@
                 <MarketHddList />
               </keep-alive>
             </el-col>
-            <el-col class="cointy"> <MarketXchList /> </el-col>
+            <el-col class="cointy">
+              <keep-alive>
+                <MarketXchList />
+              </keep-alive>
+            </el-col>
             <el-col class="cointy">
               <keep-alive><MySale /></keep-alive>
             </el-col>

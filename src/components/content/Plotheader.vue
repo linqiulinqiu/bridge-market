@@ -4,7 +4,7 @@
       <el-col :span="2">PlotBridge</el-col>
       <el-col :span="7">
         <h5 style="line-height: 35px">
-          version:3/2 5.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.1.6
+          version:3/3 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.1.6
           <br />目前网站不支持自动更新
         </h5>
       </el-col>
@@ -125,12 +125,7 @@ export default {
         }
       }
       // My sale list
-      console.log(
-        "PBT all-Lists",
-        mylist,
-        saleList,
-        this.$store.state.mySaleList
-      );
+      console.log("PBT all-Lists", mylist, saleList, msList);
       const oldToken = "0x134315EF3D11eEd8159fD1305af32119a046375A";
       const otBalance = await market.tokenBalance(oldToken);
       const otAllowance = await market.tokenAllowance(oldToken);

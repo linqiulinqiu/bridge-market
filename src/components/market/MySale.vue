@@ -43,12 +43,12 @@ export default {
   watch: {
     PBTMySaleLists: function (newLists) {
       this.$store.commit("setPBTMySaleLists", newLists);
-      const start = this.mypageNum * 10 - 10;
-      const down = this.mypageNum * 10;
-      this.mylist = Object.fromEntries(
-        Object.entries(newLists).slice(start, down)
-      );
-      console.log("mysale list", newLists);
+      //   const start = this.mypageNum * 10 - 10;
+      //   const down = this.mypageNum * 10;
+      //   this.mylist = Object.fromEntries(
+      //     Object.entries(newLists).slice(start, down)
+      //   );
+        console.log("mysale list", newLists);
     },
     deep: true,
   },

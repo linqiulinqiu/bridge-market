@@ -179,7 +179,6 @@ export default {
       const evt_send = await obj.send();
       market.waitEventDone(evt_send, async function (evt_send, evt) {
         const evt_sell = await obj.sellNFT();
-        console.log("evt_sell", evt_sell);
       });
       console.log("PBTsend", evt_send);
     },

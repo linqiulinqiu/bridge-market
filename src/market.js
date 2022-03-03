@@ -27,6 +27,44 @@ function coinContract(coin) {
     const wcoin = 'w' + coin.toLowerCase()
     return bsc.ctrs[wcoin]
 }
+async function listenEvents(commit) {
+    // listenNFTEvents(bsc.ctrs.pbt, PBTList, function (newlist) {
+    //     // newlist = PBTList.owned
+    //     console.log("pbt=list", PBTList, newlist, bsc.ctrs.pbt)
+    //     // console.log("pbtlist,evt", )
+    //     // commit('setPBTlists', newlist)
+    // })
+    console.log("1", bsc.ctrs.pbt, bsc.ctrs.pbt.filters)
+    console.log("2", bsc.ctrs.market, bsc.ctrs.market.filters)
+    if (bsc.ctrs.pbt.filters.Transfer) {
+        bsc.ctrs.pbt.on(bsc.ctrs.pbt.filters.Transfer, async function (evt) {
+            console.log("PBT.fillter.transfer".evt)
+        })
+    }
+    if (bsc.ctrs.pbt.filters.OwnershipTransferred) {
+        bsc.ctrs.pbt.on(bsc.ctrs.pbt.filters.OwnershipTransferred, async function (evt) {
+            console.log("PBT.fillter.OwnershipTransferred".evt)
+        })
+    }
+    if (bsc.ctrs.pbmarket.filters.OffSale) { //下架商品
+        bsc.ctrs.pbmarket.on(bsc.ctrs.market.filters.OffSale, async function (evt) {
+            console.log("OFF sale start", evt)
+        })
+    }
+    if (bsc.ctrs.pbmarket.filters.Sold) { //购买NFT
+        bsc.ctrs.pbmarket.on(bsc.ctrs.market.filters.Sold, async function (evt) {
+            console.log("Sold start", evt)
+
+        })
+    }
+    if (bsc.ctrs.pbmarket.filters.OnSale) { // 
+        bsc.ctrs.pbmarket.on(bsc.ctrs.market.filters.OnSale, async function (evt) {
+            console.log("On sale start", evt)
+
+        })
+    }
+
+}
 async function ListenToWCoin(commit) {
     let wBalance = {
         XCC: '',
@@ -43,7 +81,6 @@ async function ListenToWCoin(commit) {
     async function updateXCCBalance(evt) {
         const xccbalance = await ctr_xcc.balanceOf(bsc.addr)
         wBalance.XCC = ethers.utils.formatUnits(xccbalance, decimals_xcc)
-        console.log('wbalance', wBalance)
         commit('setWBalance', wBalance)
     }
     async function updateHDDBalance(evt) {
@@ -51,7 +88,6 @@ async function ListenToWCoin(commit) {
         const hddbalance = await ctr_hdd.balanceOf(bsc.addr)
         // wBalance.xch = ethers.utils.formatUnits(xchbalance, decimals_xch)
         wBalance.HDD = ethers.utils.formatUnits(hddbalance, decimals_hdd)
-        console.log('wbalance', wBalance)
         commit('setWBalance', wBalance)
     }
     await updateXCCBalance()
@@ -64,8 +100,9 @@ async function connect(commit) {
     bsc = await pbwallet.connect(true)
     if (bsc) {
         store.commit("setBsc", bsc)
+        console.log("bsc", bsc)
         await ListenToWCoin(commit)
-        console.log("bsc111", bsc)
+        // await listenEvents(commit)
         return bsc
     }
     return false
@@ -102,7 +139,6 @@ async function tokenAllowance(tokenAddr) {
     const ctr = pbwallet.erc20_contract(tokenAddr)
     const allowance = await ctr.allowance(bsc.addr, bsc.ctrs.tokenredeem.address)
     const decimals = await ctr.decimals()
-    console.log('token allowance', tokenAddr, allowance)
     return ethers.utils.formatUnits(allowance, decimals)
 }
 async function tokenApprove(tokenAddr) {
@@ -179,7 +215,6 @@ async function burnWcoin(amount, coin) {
     const ctr = coinContract(coin)
     const decimals = await getDecimals(coin)
     amount = ethers.utils.parseUnits(amount, decimals)
-    console.log("amount burn", amount, ethers.utils.formatUnits(amount, decimals))
     const wBalance = ethers.utils.parseUnits(store.state.WBalance[coin], decimals)
     if (amount.gt(wBalance)) {
         return false
@@ -241,9 +276,8 @@ async function setSellInfo(coin, id, ptName, price, desc) {
     if (!ptAddr) {
         ptAddr = ethers.constants.AddressZero
     }
-    console.log('onSale', pb.address, id, ptAddr, ethers.utils.parseEther(price), desc)
     const res = await bsc.ctrs.pbmarket.onSale(pb.address, id, ptAddr, ethers.utils.parseEther(price), desc)
-    console.log('set sell info receipt', res)
+    console.log('set-sale-info-receipt', res)
 }
 async function checkAllowance(nft) {
     console.log('checkAllowce', nft)
@@ -260,7 +294,6 @@ async function checkAllowance(nft) {
             if (allow.lt(price)) {
                 return false
             }
-            console.log("checkallowance", options, price, ctr, allow, allow.lt(price))
             return allow
         } catch (e) {
             console.log("eee", e.message)
@@ -283,7 +316,6 @@ async function buyNFT(coin, nft) {
     const price = ethers.utils.parseEther(nft.market.price)
     const priceToken = nft.market.priceToken
     const id = ethers.BigNumber.from(nft.id)
-    console.log('buy', pb, "id", id, priceToken, price)
     const options = {}
     if (priceToken == ethers.constants.AddressZero) {
         options.value = price
@@ -292,7 +324,7 @@ async function buyNFT(coin, nft) {
         const allow = await checkAllowance(nft)
         if (allow.lt(price)) { // not enough allowance, approve first
             const res = await approveAllow(nft)
-            console.log("res", res) // TODO: approve can use MAX_UINT256 for infinity
+            console.log("buy res", res) // TODO: approve can use MAX_UINT256 for infinity
             res.fn = 'approve'
             // we need to wait for approve confirmed by BSC network, so return and let user buy again
             // TODO: show "Approve" in button when allowance not enough, then show "Buy" when allowance enough
@@ -301,13 +333,14 @@ async function buyNFT(coin, nft) {
         }
     }
     const res = await bsc.ctrs.pbmarket.buy(pb.address, id, options)
+    console.log("buy res", res) // TODO: approve can use MAX_UINT256 for infinity
     res.fn = 'buy'
     return res
 }
 async function retreatNFT(coin, id) {
     const pb = coin2pb(coin)
     const res = await bsc.ctrs.pbmarket.offSale(pb.address, id)
-    console.log('retreat receipt', res)
+    console.log('retreat--res', res)
 }
 
 
