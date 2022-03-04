@@ -108,11 +108,21 @@ async function listenEvents(commit) {
         bsc.ctrs.pbx.on(bsc.ctrs.pbx.filters.WithdrawPuzzleHashChanged, async function (evt) {
             if (evt.event == 'WithdrawPuzzleHashChanged') {
                 console.log("PBx.WithdrawPuzzleHashChangedr", evt)
-                const key = parseInt(evt.args.tokenId).toString()
-                const addrinfo = await getPBXInfo(evt.args.tokenId)
-                PBTList.owned[key].pbxs.withdrawAddr = addrinfo.withdrawAddr
-                console.log("stasssss", PBTList.owned)
-                store.commit("setPBTlist", PBTList.owned)
+                const key = parseInt(evt.args.tokenId).toString() //pbx id
+                const coinTy = await getCoinTypes(key)
+                const mlist = PBTList.owned
+                const mlkeys = Object.keys(mlist)
+                for (let i = 0; i < mlkeys.length; i++) {
+                    const id = parseInt(mlist[mlkeys[i]].pbxs[coinTy.toString()].id)
+                    if (id == parseInt(evt.args.tokenId)) {
+                        const pbtId = mlkeys[i]
+                        const info = await getPBXInfo(pbtId)
+                        mlist[pbtId].pbxs[coinTy.toString()].depositeAddr = info.depositeAddr
+                        mlist[pbtId].pbxs[coinTy.toString()].withdrawAddr = info.withdrawAddr
+                        PBTList.owned = mlist
+                        store.commit("setPBTlists", PBTList.owned)
+                    }
+                }
             }
         })
     }
@@ -282,9 +292,7 @@ async function getNFTinfo(coin, nftid) {
 }
 //获取绑定的 pbx 信息 
 async function getPBXInfo(pbtId) {
-    console.log("PBTlist", PBTList.owned)
     const list = PBTList.owned[pbtId.toString()]
-    console.log("list", list)
     const coinArr = Object.keys(list.pbxs)
     let coin = ""
     if (coinArr.includes('1')) {
@@ -296,8 +304,6 @@ async function getPBXInfo(pbtId) {
     } else {
         return false
     }
-    console.log("coin", coin, list, coinArr)
-    // const prefix = getprefix(coin)
     const xAddress = await bsc.ctrs.pbconnect.XAddressList(pbtId)
     const depAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[1].toString(), coin.toLowerCase())
     const withAddress = window.ChiaUtils.puzzle_hash_to_address(xAddress[2].toString(), coin.toLowerCase())

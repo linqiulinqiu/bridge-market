@@ -1,11 +1,10 @@
 <template>
   <el-row id="bridge-main" type="flex" justify="center">
-    <el-col class="fees" :span="12" v-if="baddr">
+    <el-col class="fees" :span="14" v-if="baddr">
       <el-col v-if="PBTlists != null" class="mainpanel">
         <el-col> <BridgeFee /> </el-col>
         <el-col id="balance">
-          余额：{{ WBalance[bcoin] }}
-          <span v-if="WBalance"></span>
+          余额：<span class="font"> {{ WBalance[bcoin] }}</span>
           <span class="minifont"> w{{ bcoin }}</span>
           <el-button size="mini" type="primary" @click="addToken">
             添加代币

@@ -4,7 +4,7 @@
       <el-col :span="2">PlotBridge</el-col>
       <el-col :span="7">
         <h5 style="line-height: 35px">
-          version:3/3 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.1.6
+          version:3/4 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.1.6
           <br />目前网站不支持自动更新
         </h5>
       </el-col>
@@ -24,7 +24,7 @@
         <el-button v-if="!baddr" @click="connect_wallet" class="connect"
           >Connect Wallet</el-button
         >
-        <span v-else style="color: #fff" class="baddr">{{
+        <span v-else style="color: #fff" class="baddr font">{{
           baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
         }}</span>
       </el-col>
@@ -116,7 +116,6 @@ export default {
       const slist = saleList;
       const slistKeys = Object.keys(slist);
       const msList = {};
-      console.log("111111111111111111");
       for (let i = 0; i < slistKeys.length; i++) {
         if (slist[slistKeys[i]].market.seller == "-self") {
           const key = slist[slistKeys[i]].id.toString();
@@ -146,7 +145,6 @@ export default {
       if (bsc) {
         commit("setBaddr", this.$store.state.bsc.addr);
         await this.getBrieflist();
-        console.log("downnn");
       }
       await this.get_lists();
       console.log("downnnnnnnnnnn");

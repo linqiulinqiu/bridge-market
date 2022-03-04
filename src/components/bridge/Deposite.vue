@@ -18,7 +18,9 @@
             <span v-if="curNFT.pbxs['0']">请绑定PBX</span>
             <span v-else>
               <span v-if="curNFT.pbxs[this.coinMap[bcoin]].depositeAddr">
-                {{ curNFT.pbxs[this.coinMap[bcoin]].depositeAddr }}
+                <span class="font">{{
+                  curNFT.pbxs[this.coinMap[bcoin]].depositeAddr
+                }}</span>
               </span>
             </span>
           </el-col>

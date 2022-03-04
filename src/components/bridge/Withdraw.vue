@@ -18,7 +18,7 @@
                     "
                     >未绑定取款地址
                   </span>
-                  <span v-else>{{ item.withdrawAddr }}</span>
+                  <span v-else class="font"> {{ item.withdrawAddr }}</span>
                 </span>
               </span>
             </span>
