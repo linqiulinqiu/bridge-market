@@ -53,7 +53,9 @@
           <p>
             你将会收到
             <span class="span">
-              <span v-if="this.wAmount != ''">{{ getwAmount }}</span>
+              <span class="font" v-if="this.wAmount != ''">{{
+                getwAmount
+              }}</span>
             </span>
             {{ bcoin }}币
           </p>

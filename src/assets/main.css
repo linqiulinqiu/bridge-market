@@ -143,6 +143,12 @@ button {
 /* 输入数字*/
 .amount-input {
     width: 200px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.el-input__inner {
+    font-family: 'Courier New', Courier, monospace;
+
 }
 
 /* /* tab 标签页面 */

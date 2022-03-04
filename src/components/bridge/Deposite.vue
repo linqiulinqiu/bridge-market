@@ -29,7 +29,9 @@
       <el-col>
         <p>
           你将会得到<span class="span"
-            ><span v-if="this.depAmount"> {{ getAmount }}</span></span
+            ><span v-if="this.depAmount" class="font">
+              {{ getAmount }}</span
+            ></span
           >
           W{{ bcoin }}
           币，在你的bsc钱包中。
