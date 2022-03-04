@@ -205,12 +205,10 @@ async function listenEvents(commit) {
                 slist[key] = info
                 PBTList.selling = slist
                 const marketInfo = await getMarketNFT("PBT", evt.args.tokenId)
-                console.log("market", marketInfo)
                 info = slist[key]
                 info.market = marketInfo
                 slist[key] = info
                 PBTList.selling = slist
-                console.log("infooo", slist, slist[key])
                 store.commit("setPBTSellingLists", slist)
                 //增加 或者 更改价格
                 const mslist = getMySaleList("PBT")
@@ -438,13 +436,10 @@ function getMySaleList(coin) {
     if (coin == "PBT") {
         const slist = PBTList.selling
         const slistKeys = Object.keys(slist)
-        console.log("sssss", slist, slistKeys)
         for (let i = 0; i < slistKeys.length; i++) {
             if (slist[slistKeys[i]].market.seller == "-self") {
                 const key = slist[slistKeys[i]].id.toString()
-                console.log("ooooo", key, slistKeys[i])
                 msList[key] = slist[slistKeys[i]]
-                console.log("mmmmm", msList)
                 store.commit("setPBTMySaleLists", msList)
                 PBTList.mysale = msList
                 console.log("mySale list", msList)

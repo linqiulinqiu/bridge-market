@@ -1,7 +1,7 @@
 <template>
-  <el-row type="flex">
+  <el-row type="flex" justify="center">
     <!-- <el-col v-if="curNFT && curNFT.mata"> -->
-    <el-col>
+    <el-col :span="10">
       <img :src="curNFT.meta.image" alt="Img" />
       <p>id:#{{ curNFT.id }}</p>
       <el-col v-if="curNFT.market">
@@ -32,7 +32,7 @@
         <span v-else> no bind bridge </span>
       </p>
     </el-col>
-    <el-col v-if="curNFT.market">
+    <el-col v-if="curNFT.market" :span="13">
       <!-- My sale nft info -->
       <!-- <el-col v-if="curNFT.market.seller"> -->
       <el-col v-if="curNFT.market.seller == '-self'">
@@ -88,8 +88,15 @@
       <!-- </el-col> -->
     </el-col>
     <!-- My NFT not sale -->
-    <el-col v-else>
-      <p>Set the sale info:</p>
+    <el-col v-else :span="13">
+      <h2>售卖此NFT</h2>
+      <h3>1、发送到市场</h3>
+      <h3>
+        2、设置价格、描述
+        <span class="minifont"
+          >你可以在此处设置，也可以在市场位置设置更改价格等</span
+        >
+      </h3>
       <p>
         <label for="price" class="labels">price </label>
         <el-input
@@ -145,6 +152,7 @@ export default {
       nftPrice: 0,
       nftDesc: "",
       priceToken: "BNB",
+      setInfo: true,
     };
   },
   methods: {
@@ -154,6 +162,7 @@ export default {
       const coin = "PBT";
       const tx = await market.sendToMarket(coin, id);
       console.log("send to market", tx);
+      // await market.waitEventDone
       return tx;
     },
     sellNFT: async function () {
@@ -177,8 +186,17 @@ export default {
     sendSell: async function () {
       const obj = this;
       const evt_send = await obj.send();
-      market.waitEventDone(evt_send, async function (evt_send, evt) {
-        const evt_sell = await obj.sellNFT();
+      await market.waitEventDone(evt_send, async function (evt_send, evt) {
+        console.log(
+          "blockHash",
+          evt,
+          evt_send.blockHash,
+          evt_send.blockHash == null
+        );
+        if (evt.event == "Transfer") {
+          const evt_sell = await obj.sellNFT();
+          console.log("evnt sell", evt_sell);
+        }
       });
       console.log("PBTsend", evt_send);
     },
