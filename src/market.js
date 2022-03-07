@@ -14,6 +14,11 @@ const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
     'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
 }
+const oldTokenAddr = {
+    "XCC": "",
+    "XCH": "",
+    "HDD": "",
+}
 //根据币种选择decimals
 async function getDecimals(coin) {
     if (coin in coinDecimals) {
@@ -26,44 +31,6 @@ async function getDecimals(coin) {
 function coinContract(coin) {
     const wcoin = 'w' + coin.toLowerCase()
     return bsc.ctrs[wcoin]
-}
-async function listenEvents(commit) {
-    // listenNFTEvents(bsc.ctrs.pbt, PBTList, function (newlist) {
-    //     // newlist = PBTList.owned
-    //     console.log("pbt=list", PBTList, newlist, bsc.ctrs.pbt)
-    //     // console.log("pbtlist,evt", )
-    //     // commit('setPBTlists', newlist)
-    // })
-    console.log("1", bsc.ctrs.pbt, bsc.ctrs.pbt.filters)
-    console.log("2", bsc.ctrs.market, bsc.ctrs.market.filters)
-    if (bsc.ctrs.pbt.filters.Transfer) {
-        bsc.ctrs.pbt.on(bsc.ctrs.pbt.filters.Transfer, async function (evt) {
-            console.log("PBT.fillter.transfer".evt)
-        })
-    }
-    if (bsc.ctrs.pbt.filters.OwnershipTransferred) {
-        bsc.ctrs.pbt.on(bsc.ctrs.pbt.filters.OwnershipTransferred, async function (evt) {
-            console.log("PBT.fillter.OwnershipTransferred".evt)
-        })
-    }
-    if (bsc.ctrs.pbmarket.filters.OffSale) { //下架商品
-        bsc.ctrs.pbmarket.on(bsc.ctrs.market.filters.OffSale, async function (evt) {
-            console.log("OFF sale start", evt)
-        })
-    }
-    if (bsc.ctrs.pbmarket.filters.Sold) { //购买NFT
-        bsc.ctrs.pbmarket.on(bsc.ctrs.market.filters.Sold, async function (evt) {
-            console.log("Sold start", evt)
-
-        })
-    }
-    if (bsc.ctrs.pbmarket.filters.OnSale) { // 
-        bsc.ctrs.pbmarket.on(bsc.ctrs.market.filters.OnSale, async function (evt) {
-            console.log("On sale start", evt)
-
-        })
-    }
-
 }
 async function ListenToWCoin(commit) {
     let wBalance = {
@@ -102,7 +69,6 @@ async function connect(commit) {
         store.commit("setBsc", bsc)
         console.log("bsc", bsc)
         await ListenToWCoin(commit)
-        // await listenEvents(commit)
         return bsc
     }
     return false

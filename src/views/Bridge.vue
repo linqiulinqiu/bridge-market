@@ -10,18 +10,14 @@
 </template>
 
 <script>
-import Plotheader from "../components/content/Plotheader.vue";
 import Mynft from "../components/content/nftpanel/Mynft.vue";
-import Plotfooter from "../components/content/Plotfooter.vue";
 import BridgeMain from "../components/BridgeMain.vue";
 import { mapState } from "vuex";
 
 export default {
   name: "Bridge",
   components: {
-    Plotheader,
     Mynft,
-    Plotfooter,
     BridgeMain,
   },
 };

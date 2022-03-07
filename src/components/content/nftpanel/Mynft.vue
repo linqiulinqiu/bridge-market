@@ -2,55 +2,54 @@
   <el-col id="mynft">
     <el-col class="title">My NFTs</el-col>
     <el-col v-if="baddr">
-
-    <el-col v-if="Object.keys(PBTlists).length > 0" class="nftarea">
-      <el-col class="nftlist">
-        <ul>
-          <li
-            v-for="(nft, name) in Object.fromEntries(
-              Object.entries(this.$store.state.PBTlists).slice(
-                pageNum * 3 - 3,
-                pageNum * 3
-              )
-            )"
-            :key="name"
-            class="nftli"
-          >
-            <el-button
-              :class="{ addclass: name == isAdd }"
-              @click="openNFT(nft, name)"
+      <el-col v-if="Object.keys(PBTlists).length > 0" class="nftarea">
+        <el-col class="nftlist">
+          <ul>
+            <li
+              v-for="(nft, name) in Object.fromEntries(
+                Object.entries(this.$store.state.PBTlists).slice(
+                  pageNum * 3 - 3,
+                  pageNum * 3
+                )
+              )"
+              :key="name"
+              class="nftli"
             >
-              <el-col>
-                <i>#{{ nft.id }}</i>
-                <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-              </el-col>
-              <el-badge
-                v-if="nft.pbxs.coinTypes == '3'"
-                value="Chives"
-                class="item"
+              <el-button
+                :class="{ addclass: name == isAdd }"
+                @click="openNFT(nft, name)"
               >
-              </el-badge>
-            </el-button>
-          </li>
-        </ul>
+                <el-col>
+                  <i>#{{ nft.id }}</i>
+                  <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+                </el-col>
+                <el-badge
+                  v-if="nft.pbxs.coinTypes == '3'"
+                  value="Chives"
+                  class="item"
+                >
+                </el-badge>
+              </el-button>
+            </li>
+          </ul>
+        </el-col>
+        <el-col class="btn-bar">
+          <el-pagination
+            background
+            layout="total,prev,pager,next"
+            :total="Object.keys(PBTlists).length"
+            @current-change="handleCurrentChange"
+            :current-page="this.pageNum"
+            :page-size="3"
+          ></el-pagination>
+        </el-col>
       </el-col>
-      <el-col class="btn-bar">
-        <el-pagination
-          background
-          layout="total,prev,pager,next"
-          :total="Object.keys(PBTlists).length"
-          @current-change="handleCurrentChange"
-          :current-page="this.pageNum"
-          :page-size="3"
-        ></el-pagination>
+      <el-col v-else class="content">
+        You haven't got any NFTs. Please go to the market.
       </el-col>
-    </el-col>
-    <el-col v-else class="content">
-      You haven't got any NFTs. Please go to the market.
-    </el-col>
-    <el-col>
-      <el-button class="bottom">Go to Market </el-button>
-    </el-col>
+      <el-col>
+        <el-button class="bottom">Go to Market </el-button>
+      </el-col>
     </el-col>
 
     <el-col v-else>{{ $t("look-info") }}</el-col>
@@ -123,7 +122,9 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(200,230,200,0.6)",
       });
-      if (this.mode == "bridge") {
+      console.log("mode", this.mode);
+      const mo = location.pathname.substr(1);
+      if (this.mode == "bridge" || mo == "bridge") {
         const cointy = Object.keys(nft.pbxs);
         let bridge_coin = "";
         if (cointy.length == 1) {
@@ -142,7 +143,7 @@ export default {
         }
         this.isAdd = name;
       }
-      if (this.mode == "market") {
+      if (this.mode == "market" || mo == "market") {
         this.nftinfo_dialog = true;
         this.$store.commit("setCurNFT", nft);
       }

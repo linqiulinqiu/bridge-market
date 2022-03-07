@@ -90,13 +90,6 @@
     <!-- My NFT not sale -->
     <el-col v-else :span="13">
       <h2>售卖此NFT</h2>
-      <h3>1、发送到市场</h3>
-      <h3>
-        2、设置价格、描述
-        <span class="minifont"
-          >你可以在此处设置，也可以在市场位置设置更改价格等</span
-        >
-      </h3>
       <p>
         <label for="price" class="labels">price </label>
         <el-input
@@ -187,12 +180,6 @@ export default {
       const obj = this;
       const evt_send = await obj.send();
       await market.waitEventDone(evt_send, async function (evt_send, evt) {
-        console.log(
-          "blockHash",
-          evt,
-          evt_send.blockHash,
-          evt_send.blockHash == null
-        );
         if (evt.event == "Transfer") {
           const evt_sell = await obj.sellNFT();
           console.log("evnt sell", evt_sell);
@@ -203,7 +190,6 @@ export default {
 
     retreatNFT: async function () {
       const id = this.curNFT.id;
-      console.log("retreat start", this.mcoin, id);
       const res = await market.retreatNFT(this.mcoin, id);
       console.log("retreat ok", res);
     },
