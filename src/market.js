@@ -207,11 +207,13 @@ async function getDepAddr(pbtId, coin) {
     if (parseInt(ables) == 0) {
         return false
     } else {
-        const id = ethers.utils.parseEther(pbtId.toString())
-        console.log("id", id, parseInt(coinMap[coin]))
-        const res = bsc.ctrs.pbpuzzlehash.bindDepositePuzzleHash(id, parseInt(coinMap[coin]))
+        console.log('obtain PBTID')
+        const id = ethers.BigNumber.from(pbtId)
+        const coinType = parseInt(coinMap[coin])
+        console.log("current pbtId", id, coinType)
+        const res = await bsc.ctrs.pbpuzzlehash.bindDepositPuzzleHash(id, coinType)
         // const res = bsc.ctrs.pbpuzzlehash['bindDepositePuzzleHash(pbtId,coinType)'](pbtId, coinMap[coin])
-        console.log("deposite addr", res)
+        console.log("obtain deposite addr", res)
         return res
     }
 }
