@@ -30,7 +30,15 @@ const coinTyMap = {
 async function listenEvents(commit) {
     if (bsc.ctrs.pbt.filters.MinterTransferred) { //mint PBT
         bsc.ctrs.pbt.on(bsc.ctrs.pbt.filters.MinterTransferred, async function (evt) {
-            console.log("pbt MinterTransferred", evt)
+            console.log("pbt MinterTransfer", evt)
+            if (evt.event == "Transfer") {
+                const key = parseInt(evt.args.tokenId).toString() //pbt id
+                const mlist = PBTList.owned
+                const mintInfo = await getNFTinfo("PBT", evt.args.tokenId)
+                mlist[key] = mintInfo
+                PBTList.owned = mlist
+                store.commit("setPBTlists", PBTList.owned)
+            }
         })
     }
     if (bsc.ctrs.pbpuzzlehash.filters.WithdrawPuzzleHashChanged) { //bind withdraw addr
