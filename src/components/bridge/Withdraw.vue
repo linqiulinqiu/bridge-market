@@ -171,15 +171,15 @@ export default {
     clearAddr: async function () {
       console.log("coin", this.bcoin);
       const cointy = this.cointy[this.bcoin];
-      const id = this.curNFT.pbxs[cointy].id;
-      const res = await market.clearAddr(id);
+      const id = this.curNFT.id;
+      const res = await market.clearAddr(id, cointy);
       console.log("clearAddr", res);
     },
     bindWaddr: async function () {
       const cointy = this.cointy[this.bcoin];
-      const id = this.curNFT.pbxs[cointy].id;
+      const id = this.curNFT.id;
       const addr = this.wAddr.toString();
-      const res = await market.bindAddr(addr, id);
+      const res = await market.bindAddr(addr, id, cointy);
       console.log("bindWaddr", res);
     },
   },

@@ -4,13 +4,9 @@
       <el-col>
         <h2>
           PBT Market
-          <!-- <el-button
-                @click="getMintfee"
-                size="small"
-                class="btn"
-                v-if="baddr"
-                >铸造 PBT</el-button
-              > -->
+          <el-button @click="getMintfee" size="small" class="btn" v-if="baddr"
+            >铸造 PBT</el-button
+          >
         </h2>
         <el-col class="cointy">
           <keep-alive>

@@ -21,14 +21,8 @@
               >
                 <el-col>
                   <i>#{{ nft.id }}</i>
-                  <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+                  <img v-if="nft.meta" :src="nft.meta.url" alt="img" />
                 </el-col>
-                <el-badge
-                  v-if="nft.pbxs.coinTypes == '3'"
-                  value="Chives"
-                  class="item"
-                >
-                </el-badge>
               </el-button>
             </li>
           </ul>
@@ -107,7 +101,7 @@ export default {
       mylist: {},
       pageNum: 1,
       nftinfo_dialog: false,
-      isAdd: "",
+      isAdd: 0,
       coinMap: {
         3: "XCC",
         2: "HDD",
@@ -122,17 +116,10 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(200,230,200,0.6)",
       });
-      console.log("mode", this.mode);
+      console.log("mode", this.mode, name);
       const mo = location.pathname.substr(1);
       if (this.mode == "bridge" || mo == "bridge") {
-        const cointy = Object.keys(nft.pbxs);
-        let bridge_coin = "";
-        if (cointy.length == 1) {
-          const key = cointy[0];
-          bridge_coin = this.coinMap[key];
-          this.$store.commit("setBcoin", bridge_coin);
-        }
-        if (!("depositeAddr" in nft.pbxs[cointy[0]])) {
+        if (!("pbxs" in nft)) {
           console.log("open", nft);
           const nftinfo = await getAllData.nftAllinfo(nft);
           console.log("open nft", nftinfo);
@@ -188,12 +175,6 @@ export default {
   color: #000000;
   float: right;
   margin: 0px 20px;
-}
-.addclass {
-  background: rgb(173, 195, 235);
-  width: 150px;
-  height: 150px;
-  transform: all 0.3 linear 0.2;
 }
 .addclass {
   background: rgb(173, 195, 235);

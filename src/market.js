@@ -8,8 +8,7 @@ import store from "./store"
 
 // 全局变量设置
 var bsc = {}
-// var bsc = store.state.bsc
-console.log("bsc111", bsc)
+const coinDecimals = {}
 const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
     'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
@@ -18,6 +17,11 @@ const oldTokenAddr = {
     "XCC": "",
     "XCH": "",
     "HDD": "",
+}
+const coinMap = {
+    "XCC": '3',
+    "XCH": '1',
+    "HDD": "2"
 }
 //根据币种选择decimals
 async function getDecimals(coin) {
@@ -74,12 +78,6 @@ async function connect(commit) {
     return false
 }
 
-//获取绑定的pbx类型
-async function getCoinTypes(pbxid) {
-    const cointype = await bsc.ctrs.pbx.getCoinTypes([pbxid])
-    return cointype
-}
-
 function priceName(token) {
     token = ethers.utils.getAddress(token)
     for (var k in ptAddrs) {
@@ -117,22 +115,6 @@ async function tokenRedeem(tokenAddr, amount) {
     const decimals = await ctr.decimals()
     amount = ethers.utils.parseUnits(amount, decimals)
     await bsc.ctrs.tokenredeem.redeem(tokenAddr, amount)
-}
-async function bindTX(pbx_id, pbt) {
-    const pbtId = ethers.utils.hexZeroPad(ethers.utils.hexValue(ethers.BigNumber.from(pbt.id)), 32)
-    try {
-        const res = await bsc.ctrs.pbx["safeTransferFrom(address,address,uint256,bytes)"](bsc.addr, bsc.ctrs.pbconnect.address, pbx_id, pbtId)
-        console.log('bindTX receive', res)
-        return res
-    } catch (e) {
-        let text = e.message
-        if ('data' in e) {
-            if ('message' in e.data) {
-                text = e.data.message
-            }
-        }
-        return text
-    }
 }
 async function getmintfee() {
     const options = {}
@@ -198,36 +180,45 @@ async function waitEventDone(tx, done) {
         }
     })
 }
-// 解除绑定
-async function unbind(pbx) {
-    const pbconnect = bsc.ctrs.pbconnect
-    try {
-        const pbxid = parseInt(pbx.id)
-        const res = await pbconnect.retreat(pbxid)
-        return res
-    } catch (e) {
-        console.log("onbound error", e.message)
-    }
-}
 //绑定取款地址
-async function bindAddr(waddr, pbxId) {
+async function bindAddr(waddr, pbtId, cointy) {
     try {
         if ('ChiaUtils' in window) {
             if (waddr.substr(0, 3) != (store.state.bcoin).toLowerCase()) return false
             console.log("this.xaddr", store.state.bcoin)
             const addr = window.ChiaUtils.address_to_puzzle_hash(waddr)
-            const id = parseInt(pbxId)
-            const res = await bsc.ctrs.pbconnect.bindWithdrawPuzzleHash(id, addr)
+            const res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr)
             return res
         }
     } catch (e) {
         console.log("bindaddr errrrr", e.message)
     }
 }
-async function clearAddr(pbxid) {
-    const id = parseInt(pbxid)
+//存款地址数量
+async function getBindables(coin) {
+    const coinTy = coinMap[coin]
+    const ables = bsc.ctrs.pbpuzzlehash.bindables(coinTy)
+    return ables
+}
+//获取存款地址
+async function getDepAddr(pbtId, coin) {
+    const ables = await getBindables(coin)
+    console.log("ablse", ables)
+    if (parseInt(ables) == 0) {
+        return false
+    } else {
+        const id = ethers.utils.parseEther(pbtId.toString())
+        console.log("id", id, parseInt(coinMap[coin]))
+        const res = bsc.ctrs.pbpuzzlehash.bindDepositePuzzleHash(id, parseInt(coinMap[coin]))
+        // const res = bsc.ctrs.pbpuzzlehash['bindDepositePuzzleHash(pbtId,coinType)'](pbtId, coinMap[coin])
+        console.log("deposite addr", res)
+        return res
+    }
+}
+async function clearAddr(pbtid, cointy) {
+    const id = parseInt(pbtid)
     const addr1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
-    const res = await bsc.ctrs.pbconnect.bindWithdrawPuzzleHash(id, addr1)
+    const res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(id, cointy, addr1)
     console.log("clearAddr", res)
 }
 async function sendToMarket(coin, id) {
@@ -309,9 +300,6 @@ async function retreatNFT(coin, id) {
     console.log('retreat--res', res)
 }
 
-
-const coinDecimals = {}
-
 async function afterFee(coin, mode, amount) {
     const fees = await getfees(coin)
     const nowfee = {}
@@ -387,15 +375,15 @@ export default {
     connect: connect,
     afterFee: afterFee,
     watchToken: watchToken,
-    bindTX: bindTX,
     burnWcoin: burnWcoin,
     tokenAllowance: tokenAllowance,
     tokenApprove: tokenApprove,
     tokenBalance: tokenBalance,
     tokenRedeem: tokenRedeem,
-    unbind: unbind,
     mintPBT: mintPBT,
     bindAddr: bindAddr,
+    getDepAddr: getDepAddr,
+    getBindables: getBindables,
     clearAddr: clearAddr,
     waitEventDone: waitEventDone,
     retreatNFT: retreatNFT,

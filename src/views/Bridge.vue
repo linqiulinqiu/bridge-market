@@ -5,6 +5,9 @@
         <keep-alive> <mynft /></keep-alive>
       </el-aside>
       <el-main><BridgeMain /></el-main>
+      <el-aside width="200px" style="float: right; background: #abcdef">
+        <SelectCoin />
+      </el-aside>
     </el-container>
   </div>
 </template>
@@ -12,6 +15,7 @@
 <script>
 import Mynft from "../components/content/nftpanel/Mynft.vue";
 import BridgeMain from "../components/BridgeMain.vue";
+import SelectCoin from "../components/bridge/SelectCoin.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -19,6 +23,7 @@ export default {
   components: {
     Mynft,
     BridgeMain,
+    SelectCoin,
   },
 };
 </script>

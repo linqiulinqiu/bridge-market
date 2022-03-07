@@ -14,17 +14,37 @@
       <el-col>
         在以下的地址：
         <el-col class="aa">
-          <el-col v-if="curNFT.pbxs">
-            <span v-if="curNFT.pbxs['0']">请绑定PBX</span>
-            <span v-else>
-              <span v-if="curNFT.pbxs[this.coinMap[bcoin]].depositeAddr">
-                <span class="font">{{
-                  curNFT.pbxs[this.coinMap[bcoin]].depositeAddr
-                }}</span>
+          <!-- <el-col v-if="curNFT.pbxs"> -->
+          <el-col v-if="curNFT['pbxs'] == undefined">
+            <el-button
+              type="primary"
+              class="getdeposte"
+              @click="getDepositeAddr"
+              >获取{{ bcoin }}存款地址</el-button
+            >
+          </el-col>
+          <el-col v-else>
+            <span v-if="curNFT.pbxs[this.coinMap[bcoin]].depositeAddr">
+              <span
+                v-if="
+                  curNFT.pbxs[this.coinMap[bcoin]].depositeAddr.substr(3, 6) ==
+                  '1qqqqq'
+                "
+              >
+                <el-button
+                  type="primary"
+                  class="getdeposte"
+                  @click="getDepositeAddr"
+                  >获取{{ bcoin }}存款地址</el-button
+                >
               </span>
+              <span class="font" v-else>{{
+                curNFT.pbxs[this.coinMap[bcoin]].depositeAddr
+              }}</span>
             </span>
           </el-col>
         </el-col>
+        <!-- </el-col> -->
       </el-col>
       <el-col>
         <p>
@@ -69,6 +89,9 @@ export default {
     };
   },
   watch: {
+    curNFT: function (newNFT) {
+      this.$store.commit("setCurNFT", newNFT);
+    },
     depAmount: async function () {
       var depamount = this.depAmount;
       console.log("depamount", this.bcoin, depamount);
@@ -97,6 +120,18 @@ export default {
       return after_fee;
     },
   },
-  methods: {},
+  methods: {
+    getDepositeAddr: async function () {
+      const nft = this.curNFT;
+      try {
+        const res = await market.getDepAddr(nft.id, this.bcoin);
+        if (res == false) {
+          this.$message("该类型存款地址已经获取了");
+        }
+      } catch (e) {
+        console.log("deposit addr errr", e.message);
+      }
+    },
+  },
 };
 </script>
