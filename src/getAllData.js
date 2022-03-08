@@ -28,7 +28,7 @@ const coinTyMap = {
 }
 //监听 PBT list 以及 事件evt的发生
 async function listenEvents(commit) {
-    if (bsc.ctrs.pbt.filters.Transfer) { //mint PBT
+    if (bsc.ctrs.pbt.filters.MinterTransferred) { //mint PBT
         bsc.ctrs.pbt.on(bsc.ctrs.pbt.filters.Transfer, async function (evt) {
             console.log("pbt MinterTransfer", evt)
             if (evt.event == "Transfer") {
@@ -216,9 +216,11 @@ function fix_uri(uri) {
 async function getNFTinfo(coin, nftid) {
     const pb = coin2pb(coin)
     const uri = await pb.tokenURI(nftid.toNumber())
-    console.log("uri", uri)
     const meta = await fetch(fix_uri(uri))
-    meta.image = fix_uri(String(meta.image))
+    const img = await meta.json()
+    console.log("json", img)
+    meta['image'] = await fix_uri(String(img.image))
+    console.log("meta.image", meta.image)
     const info = {
         id: nftid.toNumber(),
         uri: uri,

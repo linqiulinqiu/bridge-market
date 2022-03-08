@@ -77,7 +77,7 @@ button {
 }
 
 .marketlist {
-    margin: 10px;
+    /* margin: 10px; */
     float: left;
     position: relative;
 }
@@ -86,6 +86,7 @@ button {
     height: 108px;
     width: 136px;
     box-sizing: border-box;
+    margin: 10px;
 }
 
 .marketlist img {

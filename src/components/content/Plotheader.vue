@@ -5,7 +5,6 @@
       <el-col :span="7">
         <h5 style="line-height: 35px">
           version:3/8 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.10
-          <br />目前网站不支持自动更新
         </h5>
       </el-col>
       <el-col class="nav" :span="8">
@@ -140,18 +139,18 @@ export default {
       //   spinner: "el-icon-loading",
       //   background: "rgba(200,230,200,0.6)",
       // });
-      try {
-        const bsc = await allData.connectW(commit);
-        if (bsc) {
-          commit("setBaddr", this.$store.state.bsc.addr);
-          await this.getBrieflist();
-        }
-        await this.get_lists();
-        console.log("downnnnnnnnnnn");
-      } catch (e) {
-        console.log(e.message);
-        this.$message(e.message);
+      // try {
+      const bsc = await allData.connectW(commit);
+      if (bsc) {
+        commit("setBaddr", this.$store.state.bsc.addr);
+        await this.getBrieflist();
       }
+      await this.get_lists();
+      console.log("downnnnnnnnnnn");
+      // } catch (e) {
+      //   console.log(e.message);
+      //   this.$message(e.message);
+      // }
       // loading.close();
     },
   },

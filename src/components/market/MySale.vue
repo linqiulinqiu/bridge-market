@@ -3,7 +3,7 @@
     <h3>My Selling PBT</h3>
     <ul class="content">
       <li v-for="nft in PBTMySaleLists" :key="nft.uri" class="marketlist">
-        <el-button @click="openNFT(nft)">
+        <el-button @click="openNFT(nft)" class="nftbtn">
           <i>#{{ nft.id }}</i>
           <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
         </el-button>
@@ -48,7 +48,7 @@ export default {
       //   this.mylist = Object.fromEntries(
       //     Object.entries(newLists).slice(start, down)
       //   );
-        console.log("mysale list", newLists);
+      console.log("mysale list", newLists);
     },
     deep: true,
   },

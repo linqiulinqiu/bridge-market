@@ -3,10 +3,14 @@
     <h3>
       On Sale <span class="minifont">(价格为0的NFT将不会出现在市场列表中)</span>
     </h3>
-    <ul class="content" v-for="(nft, name) in PBTSellingLists" :key="name">
-      <li class="marketlist" v-if="nft.market">
-        <el-button @click="openNFT(nft)" v-if="!nft.market.price == '0'">
-          <i>#{{ nft.id }}</i>
+    <ul class="content">
+      <li class="marketlist" v-for="(nft, name) in PBTSellingLists" :key="name">
+        <el-button
+          class="nftbtn"
+          @click="openNFT(nft)"
+          v-if="nft.market && !(nft.market.price == '0.0')"
+        >
+          <span>#{{ nft.id }}</span>
           <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
           <i v-if="'seller' in nft.market">
             <el-badge

@@ -130,6 +130,7 @@ export default {
     bcoin: "bcoin",
     curNFT: "curNFT",
     mcoin: "mcoin",
+    baddr: "baddr",
   }),
   watch: {
     nftprice: function (newprice) {
@@ -179,13 +180,15 @@ export default {
     sendSell: async function () {
       const obj = this;
       const evt_send = await obj.send();
+      console.log("PBTsend", evt_send);
+
       await market.waitEventDone(evt_send, async function (evt_send, evt) {
+        console.log("evt", evt_send, evt);
         if (evt.event == "Transfer") {
           const evt_sell = await obj.sellNFT();
           console.log("evnt sell", evt_sell);
         }
       });
-      console.log("PBTsend", evt_send);
     },
 
     retreatNFT: async function () {
