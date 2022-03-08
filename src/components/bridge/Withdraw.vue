@@ -28,7 +28,7 @@
           <el-button @click="bind_dialog = true" type="primary" size="small"
             >更改取款地址</el-button
           >
-          <el-button @click="clearAddr" size="small">清空存款地址</el-button>
+          <el-button @click="clearAddr" size="small">清空取款地址</el-button>
         </p>
       </el-col>
       <el-col>

@@ -129,6 +129,11 @@ async function getmintfee() {
     console.log("options", options)
     return options
 }
+async function getMintAbles() {
+    const mintAbles = await bsc.ctrs.pbt.mintables()
+    console.log("mintAbles", mintAbles)
+    return mintAbles
+}
 async function mintPBT() {
     try {
         const mintfee = await bsc.ctrs.pbt.mintFee()
@@ -383,6 +388,7 @@ export default {
     tokenBalance: tokenBalance,
     tokenRedeem: tokenRedeem,
     mintPBT: mintPBT,
+    getMintAbles: getMintAbles,
     bindAddr: bindAddr,
     getDepAddr: getDepAddr,
     getBindables: getBindables,

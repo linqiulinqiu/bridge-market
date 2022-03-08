@@ -4,23 +4,18 @@
       <el-col>
         <h2>
           PBT Market
-          <el-button @click="getMintfee" size="small" class="btn" v-if="baddr"
+          <el-button
+            @click="getMintfee"
+            size="small"
+            class="btn"
+            v-if="baddr"
+            type="primary"
             >铸造 PBT</el-button
           >
         </h2>
         <el-col class="cointy">
           <keep-alive>
-            <MarketXccList />
-          </keep-alive>
-        </el-col>
-        <el-col class="cointy">
-          <keep-alive>
-            <MarketHddList />
-          </keep-alive>
-        </el-col>
-        <el-col class="cointy">
-          <keep-alive>
-            <MarketXchList />
+            <MarketList />
           </keep-alive>
         </el-col>
         <el-col class="cointy">
@@ -31,24 +26,37 @@
     <el-col v-else>连接钱包后查看</el-col>
     <el-dialog :visible.sync="mintVisible" title="MINT NFT" width="50%">
       <el-card>
-        <el-empty :image-size="200"></el-empty>
-        <el-col>
-          <p>
-            价格:
-            <span>{{ this.mintFee.price }}</span>
-            <span>{{ this.mintFee.token }}</span>
-          </p>
-          <p>支持币种: Chives（韭菜）</p>
-          <el-button @click="mintNFT">铸造</el-button>
-        </el-col>
+        <el-row type="flex" justify="center">
+          <el-col :sapn="10">
+            <el-empty :image-size="100"></el-empty>
+          </el-col>
+          <el-col :span="12">
+            <p>
+              价格:
+              <span>{{ this.mintFee.price }}</span>
+              <span>{{ this.mintFee.token }}</span>
+            </p>
+            <p>支持币种: Chives（韭菜）</p>
+            <p>
+              <span>目前可铸造的NFT：{{ mintNumber }}个</span>
+            </p>
+            <p>
+              <el-button
+                @click="mintNFT"
+                type="primary"
+                v-if="this.mintNumber > 0"
+                >铸造</el-button
+              >
+              <span v-else>目前可铸造数为0,不可铸造NFT，请等待</span>
+            </p>
+          </el-col>
+        </el-row>
       </el-card>
     </el-dialog>
   </el-row>
 </template>
 <script>
-import MarketXccList from "./market/MarketXccList.vue";
-import MarketHddList from "./market/MarketHddList.vue";
-import MarketXchList from "./market/MarketXchList.vue";
+import MarketList from "./market/MarketList.vue";
 import NFTinfo from "./content/nftpanel/NFTinfo.vue";
 import MySale from "./market/MySale.vue";
 import { mapState } from "vuex";
@@ -57,9 +65,7 @@ export default {
   name: "MarketMain",
   components: {
     MySale,
-    MarketXccList,
-    MarketHddList,
-    MarketXchList,
+    MarketList,
     NFTinfo,
   },
   computed: mapState({
@@ -70,6 +76,7 @@ export default {
   }),
   data() {
     return {
+      mintNumber: "--",
       mintVisible: false,
       mintFee: {
         price: 0,
@@ -91,6 +98,9 @@ export default {
       this.mintFee.price = fee.price;
       this.mintFee.token = fee.ptName;
       this.mintVisible = true;
+      const number = await market.getMintAbles();
+      console.log("mint number", number);
+      this.mintNumber = number;
     },
   },
 };
@@ -105,5 +115,8 @@ export default {
 }
 .nftlist {
   margin: 15px;
+}
+.emptyImg {
+  float: left;
 }
 </style>

@@ -21,7 +21,7 @@
               >
                 <el-col>
                   <i>#{{ nft.id }}</i>
-                  <img v-if="nft.meta" :src="nft.meta.url" alt="img" />
+                  <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
                 </el-col>
               </el-button>
             </li>

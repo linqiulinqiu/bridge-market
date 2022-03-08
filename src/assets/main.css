@@ -132,13 +132,11 @@ button {
 }
 
 .cointy {
-    min-height: 200px;
-    border: #abcdef 1px solid;
+    min-height: 300px;
+    border: #d3fde1 1px solid;
     position: relative;
+    padding: 30px;
 }
-
-
-
 
 /* 输入数字*/
 .amount-input {
@@ -148,7 +146,6 @@ button {
 
 .el-input__inner {
     font-family: 'Courier New', Courier, monospace;
-
 }
 
 /* /* tab 标签页面 */
