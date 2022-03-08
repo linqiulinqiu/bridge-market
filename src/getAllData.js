@@ -233,7 +233,7 @@ async function getNFTinfo(coin, nftid) {
 }
 //获取绑定的 地址信息 
 async function getBindInfo(pbtId) {
-    const key = pbtId.toString()
+    const key = String(pbtId)
     console.log("key", key)
     const list = PBTList.owned[key]
     console.log("list", list)
@@ -248,8 +248,8 @@ async function getBindInfo(pbtId) {
         const depAddress = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[0]), prefix)
         const withAddress = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[1]), prefix)
         const addrInfo = {
-            depositAddr: depAddress.toString(),
-            withdrawAddr: withAddress.toString()
+            depositAddr: String(depAddress),
+            withdrawAddr: String(withAddress)
         }
         console.log("addrINfo", addrInfo)
         const pbxs = {}
@@ -291,7 +291,7 @@ async function getBriefInfo(coin, addr) {
     for (let i = 0; i < cnt; i++) {
         const idx = await pb.tokenOfOwnerByIndex(addr, i)
         const info = await getNFTinfo(coin, idx)
-        const key = idx.toString()
+        const key = String(idx)
         BriefList[key] = info
     }
     return BriefList
@@ -335,11 +335,8 @@ async function getUserTokenList(coin, addr) {
         for (let i = 0; i < arrmKeys[i]; i++) {
             const idx = arrmKeys[i]
             const minfo = list[idx]
-            console.log("minfo", minfo)
             if (!("pbxs" in minfo)) {
-                console.log("idx", idx, parseInt(idx), idx.toString())
                 const bindinfo = await getBindInfo(idx)
-                console.log("bindinfo", bindinfo)
                 minfo.pbxs = bindinfo
                 PBTList.owned = list
                 store.commit("setPBTlists", list)
