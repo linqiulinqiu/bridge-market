@@ -46,9 +46,8 @@ async function listenEvents(commit) {
             if (evt.event == 'WithdrawPuzzleHashChanged') {
                 console.log("PBx.WithdrawPuzzleHashChangedr", evt)
                 const key = parseInt(evt.args.tokenId).toString() //pbt id
-                console.log("cointy evt", coinTy)
                 const mlist = PBTList.owned
-                const bindinfo = await getBindInfo(evt.args.tokenId)
+                const bindinfo = await getBindInfo(evt.args.pbtId)
                 mlist[key].pbxs = bindinfo
                 PBTList.owned = mlist
                 commit("setPBTlists", PBTList.owned)
@@ -59,7 +58,7 @@ async function listenEvents(commit) {
         bsc.ctrs.pbpuzzlehash.on(bsc.ctrs.pbpuzzlehash.filters.DepositPuzzleHashChanged, async function (evt) {
             if (evt.event == 'DepositPuzzleHashChanged') {
                 console.log("PBT DepositPuzzleHashChanged", evt)
-                const key = String(parseInt(evt.args.tokenId)) //pbt id
+                const key = String(parseInt(evt.args.pbtId)) //pbt id
                 // console.log("cointy evt", coinTy)
                 const mlist = PBTList.owned
                 const bindinfo = await getBindInfo(evt.args.tokenId)
@@ -219,9 +218,7 @@ async function getNFTinfo(coin, nftid) {
     const uri = await pb.tokenURI(nftid.toNumber())
     const meta = await fetch(fix_uri(uri))
     const img = await meta.json()
-    console.log("json", img)
     meta['image'] = await fix_uri(String(img.image))
-    console.log("meta.image", meta.image)
     const info = {
         id: nftid.toNumber(),
         uri: uri,
@@ -233,7 +230,8 @@ async function getNFTinfo(coin, nftid) {
 }
 //获取绑定的 地址信息 
 async function getBindInfo(pbtId) {
-    const key = String(pbtId)
+    console.log("pbtid",pbtId)
+    const key = pbtId
     console.log("key", key)
     const list = PBTList.owned[key]
     console.log("list", list)
