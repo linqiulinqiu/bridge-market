@@ -116,8 +116,9 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(200,230,200,0.6)",
       });
-      console.log("mode", this.mode, name);
-      const mo = location.pathname.substr(1);
+      const mo = location.hash.substr(2);
+      console.log("mode", mo);
+
       if (this.mode == "bridge" || mo == "bridge") {
         if (!("pbxs" in nft)) {
           console.log("open", nft);

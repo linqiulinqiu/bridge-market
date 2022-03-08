@@ -1,10 +1,16 @@
 <template>
   <div class="container">
     <el-row type="flex" justify="center">
-      <el-col :span="2">PlotBridge</el-col>
+      <el-col :span="2">
+        <img
+          style="width: 160px"
+          src="../../assets/image/logo_000.png"
+          alt="LOGO"
+        />
+      </el-col>
       <el-col :span="7">
         <h5 style="line-height: 35px">
-          version:3/8 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.10
+          version:3/8 4.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.10
         </h5>
       </el-col>
       <el-col class="nav" :span="8">

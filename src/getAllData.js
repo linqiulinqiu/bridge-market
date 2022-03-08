@@ -163,7 +163,8 @@ async function listenEvents(commit) {
 }
 //获取绑定的coin类型
 async function getCoinTypes(pbtid) {
-    const cointype = await bsc.ctrs.pbpuzzlehash.pbtCoinTypes([pbtid])
+    const id = ethers.BigNumber.from(pbtid)
+    const cointype = await bsc.ctrs.pbpuzzlehash.pbtCoinTypes(id)
     return cointype
 }
 async function connectW(commit) {
@@ -232,11 +233,15 @@ async function getNFTinfo(coin, nftid) {
 }
 //获取绑定的 地址信息 
 async function getBindInfo(pbtId) {
-    const list = PBTList.owned[pbtId.toString()]
-    const coinTy = await getCoinTypes(pbtId)
+    const key = pbtId.toString()
+    console.log("key", key)
+    const list = PBTList.owned[key]
+    console.log("list", list)
+
+    const coinTy = await getCoinTypes(key)
     console.log("coinTY", coinTy)
     for (var i = 0; i < coinTy.length; i++) {
-        const prefix = coinTyMap[coinTy[i].toString()].toLowerCase()
+        const prefix = coinTyMap[String(coinTy[i])].toLowerCase()
         console.log("prefix", prefix)
         const xAddress = await bsc.ctrs.pbpuzzlehash.pbtPuzzleHash(pbtId, coinTy[i])
         console.log("xAddr", xAddress)
@@ -251,7 +256,7 @@ async function getBindInfo(pbtId) {
         pbxs[String(coinTy[i])] = addrInfo
         console.log("PBxs", pbxs)
         list.pbxs = pbxs
-        PBTList.owned[pbtId.toString()] = list
+        PBTList.owned[String(pbtId)] = list
         return pbxs
     }
 }
@@ -330,8 +335,11 @@ async function getUserTokenList(coin, addr) {
         for (let i = 0; i < arrmKeys[i]; i++) {
             const idx = arrmKeys[i]
             const minfo = list[idx]
-            if (!"pbxs" in minfo) {
+            console.log("minfo", minfo)
+            if (!("pbxs" in minfo)) {
+                console.log("idx", idx, parseInt(idx), idx.toString())
                 const bindinfo = await getBindInfo(idx)
+                console.log("bindinfo", bindinfo)
                 minfo.pbxs = bindinfo
                 PBTList.owned = list
                 store.commit("setPBTlists", list)
