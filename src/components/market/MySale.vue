@@ -5,7 +5,7 @@
       <li v-for="nft in PBTMySaleLists" :key="nft.uri" class="marketlist">
         <el-button @click="openNFT(nft)" class="nftbtn">
           <i>#{{ nft.id }}</i>
-          <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+          <img v-if="nft.meta" v-lazy="nft.meta.image" alt="img" />
         </el-button>
       </li>
     </ul>

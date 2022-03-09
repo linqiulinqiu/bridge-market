@@ -11,7 +11,7 @@
           v-if="nft.market && !(nft.market.price == '0.0')"
         >
           <span>#{{ nft.id }}</span>
-          <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
+          <img v-if="nft.meta" v-lazy="nft.meta.image" alt="img" />
           <i v-if="'seller' in nft.market">
             <el-badge
               v-if="nft.market.seller == '-self'"

@@ -162,14 +162,15 @@ export default {
 i{
   margin-right: 8px;
 }
-.nftlist{
-  width: 350px;
-}
 .title {
   height: 50px;
   font-size: 36px;
   line-height: 50px;
   text-align: center;
+}
+.nftlist{
+  width: 300px;
+  overflow: hidden;
 }
 .content {
   min-height: 550px;

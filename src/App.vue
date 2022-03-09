@@ -44,13 +44,20 @@ export default {
 #app {
   min-height: 800px;
 }
-.el-header,
-.el-footer {
+.el-header{
   background-color: #25272e;
   color: #ffffff;
   text-align: center;
   line-height: 70px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  user-select: none;
+}
+.el-footer {
+  background-color: #25272e;
+  color: #ffffff;
+  text-align: center;
+  line-height: 69px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   user-select: none;
 }
 
