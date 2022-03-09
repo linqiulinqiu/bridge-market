@@ -36,7 +36,6 @@
               <span>{{ this.mintFee.price }}</span>
               <span>{{ this.mintFee.token }}</span>
             </p>
-            <p>支持币种: Chives（韭菜）</p>
             <p>
               <span>目前可铸造的NFT：{{ mintNumber }}个</span>
             </p>

@@ -90,7 +90,6 @@ function priceName(token) {
 
 function coin2pb(coin) {
     if (coin == 'PBT') return bsc.ctrs.pbt
-    if (coin == 'PBX') return bsc.ctrs.pbx
     throw new Error('Unsupported coin:' + coin)
 }
 async function tokenBalance(tokenAddr) {
@@ -144,14 +143,12 @@ async function mintPBT() {
         } else {
             const ctr = pbwallet.erc20_contract(mintfee[0])
             const allow = await ctr.allowance(bsc.addr, bsc.ctrs.pbt.address)
-            console.log(" approve statrt", mintfee[1].gt(allow))
             if (mintfee[1].gt(allow)) {
                 const reciept = await ctr.approve(bsc.ctrs.pbt.address, mintfee[1].mul(10000))
                 console.log("mint approve", reciept)
             }
         }
         const res = await bsc.ctrs.pbt.mint(options)
-
         console.log("mint res", res)
     } catch (e) {
         let text = e.message
@@ -173,12 +170,13 @@ async function burnWcoin(amount, coin) {
         return false
     }
     const receipt = await ctr.burn(amount)
-    console.log("receipt", receipt)
+    console.log("burncoin receipt", receipt)
     return receipt
 }
 async function waitEventDone(tx, done) {
     const ctr = pbwallet.erc721_contract(tx.to)
     ctr.on(ctr.filters.Transfer, function (evt) {
+        console.log("waitEventDone", evt)
         if (evt.transactionHash == tx.hash) {
             done(tx, evt)
             ctr.off(ctr.filters.Transfer)
@@ -190,7 +188,6 @@ async function bindAddr(waddr, pbtId, cointy) {
     try {
         if ('ChiaUtils' in window) {
             if (waddr.substr(0, 3) != (store.state.bcoin).toLowerCase()) return false
-            console.log("this.xaddr", store.state.bcoin)
             const addr = window.ChiaUtils.address_to_puzzle_hash(waddr)
             const res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr)
             return res
@@ -208,16 +205,12 @@ async function getBindables(coin) {
 //获取存款地址
 async function getDepAddr(pbtId, coin) {
     const ables = await getBindables(coin)
-    console.log("ablse", ables)
     if (parseInt(ables) == 0) {
         return false
     } else {
-        console.log('obtain PBTID')
         const id = ethers.BigNumber.from(pbtId)
         const coinType = parseInt(coinMap[coin])
-        console.log("current pbtId", id, coinType)
         const res = await bsc.ctrs.pbpuzzlehash.bindDepositPuzzleHash(id, coinType)
-        // const res = bsc.ctrs.pbpuzzlehash['bindDepositePuzzleHash(pbtId,coinType)'](pbtId, coinMap[coin])
         console.log("obtain deposite addr", res)
         return res
     }
@@ -231,7 +224,7 @@ async function clearAddr(pbtid, cointy) {
 async function sendToMarket(coin, id) {
     const pb = coin2pb(coin)
     const res = await pb["safeTransferFrom(address,address,uint256)"](bsc.addr, bsc.ctrs.pbmarket.address, id)
-    console.log('transfer receipt', res)
+    console.log('send To the market receipt', res)
     return res
 }
 async function setSellInfo(coin, id, ptName, price, desc) {
@@ -241,13 +234,11 @@ async function setSellInfo(coin, id, ptName, price, desc) {
         ptAddr = ethers.constants.AddressZero
     }
     const res = await bsc.ctrs.pbmarket.onSale(pb.address, id, ptAddr, ethers.utils.parseEther(price), desc)
-    console.log('set-sale-info-receipt', res)
+    console.log('set-sale-info', res)
 }
 async function checkAllowance(nft) {
-    console.log('checkAllowce', nft)
     const priceToken = nft.market.priceToken
     const price = ethers.utils.parseEther(nft.market.price)
-
     const options = {}
     if (priceToken == ethers.constants.AddressZero) {
         options.value = price
@@ -268,7 +259,6 @@ async function approveAllow(nft) {
     const priceToken = nft.priceToken
     const price = ethers.utils.parseEther(nft.price)
     const ctr = pbwallet.erc20_contract(priceToken)
-    // uint256_MAX, priceToken_ctr.totalSupply()
     const res = await ctr.approve(bsc.ctrs.pbmarket.address, price.mul(1000000))
     res.fn = 'approve'
     return res

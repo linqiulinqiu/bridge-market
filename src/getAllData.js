@@ -28,41 +28,45 @@ const coinTyMap = {
 }
 //监听 PBT list 以及 事件evt的发生
 async function listenEvents(commit) {
-    if (bsc.ctrs.pbt.filters.MinterTransferred) { //mint PBT
+    if (bsc.ctrs.pbt.filters.Transfer) { //mint PBT
         bsc.ctrs.pbt.on(bsc.ctrs.pbt.filters.Transfer, async function (evt) {
-            console.log("pbt MinterTransfer", evt)
-            if (evt.event == "Transfer") {
-                const key = parseInt(evt.args.tokenId).toString() //pbt id
-                const mlist = PBTList.owned
-                const mintInfo = await getNFTinfo("PBT", evt.args.tokenId)
-                mlist[key] = mintInfo
-                PBTList.owned = mlist
-                commit("setPBTlists", PBTList.owned)
+            console.log("Mint Transfer", evt)
+            if (evt.args.to == bsc.addr && evt.args.from.substr(0, 4) == "0x00") {
+                if (evt.event == "Transfer") {
+                    const key = parseInt(evt.args.pbtId).toString() //pbt id
+                    const mlist = PBTList.owned
+                    const mintInfo = await getNFTinfo("PBT", evt.args.tokenId)
+                    mlist[key] = mintInfo
+                    PBTList.owned = mlist
+                    commit("setPBTlists", PBTList.owned)
+                }
             }
         })
     }
     if (bsc.ctrs.pbpuzzlehash.filters.WithdrawPuzzleHashChanged) { //bind withdraw addr
         bsc.ctrs.pbpuzzlehash.on(bsc.ctrs.pbpuzzlehash.filters.WithdrawPuzzleHashChanged, async function (evt) {
             if (evt.event == 'WithdrawPuzzleHashChanged') {
-                console.log("PBx.WithdrawPuzzleHashChangedr", evt)
-                const key = parseInt(evt.args.tokenId).toString() //pbt id
+                console.log("WithdrawPuzzleHashChangedr", evt)
+                const key = parseInt(evt.args.pbtId).toString() //pbt id
                 const mlist = PBTList.owned
                 const bindinfo = await getBindInfo(evt.args.pbtId)
-                mlist[key].pbxs = bindinfo
+                const info = mlist[key]
+                info['pbxs'] = bindinfo
                 PBTList.owned = mlist
                 commit("setPBTlists", PBTList.owned)
             }
+
         })
     }
     if (bsc.ctrs.pbpuzzlehash.filters.DepositPuzzleHashChanged) { //bind Deposit addr
         bsc.ctrs.pbpuzzlehash.on(bsc.ctrs.pbpuzzlehash.filters.DepositPuzzleHashChanged, async function (evt) {
+
             if (evt.event == 'DepositPuzzleHashChanged') {
-                console.log("PBT DepositPuzzleHashChanged", evt)
+                console.log("DepositPuzzleHashChanged", evt)
                 const key = String(parseInt(evt.args.pbtId)) //pbt id
-                // console.log("cointy evt", coinTy)
                 const mlist = PBTList.owned
                 const bindinfo = await getBindInfo(evt.args.tokenId)
-                mlist[key].pbxs = bindinfo
+                mlist[key]['pbxs'] = bindinfo
                 PBTList.owned = mlist
                 commit("setPBTlists", PBTList.owned)
             }
@@ -97,6 +101,7 @@ async function listenEvents(commit) {
     }
     if (bsc.ctrs.pbmarket.filters.Sold) { //购买NFT
         bsc.ctrs.pbmarket.on(bsc.ctrs.pbmarket.filters.Sold, async function (evt) {
+            console.log("buy PBT", evt)
             if (evt.event == 'Sold') {
                 //增加
                 const mylist = PBTList.owned
@@ -105,8 +110,6 @@ async function listenEvents(commit) {
                 const info = await getNFTinfo("PBT", evt.args.tokenId)
                 PBTList.owned[key] = info
                 const pbxinfo = await getBindInfo(evt.args.tokenId)
-                console.log('infoo', info, pbxinfo, PBTList.owned[key])
-
                 info['pbxs'] = pbxinfo
                 mylist[key] = info
                 PBTList.owned = mylist
@@ -126,36 +129,39 @@ async function listenEvents(commit) {
     }
     if (bsc.ctrs.pbmarket.filters.OnSale) { // 更改价格
         bsc.ctrs.pbmarket.on(bsc.ctrs.pbmarket.filters.OnSale, async function (evt) {
-            if (evt.event == 'OnSale') {
-                console.log("On sale start", evt)
-                const key = parseInt(evt.args.tokenId).toString()
-                //减少                    
-                const mylist = PBTList.owned
-                if (Object.keys(mylist).includes(key)) { //售卖nft 
-                    delete mylist[key]
-                }
-                //更改价格
-                //增加    
-                const slist = PBTList.selling
-                let info = {}
-                if (!(Object.keys(slist).includes(key))) {
-                    info = await getNFTinfo("PBT", evt.args.tokenId)
-                } else {
+            if (evt.from == bsc.addr) {
+                if (evt.event == 'OnSale') {
+                    console.log("On sale", evt)
+                    const key = parseInt(evt.args.tokenId).toString()
+                    //减少                    
+                    const mylist = PBTList.owned
+                    if (Object.keys(mylist).includes(key)) { //售卖nft 
+                        delete mylist[key]
+                    }
+                    //更改价格
+                    //增加    
+                    const slist = PBTList.selling
+                    let info = {}
+                    if (!(Object.keys(slist).includes(key))) {
+                        info = await getNFTinfo("PBT", evt.args.tokenId)
+                    } else {
+                        info = slist[key]
+                    }
+                    slist[key] = info
+                    PBTList.selling = slist
+                    const marketInfo = await getMarketNFT("PBT", evt.args.tokenId)
                     info = slist[key]
+                    info.market = marketInfo
+                    slist[key] = info
+                    PBTList.selling = slist
+                    commit("setPBTSellingLists", slist)
+                    //增加 或者 更改价格
+                    const mslist = getMySaleList("PBT")
+                    PBTList.mysale = mslist
+                    commit("setPBTMySaleLists", mslist)
                 }
-                slist[key] = info
-                PBTList.selling = slist
-                const marketInfo = await getMarketNFT("PBT", evt.args.tokenId)
-                info = slist[key]
-                info.market = marketInfo
-                slist[key] = info
-                PBTList.selling = slist
-                commit("setPBTSellingLists", slist)
-                //增加 或者 更改价格
-                const mslist = getMySaleList("PBT")
-                PBTList.mysale = mslist
-                commit("setPBTMySaleLists", mslist)
             }
+
         })
     }
 
@@ -176,7 +182,6 @@ async function connectW(commit) {
     }
     if (bsc) {
         commit("setBsc", bsc)
-        console.log("bsc", bsc)
         await listenEvents(commit)
         return bsc
     }
@@ -196,17 +201,14 @@ async function nftAllinfo(nft) {
     if (bcoin in coinMap) {
         const key = coinMap[bcoin]
         const info = await getBindInfo(nft.id)
-        console.log("nftAllinfo", key, info)
         nft['pbxs'] = info
         PBTList.owned[nft.id.toString()]['pbxs'] = info
-        console.log("this NFT", nft)
         return nft
     }
 }
 
 function fix_uri(uri) {
     if (uri.startsWith('ipfs:')) {
-        console.log('ipfs uri', uri)
         return uri.replace('ipfs://', 'https://ipfs.io/ipfs/')
     } else {
         return uri
@@ -224,35 +226,24 @@ async function getNFTinfo(coin, nftid) {
         uri: uri,
         meta: meta,
     }
-    console.log("get simple info", info)
-
     return info
 }
 //获取绑定的 地址信息 
 async function getBindInfo(pbtId) {
-    console.log("pbtid",pbtId)
     const key = pbtId
-    console.log("key", key)
     const list = PBTList.owned[key]
-    console.log("list", list)
-
     const coinTy = await getCoinTypes(key)
-    console.log("coinTY", coinTy)
     for (var i = 0; i < coinTy.length; i++) {
         const prefix = coinTyMap[String(coinTy[i])].toLowerCase()
-        console.log("prefix", prefix)
         const xAddress = await bsc.ctrs.pbpuzzlehash.pbtPuzzleHash(pbtId, coinTy[i])
-        console.log("xAddr", xAddress)
         const depAddress = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[0]), prefix)
         const withAddress = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[1]), prefix)
         const addrInfo = {
             depositAddr: String(depAddress),
             withdrawAddr: String(withAddress)
         }
-        console.log("addrINfo", addrInfo)
         const pbxs = {}
         pbxs[String(coinTy[i])] = addrInfo
-        console.log("PBxs", pbxs)
         list.pbxs = pbxs
         PBTList.owned[String(pbtId)] = list
         return pbxs
@@ -297,7 +288,6 @@ async function getBriefInfo(coin, addr) {
 //获取mylist
 async function getMyList(coin) {
     if (coin == "PBT") PBTList.owned = await getBriefInfo(coin, bsc.addr)
-    console.log("PBT/PBX list =", PBTList.owned)
     return await getBriefInfo(coin, bsc.addr)
 }
 //获取market list
@@ -347,12 +337,10 @@ async function getUserTokenList(coin, addr) {
 
 function coin2pb(coin) {
     if (coin == 'PBT') return bsc.ctrs.pbt
-    if (coin == 'PBX') return bsc.ctrs.pbx
     throw new Error('Unsupported coin:' + coin)
 }
 async function getMyTokenList(coin) {
     if (coin == "PBT") PBTList.owned = await getUserTokenList(coin, bsc.addr)
-    console.log("PBT list detail info=", PBTList.owned)
     return await getUserTokenList(coin, bsc.addr)
 }
 async function getSaleList(coin) {
@@ -371,7 +359,6 @@ function getMySaleList(coin) {
                 msList[key] = slist[slistKeys[i]]
                 store.commit("setPBTMySaleLists", msList)
                 PBTList.mysale = msList
-                console.log("mySale list", msList)
             }
         }
         return msList
