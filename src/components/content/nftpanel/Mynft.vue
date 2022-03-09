@@ -19,10 +19,8 @@
                 :class="{ addclass: name == isAdd }"
                 @click="openNFT(nft, name)"
               >
-                <el-col>
-                  <i>#{{ nft.id }}</i>
-                  <img v-if="nft.meta" :src="nft.meta.image" alt="img" />
-                </el-col>
+                <i>#{{ nft.id }}</i>
+                <img v-if="nft.meta" v-lazy="nft.meta.image" alt="img" />
               </el-button>
             </li>
           </ul>
@@ -155,6 +153,17 @@ export default {
 .container {
   color: #ffffff;
   background: #adefab25;
+  height: calc(100vh - 235px);
+}
+.el-col,#mynft {
+  color: #ffffff;
+  background-color: #25272e;
+}
+i{
+  margin-right: 8px;
+}
+.nftlist{
+  width: 350px;
 }
 .title {
   height: 50px;
@@ -163,7 +172,6 @@ export default {
   text-align: center;
 }
 .content {
-  height: calc(100vh - 235px);
   min-height: 550px;
   font-size: 24px;
   line-height: 36px;

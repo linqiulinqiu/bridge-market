@@ -5,7 +5,7 @@
         <keep-alive> <mynft /></keep-alive>
       </el-aside>
       <el-main><BridgeMain /></el-main>
-      <el-aside width="200px" style="float: right; background: #abcdef">
+      <el-aside width="200px" style="float: right; background: #25272e">
         <SelectCoin />
       </el-aside>
     </el-container>
