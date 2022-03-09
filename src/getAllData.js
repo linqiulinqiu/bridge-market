@@ -4,7 +4,7 @@ import {
 } from 'ethers'
 import pbwallet from 'pbwallet'
 import store from "./store"
-
+import keeper from 'pbweb-nftkeeper'
 
 //  获取所有的页面数据
 // 全局变量设置
@@ -182,7 +182,10 @@ async function connectW(commit) {
     }
     if (bsc) {
         commit("setBsc", bsc)
-        await listenEvents(commit)
+        await keeper.startKeeper(bsc, commit, PBTList)
+        const cnt = await keeper.preload(commit, PBTList)
+        console.log('user owns', cnt.toString(), 'PBT')
+        // await listenEvents(commit)
         return bsc
     }
     return false

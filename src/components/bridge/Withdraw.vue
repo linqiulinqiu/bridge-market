@@ -6,24 +6,24 @@
         请确认取款地址是自己钱包的收款地址，并且确认地址是正确的。
       </span>
       <el-col class="aa">
-        <p>
-          <span v-if="curNFT.pbxs">
-            <span v-for="(item, key, index) in curNFT.pbxs" :key="index">
-              <span v-if="key == '0'">暂不可用的PBT，绑定PBX后使用</span>
-              <span v-else>
-                <span v-if="curNFT.pbxs[key].withdrawAddr">
-                  <span
-                    v-if="
-                      curNFT.pbxs[key].withdrawAddr.substr(3, 6) == '1qqqqq'
-                    "
-                    >未绑定取款地址
-                  </span>
-                  <span v-else class="font"> {{ item.withdrawAddr }}</span>
-                </span>
-              </span>
+        <el-col v-if="curNFT['pbxs'] == undefined">
+          <p>未绑定取款地址</p>
+        </el-col>
+        <el-col v-else>
+          <span v-if="curNFT.pbxs[this.cointy[bcoin]]">
+            <span
+              v-if="
+                curNFT.pbxs[this.cointy[bcoin]].withdrawAddr.substr(3, 4) ==
+                '1qqq'
+              "
+              >未绑定取款地址</span
+            >
+            <span class="font" v-else>
+              {{ curNFT.pbxs[this.cointy[bcoin]].withdrawAddr }}
             </span>
           </span>
-        </p>
+          <span v-else> 未绑定取款地址 </span>
+        </el-col>
         <p>
           <el-button @click="bind_dialog = true" type="primary" size="small"
             >更改取款地址</el-button

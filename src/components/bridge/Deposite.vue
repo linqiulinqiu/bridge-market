@@ -15,31 +15,23 @@
         在以下的地址：
         <el-col class="aa">
           <el-col v-if="curNFT['pbxs'] == undefined">
-            <el-button
-              type="primary"
-              class="getdeposte"
-              @click="getDepositAddr"
+            <el-button type="primary" class="getdeposte" @click="getDepositAddr"
               >获取{{ bcoin }}存款地址</el-button
             >
           </el-col>
           <el-col v-else>
-            <span v-if="curNFT.pbxs[this.coinMap[bcoin]].depositAddr">
-              <span
-                v-if="
-                  curNFT.pbxs[this.coinMap[bcoin]].depositAddr.substr(3, 6) ==
-                  '1qqqqq'
-                "
-              >
-                <el-button
-                  type="primary"
-                  class="getdeposte"
-                  @click="getDepositAddr"
-                  >获取{{ bcoin }}存款地址</el-button
-                >
-              </span>
-              <span class="font" v-else>{{
+            <span v-if="curNFT.pbxs[this.coinMap[bcoin]]">
+              <span class="font">{{
                 curNFT.pbxs[this.coinMap[bcoin]].depositAddr
               }}</span>
+            </span>
+            <span v-else>
+              <el-button
+                type="primary"
+                class="getdeposte"
+                @click="getDepositAddr"
+                >获取{{ bcoin }}存款地址</el-button
+              >
             </span>
           </el-col>
         </el-col>

@@ -52,7 +52,6 @@ export default {
   watch: {
     bcoin: function (newcoin) {
       console.log("coin", newcoin, this.bcoin);
-      // const re = this.coinBalance(newcoin);
       this.$store.commit("setBcoin", newcoin);
     },
     deep: true,
