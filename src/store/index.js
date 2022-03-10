@@ -20,6 +20,7 @@ export default new Vuex.Store({
         redeemBalance: "0",
         redeemAllowance: "0",
         mode: '', //bridge or market
+        bridgeVisible: false
     },
     mutations: {
         setBsc(state, bsc) {
@@ -42,6 +43,9 @@ export default new Vuex.Store({
         },
         setMode(state, mode) {
             state.mode = mode
+        },
+        setBridgeVisible(state, boolean) {
+            state.bridgeVisible = boolean
         },
         setNFTinfo(state, boolean) {
             state.NFTinfo = boolean

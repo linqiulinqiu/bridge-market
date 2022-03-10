@@ -44,6 +44,7 @@
                 @click="mintNFT"
                 type="primary"
                 v-if="this.mintNumber > 0"
+                :loading="mint_loading"
                 >铸造</el-button
               >
               <span v-else>目前可铸造数为0,不可铸造NFT，请等待</span>
@@ -81,13 +82,20 @@ export default {
         price: 0,
         token: "BNB",
       },
+      mint_loading: false,
     };
   },
   methods: {
     mintNFT: async function () {
+      this.mint_loading = true;
+      const obj = this;
       try {
-        await market.mintPBT();
+        const res = await market.mintPBT();
+        await market.waitEventDone(res, async function (evt) {
+          obj.mint_loading = false;
+        });
       } catch (e) {
+        this.mint_loading = false;
         this.$message(e.data.message);
         console.log("mint err", e.message);
       }

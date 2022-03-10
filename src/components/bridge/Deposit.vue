@@ -30,12 +30,12 @@
                 type="primary"
                 class="getdeposte"
                 @click="getDepositAddr"
+                :loading="getDep_loading"
                 >获取{{ bcoin }}存款地址</el-button
               >
             </span>
           </el-col>
         </el-col>
-        <!-- </el-col> -->
       </el-col>
       <el-col>
         <p>
@@ -72,6 +72,7 @@ export default {
       depAmount: "",
       getAmount: "",
       tips_amount: false,
+      getDep_loading: false,
       coinMap: {
         XCC: "3",
         XCH: "1",
@@ -113,13 +114,19 @@ export default {
   },
   methods: {
     getDepositAddr: async function () {
+      this.getDep_loading = true;
       const nft = this.curNFT;
       try {
         const res = await market.getDepAddr(nft.id, this.bcoin);
         if (res == false) {
           this.$message("该类型存款地址已经获取了");
         }
+        const obj = this;
+        await market.waitEventDone(res, async function (evt) {
+          obj.getDep_loading = false;
+        });
       } catch (e) {
+        this.getDep_loading = false;
         console.log("deposit addr errr", e.message);
       }
     },

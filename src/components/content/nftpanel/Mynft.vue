@@ -128,6 +128,7 @@ export default {
           this.$store.commit("setCurNFT", nft);
         }
         this.isAdd = name;
+        this.$store.commit("setBridgeVisible", true);
       }
       if (this.mode == "market" || mo == "market") {
         this.nftinfo_dialog = true;
@@ -155,11 +156,12 @@ export default {
   background: #adefab25;
   height: calc(100vh - 235px);
 }
-.el-col,#mynft {
+.el-col,
+#mynft {
   color: #ffffff;
   background-color: #25272e;
 }
-i{
+i {
   margin-right: 8px;
 }
 .title {
@@ -168,7 +170,7 @@ i{
   line-height: 50px;
   text-align: center;
 }
-.nftlist{
+.nftlist {
   width: 300px;
   overflow: hidden;
 }

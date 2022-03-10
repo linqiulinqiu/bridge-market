@@ -10,7 +10,7 @@
       </el-col>
       <el-col :span="7">
         <h5 style="line-height: 35px">
-          version:3/9 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.10
+          version:3/10 3.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.0
         </h5>
       </el-col>
       <el-col class="nav" :span="8">
@@ -26,7 +26,11 @@
         </ul>
       </el-col>
       <el-col :span="4">
-        <el-button v-if="!baddr" @click="connect_wallet" class="connect"
+        <el-button
+          v-if="!baddr"
+          @click="connect_wallet"
+          class="connect"
+          :loading="conenct_loading"
           >Connect Wallet</el-button
         >
         <span v-else style="color: #fff" class="baddr font">{{
@@ -60,6 +64,7 @@ export default {
     PBTlists: "PBTlists",
     PBTSellingLists: "PBTSellingLists",
     mode: "mode",
+    bridgeVisible: "bridgeVisible",
   }),
   watch: {
     PBTlists: function (new_list) {
@@ -77,6 +82,7 @@ export default {
   },
   data() {
     return {
+      conenct_loading: false,
       langs: [
         { value: "en", label: "English" },
         { value: "zh", label: "简体中文" },
@@ -92,7 +98,6 @@ export default {
   },
   methods: {
     liclick(link, index) {
-      console.log("link", link);
       let arr = document.getElementsByClassName("nav-item");
       let array = Array.from(arr);
       array.forEach((element) => {
@@ -101,6 +106,7 @@ export default {
       array[index].classList.add("active");
       const curMode = link.toString().substr(1);
       this.$store.commit("setMode", curMode);
+      this.$store.commit("setBridgeVisible", false);
       this.$router.push(link).catch((err) => err); //加catch,在router.push的时候捕获异常，防止重复点击报错
     },
     getBrieflist: async function () {
@@ -139,24 +145,27 @@ export default {
     },
 
     connect_wallet: async function () {
+      this.conenct_loading = true;
       const commit = this.$store.commit;
       // const loading = this.$loading({
       //   lock: true,
       //   spinner: "el-icon-loading",
       //   background: "rgba(200,230,200,0.6)",
       // });
-      // try {
-      const bsc = await allData.connectW(commit);
-      if (bsc) {
-        commit("setBaddr", this.$store.state.bsc.addr);
-        await this.getBrieflist();
+      try {
+        const bsc = await allData.connectW(commit);
+        if (bsc) {
+          commit("setBaddr", this.$store.state.bsc.addr);
+          this.conenct_loading = false;
+          await this.getBrieflist();
+        }
+        await this.get_lists();
+        console.log("downnnnnnnnnnn");
+      } catch (e) {
+        console.log(e.message);
+        this.$message(e.message);
+        this.conenct_loading = false;
       }
-      await this.get_lists();
-      console.log("downnnnnnnnnnn");
-      // } catch (e) {
-      //   console.log(e.message);
-      //   this.$message(e.message);
-      // }
       // loading.close();
     },
   },

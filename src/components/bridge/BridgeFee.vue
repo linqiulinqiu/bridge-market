@@ -3,7 +3,7 @@
     <el-popover placement="left" trigger="click" title="fees">
       <p>
         单次存款建议限额为：{{ this.depAmount }}<br />
-        单次取款建议限额：{{ this.wAmount }}<br />
+        单次取款建议限额为：{{ this.wAmount }}<br />
         超出金额限制后，交易时间会大幅增加，请耐心等待<br />
         存款费率：{{ this.dFeeRate / 100 }}%，存款最小手续费：{{ this.dFee
         }}{{ bcoin }}

@@ -28,7 +28,9 @@
           <el-button @click="bind_dialog = true" type="primary" size="small"
             >更改取款地址</el-button
           >
-          <el-button @click="clearAddr" size="small">清空取款地址</el-button>
+          <el-button @click="clearAddr" size="small" :loading="clear_loading"
+            >清空取款地址</el-button
+          >
         </p>
       </el-col>
       <el-col>
@@ -65,7 +67,13 @@
         </el-col>
       </el-col>
       <el-col>
-        <el-button type="primary" @click="withdraw">取款</el-button>
+        <el-button
+          type="primary"
+          @click="withdraw"
+          :loading="w_loading"
+          :disabled="w_disabled"
+          >取款</el-button
+        >
       </el-col>
       <el-col style="margin-top: 20px">
         <p>
@@ -84,7 +92,9 @@
           </span>
         </p>
         <el-input type="text" v-model.trim="wAddr"></el-input>
-        <el-button type="primary" @click="bindWaddr">Bind</el-button>
+        <el-button type="primary" @click="bindWaddr" :loading="bind_loading"
+          >Bind</el-button
+        >
         <el-button @click="bind_dialog = false">Cancel</el-button>
       </el-card>
     </el-dialog>
@@ -106,6 +116,10 @@ export default {
   }),
   data() {
     return {
+      w_disabled: true,
+      w_loading: false,
+      clear_loading: false,
+      bind_loading: false,
       wAmount: "",
       getwAmount: "",
       tips_amount: false,
@@ -131,14 +145,18 @@ export default {
       const after_fee = await market.afterFee(this.bcoin, "withdraw", wamount);
       console.log("afterfee", after_fee);
       if (!after_fee) {
+        this.w_disabled = true;
+
         this.getwAmount = "";
         this.tips_amount = "数额过少，将什么都收不到呢！";
       } else if (after_fee == "fund") {
+        this.w_disabled = true;
         this.getwAmount = "";
         this.tips_amount = "数额过大，余额不够呢！";
       } else {
         this.getwAmount = after_fee;
         this.tips_amount = false;
+        this.w_disabled = false;
       }
       return after_fee;
     },
@@ -155,32 +173,58 @@ export default {
       return true;
     },
     withdraw: async function () {
+      this.w_loading = true;
       const amount = this.wAmount;
       const coin = this.bcoin;
-      console.log("bcoin", coin);
       if (await this.amount_valid(this.wAmount)) {
-        // try {
-        console.log("s");
-        const res = await market.burnWcoin(amount, coin);
-        console.log("withdraw res", res);
-        // } catch (e) {
-        //   console.log("withdraw errrr", e.message);
-        // }
+        try {
+          const obj = this;
+          const res = await market.burnWcoin(amount, coin);
+          await market.waitEventDone(res, async function (evt) {
+            obj.w_loading = false;
+          });
+        } catch (e) {
+          console.log("withdraw errrr", e.message);
+          this.w_loading = false;
+        }
       }
     },
     clearAddr: async function () {
-      console.log("coin", this.bcoin);
+      this.clear_loading = true;
       const cointy = this.cointy[this.bcoin];
       const id = this.curNFT.id;
-      const res = await market.clearAddr(id, cointy);
-      console.log("clearAddr", res);
+      const obj = this;
+      try {
+        const res = await market.clearAddr(id, cointy);
+        console.log("clearAddr", res);
+        await market.waitEventDone(res, async function (evt) {
+          obj.clear_loading = false;
+        });
+      } catch (e) {
+        this.clear_loading = false;
+        console.log("clear Withdraw Addr err", e.message);
+      }
     },
     bindWaddr: async function () {
+      this.bind_loading = true;
       const cointy = this.cointy[this.bcoin];
       const id = this.curNFT.id;
       const addr = this.wAddr.toString();
-      const res = await market.bindAddr(addr, id, cointy);
-      console.log("bindWaddr", res);
+      const obj = this;
+      try {
+        const res = await market.bindAddr(addr, id, cointy);
+        console.log("bindWaddr", res);
+        if (res == false) {
+          this.bind_loading = false;
+          this.$message("请输入正确的取款地址");
+        }
+        await market.waitEventDone(res, async function (evt) {
+          obj.bind_loading = false;
+        });
+      } catch (e) {
+        this.bind_loading = false;
+        console.log("bind withdraw addr err", e.message);
+      }
     },
   },
 };
