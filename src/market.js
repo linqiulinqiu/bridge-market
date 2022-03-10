@@ -5,7 +5,7 @@ import {
 import pbwallet from 'pbwallet'
 import allData from './getAllData'
 import store from "./store"
-
+import keeper from "pbweb-nftkeeper"
 // 全局变量设置
 var bsc = {}
 const coinDecimals = {}
@@ -78,25 +78,15 @@ async function connect(commit) {
     return false
 }
 
-function priceName(token) {
-    token = ethers.utils.getAddress(token)
-    for (var k in ptAddrs) {
-        if (ethers.utils.getAddress(ptAddrs[k]) == token) {
-            return k
-        }
-    }
-    return false
-}
-
 function coin2pb(coin) {
     if (coin == 'PBT') return bsc.ctrs.pbt
     throw new Error('Unsupported coin:' + coin)
 }
 async function tokenBalance(tokenAddr) {
+    const info = await keeper.tokenInfo(tokenAddr)
     const ctr = pbwallet.erc20_contract(tokenAddr)
     const balance = await ctr.balanceOf(bsc.addr)
-    const decimals = await ctr.decimals()
-    return ethers.utils.formatUnits(balance, decimals)
+    return ethers.utils.formatUnits(balance, info.decimals)
 }
 async function tokenAllowance(tokenAddr) {
     const ctr = pbwallet.erc20_contract(tokenAddr)
@@ -118,13 +108,9 @@ async function tokenRedeem(tokenAddr, amount) {
 async function getmintfee() {
     const options = {}
     const fee = await bsc.ctrs.pbt.mintFee();
-    if (fee[0] == ethers.constants.AddressZero) {
-        options.price = ethers.utils.formatUnits(fee[1])
-        options.ptName = "BNB"
-    } else if (fee[0] == ptAddrs.BUSD) {
-        options.price = ethers.utils.formatUnits(fee[1])
-        options.ptName = "BUSD"
-    }
+    const info = await keeper.tokenInfo(fee[0])
+    options.price = ethers.utils.formatUnits(fee[1], info.decimals)
+    options.ptName = info.symbol
     console.log("options", options)
     return options
 }

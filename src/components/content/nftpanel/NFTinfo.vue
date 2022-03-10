@@ -9,7 +9,9 @@
       <el-col v-if="curNFT.market">
         <el-col v-if="curNFT.market.seller == '-self'">
           <p v-if="curNFT.market.price">
-            {{ $t("price") }}:<span>{{ curNFT.market.price }}&nbsp;</span>
+            {{ $t("price") }}:<span
+              >{{ curNFT.market.price }}&nbsp;&nbsp;&nbsp;</span
+            >
             <span>{{ curNFT.market.ptName }}</span>
           </p>
           <p v-if="curNFT.market.desc != ''">
@@ -202,12 +204,14 @@ export default {
     },
     sellNFT: async function () {
       this.set_loading = true;
+      this.change_loading = true;
       const curNFT = this.$store.state.curNFT;
       const id = curNFT.id;
       const coin = "PBT";
       if (this.nftPrice === 0 || this.nftPrice == null) {
         this.$message("price is empty");
         this.set_loading = false;
+        this.change_loading = false;
       }
       try {
         const res = await market.setSellInfo(
@@ -221,10 +225,13 @@ export default {
         await market.waitEventDone(res, async function (evt) {
           obj.set_loading = false;
           obj.sendToMarket = true;
+          obj.change_loading = false;
+
           console.log("sendtomarket", obj.sendToMarket);
         });
         return res;
       } catch (e) {
+        this.change_loading = false;
         this.set_loading = false;
         console.log("setSellInfo errr", e.message);
       }
