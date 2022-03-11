@@ -15,12 +15,7 @@
               :key="name"
               class="nftli"
             >
-              <el-button
-                :class="{ addclass: name == isAdd }"
-                @click="openNFT(nft, name)"
-              >
-                <MyPBTItem v-bind:info="nft" />
-              </el-button>
+              <MyPBTItem v-bind:info="nft" v-bind:active="active_id==nft.id" @click.native="openNFT(nft,name)"/>
             </li>
           </ul>
         </el-col>
@@ -98,6 +93,7 @@ export default {
       mylist: {},
       pageNum: 1,
       nftinfo_dialog: false,
+      active_id: 0,
       isAdd: 0,
       coinMap: {
         3: "XCC",
@@ -108,6 +104,8 @@ export default {
   },
   methods: {
     openNFT: async function (nft, name) {
+      this.active_id = nft.id   // DXL
+      console.log('active_id', this.active_id)
       const loading = this.$loading({
         lock: true,
         spinner: "el-icon-loading",
