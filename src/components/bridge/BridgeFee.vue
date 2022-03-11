@@ -2,13 +2,15 @@
   <el-col id="fee">
     <el-popover placement="left" trigger="click" title="fees">
       <p>
-        单次存款建议限额为：{{ this.depAmount }}<br />
-        单次取款建议限额为：{{ this.wAmount }}<br />
-        超出金额限制后，交易时间会大幅增加，请耐心等待<br />
-        存款费率：{{ this.dFeeRate / 100 }}%，存款最小手续费：{{ this.dFee
-        }}{{ bcoin }}
+        {{ $t("dep-limit") }}{{ this.depAmount }}<br />
+        {{ $t("w-limit") }}：{{ this.wAmount }}<br />
+        {{ $t("beyond-limit") }}<br />
+        {{ $t("dep-rate") }}{{ this.dFeeRate / 100 }}%，{{
+          $t("dep-minFee")
+        }}：{{ this.dFee }}{{ bcoin }}
         <br />
-        取款费率：{{ this.wFeeRate / 100 }}%，取款最小手续费：{{ this.wFee
+        {{ $t("w-rate") }}：{{ this.wFeeRate / 100 }}%，{{ $t("w-minFee") }}：{{
+          this.wFee
         }}{{ bcoin }}
       </p>
       <el-button

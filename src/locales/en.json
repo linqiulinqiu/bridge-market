@@ -1,13 +1,45 @@
-{
+{   "add-token":"Add Token",
+    "addr":"In the following address",
+
     "bridge":"Bridge",
     "buy":"Buy it",
+    "beyond-limit":"After the amount limit is exceeded, the transaction time will increase significantly, please be patient",
+    
+    "connect":"Connect Wallet",
     "change-price":"Change price",
+    
     "deposit":"Deposit",
-    "desc":"description",
+    "desc":"description :",
+    "dep-rate":"Deposit rate",
+    "dep-minFee":"Min deposit fee",
+    "dep-limit":"The recommended limit for a single deposit is :",
+    "dep-addr":"Get deposit address for {bcoin}",
+
     "function":"Function",
+    
+    "get":"You will get :",
+    "getaddr":"The address for this type of deposit has been obtained",
+
+    "inbsc":"In your BSC wallet",
+
     "look-info":"Looking the details info after connect wallet",
+    
     "market":"Market",
+    "mintPBT":"Mint PBT",
+    "mintable":"NFT's currently available for minting :",
+    
+    "none":"The number of mintable NFTs is 0 currently, no NFTs can be minted, please wait.",
+    
     "or":"OR",
-    "price":"The price",
-    "withdraw":"Withdraw"
+    "openNFT":"Please select a nft first",
+    
+    "price":"The price :",
+   
+    "redeem":"Redeem",
+    
+    "withdraw":"Withdraw",
+    "w-Rate":"Withdraw rate",
+    "w-minFee":"Min withdraw fee",
+    "w-limit":"The recommended limit for a single withdraw is :"
+
 }

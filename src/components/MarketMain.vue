@@ -10,7 +10,7 @@
             class="btn"
             v-if="baddr"
             type="primary"
-            >铸造 PBT</el-button
+            >{{ $t("mintPBT") }}</el-button
           >
         </h2>
         <el-col class="cointy">
@@ -23,7 +23,7 @@
         </el-col>
       </el-col>
     </el-col>
-    <el-col v-else>连接钱包后查看</el-col>
+    <el-col v-else>{{ $t("connect") }}</el-col>
     <el-dialog :visible.sync="mintVisible" title="MINT NFT" width="50%">
       <el-card>
         <el-row type="flex" justify="center">
@@ -32,12 +32,12 @@
           </el-col>
           <el-col :span="12">
             <p>
-              价格:
+              {{ $t("price") }}
               <span>{{ this.mintFee.price }}</span>
               <span>{{ this.mintFee.token }}</span>
             </p>
             <p>
-              <span>目前可铸造的NFT：{{ mintNumber }}个</span>
+              <span>{{ $t("mintable") }}{{ mintNumber }}个</span>
             </p>
             <p>
               <el-button
@@ -45,9 +45,9 @@
                 type="primary"
                 v-if="this.mintNumber > 0"
                 :loading="mint_loading"
-                >铸造</el-button
+                >{{ $t("mintPBT") }}</el-button
               >
-              <span v-else>目前可铸造数为0,不可铸造NFT，请等待</span>
+              <span v-else>{{ $t("none") }}</span>
             </p>
           </el-col>
         </el-row>

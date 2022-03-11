@@ -13,7 +13,7 @@
       </el-col>
       <el-col v-else>
         <el-col v-if="!bridgeVisible" style="color: #fff">
-          <h1>请先选择一个NFT</h1>
+          <h1>{{ $t("openNFT") }}</h1>
         </el-col>
         <el-col v-else>
           <el-col> <BridgeFee /> </el-col>
@@ -21,18 +21,18 @@
             余额：<span class="font"> {{ WBalance[bcoin] }}</span>
             <span class="minifont"> w{{ bcoin }}</span>
             <el-button size="mini" type="primary" @click="addToken">
-              添加代币
+              {{ $t("add-token") }}
             </el-button>
           </el-col>
           <el-tabs>
             <el-tab-pane :label="$t('deposit')"><Deposit /></el-tab-pane>
             <el-tab-pane :label="$t('withdraw')"><Withdraw /></el-tab-pane>
-            <el-tab-pane label="兑换"><Redeem /></el-tab-pane>
+            <el-tab-pane :label="$t('redeem')"><Redeem /></el-tab-pane>
           </el-tabs>
         </el-col>
       </el-col>
     </el-col>
-    <el-col v-else> 请连接钱包 </el-col>
+    <el-col v-else> {{ $t("connect") }} </el-col>
   </el-row>
 </template>
 <script>

@@ -2,21 +2,24 @@
   <el-col id="deposite" class="tabs">
     <el-col v-if="baddr">
       <p>
-        存入:<el-input
+        {{ $t("deposit") }}:<el-input
           type="text"
           clearable
           maxlength="40"
           class="amount-input"
           suffix-icon="el-icon-edit"
           v-model.trim="depAmount"
-        />{{ bcoin }}币
+        />{{ bcoin }}
       </p>
       <el-col>
-        在以下的地址：
+        {{ $t("addr") }} ：
         <el-col class="aa">
           <el-col v-if="curNFT['pbxs'] == undefined">
-            <el-button type="primary" class="getdeposte" @click="getDepositAddr"
-              >获取{{ bcoin }}存款地址</el-button
+            <el-button
+              type="primary"
+              class="getdeposte"
+              @click="getDepositAddr"
+              >{{ $t("dep-addr", { bcoin: bcoin }) }}</el-button
             >
           </el-col>
           <el-col v-else>
@@ -31,7 +34,7 @@
                 class="getdeposte"
                 @click="getDepositAddr"
                 :loading="getDep_loading"
-                >获取{{ bcoin }}存款地址</el-button
+                >{{ $t("dep-addr", { bcoin: bcoin }) }}</el-button
               >
             </span>
           </el-col>
@@ -39,13 +42,13 @@
       </el-col>
       <el-col>
         <p>
-          你将会得到<span class="span"
+          {{ $t("get")
+          }}<span class="span"
             ><span v-if="this.depAmount" class="font">
               {{ getAmount }}</span
             ></span
           >
-          W{{ bcoin }}
-          币，在你的bsc钱包中。
+          w{{ bcoin }}，{{ $t("inbsc") }}。
         </p>
         <p v-if="this.tips_amount">
           <i v-if="this.depAmount.length > 0">{{ this.tips_amount }}</i>
@@ -119,7 +122,7 @@ export default {
       try {
         const res = await market.getDepAddr(nft.id, this.bcoin);
         if (res == false) {
-          this.$message("该类型存款地址已经获取了");
+          this.$message(this.$t("getaddr"));
         }
         const obj = this;
         await market.waitEventDone(res, async function (evt) {
