@@ -19,8 +19,7 @@
                 :class="{ addclass: name == isAdd }"
                 @click="openNFT(nft, name)"
               >
-                <i>#{{ nft.id }}</i>
-                <img v-if="nft.meta" v-lazy="nft.meta.image" alt="img" />
+                <MyPBTItem v-bind:info="nft" />
               </el-button>
             </li>
           </ul>

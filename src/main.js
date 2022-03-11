@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
+import PBWebUI from 'pbweb-ui'
 import '../theme/index.css'
 import "./assets/main.css"
 import i18n from './locales'
@@ -15,6 +16,7 @@ Vue.use(VueLazyLoad,{
 })
 
 Vue.use(ElementUI)
+Vue.use(PBWebUI)
 
 Vue.config.productionTip = false
 
