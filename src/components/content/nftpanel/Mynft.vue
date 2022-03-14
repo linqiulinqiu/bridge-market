@@ -4,20 +4,7 @@
     <el-col v-if="baddr">
       <el-col v-if="Object.keys(PBTlists).length > 0" class="nftarea">
         <el-col class="nftlist">
-          <ul>
-            <li
-              v-for="(nft, name) in Object.fromEntries(
-                Object.entries(this.$store.state.PBTlists).slice(
-                  pageNum * 3 - 3,
-                  pageNum * 3
-                )
-              )"
-              :key="name"
-              class="nftli"
-            >
-              <MyPBTItem v-bind:info="nft" v-bind:active="active_id==nft.id" @click.native="openNFT(nft,name)"/>
-            </li>
-          </ul>
+          <MyPBTList v-bind:nftlist="nftlist" :openNFT="openNFT" />
         </el-col>
         <el-col class="btn-bar">
           <el-pagination
@@ -67,14 +54,18 @@ export default {
     PBTMySaleLists: "PBTMySaleLists",
     WBalance: "WBalance",
     mode: "mode",
+    nftlist() {
+      const start = this.pageNum * 3 - 3;
+      const down = this.pageNum * 3;
+      const list = Object.fromEntries(
+        Object.entries(this.PBTlists).slice(start, down)
+      );
+      return list;
+    },
   }),
   watch: {
     PBTlists: function (newLists) {
       this.$store.commit("setPBTlists", newLists);
-      (this.mylist = Object.fromEntries(
-        Object.entries(this.$store.state.PBTlists).slice(0, 3)
-      )),
-        console.log("wantch PBTlists", newLists);
     },
     deep: true,
     PBTMySaleLists: function (newLists) {
@@ -104,8 +95,8 @@ export default {
   },
   methods: {
     openNFT: async function (nft, name) {
-      this.active_id = nft.id   // DXL
-      console.log('active_id', this.active_id)
+      this.active_id = nft.id; // DXL
+      console.log("active_id", this.active_id);
       const loading = this.$loading({
         lock: true,
         spinner: "el-icon-loading",

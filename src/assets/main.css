@@ -56,25 +56,11 @@ button {
 
 .nftlist {
     height: 480px;
-    padding: 0px 100px;
+    padding: 0px 50px;
     margin-top: 15px;
     background-color: #d1fcd1;
 }
 
-.nftli {
-    margin-bottom: 40px;
-}
-
-.nftli .el-button {
-    height: 108px;
-    width: 136px;
-    box-sizing: border-box;
-}
-
-.nftli img {
-    width: 80px;
-    margin: 0;
-}
 
 .marketlist {
     /* margin: 10px; */

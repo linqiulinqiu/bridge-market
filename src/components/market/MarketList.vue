@@ -5,22 +5,11 @@
     </h3>
     <ul class="content">
       <li class="marketlist" v-for="(nft, name) in PBTSellingLists" :key="name">
-        <el-button
-          class="nftbtn"
-          @click="openNFT(nft)"
+        <SellingItem
           v-if="nft.market && !(nft.market.price == '0.0')"
-        >
-          <span>#{{ nft.id }}</span>
-          <img v-if="nft.meta" v-lazy="nft.meta.image" alt="img" />
-          <i v-if="'seller' in nft.market">
-            <el-badge
-              v-if="nft.market.seller == '-self'"
-              value="My Sale"
-              class="item simbol"
-            >
-            </el-badge>
-          </i>
-        </el-button>
+          v-bind:info="nft"
+          @click.native="openNFT(nft, name)"
+        />
       </li>
     </ul>
     <!-- <el-col :offset="10">
