@@ -10,7 +10,7 @@
       </el-col>
       <el-col :span="7">
         <h5 style="line-height: 35px">
-          version:3/11 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.0
+          version:3/14 3.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.0
         </h5>
       </el-col>
       <el-col class="nav" :span="8">

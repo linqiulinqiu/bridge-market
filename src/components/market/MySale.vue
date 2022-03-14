@@ -78,3 +78,22 @@ export default {
   },
 };
 </script>
+<style scoped>
+.marketlist {
+  /* margin: 10px; */
+  float: left;
+  position: relative;
+}
+
+.marketlist .el-button {
+  height: 108px;
+  width: 136px;
+  box-sizing: border-box;
+  margin: 10px;
+}
+
+.marketlist img {
+  width: 80px;
+  margin: 0;
+}
+</style>

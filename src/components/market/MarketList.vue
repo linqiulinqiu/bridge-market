@@ -4,24 +4,26 @@
       On Sale <span class="minifont">(价格为0的NFT将不会出现在市场列表中)</span>
     </h3>
     <ul class="content">
-      <li class="marketlist" v-for="(nft, name) in PBTSellingLists" :key="name">
-        <SellingItem
-          v-if="nft.market && !(nft.market.price == '0.0')"
-          v-bind:info="nft"
-          @click.native="openNFT(nft, name)"
-        />
+      <li class="marketlist" v-for="(nft, name) in this.saleList" :key="name">
+        <keep-alive>
+          <SellingItem
+            v-if="nft.market && !(nft.market.price == '0.0')"
+            v-bind:info="nft"
+            @click.native="openNFT(nft, name)"
+          />
+        </keep-alive>
       </li>
     </ul>
-    <!-- <el-col :offset="10">
+    <el-col :offset="10">
       <el-pagination
         :total="Object.keys(PBTSellingLists).length"
         background
         @current-change="handleXccPaegChange"
         :current-page="this.xccpageNum"
-        :page-size="10"
+        :page-size="4"
         layout="total,prev,pager,next"
       ></el-pagination>
-    </el-col> -->
+    </el-col>
     <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
       <el-card>
         <NFTinfo />
@@ -44,15 +46,19 @@ export default {
     baddr: "baddr",
     curNFT: "curNFT",
     PBTSellingLists: "PBTSellingLists",
+    saleList() {
+      const start = this.xccpageNum * 4 - 4;
+      const down = this.xccpageNum * 4;
+      const xcclist = Object.fromEntries(
+        Object.entries(this.PBTSellingLists).slice(start, down)
+      );
+      return xcclist;
+    },
   }),
   watch: {
     PBTSellingLists: function (newLists) {
       this.$store.commit("setPBTSellingLists", newLists);
-      const start = this.xccpageNum * 10 - 10;
-      const down = this.xccpageNum * 10;
-      this.xcclist = Object.fromEntries(
-        Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
-      );
+
       console.log("selllist", this.$store.state.PBTSellingLists, newLists);
     },
     deep: true,
@@ -68,12 +74,14 @@ export default {
     handleXccPaegChange: function (page_xcc) {
       console.log("当前页:", page_xcc);
       this.xccpageNum = page_xcc;
-      console.log("all pbtlist", this.xcclist);
-      const start = this.xccpageNum * 10 - 10;
-      const down = this.xccpageNum * 10;
-      this.mylist = Object.fromEntries(
-        Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
-      );
+      // this.saleList();
+      // console.log("all pbtlist", this.saleList());
+
+      // const start = this.xccpageNum * 10 - 10;
+      // const down = this.xccpageNum * 10;
+      // this.mylist = Object.fromEntries(
+      //   Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
+      // );
     },
     openNFT: async function (nft) {
       const loading = this.$loading({
@@ -93,3 +101,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.content {
+  height: 500px;
+}
+.marketlist {
+  float: left;
+  position: relative;
+  height: 500px;
+}
+</style>

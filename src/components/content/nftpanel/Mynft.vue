@@ -4,7 +4,9 @@
     <el-col v-if="baddr">
       <el-col v-if="Object.keys(PBTlists).length > 0" class="nftarea">
         <el-col class="nftlist">
-          <MyPBTList v-bind:nftlist="nftlist" :openNFT="openNFT" />
+          <keep-alive>
+            <MyPBTList v-bind:nftlist="nftlist" :openNFT="openNFT" />
+          </keep-alive>
         </el-col>
         <el-col class="btn-bar">
           <el-pagination
@@ -127,12 +129,12 @@ export default {
     handleCurrentChange(newPage) {
       console.log("当前页:", newPage);
       this.pageNum = newPage;
-      console.log("all pbtlist", this.mylist);
-      const start = newPage * 3 - 3;
-      const down = newPage * 3;
-      this.mylist = Object.fromEntries(
-        Object.entries(this.$store.state.PBTlists).slice(start, down)
-      );
+      // console.log("all pbtlist", this.mylist);
+      // const start = newPage * 3 - 3;
+      // const down = newPage * 3;
+      // this.mylist = Object.fromEntries(
+      //   Object.entries(this.$store.state.PBTlists).slice(start, down)
+      // );
     },
   },
 };
