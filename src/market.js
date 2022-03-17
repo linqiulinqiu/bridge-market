@@ -135,6 +135,7 @@ async function mintPBT() {
         }
         const res = await bsc.ctrs.pbt.mint(options)
         console.log("mint res", res)
+        return res
     } catch (e) {
         let text = e.message
         if ('data' in e) {
@@ -161,7 +162,6 @@ async function burnWcoin(amount, coin) {
 async function waitEventDone(tx, done) {
     const ctr = pbwallet.erc721_contract(tx.to)
     ctr.on(ctr.filters.Transfer, function (evt) {
-        console.log("waitEventDone", evt)
         if (evt.transactionHash == tx.hash) {
             done(tx, evt)
             ctr.off(ctr.filters.Transfer)
@@ -204,12 +204,11 @@ async function clearAddr(pbtid, cointy) {
     const id = parseInt(pbtid)
     const addr1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
     const res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(id, cointy, addr1)
-    console.log("clearAddr", res)
+    return res
 }
 async function sendToMarket(coin, id) {
     const pb = coin2pb(coin)
     const res = await pb["safeTransferFrom(address,address,uint256)"](bsc.addr, bsc.ctrs.pbmarket.address, id)
-    console.log('send To the market receipt', res)
     return res
 }
 async function setSellInfo(coin, id, ptName, price, desc) {
@@ -219,7 +218,7 @@ async function setSellInfo(coin, id, ptName, price, desc) {
         ptAddr = ethers.constants.AddressZero
     }
     const res = await bsc.ctrs.pbmarket.onSale(pb.address, id, ptAddr, ethers.utils.parseEther(price), desc)
-    console.log('set-sale-info', res)
+    return res
 }
 async function checkAllowance(nft) {
     const priceToken = nft.market.priceToken
@@ -262,8 +261,7 @@ async function buyNFT(coin, nft) {
         // check allowance
         const allow = await checkAllowance(nft)
         if (allow.lt(price)) { // not enough allowance, approve first
-            const res = await approveAllow(nft)
-            console.log("buy res", res) // TODO: approve can use MAX_UINT256 for infinity
+            const res = await approveAllow(nft) // TODO: approve can use MAX_UINT256 for infinity
             res.fn = 'approve'
             // we need to wait for approve confirmed by BSC network, so return and let user buy again
             // TODO: show "Approve" in button when allowance not enough, then show "Buy" when allowance enough
@@ -271,15 +269,14 @@ async function buyNFT(coin, nft) {
             return res
         }
     }
-    const res = await bsc.ctrs.pbmarket.buy(pb.address, id, options)
-    console.log("buy res", res) // TODO: approve can use MAX_UINT256 for infinity
+    const res = await bsc.ctrs.pbmarket.buy(pb.address, id, options) // TODO: approve can use MAX_UINT256 for infinity
     res.fn = 'buy'
     return res
 }
 async function retreatNFT(coin, id) {
     const pb = coin2pb(coin)
     const res = await bsc.ctrs.pbmarket.offSale(pb.address, id)
-    console.log('retreat--res', res)
+    return res
 }
 
 async function afterFee(coin, mode, amount) {

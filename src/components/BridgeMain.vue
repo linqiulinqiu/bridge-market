@@ -25,9 +25,9 @@
             </el-button>
           </el-col>
           <el-tabs>
-            <el-tab-pane :label="$t('deposit')"><Deposit /></el-tab-pane>
-            <el-tab-pane :label="$t('withdraw')"><Withdraw /></el-tab-pane>
-            <el-tab-pane :label="$t('redeem')"><Redeem /></el-tab-pane>
+            <el-tab-pane :label="$t('deposit')"><Deposit :curNFT="curNFT" /></el-tab-pane>
+            <el-tab-pane :label="$t('withdraw')"><Withdraw :curNFT="curNFT"/></el-tab-pane>
+            <el-tab-pane :label="$t('redeem')"><Redeem :curNFT="curNFT"/></el-tab-pane>
           </el-tabs>
         </el-col>
       </el-col>
@@ -57,6 +57,16 @@ export default {
     current: "current",
     bcoin: "bcoin",
     baddr: "baddr",
+    curNFT(state) {
+      if (state.current.pbtId) {
+        const pbtId = state.current.pbtId;
+        if (pbtId in state.myList) {
+          console.log("this.current NFT", state.myList[pbtId]);
+          return state.myList[pbtId];
+        }
+      }
+      return false;
+    },
   }),
   watch: {
     bcoin: function (newcoin) {

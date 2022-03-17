@@ -14,7 +14,7 @@
       <el-col>
         {{ $t("addr") }} ：
         <el-col class="aa">
-          <el-col v-if="curNFT['pbxs'] == undefined">
+          <el-col v-if="this.curNFT['pbxs'] == undefined">
             <el-button
               type="primary"
               class="getdeposte"
@@ -23,9 +23,9 @@
             >
           </el-col>
           <el-col v-else>
-            <span v-if="curNFT.pbxs[this.coinMap[bcoin]]">
+            <span v-if="this.curNFT.pbxs[this.coinMap[bcoin]]">
               <span class="font">{{
-                curNFT.pbxs[this.coinMap[bcoin]].depositAddr
+                this.curNFT.pbxs[this.coinMap[bcoin]].depositAddr
               }}</span>
             </span>
             <span v-else>
@@ -65,24 +65,11 @@ export default {
   components: {
     BridgeFee,
   },
+  props: ["curNFT"],
   computed: mapState({
     baddr: "baddr",
     bcoin: "bcoin",
-    curNFT(state) {
-      console.log("call curNFT", state.current);
-      if (state.current.pbtId) {
-        const pbtId = state.current.pbtId;
-        if (pbtId in state.PBTlists) {
-          console.log("this.current NFT", state.PBTlists[pbtId]);
-          return state.PBTlists[pbtId];
-        } else {
-          console.log("current NFT not exists", Object.keys(state.PBTlists));
-        }
-      } else {
-        console.log("no current pbtId", state.current);
-      }
-      return false;
-    },
+    current: "current",
   }),
   data() {
     return {
@@ -100,7 +87,6 @@ export default {
   watch: {
     depAmount: async function () {
       var depamount = this.depAmount;
-      console.log("depamount", this.bcoin, depamount);
       if (!depamount || isNaN(depamount) || depamount == "") {
         depamount = "0";
         this.tips_amount = this.$t("correct-amount");
@@ -129,9 +115,9 @@ export default {
   methods: {
     getDepositAddr: async function () {
       this.getDep_loading = true;
-      const nft = this.curNFT;
+      const id = this.current.pbtId;
       try {
-        const res = await market.getDepAddr(nft.id, this.bcoin);
+        const res = await market.getDepAddr(id, this.bcoin);
         if (res == false) {
           this.$message(this.$t("getaddr"));
         }

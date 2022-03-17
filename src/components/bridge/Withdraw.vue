@@ -6,20 +6,22 @@
         请确认取款地址是自己钱包的收款地址，并且确认地址是正确的。
       </span>
       <el-col class="aa">
-        <el-col v-if="curNFT['pbxs'] == undefined">
+        <el-col v-if="this.curNFT['pbxs'] == undefined">
           <p>未绑定取款地址</p>
         </el-col>
         <el-col v-else>
-          <span v-if="curNFT.pbxs[this.cointy[bcoin]]">
+          <span v-if="this.curNFT.pbxs[this.cointy[bcoin]]">
             <span
               v-if="
-                curNFT.pbxs[this.cointy[bcoin]].withdrawAddr.substr(3, 4) ==
-                '1qqq'
+                this.curNFT.pbxs[this.cointy[bcoin]].withdrawAddr.substr(
+                  3,
+                  4
+                ) == '1qqq'
               "
               >未绑定取款地址</span
             >
             <span class="font" v-else>
-              {{ curNFT.pbxs[this.cointy[bcoin]].withdrawAddr }}
+              {{ this.curNFT.pbxs[this.cointy[bcoin]].withdrawAddr }}
             </span>
           </span>
           <span v-else> 未绑定取款地址 </span>
@@ -108,25 +110,12 @@ export default {
   components: {
     BridgeFee,
   },
+  props: ["curNFT"],
   computed: mapState({
     baddr: "baddr",
     bcoin: "bcoin",
     WBalance: "WBalance",
-    curNFT(state) {
-      console.log("call curNFT", state.current);
-      if (state.current.pbtId) {
-        const pbtId = state.current.pbtId;
-        if (pbtId in state.PBTlists) {
-          console.log("this.current NFT", state.PBTlists[pbtId]);
-          return state.PBTlists[pbtId];
-        } else {
-          console.log("current NFT not exists", Object.keys(state.PBTlists));
-        }
-      } else {
-        console.log("no current pbtId", state.current);
-      }
-      return false;
-    },
+    current: "current",
   }),
   data() {
     return {
@@ -206,7 +195,7 @@ export default {
     clearAddr: async function () {
       this.clear_loading = true;
       const cointy = this.cointy[this.bcoin];
-      const id = this.curNFT.id;
+      const id = this.current.pbtId;
       const obj = this;
       try {
         const res = await market.clearAddr(id, cointy);
@@ -222,7 +211,7 @@ export default {
     bindWaddr: async function () {
       this.bind_loading = true;
       const cointy = this.cointy[this.bcoin];
-      const id = this.curNFT.id;
+      const id = this.current.pbtId;
       const addr = this.wAddr.toString();
       const obj = this;
       try {

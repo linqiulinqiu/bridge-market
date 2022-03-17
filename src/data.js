@@ -18,9 +18,9 @@ async function connect(commit) {
     console.log("bsc in connect", bsc)
     if (bsc) {
         commit("setBsc", bsc)
-        // await keeper.startKeeper(bsc, commit, myList, marketList)
-        // const cnt = await keeper.preload(commit, myList, marketList)
-        // console.log('user owns', cnt.toString(), 'PBT')
+        await keeper.startKeeper(bsc, commit, marketList, myList)
+        const cnt = await keeper.preload(commit, myList)
+        console.log('user owns', cnt.toString(), 'PBT')
         return bsc
     }
     return false
@@ -62,6 +62,7 @@ async function getCoinTypes(pid) {
     return cointype
 }
 async function nftBriefInfo(id) {
+    console.log("id", id, id.toNumber())
     const uri = await bsc.ctrs.pbt.tokenURI(id.toNumber())
     const meta = await fetch(fix_uri(uri))
     const img = await meta.json()
@@ -91,7 +92,8 @@ async function loadPbxs(pbtid) {
     const pbxs = {}
     for (var i = 0; i < cointy.length; i++) {
         const ct = parseInt(cointy[i])
-        const winfo = pbwallet.wcoin_info
+        const winfo = pbwallet.wcoin_info(ct)
+        console.log("winfo", winfo)
         const xAddress = await bsc.ctrs.pbpuzzlehash.pbtPuzzleHash(pbtid, ct)
         const depAddress = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[0]), winfo.prefix)
         const withAddress = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[1]), winfo.prefix)
@@ -110,6 +112,7 @@ async function loadlist_brief(addr) {
     const briefList = {}
     for (let i = 0; i < cnt; i++) {
         const idx = await bsc.ctrs.pbt.tokenOfOwnerByIndex(addr, i)
+        console.log("idx", idx)
         const info = await nftBriefInfo(idx)
         const key = String(idx)
         briefList[key] = info

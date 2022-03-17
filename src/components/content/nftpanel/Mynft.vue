@@ -60,6 +60,9 @@ export default {
         if (pbtId in this.myList) {
           return this.myList[pbtId];
         }
+        if (pbtId in state.mySaleList) {
+          return state.mySaleList[pbtId];
+        }
       }
       return false;
     },
@@ -70,7 +73,6 @@ export default {
       this.listPage = Object.fromEntries(
         Object.entries(this.myList).slice(start, down)
       );
-      console.log("list update", this.listPage);
       return this.listPage;
     },
   }),
@@ -78,6 +80,8 @@ export default {
     myList: function (list) {
       this.$store.commit("setMylist", list);
       this.nftlist;
+      this.curNFT;
+      console.log("watch mynft", this.curNFT, this.listPage);
     },
   },
   data() {
@@ -116,7 +120,6 @@ export default {
         if (this.mode == "bridge" || mo == "bridge") {
           this.isAdd = name;
         }
-        
       }
       loading.close();
     },

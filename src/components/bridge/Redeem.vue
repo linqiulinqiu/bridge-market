@@ -25,6 +25,8 @@
 import { mapState } from "vuex";
 import market from "../../market";
 export default {
+  name: "Redeem",
+  props: ["curNFT"],
   computed: mapState({
     bcoin: "bcoin",
     current: "current",

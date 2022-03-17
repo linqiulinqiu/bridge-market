@@ -64,19 +64,19 @@ export default {
   name: "Plotheader",
   computed: mapState({
     baddr: "baddr",
-    PBTlists: "PBTlists",
-    PBTSellingLists: "PBTSellingLists",
+    myList: "myList",
+    marketList: "marketList",
     mode: "mode",
     bridgeVisible: "bridgeVisible",
   }),
   watch: {
-    PBTlists: function (new_list) {
-      this.$store.commit("setPBTlists", new_list);
+    myList: function (new_list) {
+      this.$store.commit("setMylist", new_list);
     },
     deep: true,
 
-    PBTSellingLists: function (newLists) {
-      this.$store.commit("setPBTSellingLists", newLists);
+    marketList: function (newLists) {
+      this.$store.commit("setMarketlist", newLists);
     },
     deep: true,
     lang: function () {

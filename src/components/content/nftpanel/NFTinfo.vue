@@ -21,17 +21,27 @@
           <!-- My sale nft info -->
           <el-col v-if="market.seller == '-self'">
             <el-col>
+              <label for="_price" class="labels">Change price to:</label>
               <p>
-                <span>Change price to:</span>
                 <el-input
                   v-model="nftPrice"
                   placeholder="input price"
+                  id="_price"
                 ></el-input>
                 <el-select v-model="priceToken" class="selecToken">
                   <el-option value="BNB" key="BNB" label="BNB"></el-option>
                   <el-option value="BUSD" key="BUSD" label="BUSD"></el-option>
                 </el-select>
               </p>
+              <label for="description" class="labels"> Description: </label>
+              <el-input
+                type="text"
+                placeholder="input description"
+                v-model="nftDesc"
+                maxlength="50"
+                show-word-limit
+                id="description"
+              />
               <el-button
                 @click="sellNFT"
                 type="primary"
@@ -109,6 +119,7 @@
                   placeholder="input price"
                   maxlength="20"
                   show-word-limit
+                  id="price"
                 ></el-input>
                 <el-select v-model="priceToken" class="selecToken">
                   <el-option value="BNB" key="BNB" label="BNB"></el-option>
@@ -156,13 +167,17 @@ export default {
       if (this.curNFT && "meta" in this.curNFT) return this.curNFT.meta;
       return {};
     },
+    pbxs() {
+      if (this.curNFT && "pbxs" in this.curNFT) return this.curNFT.pbxs;
+      return {};
+    },
   }),
   watch: {
     curNFT: function () {
       this.nftId;
       this.market;
       this.meta;
-      console.log("now NFT info", this.nftId, this.market, this.meta);
+      this.pbxs;
     },
     deep: true,
   },
@@ -183,7 +198,6 @@ export default {
     };
   },
   methods: {
-    curNFt_refresh: function () {},
     show() {
       this.visible = true;
     },
@@ -196,7 +210,6 @@ export default {
         const tx = await market.sendToMarket(coin, id);
         const obj = this;
         await market.waitEventDone(tx, async function (tx, evt) {
-          console.log("send to market", tx, evt);
           obj.sendToMarket = false;
           obj.send_loading = false;
         });
@@ -229,12 +242,14 @@ export default {
           this.nftPrice,
           this.nftDesc
         );
+        console.log("sell", res);
+
         const obj = this;
         await market.waitEventDone(res, async function (evt) {
           obj.set_loading = false;
           obj.sendToMarket = true;
           obj.change_loading = false;
-          obj.dialog_visible();
+          obj.visible = false;
           console.log("sendtomarket", obj.sendToMarket);
         });
         return res;
@@ -247,15 +262,15 @@ export default {
     retreatNFT: async function () {
       this.re_loading = true;
       const id = this.curNFT.id;
-      const obj = this;
       try {
         const res = await market.retreatNFT(this.mcoin, id);
+        const obj = this;
         await market.waitEventDone(res, async function (evt) {
           obj.re_loading = false;
-          obj.dialog_visible();
+          obj.visible = false;
         });
       } catch (e) {
-        obj.re_loading = false;
+        this.re_loading = false;
         console.log("retreat err", e.message);
       }
     },
