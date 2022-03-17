@@ -30,12 +30,11 @@ export default {
   computed: mapState({
     bcoin: "bcoin",
     baddr: "baddr",
-    curNFT: "curNFT",
   }),
   data() {
     return {
       depAmount: 0,
-      wAmount: -1,
+      wAmount: 0,
       wFeeRate: 0,
       wFee: 0,
       dFee: 0,
@@ -44,10 +43,8 @@ export default {
   },
   methods: {
     getAmountLimit: async function () {
-      console.log("getAmountLimit", this.curNFT);
       const coin = this.bcoin;
       const amount = await market.getLimit(coin);
-      console.log("getamount", amount, typeof amount[0]);
       this.depAmount = (amount[1] - amount[0]) / 2;
       this.wAmount = amount[0];
       const fees = await market.getfees(coin);

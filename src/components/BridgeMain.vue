@@ -1,7 +1,7 @@
 <template>
   <el-row id="bridge-main" type="flex" justify="center">
     <el-col class="fees" :span="14" v-if="baddr">
-      <el-col v-if="Object.keys(PBTlists).length == 0" class="mainpanel">
+      <el-col v-if="Object.keys(myList).length == 0" class="mainpanel">
         <el-col style="color: #fff">
           <h1>Bridge Guide</h1>
           <el-col>
@@ -12,7 +12,7 @@
         </el-col>
       </el-col>
       <el-col v-else>
-        <el-col v-if="!bridgeVisible" style="color: #fff">
+        <el-col v-if="!current.pbtId" style="color: #fff">
           <h1>{{ $t("openNFT") }}</h1>
         </el-col>
         <el-col v-else>
@@ -44,18 +44,19 @@ import { mapState } from "vuex";
 import market from "../market";
 
 export default {
+  name: "BridgeMain",
   components: {
     Deposit,
     Withdraw,
     Redeem,
     BridgeFee,
   },
+  props: ["myList"],
   computed: mapState({
     WBalance: "WBalance",
+    current: "current",
     bcoin: "bcoin",
     baddr: "baddr",
-    PBTlists: "PBTlists",
-    bridgeVisible: "bridgeVisible",
   }),
   watch: {
     bcoin: function (newcoin) {
@@ -81,7 +82,6 @@ export default {
         this.balance = this.WBalance[lcoin];
         return this.WBalance[lcoin];
       } else {
-        // WBalance[coin] not exist or WBalance[coin] == false
         this.balance = "---";
         return "---";
       }

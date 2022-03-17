@@ -68,7 +68,21 @@ export default {
   computed: mapState({
     baddr: "baddr",
     bcoin: "bcoin",
-    curNFT: "curNFT",
+    curNFT(state) {
+      console.log("call curNFT", state.current);
+      if (state.current.pbtId) {
+        const pbtId = state.current.pbtId;
+        if (pbtId in state.PBTlists) {
+          console.log("this.current NFT", state.PBTlists[pbtId]);
+          return state.PBTlists[pbtId];
+        } else {
+          console.log("current NFT not exists", Object.keys(state.PBTlists));
+        }
+      } else {
+        console.log("no current pbtId", state.current);
+      }
+      return false;
+    },
   }),
   data() {
     return {
@@ -84,15 +98,12 @@ export default {
     };
   },
   watch: {
-    curNFT: function (newNFT) {
-      this.$store.commit("setCurNFT", newNFT);
-    },
     depAmount: async function () {
       var depamount = this.depAmount;
       console.log("depamount", this.bcoin, depamount);
       if (!depamount || isNaN(depamount) || depamount == "") {
         depamount = "0";
-        this.tips_amount = "请输入正确的金额";
+        this.tips_amount = this.$t("correct-amount");
         return false;
       }
       const after_fee = await market.afterFee(
@@ -103,10 +114,10 @@ export default {
       console.log("aftrerfee", after_fee);
       if (!after_fee) {
         this.getAmount = "0";
-        this.tips_amount = "数额过少，将什么都收不到呢！";
+        this.tips_amount = this.$t("tips-amount1");
       } else if (after_fee == "fund") {
         this.getAmount = "0";
-        this.tips_amount = "数额过大，余额不够呢！";
+        this.tips_amount = this.$t("tips-amount1");
       } else {
         this.getAmount = after_fee;
         this.tips_amount = false;

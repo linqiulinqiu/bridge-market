@@ -3,7 +3,6 @@ import {
 } from 'ethers'
 
 import pbwallet from 'pbwallet'
-import allData from './getAllData'
 import store from "./store"
 import keeper from "pbweb-nftkeeper"
 // 全局变量设置
@@ -14,10 +13,11 @@ const ptAddrs = {
     'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
 }
 const oldTokenAddr = {
-    "XCC": "",
-    "XCH": "",
-    "HDD": "",
+    "XCC": "0xD98ebD2073b389558005683262B241749B1C5655",
+    "XCH": "0xFdF2F0995663a993A16929CeC5c39B039AB18Ef6",
+    "HDD": "0xFfB8F22732e7fC4550a8Cda5DB03cCcCF082b357",
 }
+
 const coinMap = {
     "XCC": '3',
     "XCH": '1',
@@ -40,7 +40,7 @@ async function ListenToWCoin(commit) {
     let wBalance = {
         XCC: '',
         HDD: '',
-        // xch:""
+        // XCH:""
     }
     var ctr_xcc = coinContract("XCC")
     // var ctr_xch = coinContract("XCH")
@@ -71,7 +71,6 @@ async function connect(commit) {
     bsc = await pbwallet.connect(true)
     if (bsc) {
         store.commit("setBsc", bsc)
-        console.log("bsc", bsc)
         await ListenToWCoin(commit)
         return bsc
     }
@@ -242,8 +241,8 @@ async function checkAllowance(nft) {
     }
 }
 async function approveAllow(nft) {
-    const priceToken = nft.priceToken
-    const price = ethers.utils.parseEther(nft.price)
+    const priceToken = nft.market.priceToken
+    const price = ethers.utils.parseEther(nft.market.price)
     const ctr = pbwallet.erc20_contract(priceToken)
     const res = await ctr.approve(bsc.ctrs.pbmarket.address, price.mul(1000000))
     res.fn = 'approve'
@@ -356,6 +355,8 @@ async function watchToken(coin) {
 }
 export default {
     connect: connect,
+    checkAllowance: checkAllowance,
+    approveAllow: approveAllow,
     afterFee: afterFee,
     watchToken: watchToken,
     burnWcoin: burnWcoin,

@@ -7,15 +7,12 @@ export default new Vuex.Store({
         bcoin: "XCC",
         mcoin: "PBT",
         baddr: false,
-        curNFT: {},
+        current: {},
         NFTinfo: false,
         allow: -1,
-        PBTlists: {},
-        PBXlists: {},
-        PBTSellingLists: {},
-        PBXSellingLists: {},
-        PBTMySaleLists: {},
-        PBXMySaleLists: {},
+        myList: {},
+        marketList: {},
+        mySaleList: {},
         WBalance: 0,
         redeemBalance: "0",
         redeemAllowance: "0",
@@ -32,20 +29,29 @@ export default new Vuex.Store({
         setBalance(state, balance) {
             state.WBalance = balance
         },
+        setCurrent(state, cur) {
+            state.current = cur
+        },
+        setCurrentPbtId(state, pbtId) {
+            if (pbtId != state.current.pbtId) {
+                state.current.pbtId = pbtId
+                state.current = Object.assign({}, state.current);
+            }
+        },
+        setCurrentCoinType(state, coinType) {
+            if (coinType != state.current.coinType) {
+                state.current.coinType = coinType
+                state.current = Object.assign({}, state.current);
+            }
+        },
         setBcoin(state, bsccoin) {
             state.bcoin = bsccoin
         },
         setMcoin(state, marketcoin) {
             state.mcoin = marketcoin
         },
-        setCurNFT(state, curNFT) {
-            state.curNFT = curNFT
-        },
         setMode(state, mode) {
             state.mode = mode
-        },
-        setBridgeVisible(state, boolean) {
-            state.bridgeVisible = boolean
         },
         setNFTinfo(state, boolean) {
             state.NFTinfo = boolean
@@ -53,25 +59,15 @@ export default new Vuex.Store({
         setAllow(state, allow) {
             state.allow = allow
         },
-        setPBTSellingLists(state, list) {
-            state.PBTSellingLists = list
+        setMylist(state, list) {
+            state.myList = list
         },
-        setPBXSellingLists(state, list) {
-            state.PBXSellingLists = list
-        },
-        setPBTlists(state, list) {
+        setMarketlist(state, list) {
             // generate MySale, Market, MyBag lists
-            state.PBTlists = list
+            state.marketList = list
         },
-        setPBXlists(state, list) {
-            // generate MySale, Market, MyBag lists
-            state.PBXlists = list
-        },
-        setPBTMySaleLists(state, list) {
-            state.PBTMySaleLists = list
-        },
-        setPBXMySaleLists(state, list) {
-            state.PBXMySaleLists = list
+        setMySalelist(state, list) {
+            state.mySaleList = list
         },
         setRedeemBalance(state, balance) {
             state.redeemBalance = balance

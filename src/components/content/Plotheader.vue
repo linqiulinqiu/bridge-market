@@ -10,7 +10,9 @@
       </el-col>
       <el-col :span="7">
         <h5 style="line-height: 35px">
-          version:3/14 3.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.0
+          version:3/17 3.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.3
+          <br />
+          网站目前不支持自动刷新
         </h5>
       </el-col>
       <el-col class="nav" :span="8">
@@ -54,8 +56,9 @@
 <script>
 import { mapState } from "vuex";
 import market from "../../market";
-import allData from "../../getAllData";
+import data from "../../data";
 import { i18n, setup } from "../../locales";
+import store from "../../store";
 
 export default {
   name: "Plotheader",
@@ -104,69 +107,26 @@ export default {
         element.classList.remove("active");
       });
       array[index].classList.add("active");
-      const curMode = link.toString().substr(1);
-      this.$store.commit("setMode", curMode);
-      this.$store.commit("setBridgeVisible", false);
+      this.$store.commit("setCurrentPbtId", false);
       this.$router.push(link).catch((err) => err); //加catch,在router.push的时候捕获异常，防止重复点击报错
     },
-    getBrieflist: async function () {
-      // 获取my PBT NFT 简单信息
-      const tlist = await allData.getMyList("PBT");
-      this.$store.commit("setPBTlists", tlist);
-      //获取 matket PBT NFT 简单信息
-      const tSaleList = await allData.getMarketList("PBT");
-      this.$store.commit("setPBTSellingLists", tSaleList);
-      console.log("PBT-nft-brief-info ", tlist, tSaleList);
-      return "ok";
-    },
-    get_lists: async function () {
-      //获取PBT nft 详细信息
-      //my list
-      const mylist = await allData.getMyTokenList("PBT");
-      const saleList = await allData.getSaleList("PBT");
-      const slist = saleList;
-      const slistKeys = Object.keys(slist);
-      const msList = {};
-      for (let i = 0; i < slistKeys.length; i++) {
-        if (slist[slistKeys[i]].market.seller == "-self") {
-          const key = slist[slistKeys[i]].id.toString();
-          msList[key] = slist[slistKeys[i]];
-          this.$store.commit("setPBTMySaleLists", msList);
-        }
-      }
-      // My sale list
-      console.log("PBT all-Lists", mylist, saleList, msList);
-      const oldToken = "0x134315EF3D11eEd8159fD1305af32119a046375A";
-      const otBalance = await market.tokenBalance(oldToken);
-      const otAllowance = await market.tokenAllowance(oldToken);
-      this.$store.commit("setRedeemBalance", otBalance);
-      this.$store.commit("setRedeemAllowance", otAllowance);
-      return "ok";
-    },
-
     connect_wallet: async function () {
       this.conenct_loading = true;
       const commit = this.$store.commit;
-      // const loading = this.$loading({
-      //   lock: true,
-      //   spinner: "el-icon-loading",
-      //   background: "rgba(200,230,200,0.6)",
-      // });
-      try {
-        const bsc = await allData.connectW(commit);
-        if (bsc) {
-          commit("setBaddr", this.$store.state.bsc.addr);
-          this.conenct_loading = false;
-          await this.getBrieflist();
-        }
-        await this.get_lists();
-        console.log("downnnnnnnnnnn");
-      } catch (e) {
-        console.log(e.message);
-        this.$message(e.message);
+      const bsc = await data.connect(commit);
+      if (bsc) {
+        commit("setBaddr", bsc.addr);
+        await data.loadAlllists_brief(store);
+        await data.loadAlllists_detail(store);
+        const oldToken = "0x134315EF3D11eEd8159fD1305af32119a046375A";
+        const otBalance = await market.tokenBalance(oldToken);
+        const otAllowance = await market.tokenAllowance(oldToken);
+        this.$store.commit("setRedeemBalance", otBalance);
+        this.$store.commit("setRedeemAllowance", otAllowance);
         this.conenct_loading = false;
+
+        return "ok";
       }
-      // loading.close();
     },
   },
 };

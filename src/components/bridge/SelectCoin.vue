@@ -1,6 +1,6 @@
 <template>
   <el-col id="selectCoin">
-    <p>Select CoinTypes</p>
+    <p>{{ $t("select-coin") }}</p>
     <ul>
       <li
         v-for="(item, name) in this.coinMap"
@@ -44,7 +44,6 @@ export default {
       this.addclass = name;
       const coin = item.coinTy;
       this.$store.commit("setBcoin", coin);
-      console.log("coin", this.bcoin, name);
     },
   },
 };

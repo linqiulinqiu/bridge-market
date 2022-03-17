@@ -2,10 +2,14 @@
   <div>
     <div class="content">
       <el-aside width="350px">
-        <keep-alive> <mynft /></keep-alive>
+        <keep-alive> <Mynft :myList="myList" :pageSize="3" /></keep-alive>
       </el-aside>
       <el-main style="color: #fff">
-        <MarketMain />
+        <MarketMain
+          :marketList="marketList"
+          :mySaleList="mySaleList"
+          :pageSize="4"
+        />
       </el-main>
     </div>
   </div>
@@ -14,7 +18,6 @@
 <script>
 import Mynft from "../components/content/nftpanel/Mynft.vue";
 import { mapState } from "vuex";
-import market from "../market";
 import MarketMain from "../components/MarketMain.vue";
 export default {
   name: "Market",
@@ -23,13 +26,15 @@ export default {
     MarketMain,
   },
   computed: mapState({
-    coin: "coin",
     baddr: "baddr",
-    curNFT: "curNFT",
-    PBTSellingLists: "PBTSellingLists",
+    myList: "myList",
+    marketList: "marketList",
+    mySaleList: "mySaleList",
   }),
   data() {
-    return {};
+    return {
+      pageSize: 3,
+    };
   },
 };
 </script>

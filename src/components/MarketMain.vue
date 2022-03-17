@@ -14,12 +14,10 @@
           >
         </h2>
         <el-col class="cointy">
-          <keep-alive>
-            <MarketList />
-          </keep-alive>
+          <MarketList :marketList="this.marketList" :pageSize="this.pageSize" />
         </el-col>
         <el-col class="cointy">
-          <keep-alive><MySale /></keep-alive>
+          <MySale :mySaleList="this.mySaleList" :pageSize="this.pageSize" />
         </el-col>
       </el-col>
     </el-col>
@@ -68,11 +66,10 @@ export default {
     MarketList,
     NFTinfo,
   },
+  props: ["marketList", "mySaleList", "pageSize"],
   computed: mapState({
     coin: "coin",
     baddr: "baddr",
-    curNFT: "curNFT",
-    PBTSellingLists: "PBTSellingLists",
   }),
   data() {
     return {
@@ -93,6 +90,7 @@ export default {
         const res = await market.mintPBT();
         await market.waitEventDone(res, async function (evt) {
           obj.mint_loading = false;
+          obj.mintVisible = false;
         });
       } catch (e) {
         this.mint_loading = false;

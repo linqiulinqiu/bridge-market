@@ -4,19 +4,19 @@
       On Sale <span class="minifont">(价格为0的NFT将不会出现在市场列表中)</span>
     </h3>
     <ul class="content">
-      <li class="marketlist" v-for="(nft, name) in this.saleList" :key="name">
+      <li class="marketlist" v-for="nft in mklist" :key="nft.id">
         <keep-alive>
           <SellingItem
-            v-if="nft.market && !(nft.market.price == '0.0')"
             v-bind:info="nft"
             @click.native="openNFT(nft, name)"
+            v-if="nft.market && nft.market.price != '0.0'"
           />
         </keep-alive>
       </li>
     </ul>
     <el-col :offset="10">
       <el-pagination
-        :total="Object.keys(PBTSellingLists).length"
+        :total="Object.keys(this.marketList).length"
         background
         @current-change="handleXccPaegChange"
         :current-page="this.xccpageNum"
@@ -24,86 +24,84 @@
         layout="total,prev,pager,next"
       ></el-pagination>
     </el-col>
-    <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
-      <el-card>
-        <NFTinfo />
-      </el-card>
-    </el-dialog>
+    <NFTinfo
+      :approve="approve"
+      :curNFT="curNFT"
+      ref="mainNftInfo"
+      :visible="this.nftinfo_show"
+    />
   </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
-import getAllData from "../../getAllData";
 import market from "../../market";
 import NFTinfo from "../content/nftpanel/NFTinfo.vue";
 export default {
-  name: "MarketXccList",
+  name: "MarketList",
   components: {
     NFTinfo,
   },
+  props: ["marketList", "pageSize"],
   computed: mapState({
     coin: "coin",
     baddr: "baddr",
-    curNFT: "curNFT",
-    PBTSellingLists: "PBTSellingLists",
-    saleList() {
-      const start = this.xccpageNum * 4 - 4;
-      const down = this.xccpageNum * 4;
-      const xcclist = Object.fromEntries(
-        Object.entries(this.PBTSellingLists).slice(start, down)
+    curNFT(state) {
+      if (state.current.pbtId) {
+        const pbtId = String(state.current.pbtId);
+        if (pbtId in this.marketList) {
+          console.log("this.curNFT", this.marketList[pbtId]);
+          return this.marketList[pbtId];
+        }
+        return false;
+      }
+    },
+    mklist() {
+      const start = this.xccpageNum * this.pageSize - this.pageSize;
+      const down = this.xccpageNum * this.pageSize;
+      const list = Object.fromEntries(
+        Object.entries(this.marketList).slice(start, down)
       );
-      return xcclist;
+      return list;
     },
   }),
   watch: {
-    PBTSellingLists: function (newLists) {
-      this.$store.commit("setPBTSellingLists", newLists);
-
-      console.log("selllist", this.$store.state.PBTSellingLists, newLists);
+    marketList: function (newLists) {
+      this.$store.commit("setMarketlist", newLists);
+      console.log("selllist", newLists);
+      this.mklist;
+    },
+    deep: true,
+    curNFT: function () {
+      this.curNFT;
     },
     deep: true,
   },
   data() {
     return {
+      approve: true,
       xccpageNum: 1,
-      xcclist: {},
-      nftinfo_dialog: false,
+      nftinfo_show: false,
     };
   },
   methods: {
     handleXccPaegChange: function (page_xcc) {
-      console.log("当前页:", page_xcc);
       this.xccpageNum = page_xcc;
-      // this.saleList();
-      // console.log("all pbtlist", this.saleList());
-
-      // const start = this.xccpageNum * 10 - 10;
-      // const down = this.xccpageNum * 10;
-      // this.mylist = Object.fromEntries(
-      //   Object.entries(this.$store.state.PBTSellingLists).slice(start, down)
-      // );
     },
     openNFT: async function (nft) {
-      const loading = this.$loading({
-        lock: true,
-        spinner: "el-icon-loading",
-        background: "rgba(200,230,200,0.6)",
-      });
-      if (!("market" in nft)) {
-        const info = await getAllData.getMarketNFT("PBT", nft.id);
-        nft.market = info;
+      if (nft.market.ptName == "BUSD") {
+        this.approve = await market.checkAllowance(nft);
+        console.log("checkAllowance", this.approve);
       }
-      this.$store.commit("setCurNFT", nft);
-      console.log("curNFT", nft);
-      this.nftinfo_dialog = true;
-      loading.close();
+      this.$store.commit("setCurrentPbtId", nft.id);
+      this.nftinfo_show = true;
+      this.$refs.mainNftInfo.show();
     },
   },
 };
 </script>
 <style scoped>
 .content {
-  height: 500px;
+  min-height: 550px;
 }
 .marketlist {
   float: left;

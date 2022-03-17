@@ -2,9 +2,11 @@
   <div>
     <el-container>
       <el-aside width="350px">
-        <keep-alive> <mynft /></keep-alive>
+        <keep-alive v-if="Object.keys(myList).length > 0">
+          <mynft v-bind:myList="myList" v-bind:pageSize="3"
+        /></keep-alive>
       </el-aside>
-      <el-main><BridgeMain /></el-main>
+      <el-main><BridgeMain v-bind:myList="myList" /></el-main>
       <el-aside width="200px" style="float: right; background: #25272e">
         <SelectCoin />
       </el-aside>
@@ -24,6 +26,14 @@ export default {
     Mynft,
     BridgeMain,
     SelectCoin,
+  },
+  computed: mapState({
+    myList: "myList",
+  }),
+  watch: {
+    myList: function (lists) {
+      this.$store.commit("setMylist", lists);
+    },
   },
 };
 </script>

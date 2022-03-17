@@ -2,78 +2,88 @@
   <el-col>
     <h3>My Selling PBT</h3>
     <ul class="content">
-      <li v-for="nft in PBTMySaleLists" :key="nft.uri" class="marketlist">
+      <li v-for="nft in this.mslist" :key="nft.uri" class="marketlist">
         <el-button @click="openNFT(nft)" class="nftbtn">
           <i>#{{ nft.id }}</i>
           <img v-if="nft.meta" v-lazy="nft.meta.image" alt="img" />
         </el-button>
       </li>
     </ul>
-    <!-- <el-col :offset="10">
+    <el-col :offset="10">
       <el-pagination
-        :total="Object.keys(PBTMySaleLists).length"
+        :total="Object.keys(this.mySaleList).length"
         background
         @current-change="handleCurPageChange()"
         :current-page="this.mypageNum"
         :page-size="10"
         layout="total,prev,pager,next"
       ></el-pagination>
-    </el-col> -->
-    <el-dialog title="curNFT info" :visible.sync="nftinfo_dialog" width="50%">
-      <el-card>
-        <NFTinfo />
-      </el-card>
-    </el-dialog>
+    </el-col>
+    <NFTinfo
+      ref="mainNftInfo"
+      :curNFT="this.curNFT"
+      :visible="this.nftinfo_show"
+    />
   </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
-import market from "../../market";
-import allData from "../../getAllData";
 import NFTinfo from "../content/nftpanel/NFTinfo.vue";
 export default {
   name: "MySale",
   components: {
     NFTinfo,
   },
+  props: ["mySaleList", "pageSize"],
   computed: mapState({
-    PBTMySaleLists: "PBTMySaleLists",
-    curNFT: "curNFT",
+    curNFT(state) {
+      if (state.current.pbtId) {
+        const pbtId = state.current.pbtId;
+        if (pbtId in this.mySaleList) {
+          return this.mySaleList[pbtId];
+        }
+        return false;
+      }
+    },
+    mslist() {
+      const start = this.mypageNum * this.pageSize - this.pageSize;
+      const down = this.mypageNum * this.pageSize;
+      if (start > 0) {
+        const mylist = Object.fromEntries(
+          Object.entries(this.mySaleList).slice(start, down)
+        );
+        return mylist;
+      }
+      return this.mySaleList;
+    },
   }),
   watch: {
-    PBTMySaleLists: function (newLists) {
-      this.$store.commit("setPBTMySaleLists", newLists);
-      //   const start = this.mypageNum * 10 - 10;
-      //   const down = this.mypageNum * 10;
-      //   this.mylist = Object.fromEntries(
-      //     Object.entries(newLists).slice(start, down)
-      //   );
-      console.log("mysale list", newLists);
+    mySaleList: function (newLists) {
+      this.$store.commit("setMySalelist", newLists);
+      this.mslist;
+    },
+    deep: true,
+    curNFT: function () {
+      this.curNFT;
     },
     deep: true,
   },
   data() {
     return {
       mypageNum: 1,
-      mylist: {},
-      nftinfo_dialog: false,
+      nftinfo_show: false,
     };
   },
   methods: {
     handleCurPageChange(page) {
       console.log("当前页:", page);
       this.mypageNum = page;
-      console.log("all pbtlist", this.mylist);
-      const start = page * 10 - 10;
-      const down = page * 10;
-      this.mylist = Object.fromEntries(
-        Object.entries(this.$store.state.PBTMySaleLists).slice(start, down)
-      );
     },
     openNFT: function (nft) {
-      this.$store.commit("setCurNFT", nft);
+      this.$store.commit("setCurrentPbtId", nft.id);
       console.log("curNFT", nft);
-      this.nftinfo_dialog = true;
+      this.nftinfo_show = true;
+      this.$refs.mainNftInfo.show();
     },
   },
 };

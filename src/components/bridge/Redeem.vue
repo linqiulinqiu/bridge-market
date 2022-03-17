@@ -1,21 +1,22 @@
 <template>
   <el-col id="redeem" class="tabs">
-    <h3>Redeem</h3>
+    <h3>{{ $t("redeem") }}</h3>
     <el-col>
-      <p>balnce:{{ balance }}</p>
+      <p>{{ $t("balance") }}:{{ balance }}</p>
       <el-col>
         <el-input type="text" v-model.trim="redeemNum"></el-input>
         <el-col v-if="needApprove">
           <el-button @click="approve">Approve</el-button>
         </el-col>
         <el-col v-else>
-          <el-button @click="redeemNum = this.balance">All</el-button>
-          <el-button @click="redeem">Redeem</el-button>
+          <el-button @click="redeemNum = this.balance">{{
+            $t("all")
+          }}</el-button>
+          <el-button @click="redeem">{{ $t("redeem") }}</el-button>
         </el-col>
       </el-col>
       <p>
-        因为版本升级，现将以前的代币按照一比一兑换为现在的代币，如 50 PXCC
-        转化为 50 WXCC
+        {{ $t("rd-info", { bcoin: bcoin }) }}
       </p>
     </el-col>
   </el-col>
@@ -25,9 +26,8 @@ import { mapState } from "vuex";
 import market from "../../market";
 export default {
   computed: mapState({
-    baddr: "baddr",
     bcoin: "bcoin",
-    curNFT: "curNFT",
+    current: "current",
     WBalance: "WBalance",
     balance: "redeemBalance",
     redeemAllowance: "redeemAllowance",

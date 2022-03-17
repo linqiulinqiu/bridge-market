@@ -1,7 +1,7 @@
 <template>
   <el-col id="withdraw" class="tabs">
     <el-col>
-      取款{{ bcoin }} 将会发送到以下地址 : <br />
+      {{ $t("w-addr") }} : <br />
       <span style="font-size: 10px">
         请确认取款地址是自己钱包的收款地址，并且确认地址是正确的。
       </span>
@@ -111,8 +111,22 @@ export default {
   computed: mapState({
     baddr: "baddr",
     bcoin: "bcoin",
-    curNFT: "curNFT",
     WBalance: "WBalance",
+    curNFT(state) {
+      console.log("call curNFT", state.current);
+      if (state.current.pbtId) {
+        const pbtId = state.current.pbtId;
+        if (pbtId in state.PBTlists) {
+          console.log("this.current NFT", state.PBTlists[pbtId]);
+          return state.PBTlists[pbtId];
+        } else {
+          console.log("current NFT not exists", Object.keys(state.PBTlists));
+        }
+      } else {
+        console.log("no current pbtId", state.current);
+      }
+      return false;
+    },
   }),
   data() {
     return {
@@ -148,11 +162,11 @@ export default {
         this.w_disabled = true;
 
         this.getwAmount = "";
-        this.tips_amount = "数额过少，将什么都收不到呢！";
+        this.tips_amount = this.$t("tips-amount1");
       } else if (after_fee == "fund") {
         this.w_disabled = true;
         this.getwAmount = "";
-        this.tips_amount = "数额过大，余额不够呢！";
+        this.tips_amount = this.$t("tips-amount2");
       } else {
         this.getwAmount = after_fee;
         this.tips_amount = false;
