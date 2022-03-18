@@ -1,13 +1,13 @@
 <template>
   <el-col id="withdraw" class="tabs">
     <el-col>
-      {{ $t("w-addr") }} : <br />
+      {{ $t("w-addr", { bcoin: bcoin }) }} : <br />
       <span style="font-size: 10px">
-        请确认取款地址是自己钱包的收款地址，并且确认地址是正确的。
+        {{ $t("correct-addr") }}
       </span>
       <el-col class="aa">
         <el-col v-if="this.curNFT['pbxs'] == undefined">
-          <p>未绑定取款地址</p>
+          <p>{{ $t("no-waddr") }}</p>
         </el-col>
         <el-col v-else>
           <span v-if="this.curNFT.pbxs[this.cointy[bcoin]]">
@@ -18,27 +18,27 @@
                   4
                 ) == '1qqq'
               "
-              >未绑定取款地址</span
+              >{{ $t("no-waddr") }}</span
             >
             <span class="font" v-else>
               {{ this.curNFT.pbxs[this.cointy[bcoin]].withdrawAddr }}
             </span>
           </span>
-          <span v-else> 未绑定取款地址 </span>
+          <span v-else> {{ $t("no-waddr") }} </span>
         </el-col>
         <p>
-          <el-button @click="bind_dialog = true" type="primary" size="small"
-            >更改取款地址</el-button
-          >
-          <el-button @click="clearAddr" size="small" :loading="clear_loading"
-            >清空取款地址</el-button
-          >
+          <el-button @click="bind_dialog = true" type="primary" size="small">{{
+            $t("change-waddr")
+          }}</el-button>
+          <el-button @click="clearAddr" size="small" :loading="clear_loading">{{
+            $t("clear-waddr")
+          }}</el-button>
         </p>
       </el-col>
       <el-col>
         <el-col style="height: 45px; margin-top: 10px">
           <p>
-            烧掉
+            {{ $t("burn") }}
             <el-input
               v-model.trim="wAmount"
               class="amount-input"
@@ -46,22 +46,25 @@
               maxlength="40"
               suffix-icon="el-icon-edit"
             ></el-input>
-            <el-button type="primary" circle @click="wAmount = WBalance[bcoin]"
-              >全部</el-button
+            <el-button
+              type="primary"
+              circle
+              @click="wAmount = WBalance[bcoin]"
+              >{{ $t("all") }}</el-button
             >
-            W{{ bcoin }}币，
+            W{{ bcoin }}，
           </p>
         </el-col>
 
         <el-col style="height: 70px">
           <p>
-            你将会收到
+            {{ $t("get") }}
             <span class="span">
               <span class="font" v-if="this.wAmount != ''">{{
                 getwAmount
               }}</span>
             </span>
-            {{ bcoin }}币
+            {{ bcoin }}
           </p>
           <p v-if="this.tips_amount" class="minifont">
             <i v-if="this.wAmount.length > 0">{{ this.tips_amount }}</i>
@@ -74,13 +77,13 @@
           @click="withdraw"
           :loading="w_loading"
           :disabled="w_disabled"
-          >取款</el-button
+          >{{ $t("withdraw") }}</el-button
         >
       </el-col>
       <el-col style="margin-top: 20px">
         <p>
           <span class="minifont">
-            一个账户绑定多个钱包的多个地址时，钱款可能随机发送到其中一个钱包中，请注意查收
+            {{ $t("tips-waddr") }}
           </span>
         </p>
       </el-col>
@@ -89,15 +92,13 @@
       <el-card>
         <p>
           在下面输入你的取款地址：
-          <span style="font-size: 10px">
-            (请确认取款地址是自己钱包的收款地址，并且确认地址是正确的。)
-          </span>
+          <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
         </p>
         <el-input type="text" v-model.trim="wAddr"></el-input>
-        <el-button type="primary" @click="bindWaddr" :loading="bind_loading"
-          >Bind</el-button
-        >
-        <el-button @click="bind_dialog = false">Cancel</el-button>
+        <el-button type="primary" @click="bindWaddr" :loading="bind_loading">{{
+          $t("bind-waddr")
+        }}</el-button>
+        <el-button @click="bind_dialog = false">{{ $t("cancel") }}</el-button>
       </el-card>
     </el-dialog>
   </el-col>

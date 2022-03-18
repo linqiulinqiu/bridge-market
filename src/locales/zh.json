@@ -5,16 +5,21 @@
     "balance":"余额",
     "bridge":"桥",
     "buy":"购买",
+    "burn":"烧掉",
+    "bind-waddr":"绑定取款地址",
     "beyond-limit":"超出金额限制后，交易时间会大幅增加，请耐心等待",
     "connect":"请连接钱包",
+    "cancel":"取消",
     "change-price":"更改出售信息",
+    "change-waddr":"更改取款地址",
+    "clear-waddr":"清空取款地址",
     "correct-amount":"请输入正确的金额",
-
+    "correct-addr":"请确认取款地址是自己钱包的收款地址，并且确认地址是正确的。",
     "deposit":"存款",
     "desc":"描述 :",
     "dep-limit":"单次存款建议限额为：",
-    "dep-rate":"Deposit rate",
-    "dep-minFee":"Min deposit fee",
+    "dep-rate":"存款费率",
+    "dep-minFee":"最小存款手续费",
     "dep-addr":"获取{bcoin}的存款地址",
     "function":"支持",
     "get":"你将会得到 :",
@@ -26,6 +31,8 @@
     "mintPBT":"Mint PBT",
     "mintable":"目前可以铸造的NFT数目：",
     "none":"目前可铸造数为0,不可铸造NFT，请等待",
+    "no-waddr":"未绑定取款地址",
+
     "or":"或者",
     "openNFT":"请先选择一个NFT",
     "price":"价格 :",
@@ -36,10 +43,11 @@
 
     "tips-amount1":"数额过小，将什么都收不到呢！",
     "tips-amount2":"数额过大，余额不够呢！",
+    "tips-waddr":"一个账户绑定多个钱包的多个地址时，钱款可能随机发送到其中一个钱包中，请注意查收",
 
     "withdraw":"取款",
-    "w-Rate":"Withdraw rate",
-    "w-minFee":"Min withdraw fee",
+    "w-Rate":"取款费率",
+    "w-minFee":"最小取款手续费",
     "w-limit":"单次取款建议限额为："
 
 }

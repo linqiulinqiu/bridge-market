@@ -283,7 +283,6 @@ export default {
         const res = await market.buyNFT(this.mcoin, curNFT);
         await market.waitEventDone(res, async function (evt) {
           obj.buy_loading = false;
-          obj.dialog_visible();
         });
       } catch (e) {
         obj.buy_loading = false;

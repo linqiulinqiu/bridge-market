@@ -5,12 +5,17 @@
     "balance":"Balance",
     "bridge":"Bridge",
     "buy":"Buy it",
+    "burn":"burn",
     "beyond-limit":"After the amount limit is exceeded, the transaction time will increase significantly, please be patient",
-    
+    "bind-waddr":"Bind withdraw address",
+
+    "cancel":"Cancel",
     "connect":"Connect Wallet",
     "change-price":"Change sale info",
+    "change-waddr":"Change withdraw address",
+    "clear-waddr":"Clear withdraw address",
     "correct-amount":"Please enter the correct amount",
-
+    "correct-addr":"Please confirm that the withdrawal address is the collection address of your wallet and that the address is correct.",
     
     "deposit":"Deposit",
     "desc":"description :",
@@ -33,7 +38,9 @@
     "mintable":"NFT's currently available for minting :",
     
     "none":"The number of mintable NFTs is 0 currently, no NFTs can be minted, please wait.",
-    
+    "no-waddr":"Unbound withdrawal address",
+
+
     "or":"OR",
     "openNFT":"Please select a nft first",
     
@@ -46,6 +53,7 @@
 
     "tips-amount1":"The amount is too small, you won't receive anything.",
     "tips-amount2":"The amount is too much, and you don't have enough balance",
+    "tips-waddr":"When an account is bound to multiple addresses of multiple wallets, the money may be randomly sent to one of them. Please pay attention to check.",
 
     "withdraw":"Withdraw",
     "w-Rate":"Withdraw rate",
