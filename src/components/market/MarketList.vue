@@ -4,11 +4,11 @@
       On Sale <span class="minifont">(价格为0的NFT将不会出现在市场列表中)</span>
     </h3>
     <ul class="content">
-      <li class="marketlist" v-for="nft in mklist" :key="nft.id">
+      <li class="marketlist" v-for="nft in this.mklist" :key="nft.id">
         <keep-alive>
           <SellingItem
             v-bind:info="nft"
-            @click.native="openNFT(nft, name)"
+            @click.native="openNFT(nft)"
             v-if="nft.market && nft.market.price != '0.0'"
           />
         </keep-alive>
@@ -61,6 +61,7 @@ export default {
       const list = Object.fromEntries(
         Object.entries(this.marketList).slice(start, down)
       );
+      console.log("mklist", list, this.marketList);
       return list;
     },
   }),

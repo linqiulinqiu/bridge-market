@@ -4,9 +4,9 @@ import {
 } from "ethers";
 import pbwallet from "pbwallet"
 import keeper from "pbweb-nftkeeper";
-var bsc = {}
-var myList = {}
-var marketList = {}
+let bsc = {}
+let myList = {}
+let marketList = {}
 const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
 }
@@ -18,9 +18,9 @@ async function connect(commit) {
     console.log("bsc in connect", bsc)
     if (bsc) {
         commit("setBsc", bsc)
-        await keeper.startKeeper(bsc, commit, marketList, myList)
-        const cnt = await keeper.preload(commit, myList)
-        console.log('user owns', cnt.toString(), 'PBT')
+        // keeper.startKeeper(bsc, commit, marketList, myList)
+        // const cnt = await keeper.preload(bsc, commit, myList)
+        // console.log('user owns', cnt.toString(), 'PBT')
         return bsc
     }
     return false
@@ -189,14 +189,18 @@ async function loadmarketlist_detail(marketList, store) {
         let mySaleList = {}
         for (let i in marketList) {
             if ('market' in marketList[i]) {
-                if (parseInt(marketList[i].market['price']) > 0) {
+                if (marketList[i].market['price'] != '0.0') {
                     mklist_useful[i] = marketList[i]
                 }
+                console.log("list", mklist_useful)
+            }
+        }
+        for (let i in marketList) {
+            if ('market' in marketList[i]) {
                 if (marketList[i].market['seller'] == '-self') {
                     mySaleList[i] = marketList[i]
                 }
             }
-
         }
         console.log("loadMarketlist_datail-list_useful = ", mklist_useful, mySaleList)
         store.commit("setMarketlist", mklist_useful)
@@ -211,6 +215,11 @@ async function loadAlllists_brief(store) {
 async function loadAlllists_detail(store) {
     await loadmarketlist_detail(marketList, store)
     await loadmylist_detail(myList, store)
+    const commit = store.commit
+    keeper.startKeeper(bsc, commit, marketList, myList)
+    // const cnt = await keeper.preload(commit, myList)
+    // console.log('user owns', cnt.toString(), 'PBT')
+
 }
 export default {
     loadAlllists_brief: loadAlllists_brief,

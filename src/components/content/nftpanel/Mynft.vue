@@ -66,14 +66,14 @@ export default {
       }
       return false;
     },
-    nftlist() {
+    nftlist(state) {
       let pageSize = this.pageSize;
       const start = this.pageNum * pageSize - pageSize;
       const down = this.pageNum * pageSize;
-      this.listPage = Object.fromEntries(
-        Object.entries(this.myList).slice(start, down)
+      const listPage = Object.fromEntries(
+        Object.entries(state.myList).slice(start, down)
       );
-      return this.listPage;
+      return listPage;
     },
   }),
   watch: {
@@ -100,7 +100,14 @@ export default {
   methods: {
     openNFT: async function (id) {
       this.$store.commit("setCurrentPbtId", id);
-      this.$refs.mainNftInfo.show();
+      // this.$refs.mainNftInfo.show();
+      if (this.curNFT) {
+        const mo = location.hash.substr(2);
+        console.log("mo", mo);
+        if (mo == "market") {
+          this.$refs.mainNftInfo.show();
+        }
+      }
     },
     handleCurrentChange(newPage) {
       console.log("当前页:", newPage);
@@ -117,7 +124,7 @@ export default {
 
       if (this.curNFT) {
         const mo = location.hash.substr(2);
-        if (this.mode == "bridge" || mo == "bridge") {
+        if (mo == "market") {
           this.isAdd = name;
         }
       }
