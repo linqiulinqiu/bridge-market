@@ -23,8 +23,7 @@
     "dep-addr":"获取{bcoin}的存款地址",
     "function":"支持",
     "get":"你将会得到 :",
-    "getaddr":"该类型存款地址已经获取了",
-
+    "getaddr":"该类型的存款地址已经没有了，请在discord或电报上联系我们。",
     "inbsc":"在你的BSC钱包中",
     "look-info":"查看具体信息请先连接钱包",
     "market":"市场",

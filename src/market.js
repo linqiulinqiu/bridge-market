@@ -191,6 +191,7 @@ async function getBindables(coin) {
 async function getDepAddr(pbtId, coin) {
     const ables = await getBindables(coin)
     if (parseInt(ables) == 0) {
+        console.log("ables", ables)
         return false
     } else {
         const id = ethers.BigNumber.from(pbtId)

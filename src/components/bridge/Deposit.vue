@@ -119,6 +119,7 @@ export default {
       try {
         const res = await market.getDepAddr(id, this.bcoin);
         if (res == false) {
+          console.log("存款地址没有了");
           this.$message(this.$t("getaddr"));
         }
         const obj = this;
