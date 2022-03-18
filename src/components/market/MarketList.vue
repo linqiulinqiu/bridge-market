@@ -25,7 +25,7 @@
       ></el-pagination>
     </el-col>
     <NFTinfo
-      :approve="approve"
+      :approve="this.approve"
       :curNFT="curNFT"
       ref="mainNftInfo"
       :visible="this.nftinfo_show"
@@ -45,6 +45,9 @@ export default {
   computed: mapState({
     coin: "coin",
     baddr: "baddr",
+    // approve(state){
+
+    // },
     curNFT(state) {
       if (state.current.pbtId) {
         const pbtId = String(state.current.pbtId);
@@ -68,7 +71,6 @@ export default {
   watch: {
     marketList: function (newLists) {
       this.$store.commit("setMarketlist", newLists);
-      console.log("selllist", newLists);
       this.mklist;
     },
     deep: true,
@@ -89,9 +91,11 @@ export default {
       this.xccpageNum = page_xcc;
     },
     openNFT: async function (nft) {
-      if (nft.market.ptName == "BUSD") {
-        this.approve = await market.checkAllowance(nft);
-        console.log("checkAllowance", this.approve);
+      if (nft.market.seller == "") {
+        if (nft.market.ptName == "BUSD") {
+          this.approve = await market.checkAllowance(nft);
+          console.log("checkAllowance", this.approve);
+        }
       }
       this.$store.commit("setCurrentPbtId", nft.id);
       this.nftinfo_show = true;

@@ -76,11 +76,6 @@ async function connect(commit) {
     }
     return false
 }
-
-function coin2pb(coin) {
-    if (coin == 'PBT') return bsc.ctrs.pbt
-    throw new Error('Unsupported coin:' + coin)
-}
 async function tokenBalance(tokenAddr) {
     const info = await keeper.tokenInfo(tokenAddr)
     const ctr = pbwallet.erc20_contract(tokenAddr)
@@ -207,18 +202,17 @@ async function clearAddr(pbtid, cointy) {
     const res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(id, cointy, addr1)
     return res
 }
-async function sendToMarket(coin, id) {
-    const pb = coin2pb(coin)
+async function sendToMarket(id) {
+    const pb = bsc.ctrs.pbt
     const res = await pb["safeTransferFrom(address,address,uint256)"](bsc.addr, bsc.ctrs.pbmarket.address, id)
     return res
 }
-async function setSellInfo(coin, id, ptName, price, desc) {
-    const pb = coin2pb(coin)
+async function setSellInfo(id, ptName, price, desc) {
     var ptAddr = ptAddrs[ptName]
     if (!ptAddr) {
         ptAddr = ethers.constants.AddressZero
     }
-    const res = await bsc.ctrs.pbmarket.onSale(pb.address, id, ptAddr, ethers.utils.parseEther(price), desc)
+    const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, ethers.utils.parseEther(price), desc)
     return res
 }
 async function checkAllowance(nft) {
@@ -250,8 +244,7 @@ async function approveAllow(nft) {
 
 
 }
-async function buyNFT(coin, nft) {
-    const pb = coin2pb(coin)
+async function buyNFT(nft) {
     const price = ethers.utils.parseEther(nft.market.price)
     const priceToken = nft.market.priceToken
     const id = ethers.BigNumber.from(nft.id)
@@ -270,13 +263,12 @@ async function buyNFT(coin, nft) {
             return res
         }
     }
-    const res = await bsc.ctrs.pbmarket.buy(pb.address, id, options) // TODO: approve can use MAX_UINT256 for infinity
+    const res = await bsc.ctrs.pbmarket.buy(bsc.ctrs.pbt.address, id, options) // TODO: approve can use MAX_UINT256 for infinity
     res.fn = 'buy'
     return res
 }
-async function retreatNFT(coin, id) {
-    const pb = coin2pb(coin)
-    const res = await bsc.ctrs.pbmarket.offSale(pb.address, id)
+async function retreatNFT(id) {
+    const res = await bsc.ctrs.pbmarket.offSale(bsc.ctrs.pbt.address, id)
     return res
 }
 

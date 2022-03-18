@@ -1,0 +1,89 @@
+<template>
+  <el-col>
+    <!-- <p>
+      The price :
+      <span v-if="market.price">{{ market.price }}&nbsp;</span>
+      <span v-if="market.ptName">{{ market.ptName }}</span>
+    </p>
+    <p>
+      Description:
+      <span v-if="market.desc">{{ market.desc }}</span>
+    </p> -->
+    <el-col>
+      <el-button
+        @click="buyNFT"
+        type="primary"
+        :loading="buy_loading"
+        v-if="approve"
+      >
+        Buy It
+      </el-button>
+      <el-button
+        v-else
+        @click="approveCoin"
+        type="priamry"
+        :loading="approve_loading"
+      >
+        Approve
+      </el-button>
+    </el-col>
+  </el-col>
+</template>
+<script>
+import { mapState } from "vuex";
+import market from "../../../market";
+export default {
+  name: "InfoMarket",
+  props: ["curNFT", "show", "approve"],
+  computed: mapState({
+    market() {
+      if (this.curNFT && "market" in this.curNFT) return this.curNFT.market;
+      return false;
+    },
+  }),
+  data() {
+    return {
+      buy_loading: false,
+      approve_loading: false,
+    };
+  },
+  methods: {
+    buyNFT: async function () {
+      this.buy_loading = true;
+      const curNFT = this.curNFT;
+      const obj = this;
+      try {
+        const res = await market.buyNFT(curNFT);
+        await market.waitEventDone(res, async function (evt) {
+          obj.buy_loading = false;
+          obj.show();
+        });
+      } catch (e) {
+        obj.buy_loading = false;
+        console.log("buyNFt err", e);
+        if (e.data.code === -32000) {
+          this.$message(e.data.message);
+        }
+      }
+    },
+    approveCoin: async function () {
+      this.approve_loading = true;
+      const curNFT = this.curNFT;
+      const obj = this;
+      try {
+        const res = await market.approveAllow(curNFT);
+        await market.waitEventDone(res, async function (evt) {
+          obj.approve_loading = false;
+        });
+        console.log("res approve", res);
+      } catch (e) {
+        this.approve_loading = false;
+        console.log("approve err", e.message);
+        if (e.data.code === -32000) {
+          this.$message(e.data.message);
+        }
+      }
+    },
+  },
+};
+</script>
