@@ -216,15 +216,20 @@ export default {
       const addr = this.wAddr.toString();
       const obj = this;
       try {
-        const res = await market.bindAddr(addr, id, cointy);
-        console.log("bindWaddr", res);
+        let rebind = false;
+        if (this.curNFT.pbxs[this.cointy[this.bcoin]].withdrawAddr != false) {
+          rebind = true;
+        }
+        console.log(" bindaddr params", addr, id, cointy, rebind);
+        const res = await market.bindAddr(addr, id, cointy, rebind);
+        console.log("bindWaddr", res, rebind);
         if (res == false) {
           this.bind_loading = false;
           this.$message("请输入正确的取款地址");
         }
-        await market.waitEventDone(res, async function (evt) {
-          obj.bind_loading = false;
-        });
+        // await market.waitEventDone(res, async function (evt) {
+        obj.bind_loading = false;
+        // });
       } catch (e) {
         this.bind_loading = false;
         console.log("bind withdraw addr err", e.message);

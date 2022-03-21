@@ -14,29 +14,20 @@
       <el-col>
         {{ $t("addr") }} ：
         <el-col class="aa">
-          <el-col v-if="this.curNFT['pbxs'] == undefined">
+          <el-col v-if="this.depositAddr">
+            <span class="font">{{
+              this.curNFT.pbxs[this.coinMap[bcoin]].depositAddr
+            }}</span>
+          </el-col>
+          <el-col v-else>
+            <span> 暂时没有可获取的存款地址，请等待 </span>
             <el-button
               type="primary"
               class="getdeposte"
               @click="getDepositAddr"
+              :loading="getDep_loading"
               >{{ $t("dep-addr", { bcoin: bcoin }) }}</el-button
             >
-          </el-col>
-          <el-col v-else>
-            <span v-if="this.curNFT.pbxs[this.coinMap[bcoin]]">
-              <span class="font">{{
-                this.curNFT.pbxs[this.coinMap[bcoin]].depositAddr
-              }}</span>
-            </span>
-            <span v-else>
-              <el-button
-                type="primary"
-                class="getdeposte"
-                @click="getDepositAddr"
-                :loading="getDep_loading"
-                >{{ $t("dep-addr", { bcoin: bcoin }) }}</el-button
-              >
-            </span>
           </el-col>
         </el-col>
       </el-col>
@@ -70,6 +61,16 @@ export default {
     baddr: "baddr",
     bcoin: "bcoin",
     current: "current",
+    depositAddr(state) {
+      const pbxs = this.curNFT.pbxs;
+      const cointy = this.coinMap[state.bcoin];
+      if (pbxs == undefined) {
+        return false;
+      } else if (cointy in pbxs && pbxs[cointy]["depositAddr"]) {
+        return this.curNFT.pbxs[this.coinMap[state.bcoin]]["depositAddr"];
+      }
+      return false;
+    },
   }),
   data() {
     return {

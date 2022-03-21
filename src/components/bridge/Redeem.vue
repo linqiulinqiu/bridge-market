@@ -2,7 +2,7 @@
   <el-col id="redeem" class="tabs">
     <h3>{{ $t("redeem") }}</h3>
     <el-col>
-      <p>{{ $t("balance") }}:{{ balance }}</p>
+      <p>{{ $t("balance") }}:{{ balance[bcoin] }}</p>
       <el-col>
         <el-input type="text" v-model.trim="redeemNum"></el-input>
         <el-col v-if="needApprove">
@@ -34,8 +34,8 @@ export default {
     balance: "redeemBalance",
     redeemAllowance: "redeemAllowance",
     needApprove(state) {
-      const a = parseFloat(state.redeemAllowance);
-      const b = parseFloat(state.redeemBalance);
+      const a = parseFloat(state.redeemAllowance[state.bcoin]);
+      const b = parseFloat(state.redeemBalance[state.bcoin]);
       if (a == 0 || b >= a) {
         return true;
       }
@@ -49,13 +49,15 @@ export default {
   },
   methods: {
     approve: async function () {
-      const oldToken = "0x134315EF3D11eEd8159fD1305af32119a046375A";
-      await market.tokenApprove(oldToken);
+      const bcoin = this.bcoin;
+      const res = await market.tokenApprove("XCC");
+      console.log("res", res);
       //TODO: watch tokenRedeem events
     },
     redeem: async function () {
-      const oldToken = "0x134315EF3D11eEd8159fD1305af32119a046375A";
-      await market.tokenRedeem(oldToken, this.rAmount);
+      // const bcoin = this.bcoin;
+      const bcoin = "XCC";
+      await market.tokenRedeem(bcoin, this.rAmount);
       //TODO: watch tokenRedeem events
     },
   },

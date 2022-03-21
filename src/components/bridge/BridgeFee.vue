@@ -12,6 +12,8 @@
         {{ $t("w-rate") }}：{{ this.wFeeRate / 100 }}%，{{ $t("w-minFee") }}：{{
           this.wFee
         }}{{ bcoin }}
+        <br />
+        rebindFee:{{ this.reBindfee.amount }} {{ this.reBindfee.symbol }}
       </p>
       <el-button
         circle
@@ -39,6 +41,7 @@ export default {
       wFee: 0,
       dFee: 0,
       dFeeRate: 0,
+      reBindfee: 0,
     };
   },
   methods: {
@@ -53,6 +56,7 @@ export default {
       this.dFee = fees.depositeFee;
       this.dFeeRate = fees.depositeFeeRate;
       console.log("feeeeeeee", fees);
+      this.reBindfee = await market.reBindFee();
     },
   },
 };

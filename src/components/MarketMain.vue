@@ -22,33 +22,9 @@
       </el-col>
     </el-col>
     <el-col v-else>{{ $t("connect") }}</el-col>
-    <el-dialog :visible.sync="mintVisible" title="MINT NFT" width="50%">
+    <el-dialog :visible.sync="mintVisible">
       <el-card>
-        <el-row type="flex" justify="center">
-          <el-col :sapn="10">
-            <el-empty :image-size="100"></el-empty>
-          </el-col>
-          <el-col :span="12">
-            <p>
-              {{ $t("price") }}
-              <span>{{ this.mintFee.price }}</span>
-              <span>{{ this.mintFee.token }}</span>
-            </p>
-            <p>
-              <span>{{ $t("mintable") }}{{ mintNumber }}个</span>
-            </p>
-            <p>
-              <el-button
-                @click="mintNFT"
-                type="primary"
-                v-if="this.mintNumber > 0"
-                :loading="mint_loading"
-                >{{ $t("mintPBT") }}</el-button
-              >
-              <span v-else>{{ $t("none") }}</span>
-            </p>
-          </el-col>
-        </el-row>
+        <MintPBT :mintAbles="this.mintNumber" :mintFee="this.mintFee" />
       </el-card>
     </el-dialog>
   </el-row>
@@ -57,6 +33,7 @@
 import MarketList from "./market/MarketList.vue";
 import NFTinfo from "./content/nftpanel/NFTinfo.vue";
 import MySale from "./market/MySale.vue";
+import MintPBT from "./market/MintPBT.vue";
 import { mapState } from "vuex";
 import market from "../market";
 export default {
@@ -65,6 +42,7 @@ export default {
     MySale,
     MarketList,
     NFTinfo,
+    MintPBT,
   },
   props: ["marketList", "mySaleList", "pageSize"],
   computed: mapState({
@@ -79,33 +57,17 @@ export default {
         price: 0,
         token: "BNB",
       },
-      mint_loading: false,
     };
   },
   methods: {
-    mintNFT: async function () {
-      this.mint_loading = true;
-      const obj = this;
-      try {
-        const res = await market.mintPBT();
-        await market.waitEventDone(res, async function (evt) {
-          obj.mint_loading = false;
-          obj.mintVisible = false;
-        });
-      } catch (e) {
-        this.mint_loading = false;
-        this.$message(e.data.message);
-        console.log("mint err", e.message);
-      }
-    },
     getMintfee: async function () {
       const fee = await market.getmintfee();
       this.mintFee.price = fee.price;
       this.mintFee.token = fee.ptName;
-      this.mintVisible = true;
       const number = await market.getMintAbles();
       console.log("mint number", number);
       this.mintNumber = number;
+      this.mintVisible = true;
     },
   },
 };

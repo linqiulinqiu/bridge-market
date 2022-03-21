@@ -62,7 +62,6 @@ async function getCoinTypes(pid) {
     return cointype
 }
 async function nftBriefInfo(id) {
-    console.log("id", id, id.toNumber())
     const uri = await bsc.ctrs.pbt.tokenURI(id.toNumber())
     const meta = await fetch(fix_uri(uri))
     const img = await meta.json()
@@ -89,30 +88,39 @@ async function loadMarketinfo(id) {
 
 async function loadPbxs(pbtid) {
     const cointy = await getCoinTypes(pbtid)
+    console.log("cointy", pbtid, cointy)
+
     const pbxs = {}
-    for (var i = 0; i < cointy.length; i++) {
-        const ct = parseInt(cointy[i])
-        const winfo = pbwallet.wcoin_info(ct)
-        console.log("winfo", winfo)
-        const xAddress = await bsc.ctrs.pbpuzzlehash.pbtPuzzleHash(pbtid, ct)
-        const depAddress = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[0]), winfo.prefix)
-        const withAddress = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[1]), winfo.prefix)
-        const addrInfo = {
-            depositAddr: String(depAddress),
-            withdrawAddr: String(withAddress)
+    for (let i = 0; i < cointy.length; i++) {
+        for (let j = 0; j < cointy[i].length; j++) {
+            const ct = parseInt(cointy[i][j])
+            const winfo = pbwallet.wcoin_info(ct)
+            console.log("cointypes", ct, winfo)
+            const xAddress = await bsc.ctrs.pbpuzzlehash.pbtPuzzleHash(pbtid, ct)
+            console.log("xaddrrrrrr=", xAddress)
+            const depAddr = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[0]), winfo.prefix)
+            const withAddr = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[1]), winfo.prefix)
+            const addrInfo = {
+                depositAddr: String(depAddr),
+                withdrawAddr: String(withAddr)
+            }
+            for (let k in addrInfo) {
+                if (addrInfo[k].substr(3, 6) == "1qqqqq") {
+                    addrInfo[k] = false
+                }
+            }
+            console.log("addrinfo", addrInfo)
+            pbxs[String(ct)] = addrInfo
         }
-        pbxs[String(ct)] = addrInfo
     }
     return pbxs
 }
 
 async function loadlist_brief(addr) {
-    console.log("bsc in loadlist_b", bsc)
     const cnt = await bsc.ctrs.pbt.balanceOf(addr)
     const briefList = {}
     for (let i = 0; i < cnt; i++) {
         const idx = await bsc.ctrs.pbt.tokenOfOwnerByIndex(addr, i)
-        console.log("idx", idx)
         const info = await nftBriefInfo(idx)
         const key = String(idx)
         briefList[key] = info
@@ -130,21 +138,18 @@ async function loadMarketList_brief(store) {
     return marketList
 }
 
-
 async function loadUserlist_detail(store, myList) { //只读一个
     const current = store.state.current
     if (current.pbtId in myList) {
         const id = String(current.pbtId)
         if (!('pbxs' in myList[id])) {
             myList[id]['pbxs'] = await loadPbxs(id)
-            console.log("myList__D", myList)
             return myList
         }
     }
     for (let i in myList) {
         if ('pbxs' in myList[i]) continue
         myList[i]['pbxs'] = await loadPbxs(i)
-        console.log("myList__D", myList)
         return myList
     }
     return false
@@ -155,14 +160,12 @@ async function loadMarketlistDetail(store, marketList) {
         const id = String(current.pbtId)
         if (!('market' in marketList[id])) {
             marketList[id]['market'] = await loadMarketinfo(id)
-            console.log("marketlist__D", marketList)
             return marketList
         }
     }
     for (let i in marketList) {
         if ('market' in marketList[i]) continue
         marketList[i]['market'] = await loadMarketinfo(i)
-        console.log("marketlist__D", marketList)
         return marketList
     }
     return false
@@ -175,7 +178,6 @@ async function loadmylist_detail(myList, store) {
             break
         }
         console.log("myList__D in load_d", myList)
-
         store.commit("setMylist", myList)
     }
 }
@@ -192,7 +194,6 @@ async function loadmarketlist_detail(marketList, store) {
                 if (marketList[i].market['price'] != '0.0') {
                     mklist_useful[i] = marketList[i]
                 }
-                console.log("list", mklist_useful)
             }
         }
         for (let i in marketList) {
