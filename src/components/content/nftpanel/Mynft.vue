@@ -26,7 +26,7 @@
       <el-col v-else class="content">
         You haven't got any NFTs. Please go to the market.
       </el-col>
-      <el-col>
+      <el-col class="bottom-box">
         <el-button class="bottom">Go to Market </el-button>
       </el-col>
     </el-col>
@@ -145,6 +145,7 @@ export default {
 #mynft {
   color: #ffffff;
   background-color: #25272e;
+  /* position: relative; */
 }
 i {
   margin-right: 8px;
@@ -157,7 +158,8 @@ i {
 }
 .nftlist {
   width: 300px;
-  overflow: hidden;
+  height: 600px;
+  /* overflow-y: scroll; */
 }
 .content {
   min-height: 550px;
@@ -165,13 +167,21 @@ i {
   line-height: 36px;
   padding: 40px;
 }
+.bottom-box {
+  padding: 0 110px;
+  margin-top: 40px;
+}
 .bottom {
   background-color: #38f2af;
   width: 132px;
   font-size: 14px;
   color: #000000;
-  float: right;
-  margin: 0px 20px;
+  /* float: right; */
+  /* margin: 0px 20px; */
+}
+.btn-bar{
+  margin:20px 0;
+  padding: 0 50px;
 }
 .addclass {
   background: rgb(173, 195, 235);

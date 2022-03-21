@@ -106,11 +106,12 @@ export default {
 </script>
 <style scoped>
 .content {
-  min-height: 550px;
+  min-height: 500px;
+  /* display: flex; */
 }
 .marketlist {
-  float: left;
-  position: relative;
-  height: 500px;
+  /* float: left; */
+  /* position: relative; */
+  /* height: 500px; */
 }
 </style>

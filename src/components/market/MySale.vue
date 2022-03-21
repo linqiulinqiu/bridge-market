@@ -100,6 +100,13 @@ export default {
   width: 136px;
   box-sizing: border-box;
   margin: 10px;
+  background-color: #272a34;
+  /* border: 2px solid rgba(255, 255, 255, 0.08); */
+  border: hidden;
+}
+i {
+  padding-right:10px;
+  color: #38f2af;
 }
 
 .marketlist img {
