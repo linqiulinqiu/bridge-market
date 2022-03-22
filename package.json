@@ -11,7 +11,7 @@
     "element-ui": "^2.15.6",
     "ethers": "^5.5.4",
     "pbwallet": "github:tgarm/pbwallet#0.2.7",
-    "pbweb-nftkeeper": "bitbucket:plotnet/pbweb-nftkeeper#0.1.9",
+    "pbweb-nftkeeper": "bitbucket:plotnet/pbweb-nftkeeper#0.1.9.1",
     "pbweb-ui": "bitbucket:plotnet/pbweb-ui#0.0.13",
     "vue": "^2.6.11",
     "vue-i18n": "^8.27.0",
