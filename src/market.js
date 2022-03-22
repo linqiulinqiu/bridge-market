@@ -279,7 +279,7 @@ async function clearAddr(pbtid, cointy) {
     const fee = await bsc.ctrs.pbpuzzlehash.rebindFee()
     let res = {}
     if (fee[0] == ethers.constants.AddressZero) { // fee in BNB
-        res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr, {
+        res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addr, {
             value: fee[1]
         })
     } else { // erc20 token
@@ -301,7 +301,6 @@ async function clearAddr(pbtid, cointy) {
             value: fee[1]
         })
     }
-    res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(id, cointy, addr1)
     return res
 }
 async function sendToMarket(id) {

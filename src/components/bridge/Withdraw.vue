@@ -198,6 +198,7 @@ export default {
       this.clear_loading = true;
       const cointy = this.coinMap[this.bcoin];
       const id = this.current.pbtId;
+      console.log("pbtd", id);
       const obj = this;
       try {
         const res = await market.clearAddr(id, cointy);
