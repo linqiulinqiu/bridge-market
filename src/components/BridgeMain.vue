@@ -25,9 +25,15 @@
             </el-button>
           </el-col>
           <el-tabs>
-            <el-tab-pane :label="$t('deposit')"><Deposit :curNFT="curNFT" /></el-tab-pane>
-            <el-tab-pane :label="$t('withdraw')"><Withdraw :curNFT="curNFT"/></el-tab-pane>
-            <el-tab-pane :label="$t('redeem')"><Redeem :curNFT="curNFT"/></el-tab-pane>
+            <el-tab-pane :label="$t('deposit')"
+              ><Deposit :curNFT="curNFT"
+            /></el-tab-pane>
+            <el-tab-pane :label="$t('withdraw')"
+              ><Withdraw :curNFT="curNFT"
+            /></el-tab-pane>
+            <el-tab-pane :label="$t('redeem')"
+              ><Redeem :curNFT="curNFT"
+            /></el-tab-pane>
           </el-tabs>
         </el-col>
       </el-col>
@@ -72,6 +78,17 @@ export default {
     bcoin: function (newcoin) {
       console.log("coin", newcoin, this.bcoin);
       this.$store.commit("setBcoin", newcoin);
+    },
+    deep: true,
+    curNFT() {
+      if (this.current.pbtId) {
+        const pbtId = this.current.pbtId;
+        if (pbtId in this.myList) {
+          console.log("this.current NFT", this.myList[pbtId]);
+          return this.myList[pbtId];
+        }
+      }
+      return false;
     },
     deep: true,
   },

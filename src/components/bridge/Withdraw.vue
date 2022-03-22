@@ -1,80 +1,84 @@
 <template>
   <el-col id="withdraw" class="tabs">
-    <el-col>
-      {{ $t("w-addr", { bcoin: bcoin }) }} : <br />
-      <span style="font-size: 10px">
-        {{ $t("correct-addr") }}
-      </span>
-
-      <el-col class="aa">
-        <el-col>
-          <el-col v-if="this.withdrawAddr">{{ this.withdrawAddr }}</el-col>
-          <el-col v-else>
-            <p>{{ $t("no-waddr") }}</p>
-          </el-col>
-        </el-col>
-        <p>
-          <el-button @click="bind_dialog = true" type="primary" size="small">{{
-            $t("change-waddr")
-          }}</el-button>
-          <el-button @click="clearAddr" size="small" :loading="clear_loading">{{
-            $t("clear-waddr")
-          }}</el-button>
-        </p>
-      </el-col>
+    <el-col v-if="this.withdrawAddr">
       <el-col>
-        <el-col style="height: 45px; margin-top: 10px">
-          <p>
-            {{ $t("burn") }}
-            <el-input
-              v-model.trim="wAmount"
-              class="amount-input"
-              clearable
-              maxlength="40"
-              suffix-icon="el-icon-edit"
-            ></el-input>
-            <el-button
-              type="primary"
-              circle
-              @click="wAmount = WBalance[bcoin]"
-              >{{ $t("all") }}</el-button
-            >
-            W{{ bcoin }}，
-          </p>
-        </el-col>
-
-        <el-col style="height: 70px">
-          <p>
-            {{ $t("get") }}
-            <span class="span">
-              <span class="font" v-if="this.wAmount != ''">{{
-                getwAmount
-              }}</span>
-            </span>
-            {{ bcoin }}
-          </p>
-          <p v-if="this.tips_amount" class="minifont">
-            <i v-if="this.wAmount.length > 0">{{ this.tips_amount }}</i>
-          </p>
-        </el-col>
-      </el-col>
-      <el-col>
-        <el-button
-          type="primary"
-          @click="withdraw"
-          :loading="w_loading"
-          :disabled="w_disabled"
-          >{{ $t("withdraw") }}</el-button
-        >
-      </el-col>
-      <el-col style="margin-top: 20px">
         <p>
-          <span class="minifont">
-            {{ $t("tips-waddr") }}
+          {{ $t("w-addr", { bcoin: bcoin }) }} : <br />
+          <span style="font-size: 10px">
+            {{ $t("correct-addr") }}
           </span>
         </p>
+        <el-col>
+          {{ this.withdrawAddr }}
+          <p>
+            <el-button
+              @click="bind_dialog = true"
+              type="primary"
+              size="small"
+              >{{ $t("change-waddr") }}</el-button
+            >
+            <el-button
+              @click="clearAddr"
+              size="small"
+              :loading="clear_loading"
+              >{{ $t("clear-waddr") }}</el-button
+            >
+          </p>
+        </el-col>
+        <el-col>
+          <el-col style="height: 45px; margin-top: 10px">
+            <p>
+              {{ $t("burn") }}
+              <el-input
+                v-model.trim="wAmount"
+                class="amount-input"
+                clearable
+                maxlength="40"
+                suffix-icon="el-icon-edit"
+              ></el-input>
+              <el-button type="primary" @click="wAmount = WBalance[bcoin]">{{
+                $t("all")
+              }}</el-button>
+              W{{ bcoin }}，
+            </p>
+          </el-col>
+          <el-col style="height: 70px">
+            <p>
+              {{ $t("get") }}
+              <span class="span">
+                <span class="font" v-if="this.wAmount != ''">{{
+                  getwAmount
+                }}</span>
+              </span>
+              {{ bcoin }}
+            </p>
+            <p v-if="this.tips_amount" class="minifont">
+              <i v-if="this.wAmount.length > 0">{{ this.tips_amount }}</i>
+            </p>
+          </el-col>
+        </el-col>
+        <el-col>
+          <el-col style="margin-top: 20px">
+            <p>
+              <span class="minifont">
+                {{ $t("tips-waddr") }}
+              </span>
+            </p>
+          </el-col>
+        </el-col>
       </el-col>
     </el-col>
+    <el-col v-else>
+      <p>
+        在下面输入你的取款地址：
+        <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
+      </p>
+      <el-input type="text" v-model.trim="wAddr"></el-input>
+      <el-button type="primary" @click="bindWaddr" :loading="bind_loading">{{
+        $t("bind-waddr")
+      }}</el-button>
+    </el-col>
+
     <el-dialog title="绑定取款地址" :visible.sync="bind_dialog">
       <el-card>
         <p>

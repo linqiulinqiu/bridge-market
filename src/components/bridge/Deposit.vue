@@ -85,6 +85,9 @@ export default {
     };
   },
   watch: {
+    curNFT: function () {
+      console.log("this.curNFT", this.curNFT);
+    },
     depAmount: async function () {
       var depamount = this.depAmount;
       if (!depamount || isNaN(depamount) || depamount == "") {

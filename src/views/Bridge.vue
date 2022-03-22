@@ -33,6 +33,7 @@ export default {
   watch: {
     myList: function (lists) {
       this.$store.commit("setMylist", lists);
+      return this.myList;
     },
   },
 };

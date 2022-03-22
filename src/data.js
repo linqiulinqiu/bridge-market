@@ -89,7 +89,8 @@ async function loadPbxs(pbtid) {
     console.log("cointy", pbtid, cointy)
     const pbxs = {}
     const cointyArr = cointy[0].concat(cointy[1])
-    const atArr = new Set(cointyArr)
+    const atArr = Array.from(new Set(cointyArr))
+    console.log("atarr", cointy, cointyArr, atArr)
     for (let i = 0; i < atArr.length; i++) {
         const ct = parseInt(atArr[i])
         const winfo = pbwallet.wcoin_info(ct)
