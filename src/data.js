@@ -84,37 +84,32 @@ async function loadMarketinfo(id) {
     info.owner = 'market'
     return info
 }
-
 async function loadPbxs(pbtid) {
     const cointy = await getCoinTypes(pbtid)
     console.log("cointy", pbtid, cointy)
-
     const pbxs = {}
-    for (let i = 0; i < cointy.length; i++) {
-        for (let j = 0; j < cointy[i].length; j++) {
-            const ct = parseInt(cointy[i][j])
-            const winfo = pbwallet.wcoin_info(ct)
-            console.log("cointypes", ct, winfo)
-            const xAddress = await bsc.ctrs.pbpuzzlehash.pbtPuzzleHash(pbtid, ct)
-            console.log("xaddrrrrrr=", xAddress)
-            const depAddr = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[0]), winfo.prefix)
-            const withAddr = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[1]), winfo.prefix)
-            const addrInfo = {
-                depositAddr: String(depAddr),
-                withdrawAddr: String(withAddr)
-            }
-            for (let k in addrInfo) {
-                if (addrInfo[k].substr(3, 6) == "1qqqqq") {
-                    addrInfo[k] = false
-                }
-            }
-            console.log("addrinfo", addrInfo)
-            pbxs[String(ct)] = addrInfo
+    const cointyArr = cointy[0].concat(cointy[1])
+    const atArr = new Set(cointyArr)
+    for (let i = 0; i < atArr.length; i++) {
+        const ct = parseInt(atArr[i])
+        const winfo = pbwallet.wcoin_info(ct)
+        const xAddress = await bsc.ctrs.pbpuzzlehash.pbtPuzzleHash(pbtid, ct)
+        const depAddr = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[0]), winfo.prefix)
+        const withAddr = window.ChiaUtils.puzzle_hash_to_address(String(xAddress[1]), winfo.prefix)
+        const addrInfo = {
+            depositAddr: String(depAddr),
+            withdrawAddr: String(withAddr)
         }
+        for (let k in addrInfo) {
+            if (addrInfo[k].substr(3, 6) == "1qqqqq") {
+                addrInfo[k] = false
+            }
+        }
+        console.log("addrinfo", addrInfo)
+        pbxs[String(ct)] = addrInfo
     }
     return pbxs
 }
-
 async function loadlist_brief(addr) {
     const cnt = await bsc.ctrs.pbt.balanceOf(addr)
     const briefList = {}
@@ -136,7 +131,6 @@ async function loadMarketList_brief(store) {
     store.commit("setMarketlist", marketList)
     return marketList
 }
-
 async function loadUserlist_detail(store, myList) { //只读一个
     const current = store.state.current
     if (current.pbtId in myList) {
@@ -169,7 +163,6 @@ async function loadMarketlistDetail(store, marketList) {
     }
     return false
 }
-
 async function loadmylist_detail(myList, store) {
     while (true) {
         myList = await loadUserlist_detail(store, myList)
@@ -207,7 +200,6 @@ async function loadmarketlist_detail(marketList, store) {
         store.commit("setMySalelist", mySaleList)
     }
 }
-
 async function loadAlllists_brief(store) {
     await loadMyList_brief(store)
     await loadMarketList_brief(store)
