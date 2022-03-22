@@ -18,7 +18,6 @@ async function connect(commit) {
     console.log("bsc in connect", bsc)
     if (bsc) {
         commit("setBsc", bsc)
-        // keeper.startKeeper(bsc, commit, marketList, myList)
         // const cnt = await keeper.preload(bsc, commit, myList)
         // console.log('user owns', cnt.toString(), 'PBT')
         return bsc

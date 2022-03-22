@@ -67,7 +67,7 @@ export default {
       if (pbxs == undefined) {
         return false;
       } else if (cointy in pbxs && pbxs[cointy]["depositAddr"]) {
-        return this.curNFT.pbxs[this.coinMap[state.bcoin]]["depositAddr"];
+        return pbxs[cointy]["depositAddr"];
       }
       return false;
     },

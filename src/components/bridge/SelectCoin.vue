@@ -28,10 +28,10 @@ export default {
           coinTy: "XCC",
           label: "Chives",
         },
-        // {
-        //   coinTy: "XCH",
-        //   label: "Chia",
-        // },
+        {
+          coinTy: "XCH",
+          label: "Chia",
+        },
         {
           coinTy: "HDD",
           label: "HDDcoin",

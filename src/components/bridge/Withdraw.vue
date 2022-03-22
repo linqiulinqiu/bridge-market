@@ -5,26 +5,13 @@
       <span style="font-size: 10px">
         {{ $t("correct-addr") }}
       </span>
+
       <el-col class="aa">
-        <el-col v-if="this.curNFT['pbxs'] == undefined">
-          <p>{{ $t("no-waddr") }}</p>
-        </el-col>
-        <el-col v-else>
-          <span v-if="this.curNFT.pbxs[this.cointy[bcoin]]">
-            <span
-              v-if="
-                this.curNFT.pbxs[this.cointy[bcoin]].withdrawAddr.substr(
-                  3,
-                  4
-                ) == '1qqq'
-              "
-              >{{ $t("no-waddr") }}</span
-            >
-            <span class="font" v-else>
-              {{ this.curNFT.pbxs[this.cointy[bcoin]].withdrawAddr }}
-            </span>
-          </span>
-          <span v-else> {{ $t("no-waddr") }} </span>
+        <el-col>
+          <el-col v-if="this.withdrawAddr">{{ this.withdrawAddr }}</el-col>
+          <el-col v-else>
+            <p>{{ $t("no-waddr") }}</p>
+          </el-col>
         </el-col>
         <p>
           <el-button @click="bind_dialog = true" type="primary" size="small">{{
@@ -117,6 +104,16 @@ export default {
     bcoin: "bcoin",
     WBalance: "WBalance",
     current: "current",
+    withdrawAddr(state) {
+      const pbxs = this.curNFT.pbxs;
+      const cointy = this.coinMap[state.bcoin];
+      if (pbxs == undefined) {
+        return false;
+      } else if (cointy in pbxs && pbxs[cointy]["withdrawAddr"]) {
+        return pbxs[cointy]["withdrawAddr"];
+      }
+      return false;
+    },
   }),
   data() {
     return {
@@ -129,7 +126,7 @@ export default {
       tips_amount: false,
       wAddr: "",
       bind_dialog: false,
-      cointy: {
+      coinMap: {
         XCC: "3",
         HDD: "2",
         XCH: "1",
@@ -195,7 +192,7 @@ export default {
     },
     clearAddr: async function () {
       this.clear_loading = true;
-      const cointy = this.cointy[this.bcoin];
+      const cointy = this.coinMap[this.bcoin];
       const id = this.current.pbtId;
       const obj = this;
       try {
@@ -211,13 +208,13 @@ export default {
     },
     bindWaddr: async function () {
       this.bind_loading = true;
-      const cointy = this.cointy[this.bcoin];
+      const cointy = this.coinMap[this.bcoin];
       const id = this.current.pbtId;
       const addr = this.wAddr.toString();
       const obj = this;
       try {
         let rebind = false;
-        if (this.curNFT.pbxs[this.cointy[this.bcoin]].withdrawAddr != false) {
+        if (this.withdrawAddr != false) {
           rebind = true;
         }
         console.log(" bindaddr params", addr, id, cointy, rebind);

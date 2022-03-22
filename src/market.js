@@ -35,13 +35,13 @@ async function ListenToWCoin(commit) {
     let wBalance = {
         XCC: '',
         HDD: '',
-        // XCH:""
+        XCH: ""
     }
     var ctr_xcc = coinContract("XCC")
-    // var ctr_xch = coinContract("XCH")
+    var ctr_xch = coinContract("XCH")
     var ctr_hdd = coinContract("HDD")
     const decimals_xcc = await ctr_xcc.decimals()
-    // const decimals_xch = await ctr_xch.decimals()
+    const decimals_xch = await ctr_xch.decimals()
     const decimals_hdd = await ctr_hdd.decimals()
 
     async function updateXCCBalance(evt) {
@@ -50,20 +50,26 @@ async function ListenToWCoin(commit) {
         commit('setWBalance', wBalance)
     }
     async function updateHDDBalance(evt) {
-        // const xchbalance = await ctr_xch.balanceOf(bsc.addr)
         const hddbalance = await ctr_hdd.balanceOf(bsc.addr)
-        // wBalance.xch = ethers.utils.formatUnits(xchbalance, decimals_xch)
         wBalance.HDD = ethers.utils.formatUnits(hddbalance, decimals_hdd)
+        commit('setWBalance', wBalance)
+    }
+    async function updateXCHBalance(evt) {
+        const xchbalance = await ctr_xch.balanceOf(bsc.addr)
+        wBalance.XCH = ethers.utils.formatUnits(xchbalance, decimals_xch)
         commit('setWBalance', wBalance)
     }
     await updateXCCBalance()
     await updateHDDBalance()
+    await updateXCHBalance()
     ctr_hdd.on(ctr_hdd.filters.Transfer, updateHDDBalance)
     ctr_xcc.on(ctr_xcc.filters.Transfer, updateXCCBalance)
+    ctr_xcc.on(ctr_xch.filters.Transfer, updateXCHBalance)
 }
 async function connect(commit) {
     bsc = await pbwallet.connect(true)
     if (bsc) {
+        console.log(bsc)
         store.commit("setBsc", bsc)
         await ListenToWCoin(commit)
         return bsc
@@ -71,7 +77,7 @@ async function connect(commit) {
     return false
 }
 const oldTokenAddr = {
-    "XCC": "0x1B4bB84f3DCAc9899C41726838CdEC291DB52d25",
+    "XCC": "0x2077bFC955E9fBA076CA344cD72004C6c4a80a09",
     // "XCH": "0xFdF2F0995663a993A16929CeC5c39B039AB18Ef6",
     // "HDD": "0xFfB8F22732e7fC4550a8Cda5DB03cCcCF082b357",
     "HDD": "0xC8877338a418C659cD86A3dd769D66B069bC996A",
@@ -104,8 +110,7 @@ async function tokenAllowance() {
 async function tokenApprove(bcoin) {
     const ctr = pbwallet.erc20_contract(oldTokenAddr[bcoin])
     const supply = await ctr.totalSupply()
-    cons
-    const res = await ctr.approve(bsc.ctrs.tokenredeem.address, supply.mul(1000)) // 1000x total supply, almost infinite
+    const res = await ctr.approve(bsc.ctrs.tokenredeem.address, supply) // 1000x total supply, almost infinite
     return res
 }
 async function tokenRedeem(bcoin, amount) {
@@ -219,19 +224,23 @@ async function bindAddr(waddr, pbtId, cointy, rebind) {
             let res = {}
             if (rebind) {
                 const fee = await bsc.ctrs.pbpuzzlehash.rebindFee()
-                console.log('fee=', fee)
                 if (fee[0] == ethers.constants.AddressZero) { // fee in BNB
                     res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr, {
                         value: fee[1]
                     })
                 } else { // erc20 token
-                    console.log('12')
-                    const allow = await checkAllowance(fee[0], fee[1])
-                    console.log("checkallow", allow, allow.lt(fee[1]))
+                    const allow = await checkAllowance(fee[0], bsc.ctrs.pbpuzzlehash.address)
+                    console.log("checkAllowance", allow, allow.lt(fee[1]))
                     if (allow.lt(fee[1])) {
-                        const res = await approveAllow(fee[0])
-                        console.log("res", res)
+                        const res = await approveAllow(fee[0], bsc.ctrs.pbpuzzlehash.address)
+                        console.log("approveAllowance", res)
                         res.fn = 'approve'
+                        await waitEventDone(res, async function (evt) {
+                            console.log("approveAllowance evt done,evt=", evt)
+                            const bind = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr)
+                            console.log("rebind addr ", bind)
+                            return bind
+                        })
                         return res
                     }
                     res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr, {
@@ -284,18 +293,17 @@ async function setSellInfo(id, ptName, price, desc) {
     const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, ethers.utils.parseEther(price), desc)
     return res
 }
-async function checkAllowance(priceToken, price) {
-    // token, amount
-    // const priceToken = nft.market.priceToken
-    // const amount = ethers.utils.parseEther(price)
+async function checkAllowance(priceToken, spender) {
+    const ctr = pbwallet.erc20_contract(priceToken)
+    const amount = await ctr.totalSupply()
     const options = {}
     if (priceToken == ethers.constants.AddressZero) {
-        options.value = price
+        options.value = amount
     } else {
         try {
-            const ctr = pbwallet.erc20_contract(priceToken)
-            const allow = await ctr.allowance(bsc.addr, bsc.ctrs.pbmarket.address)
-            if (allow.lt(price)) {
+            const allow = await ctr.allowance(bsc.addr, spender)
+            console.log("checkAllowance", allow, allow.lt(amount))
+            if (allow.gt(amount)) {
                 return false
             }
             return allow
@@ -304,10 +312,12 @@ async function checkAllowance(priceToken, price) {
         }
     }
 }
-async function approveAllow(token) {
+async function approveAllow(token, spender) {
     const ctr = pbwallet.erc20_contract(token)
     const amount = await ctr.totalSupply()
-    const res = await ctr.approve(bsc.ctrs.pbmarket.address, amount.mul(10))
+    const total = await formatToken(token, amount)
+    console.log("totalsupply", total)
+    const res = await ctr.approve(spender, amount)
     res.fn = 'approve'
     return res
 
@@ -323,9 +333,9 @@ async function buyNFT(nft) {
         options.value = price
     } else {
         // check allowance
-        const allow = await checkAllowance(priceToken, price)
+        const allow = await checkAllowance(priceToken, bsc.ctrs.pbpuzzlehash.address)
         if (allow.lt(price)) { // not enough allowance, approve first
-            const res = await approveAllow(priceToken) // TODO: approve can use MAX_UINT256 for infinity
+            const res = await approveAllow(priceToken, bsc.ctrs.pbmarket.address) // TODO: approve can use MAX_UINT256 for infinity
             res.fn = 'approve'
             // we need to wait for approve confirmed by BSC network, so return and let user buy again
             // TODO: show "Approve" in button when allowance not enough, then show "Buy" when allowance enough
