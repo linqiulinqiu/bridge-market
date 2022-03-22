@@ -275,9 +275,33 @@ async function getDepAddr(pbtId, coin) {
     }
 }
 async function clearAddr(pbtid, cointy) {
-    const id = parseInt(pbtid)
-    const addr1 = '0x0000000000000000000000000000000000000000000000000000000000000000'
-    const res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(id, cointy, addr1)
+    const addrZero = '0x0000000000000000000000000000000000000000000000000000000000000000'
+    const fee = await bsc.ctrs.pbpuzzlehash.rebindFee()
+    let res = {}
+    if (fee[0] == ethers.constants.AddressZero) { // fee in BNB
+        res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr, {
+            value: fee[1]
+        })
+    } else { // erc20 token
+        const allow = await checkAllowance(fee[0], bsc.ctrs.pbpuzzlehash.address)
+        console.log("checkAllowance", allow, allow.lt(fee[1]))
+        if (allow.lt(fee[1])) {
+            const approveRes = await approveAllow(fee[0], bsc.ctrs.pbpuzzlehash.address)
+            console.log("approveAllowance", approveRes)
+            approveRes.fn = 'approve'
+            await waitEventDone(approveRes, async function (evt) {
+                console.log("approveAllowance evt done,evt=", evt)
+                const bind = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addrZero)
+                console.log("rebind addr ", bind)
+                return bind
+            })
+            return approveRes
+        }
+        res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addrZero, {
+            value: fee[1]
+        })
+    }
+    res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(id, cointy, addr1)
     return res
 }
 async function sendToMarket(id) {

@@ -20,14 +20,13 @@
             }}</span>
           </el-col>
           <el-col v-else>
-            <span> 暂时没有可获取的存款地址，请等待 </span>
             <el-button
               type="primary"
               class="getdeposte"
               @click="getDepositAddr"
               :loading="getDep_loading"
-              >{{ $t("dep-addr", { bcoin: bcoin }) }}</el-button
-            >
+              >{{ $t("dep-addr", { bcoin: bcoin }) }}
+            </el-button>
           </el-col>
         </el-col>
       </el-col>
