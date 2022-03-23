@@ -55,7 +55,6 @@ export default {
   props: ["approve", "curNFT", "showDialog"],
 
   computed: mapState({
-    mcoin: "mcoin",
     nftId() {
       if (this.curNFT && "id" in this.curNFT) return this.curNFT.id;
       return 0;

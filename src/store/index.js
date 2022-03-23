@@ -5,19 +5,14 @@ export default new Vuex.Store({
     state: {
         bsc: {},
         bcoin: "XCC",
-        mcoin: "PBT",
         baddr: false,
         current: {},
-        NFTinfo: false,
-        allow: -1,
         myList: {},
         marketList: {},
         mySaleList: {},
         WBalance: 0,
         redeemBalance: "0",
         redeemAllowance: "0",
-        mode: '', //bridge or market
-        bridgeVisible: false
     },
     mutations: {
         setBsc(state, bsc) {
@@ -47,23 +42,10 @@ export default new Vuex.Store({
         setBcoin(state, bsccoin) {
             state.bcoin = bsccoin
         },
-        setMcoin(state, marketcoin) {
-            state.mcoin = marketcoin
-        },
-        setMode(state, mode) {
-            state.mode = mode
-        },
-        setNFTinfo(state, boolean) {
-            state.NFTinfo = boolean
-        },
-        setAllow(state, allow) {
-            state.allow = allow
-        },
         setMylist(state, list) {
             state.myList = list
         },
         setMarketlist(state, list) {
-            // generate MySale, Market, MyBag lists
             state.marketList = list
         },
         setMySalelist(state, list) {

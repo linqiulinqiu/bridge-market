@@ -270,7 +270,7 @@ async function getDepAddr(pbtId, coin) {
         const id = ethers.BigNumber.from(pbtId)
         const coinType = parseInt(coinMap[coin])
         const res = await bsc.ctrs.pbpuzzlehash.bindDepositPuzzleHash(id, coinType)
-        console.log("obtain deposite addr", res)
+        console.log("obtain  addr", res)
         return res
     }
 }
@@ -379,9 +379,9 @@ async function afterFee(coin, mode, amount) {
     const nowfee = {}
     const decimals = await getDecimals(coin)
     amount = ethers.utils.parseUnits(amount.toString(), decimals)
-    if (mode == 'deposite') {
-        nowfee.min = ethers.utils.parseUnits(fees.depositeFee, decimals)
-        nowfee.rate = fees.depositeFeeRate
+    if (mode == 'deposit') {
+        nowfee.min = ethers.utils.parseUnits(fees.depositFee, decimals)
+        nowfee.rate = fees.depositFeeRate
     } else if (mode == 'withdraw') {
         nowfee.min = ethers.utils.parseUnits(fees.withdrawFee, decimals)
         nowfee.rate = fees.withdrawFeeRate
@@ -407,8 +407,8 @@ async function getfees(coin) {
     const depfee = await ctr.getDepositFee()
     const wdfee = await ctr.getWithdrawFee()
     const fee = {}
-    fee.depositeFee = ethers.utils.formatUnits(depfee[1], decimals)
-    fee.depositeFeeRate = depfee[0]
+    fee.depositFee = ethers.utils.formatUnits(depfee[1], decimals)
+    fee.depositFeeRate = depfee[0]
     fee.withdrawFee = ethers.utils.formatUnits(wdfee[1], decimals)
     fee.withdrawFeeRate = wdfee[0]
     console.log("getfees", fee)

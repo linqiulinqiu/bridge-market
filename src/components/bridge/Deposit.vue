@@ -1,50 +1,83 @@
 <template>
-  <el-col id="deposite" class="tabs">
-    <el-col v-if="baddr">
-      <p>
-        {{ $t("deposit") }}:<el-input
-          type="text"
-          clearable
-          maxlength="40"
-          class="amount-input"
-          suffix-icon="el-icon-edit"
-          v-model.trim="depAmount"
-        />{{ bcoin }}
-      </p>
-      <el-col>
-        {{ $t("addr") }} ：
+  <el-col id="deposit" class="tabs">
+    <el-col v-if="this.pbxs">
+      <el-col v-if="this.depositAddr">
+        <p>
+          {{ $t("deposit") }}:<el-input
+            type="text"
+            clearable
+            maxlength="40"
+            class="amount-input"
+            suffix-icon="el-icon-edit"
+            v-model.trim="depAmount"
+          />{{ bcoin }}
+        </p>
+        <span>{{ $t("addr") }} ：</span>
         <el-col class="aa">
-          <el-col v-if="this.depositAddr">
-            <span class="font">{{
-              this.curNFT.pbxs[this.coinMap[bcoin]].depositAddr
-            }}</span>
-          </el-col>
-          <el-col v-else>
-            <el-button
+          <span class="font">
+            {{ this.depositAddr }}
+          </span>
+        </el-col>
+        <el-col>
+          <p>
+            {{ $t("get")
+            }}<span class="span"
+              ><span v-if="this.depAmount" class="font">
+                {{ getAmount }}</span
+              ></span
+            >
+            w{{ bcoin }}，{{ $t("inbsc") }}。
+          </p>
+          <p v-if="this.tips_amount">
+            <i v-if="this.depAmount.length > 0">{{ this.tips_amount }}</i>
+          </p>
+        </el-col>
+      </el-col>
+      <el-col v-else>
+        <el-col v-if="this.bAbles[bcoin]">
+          <el-button
+            type="primary"
+            class="getdeposte"
+            @click="getDepositAddr"
+            :loading="getDep_loading"
+            >{{ $t("dep-addr", { bcoin: bcoin }) }}
+          </el-button>
+        </el-col>
+        <el-col v-else>
+          <p>{{ $t("getaddr") }}</p>
+          <el-col>
+            <el-link
+              class="a-link"
+              icon="el-icon-chat-line-square"
               type="primary"
-              class="getdeposte"
-              @click="getDepositAddr"
-              :loading="getDep_loading"
-              >{{ $t("dep-addr", { bcoin: bcoin }) }}
-            </el-button>
+              href="https://discord.gg/xHC9fBfeVW"
+              target="_blank"
+            >
+              discord
+            </el-link>
+            <el-link
+              class="a-link"
+              icon="el-icon-chat-line-square"
+              type="primary"
+              href="https://t.me/PlotBridge"
+              target="_blank"
+            >
+              telegram
+            </el-link>
+            <el-link
+              class="a-link"
+              icon="el-icon-chat-line-square"
+              type="primary"
+              href="https://twitter.com/plot_bridge"
+              target="_blank"
+            >
+              twitter
+            </el-link>
           </el-col>
         </el-col>
       </el-col>
-      <el-col>
-        <p>
-          {{ $t("get")
-          }}<span class="span"
-            ><span v-if="this.depAmount" class="font">
-              {{ getAmount }}</span
-            ></span
-          >
-          w{{ bcoin }}，{{ $t("inbsc") }}。
-        </p>
-        <p v-if="this.tips_amount">
-          <i v-if="this.depAmount.length > 0">{{ this.tips_amount }}</i>
-        </p>
-      </el-col>
     </el-col>
+    <el-col v-else>加载中。。。目前请切换NFT查看 </el-col>
   </el-col>
 </template>
 <script>
@@ -60,6 +93,16 @@ export default {
     baddr: "baddr",
     bcoin: "bcoin",
     current: "current",
+    pbxs() {
+      let pbx = "";
+      if (Object.keys(this.curNFT).includes("pbxs")) {
+        pbx = true;
+      } else {
+        pbx = false;
+      }
+      console.log("pbxs", pbx, this.curNFT);
+      return pbx;
+    },
     depositAddr(state) {
       const pbxs = this.curNFT.pbxs;
       const cointy = this.coinMap[state.bcoin];
@@ -73,6 +116,11 @@ export default {
   }),
   data() {
     return {
+      bAbles: {
+        XCC: true,
+        XCH: true,
+        HDD: true,
+      },
       depAmount: "",
       getAmount: "",
       tips_amount: false,
@@ -86,8 +134,23 @@ export default {
   },
   watch: {
     curNFT: function () {
-      console.log("this.curNFT", this.curNFT);
+      this.pbxs;
+      this.depositAddr;
+      console.log("this.curNFT in dep=", this.curNFT);
     },
+    deep: true,
+    pbxs(newV) {
+      console.log("new pbxs=", newV);
+      return newV;
+    },
+    deep: true,
+
+    depositAddr: function (newV) {
+      console.log("new dep=", newV);
+      return newV;
+    },
+    deep: true,
+
     depAmount: async function () {
       var depamount = this.depAmount;
       if (!depamount || isNaN(depamount) || depamount == "") {
@@ -95,11 +158,7 @@ export default {
         this.tips_amount = this.$t("correct-amount");
         return false;
       }
-      const after_fee = await market.afterFee(
-        this.bcoin,
-        "deposite",
-        depamount
-      );
+      const after_fee = await market.afterFee(this.bcoin, "deposit", depamount);
       console.log("aftrerfee", after_fee);
       if (!after_fee) {
         this.getAmount = "0";
@@ -124,6 +183,7 @@ export default {
         if (res == false) {
           console.log("存款地址没有了");
           this.$message(this.$t("getaddr"));
+          this.bAbles[this.bcoin] = false;
         }
         const obj = this;
         await market.waitEventDone(res, async function (evt) {
@@ -137,3 +197,8 @@ export default {
   },
 };
 </script>
+<style>
+.a-link {
+  margin: 25px;
+}
+</style>
