@@ -3,7 +3,7 @@
     <el-container>
       <el-aside width="350px">
         <keep-alive v-if="Object.keys(myList).length > 0">
-          <mynft :myList="myList" :pageSize="3"
+          <mynft :myList="myList" :pageSize="3" :curNFT="this.curNFT"
         /></keep-alive>
       </el-aside>
       <el-main><BridgeMain :curNFT="curNFT" /></el-main>
@@ -50,9 +50,10 @@ export default {
     "$store.state.myList"(lists) {
       this.$store.commit("setMylist", lists);
       this.curNFT;
-      console.log("this.curNFT in bridge", this.curNFT);
-      return this.myList;
+      console.log("this.curNFT in bridge", this.curNFT,lists);
+      return this.$store.state.myList;
     },
+    deep: true,
   },
 };
 </script>

@@ -52,6 +52,8 @@ export default {
     InfoMarket,
     InfoMySale,
   },
+  props: ["approve", "curNFT", "showDialog"],
+
   computed: mapState({
     mcoin: "mcoin",
     nftId() {
@@ -80,11 +82,9 @@ export default {
     },
     deep: true,
   },
-  props: ["approve", "curNFT", "showDialog"],
   data() {
     return {
       visible: false,
-      
     };
   },
   methods: {

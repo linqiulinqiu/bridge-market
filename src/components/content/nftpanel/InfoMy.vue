@@ -48,7 +48,6 @@
 </template>
 <script>
 import market from "../../../market";
-
 export default {
   name: "InfoMy",
   props: ["curNFT", "show"],
@@ -65,8 +64,7 @@ export default {
   methods: {
     send: async function () {
       this.send_loading = true;
-      const curNFT = this.curNFT;
-      const id = curNFT.id;
+      const id = this.curNFT.id;
       try {
         const tx = await market.sendToMarket(id);
         const obj = this;
@@ -86,8 +84,7 @@ export default {
     },
     sellNFT: async function () {
       this.set_loading = true;
-      const curNFT = this.curNFT;
-      const id = curNFT.id;
+      const id = this.curNFT.id;
       if (this.nftPrice === 0 || this.nftPrice == null) {
         this.$message("price is empty");
         this.set_loading = false;

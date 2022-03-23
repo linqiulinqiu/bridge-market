@@ -48,24 +48,12 @@ export default {
   components: {
     NFTinfo,
   },
-  props: ["myList", "pageSize"],
+  props: ["myList", "pageSize", "curNFT"],
   computed: mapState({
     baddr: "baddr",
     mode: "mode",
     bcoin: "bcoin",
     current: "current",
-    // curNFT(state) {
-    //   if (state.current.pbtId) {
-    //     const pbtId = String(state.current.pbtId);
-    //     if (pbtId in this.myList) {
-    //       return this.myList[pbtId];
-    //     }
-    //     if (pbtId in state.mySaleList) {
-    //       return state.mySaleList[pbtId];
-    //     }
-    //   }
-    //   return false;
-    // },
     nftlist(state) {
       let pageSize = this.pageSize;
       const start = this.pageNum * pageSize - pageSize;
@@ -80,8 +68,7 @@ export default {
     myList: function (list) {
       this.$store.commit("setMylist", list);
       this.nftlist;
-      // this.curNFT;
-      console.log("watch mynft", list, this.nftlist);
+      console.log("watch mynft", list, this.nftlist, this.curNFT);
     },
     deep: true,
   },
@@ -89,7 +76,6 @@ export default {
     return {
       pageNum: 1,
       nftinfo_show: false,
-      isAdd: 0,
       coinMap: {
         3: "XCC",
         2: "HDD",
@@ -100,14 +86,13 @@ export default {
   methods: {
     openNFT: async function (id) {
       this.$store.commit("setCurrentPbtId", id);
-      // this.$refs.mainNftInfo.show();
       if (this.current.pbtId) {
         const mo = location.hash.substr(2);
-        console.log("mo", mo);
         if (mo == "market") {
           this.$refs.mainNftInfo.show();
         }
       }
+      console.log("setCurrentID", this.curNFT);
     },
     handleCurrentChange(newPage) {
       console.log("当前页:", newPage);
@@ -115,22 +100,15 @@ export default {
     },
   },
   watch: {
-    curNFT() {
-      const loading = this.$loading({
-        lock: true,
-        spinner: "el-icon-loading",
-        background: "rgba(200,230,200,0.6)",
-      });
-
-      if (this.curNFT) {
-        const mo = location.hash.substr(2);
-        if (mo == "market") {
-          this.isAdd = name;
-        }
-      }
-      loading.close();
-    },
-    deep: true,
+    // curNFT() {
+    //   const loading = this.$loading({
+    //     lock: true,
+    //     spinner: "el-icon-loading",
+    //     background: "rgba(200,230,200,0.6)",
+    //   });
+    //   loading.close();
+    // },
+    // deep: true,
   },
 };
 </script>

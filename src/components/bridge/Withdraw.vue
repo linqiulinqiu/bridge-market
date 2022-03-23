@@ -27,7 +27,6 @@
         </el-col>
         <el-col>
           <el-col style="height: 45px; margin-top: 10px">
-            <!-- <p> -->
             {{ $t("burn") }}
             <el-input
               v-model.trim="wAmount"
@@ -47,7 +46,6 @@
               @click="withdraw"
               >{{ $t("withdraw") }}</el-button
             >
-            <!-- </p> -->
           </el-col>
           <el-col style="height: 70px">
             <p>

@@ -40,8 +40,8 @@ import market from "../../../market";
 
 export default {
   name: "InfoMySale",
-  props: ["curNFT", "show"],
-  computed: mapState({ bcoin: "bcoin" }),
+  props: ["show", "curNFT"],
+  computed: mapState({ bcoin: "bcoin", current: "current" }),
   data() {
     return {
       nftPrice: 0,
@@ -54,8 +54,7 @@ export default {
   methods: {
     sellNFT: async function () {
       this.change_loading = true;
-      const curNFT = this.curNFT;
-      const id = curNFT.id;
+      const id = this.curNFT.id;
       if (this.nftPrice === 0 || this.nftPrice == null) {
         this.$message("price is empty");
         this.change_loading = false;
