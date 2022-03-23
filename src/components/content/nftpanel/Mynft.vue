@@ -54,18 +54,18 @@ export default {
     mode: "mode",
     bcoin: "bcoin",
     current: "current",
-    curNFT(state) {
-      if (state.current.pbtId) {
-        const pbtId = String(state.current.pbtId);
-        if (pbtId in this.myList) {
-          return this.myList[pbtId];
-        }
-        if (pbtId in state.mySaleList) {
-          return state.mySaleList[pbtId];
-        }
-      }
-      return false;
-    },
+    // curNFT(state) {
+    //   if (state.current.pbtId) {
+    //     const pbtId = String(state.current.pbtId);
+    //     if (pbtId in this.myList) {
+    //       return this.myList[pbtId];
+    //     }
+    //     if (pbtId in state.mySaleList) {
+    //       return state.mySaleList[pbtId];
+    //     }
+    //   }
+    //   return false;
+    // },
     nftlist(state) {
       let pageSize = this.pageSize;
       const start = this.pageNum * pageSize - pageSize;
@@ -80,13 +80,13 @@ export default {
     myList: function (list) {
       this.$store.commit("setMylist", list);
       this.nftlist;
-      this.curNFT;
-      console.log("watch mynft", this.curNFT, this.listPage);
+      // this.curNFT;
+      console.log("watch mynft", list, this.nftlist);
     },
+    deep: true,
   },
   data() {
     return {
-      listPage: {},
       pageNum: 1,
       nftinfo_show: false,
       isAdd: 0,
@@ -101,7 +101,7 @@ export default {
     openNFT: async function (id) {
       this.$store.commit("setCurrentPbtId", id);
       // this.$refs.mainNftInfo.show();
-      if (this.curNFT) {
+      if (this.current.pbtId) {
         const mo = location.hash.substr(2);
         console.log("mo", mo);
         if (mo == "market") {
@@ -179,8 +179,8 @@ i {
   /* float: right; */
   /* margin: 0px 20px; */
 }
-.btn-bar{
-  margin:20px 0;
+.btn-bar {
+  margin: 20px 0;
   padding: 0 50px;
 }
 .addclass {

@@ -27,20 +27,27 @@
         </el-col>
         <el-col>
           <el-col style="height: 45px; margin-top: 10px">
-            <p>
-              {{ $t("burn") }}
-              <el-input
-                v-model.trim="wAmount"
-                class="amount-input"
-                clearable
-                maxlength="40"
-                suffix-icon="el-icon-edit"
-              ></el-input>
-              <el-button type="primary" @click="wAmount = WBalance[bcoin]">{{
-                $t("all")
-              }}</el-button>
-              W{{ bcoin }}，
-            </p>
+            <!-- <p> -->
+            {{ $t("burn") }}
+            <el-input
+              v-model.trim="wAmount"
+              class="amount-input"
+              clearable
+              maxlength="40"
+              suffix-icon="el-icon-edit"
+            ></el-input>
+            <el-button type="primary" @click="wAmount = WBalance[bcoin]">{{
+              $t("all")
+            }}</el-button>
+            W{{ bcoin }}，
+            <el-button
+              type="primary"
+              :loading="w_loading"
+              :disabled="w_disabled"
+              @click="withdraw"
+              >{{ $t("withdraw") }}</el-button
+            >
+            <!-- </p> -->
           </el-col>
           <el-col style="height: 70px">
             <p>

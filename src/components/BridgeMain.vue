@@ -1,7 +1,10 @@
 <template>
   <el-row id="bridge-main" type="flex" justify="center">
     <el-col class="fees" :span="14" v-if="baddr">
-      <el-col v-if="Object.keys(myList).length == 0" class="mainpanel">
+      <el-col
+        v-if="Object.keys(this.$store.state.myList).length == 0"
+        class="mainpanel"
+      >
         <el-col style="color: #fff">
           <h1>Bridge Guide</h1>
           <el-col>
@@ -57,22 +60,22 @@ export default {
     Redeem,
     BridgeFee,
   },
-  props: ["myList"],
+  props: ["curNFT"],
   computed: mapState({
     WBalance: "WBalance",
     current: "current",
     bcoin: "bcoin",
     baddr: "baddr",
-    curNFT(state) {
-      if (state.current.pbtId) {
-        const pbtId = state.current.pbtId;
-        if (pbtId in state.myList) {
-          console.log("this.current NFT", state.myList[pbtId]);
-          return state.myList[pbtId];
-        }
-      }
-      return false;
-    },
+    // curNFT(state) {
+    //   if (state.current.pbtId) {
+    //     const pbtId = state.current.pbtId;
+    //     if (pbtId in state.myList) {
+    //       console.log("this.current NFT", state.myList[pbtId]);
+    //       return state.myList[pbtId];
+    //     }
+    //   }
+    //   return false;
+    // },
   }),
   watch: {
     bcoin: function (newcoin) {
@@ -80,17 +83,17 @@ export default {
       this.$store.commit("setBcoin", newcoin);
     },
     deep: true,
-    curNFT() {
-      if (this.current.pbtId) {
-        const pbtId = this.current.pbtId;
-        if (pbtId in this.myList) {
-          console.log("this.current NFT", this.myList[pbtId]);
-          return this.myList[pbtId];
-        }
-      }
-      return false;
-    },
-    deep: true,
+    // curNFT() {
+    //   if (this.current.pbtId) {
+    //     const pbtId = this.current.pbtId;
+    //     if (pbtId in this.myList) {
+    //       console.log("this.current NFT", this.myList[pbtId]);
+    //       return this.myList[pbtId];
+    //     }
+    //   }
+    //   return false;
+    // },
+    // deep: true,
   },
   data() {
     return {
