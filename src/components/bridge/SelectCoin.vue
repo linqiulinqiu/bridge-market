@@ -3,47 +3,39 @@
     <p>{{ $t("select-coin") }}</p>
     <ul>
       <li
-        v-for="(item, name) in this.coinMap"
-        :key="name"
-        @click="changeCoin(item, name)"
+        v-for="item in this.coinMap"
+        :key="item.symbol"
+        @click="changeCoin(item)"
         class="coinTypes"
-        :class="{ isselect: name == addclass }"
+        :class="{ isselect: item.symbol == addclass }"
       >
-        {{ item.label }}
+        {{ item.name }}
       </li>
     </ul>
   </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
+import pbwallet from "pbwallet";
 export default {
   computed: mapState({
     bcoin: "bcoin",
   }),
   data() {
+    const coinMap = [];
+    for (let i = 1; i <= 3; i++) {
+      coinMap.push(pbwallet.wcoin_info(i));
+    }
     return {
-      addclass: 0,
-      coinMap: [
-        {
-          coinTy: "XCC",
-          label: "Chives",
-        },
-        {
-          coinTy: "XCH",
-          label: "Chia",
-        },
-        {
-          coinTy: "HDD",
-          label: "HDDcoin",
-        },
-      ],
+      addclass: coinMap[0].symbol,
+      coinMap: coinMap,
     };
   },
   methods: {
-    changeCoin: function (item, name) {
-      this.addclass = name;
-      const coin = item.coinTy;
-      this.$store.commit("setBcoin", coin);
+    changeCoin: function (item) {
+      this.addclass = item.symbol;
+      this.$store.commit("setCurrentCoinType", item.index);
+      this.$store.commit("setBcoin", item.symbol);
     },
   },
 };

@@ -67,13 +67,6 @@ export default {
     bcoin: "bcoin",
     baddr: "baddr",
   }),
-  watch: {
-    bcoin: function (newcoin) {
-      console.log("coin", newcoin, this.bcoin);
-      this.$store.commit("setBcoin", newcoin);
-    },
-    deep: true,
-  },
   data() {
     return {
       balance: "",

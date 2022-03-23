@@ -3,6 +3,13 @@
     <el-col v-if="this.pbxs">
       <el-col v-if="this.withdrawAddr">
         <el-col>
+          <p v-if="withdrawBinded > 1">
+            您已绑定{{
+              withdrawBinded
+            }}份取款地址，取款操作可能发送到任一个地址，请注意查收。或解除{{
+              withdrawBinded - 1
+            }}个绑定地址
+          </p>
           <p>
             {{ $t("w-addr", { bcoin: bcoin }) }} : <br />
             <span style="font-size: 10px">
@@ -13,20 +20,13 @@
             <span class="font">
               {{ this.withdrawAddr }}
             </span>
-            <p>
-              <el-button
-                @click="bind_dialog = true"
-                type="primary"
-                size="small"
-                >{{ $t("change-waddr") }}</el-button
-              >
-              <el-button
-                @click="clearAddr"
-                size="small"
-                :loading="clear_loading"
-                >{{ $t("clear-waddr") }}</el-button
-              >
-            </p>
+            <el-button
+              style="float: right"
+              icon="el-icon-edit"
+              type="primary"
+              size="mini"
+              @click="bind_dialog = true"
+            ></el-button>
           </el-col>
           <el-col>
             <el-col style="height: 45px; margin-top: 10px">
@@ -38,17 +38,20 @@
                 maxlength="40"
                 suffix-icon="el-icon-edit"
               ></el-input>
-              <el-button type="primary" @click="wAmount = WBalance[bcoin]">{{
-                $t("all")
-              }}</el-button>
+              <el-button
+                type="primary"
+                size="small"
+                @click="wAmount = WBalance[bcoin]"
+                >{{ $t("all") }}
+              </el-button>
               W{{ bcoin }}，
               <el-button
                 type="primary"
                 :loading="w_loading"
                 :disabled="w_disabled"
                 @click="withdraw"
-                >{{ $t("withdraw") }}</el-button
-              >
+                >{{ $t("withdraw") }}
+              </el-button>
             </el-col>
             <el-col style="height: 70px">
               <p>
@@ -65,26 +68,31 @@
               </p>
             </el-col>
           </el-col>
-          <el-col>
-            <el-col style="margin-top: 20px">
-              <p>
-                <span class="minifont">
-                  {{ $t("tips-waddr") }}
-                </span>
-              </p>
-            </el-col>
-          </el-col>
         </el-col>
       </el-col>
       <el-col v-else>
-        <p>
-          在下面输入你的取款地址：
-          <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
-        </p>
-        <el-input type="text" v-model.trim="wAddr"></el-input>
-        <el-button type="primary" @click="bindWaddr" :loading="bind_loading">{{
-          $t("bind-waddr")
-        }}</el-button>
+        <el-col v-if="this.withdrawBinded > 0">
+          <el-col style="margin-top: 20px">
+            <p>
+              <span class="minifont">
+                {{ $t("tips-waddr") }}
+              </span>
+            </p>
+          </el-col>
+        </el-col>
+        <el-col v-else>
+          <p>
+            在下面输入你的取款地址：
+            <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
+          </p>
+          <el-input type="text" v-model.trim="wAddr"></el-input>
+          <el-button
+            type="primary"
+            @click="bindWaddr"
+            :loading="bind_loading"
+            >{{ $t("bind-waddr") }}</el-button
+          >
+        </el-col>
       </el-col>
     </el-col>
     <el-col v-else> 数据加载中。。。 </el-col>
@@ -94,12 +102,23 @@
         <p>
           在下面输入你的取款地址：
           <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
+          <el-button
+            style="float: right"
+            icon="el-icon-delete"
+            @click="clearAddr"
+            size="small"
+            :loading="clear_loading"
+          >
+            {{ $t("clear-waddr") }}
+          </el-button>
         </p>
-        <el-input type="text" v-model.trim="wAddr"></el-input>
-        <el-button type="primary" @click="bindWaddr" :loading="bind_loading">{{
-          $t("bind-waddr")
-        }}</el-button>
-        <el-button @click="bind_dialog = false">{{ $t("cancel") }}</el-button>
+        <el-col class="bindWaddr">
+          <el-input type="text" v-model.trim="wAddr"></el-input>
+          <el-button type="primary" @click="bindWaddr" :loading="bind_loading">
+            {{ $t("bind-waddr") }}
+          </el-button>
+          <el-button @click="bind_dialog = false">{{ $t("cancel") }}</el-button>
+        </el-col>
       </el-card>
     </el-dialog>
   </el-col>
@@ -134,6 +153,67 @@ export default {
         return pbxs[cointy]["withdrawAddr"];
       }
       return false;
+    },
+    withdrawBinded(state) {
+      let pbts = state.myList;
+      const coinType = state.current.coinType;
+      let binded = 0;
+      for (let i in pbts) {
+        const item = pbts[i];
+        if ("pbxs" in item) {
+          if (item.pbxs && coinType in item.pbxs) {
+            if ("withdrawAddr" in item.pbxs[coinType]) {
+              if (item.pbxs[coinType].withdrawAddr) binded++;
+            }
+          }
+        }
+      }
+      return binded;
+    },
+    warning_waddr(state) {
+      let waddr_arr = {
+        XCC: [],
+        XCH: [],
+        HDD: [],
+      };
+      let warning_addr = {
+        XCH: false,
+        XCC: false,
+        HDD: false,
+      };
+      for (let i in state.myList) {
+        const item = state.myList[i];
+        if (Object.keys(item).includes("pbxs")) {
+          const pbxs = item.pbxs;
+          for (let j in pbxs) {
+            if (pbxs[j].withdrawAddr) {
+              for (let item in waddr_arr) {
+                let newArr = [];
+                const prefix = item.toLowerCase();
+                const arrpre = pbxs[j].withdrawAddr.substr(0, 3);
+                if (prefix == arrpre) {
+                  newArr.push(pbxs[j].withdrawAddr);
+                  waddr_arr[item] = newArr;
+                }
+              }
+            }
+          }
+        }
+      }
+      console.log("waddr_arr for mylist=", waddr_arr);
+      for (let i in warning_addr) {
+        for (let k in waddr_arr) {
+          waddr_arr[k] = Array.from(new Set(waddr_arr[k]));
+          if (i == k) {
+            if (waddr_arr[k].length <= 1) {
+              warning_addr[i] = false;
+            } else {
+              warning_addr[i] = true;
+            }
+          }
+        }
+      }
+      return warning_addr;
     },
   }),
   data() {
@@ -257,3 +337,12 @@ export default {
   },
 };
 </script>
+<style>
+.bindWaddr {
+  margin: 20px 0px;
+  text-align: center;
+}
+.bindWaddr button {
+  margin: 20px 0px 0px 0px;
+}
+</style>

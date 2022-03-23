@@ -1,6 +1,6 @@
 <template>
   <el-col id="deposit" class="tabs">
-    <el-col v-if="this.pbxs">
+    <el-col v-if="this.hasPbx">
       <el-col v-if="this.depositAddr">
         <p>
           {{ $t("deposit") }}:<el-input
@@ -93,16 +93,6 @@ export default {
     baddr: "baddr",
     bcoin: "bcoin",
     current: "current",
-    pbxs() {
-      let pbx = "";
-      if (Object.keys(this.curNFT).includes("pbxs")) {
-        pbx = true;
-      } else {
-        pbx = false;
-      }
-      console.log("pbxs", pbx, this.curNFT);
-      return pbx;
-    },
     depositAddr(state) {
       const pbxs = this.curNFT.pbxs;
       const cointy = this.coinMap[state.bcoin];
@@ -130,21 +120,14 @@ export default {
         XCH: "1",
         HDD: "2",
       },
+      hasPbx: false,
     };
   },
   watch: {
-    curNFT: function () {
-      this.pbxs;
-      this.depositAddr;
-      console.log("this.curNFT in dep=", this.curNFT);
+    curNFT: function (nft, old) {
+      this.hasPbx = nft && "pbxs" in nft;
+      console.log("this.curNFT in dep=", nft);
     },
-    deep: true,
-    pbxs(newV) {
-      console.log("new pbxs=", newV);
-      return newV;
-    },
-    deep: true,
-
     depositAddr: function (newV) {
       console.log("new dep=", newV);
       return newV;

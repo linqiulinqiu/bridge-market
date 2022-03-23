@@ -37,24 +37,17 @@ export default {
       if (state.current.pbtId) {
         const pbtId = String(state.current.pbtId);
         if (pbtId in state.myList) {
-          return state.myList[pbtId];
+          console.log("Bridge-curNFT", JSON.stringify(state.myList[pbtId]));
+          return Object.assign({},state.myList[pbtId]);
         }
         if (pbtId in state.mySaleList) {
-          return state.mySaleList[pbtId];
+          return Object.assign({},state.mySaleList[pbtId]);
         }
       }
+      console.log("Bridge-curNFT:nothing");
       return false;
     },
   }),
-  watch: {
-    "$store.state.myList"(lists) {
-      this.$store.commit("setMylist", lists);
-      this.curNFT;
-      console.log("this.curNFT in bridge", this.curNFT,lists);
-      return this.$store.state.myList;
-    },
-    deep: true,
-  },
 };
 </script>
 

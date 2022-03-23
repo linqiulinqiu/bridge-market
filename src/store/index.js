@@ -34,6 +34,7 @@ export default new Vuex.Store({
             }
         },
         setCurrentCoinType(state, coinType) {
+            console.log('setCurrentCoinType', coinType)
             if (coinType != state.current.coinType) {
                 state.current.coinType = coinType
                 state.current = Object.assign({}, state.current);
@@ -43,7 +44,8 @@ export default new Vuex.Store({
             state.bcoin = bsccoin
         },
         setMylist(state, list) {
-            state.myList = list
+            console.log('set-my-list', list)
+            state.myList = Object.assign({}, list)
         },
         setMarketlist(state, list) {
             state.marketList = list

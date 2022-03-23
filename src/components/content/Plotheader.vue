@@ -69,15 +69,6 @@ export default {
     mode: "mode",
   }),
   watch: {
-    myList: function (new_list) {
-      this.$store.commit("setMylist", new_list);
-    },
-    deep: true,
-
-    marketList: function (newLists) {
-      this.$store.commit("setMarketlist", newLists);
-    },
-    deep: true,
     lang: function () {
       setup(this.lang);
     },
