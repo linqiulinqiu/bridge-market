@@ -10,14 +10,8 @@ var bsc = {}
 const coinDecimals = {}
 const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
-    'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
 }
 
-const coinMap = {
-    "XCC": '3',
-    "XCH": '1',
-    "HDD": "2"
-}
 //根据币种选择decimals
 async function getDecimals(coin) {
     if (coin in coinDecimals) {
@@ -256,20 +250,18 @@ async function bindAddr(waddr, pbtId, cointy, rebind) {
         console.log("bindaddr errrrr", e.message)
     }
 }
-async function getBindables(coin) {
-    const coinTy = coinMap[coin]
-    const ables = await bsc.ctrs.pbpuzzlehash.bindables(coinTy)
+async function getBindables(cointy) {
+    const ables = await bsc.ctrs.pbpuzzlehash.bindables(cointy)
     return ables
 }
-async function getDepAddr(pbtId, coin) {
-    const ables = await getBindables(coin)
+async function getDepAddr(pbtId, cointy) {
+    const ables = await getBindables(cointy)
     if (parseInt(ables) == 0) {
         console.log("ables", ables)
         return false
     } else {
         const id = ethers.BigNumber.from(pbtId)
-        const coinType = parseInt(coinMap[coin])
-        const res = await bsc.ctrs.pbpuzzlehash.bindDepositPuzzleHash(id, coinType)
+        const res = await bsc.ctrs.pbpuzzlehash.bindDepositPuzzleHash(id, cointy)
         console.log("obtain  addr", res)
         return res
     }

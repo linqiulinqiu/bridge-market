@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Mynft from "../components/content/nftpanel/Mynft.vue";
+import Mynft from "../components/content/Mynft.vue";
 import BridgeMain from "../components/BridgeMain.vue";
 import SelectCoin from "../components/bridge/SelectCoin.vue";
 import { mapState } from "vuex";

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Mynft from "../components/content/nftpanel/Mynft.vue";
+import Mynft from "../components/content/Mynft.vue";
 import { mapState } from "vuex";
 import MarketMain from "../components/MarketMain.vue";
 export default {

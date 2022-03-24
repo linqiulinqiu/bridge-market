@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-col class="main" v-if="baddr">
-      <el-col>
+      <el-col v-if="!current.pbtId">
         <h2>
           PBT Market
           <el-button
@@ -19,6 +19,10 @@
         <el-col class="cointy">
           <MySale :mySaleList="this.mySaleList" :pageSize="this.pageSize" />
         </el-col>
+      </el-col>
+      <el-col v-else>
+        <el-button @click="clearCurrentId">Back</el-button>
+        <el-col><NFTinfo :curNFT="curNFT" /></el-col>
       </el-col>
     </el-col>
     <el-col v-else>{{ $t("connect") }}</el-col>
@@ -46,8 +50,23 @@ export default {
   },
   props: ["marketList", "mySaleList", "pageSize"],
   computed: mapState({
-    coin: "coin",
     baddr: "baddr",
+    current: "current",
+    curNFT(state) {
+      if (state.current.pbtId) {
+        const pbtId = String(state.current.pbtId);
+        if (pbtId in state.myList) {
+          return Object.assign({}, state.myList[pbtId]);
+        }
+        if (pbtId in state.mySaleList) {
+          return Object.assign({}, state.mySaleList[pbtId]);
+        }
+        if (pbtId in state.marketList) {
+          return Object.assign({}, state.marketList[pbtId]);
+        }
+      }
+      return false;
+    },
   }),
   data() {
     return {
@@ -68,6 +87,9 @@ export default {
       console.log("mint number", number);
       this.mintNumber = number;
       this.mintVisible = true;
+    },
+    clearCurrentId: function () {
+      this.$store.commit("setCurrentPbtId", false);
     },
   },
 };

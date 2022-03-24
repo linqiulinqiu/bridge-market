@@ -8,11 +8,13 @@ import '../theme/index.css'
 import "./assets/main.css"
 import i18n from './locales'
 import VueLazyLoad from 'vue-lazyload'
+import VueClipboard from "vue-clipboard2"
 
-Vue.use(VueLazyLoad,{
-  preload:1,
-  loading:require('./assets/image/loading.png'),
-  error:require('./assets/image/loading.png')
+Vue.use(VueClipboard)
+Vue.use(VueLazyLoad, {
+  preload: 1,
+  loading: require('./assets/image/loading.png'),
+  error: require('./assets/image/loading.png')
 })
 
 Vue.use(ElementUI)

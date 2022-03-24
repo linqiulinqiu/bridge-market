@@ -17,6 +17,15 @@
           <span class="font">
             {{ this.depositAddr }}
           </span>
+          <el-tooltip content="复制到剪切板" placement="right">
+            <el-button
+              size="mini"
+              icon="el-icon-document-copy"
+              v-clipboard:copy="this.depositAddr"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError"
+            ></el-button>
+          </el-tooltip>
         </el-col>
         <el-col>
           <p>
@@ -77,7 +86,9 @@
         </el-col>
       </el-col>
     </el-col>
-    <el-col v-else>加载中。。。目前请切换NFT查看 </el-col>
+    <el-col v-else>
+      <el-skeleton :rows="5" animated></el-skeleton>
+    </el-col>
   </el-col>
 </template>
 <script>
@@ -95,7 +106,7 @@ export default {
     current: "current",
     depositAddr(state) {
       const pbxs = this.curNFT.pbxs;
-      const cointy = this.coinMap[state.bcoin];
+      const cointy = this.current.coinType;
       if (pbxs == undefined) {
         return false;
       } else if (cointy in pbxs && pbxs[cointy]["depositAddr"]) {
@@ -115,11 +126,6 @@ export default {
       getAmount: "",
       tips_amount: false,
       getDep_loading: false,
-      coinMap: {
-        XCC: "3",
-        XCH: "1",
-        HDD: "2",
-      },
       hasPbx: false,
     };
   },
@@ -158,11 +164,18 @@ export default {
     },
   },
   methods: {
+    onCopy: function (e) {
+      this.$message.success("地址已经复制到剪切板！");
+    },
+    onError: function (e) {
+      this.$message.error("抱歉，复制地址失败。");
+    },
     getDepositAddr: async function () {
       this.getDep_loading = true;
       const id = this.current.pbtId;
+      const cointy = this.current.coinType;
       try {
-        const res = await market.getDepAddr(id, this.bcoin);
+        const res = await market.getDepAddr(id, cointy);
         if (res == false) {
           console.log("存款地址没有了");
           this.$message(this.$t("getaddr"));

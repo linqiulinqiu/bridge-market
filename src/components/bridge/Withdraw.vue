@@ -85,7 +85,12 @@
             在下面输入你的取款地址：
             <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
           </p>
-          <el-input type="text" v-model.trim="wAddr"></el-input>
+          <el-input
+            type="text"
+            v-model.trim="wAddr"
+            clearable
+            suffix-icon="el-icon-edit"
+          ></el-input>
           <el-button
             type="primary"
             @click="bindWaddr"
@@ -113,7 +118,12 @@
           </el-button>
         </p>
         <el-col class="bindWaddr">
-          <el-input type="text" v-model.trim="wAddr"></el-input>
+          <el-input
+            type="text"
+            v-model.trim="wAddr"
+            clearable
+            suffix-icon="el-icon-edit"
+          ></el-input>
           <el-button type="primary" @click="bindWaddr" :loading="bind_loading">
             {{ $t("bind-waddr") }}
           </el-button>
@@ -146,7 +156,7 @@ export default {
     },
     withdrawAddr(state) {
       const pbxs = this.curNFT.pbxs;
-      const cointy = this.coinMap[state.bcoin];
+      const cointy = this.current.coinType;
       if (pbxs == undefined) {
         return false;
       } else if (cointy in pbxs && pbxs[cointy]["withdrawAddr"]) {
@@ -227,11 +237,6 @@ export default {
       tips_amount: false,
       wAddr: "",
       bind_dialog: false,
-      coinMap: {
-        XCC: "3",
-        HDD: "2",
-        XCH: "1",
-      },
     };
   },
   watch: {
@@ -293,7 +298,7 @@ export default {
     },
     clearAddr: async function () {
       this.clear_loading = true;
-      const cointy = this.coinMap[this.bcoin];
+      const cointy = this.current.coinType;
       const id = this.current.pbtId;
       console.log("pbtd", id);
       const obj = this;
@@ -310,7 +315,7 @@ export default {
     },
     bindWaddr: async function () {
       this.bind_loading = true;
-      const cointy = this.coinMap[this.bcoin];
+      const cointy = this.current.coinType;
       const id = this.current.pbtId;
       const addr = this.wAddr.toString();
       const obj = this;

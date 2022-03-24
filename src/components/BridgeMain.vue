@@ -23,9 +23,13 @@
           <el-col id="balance">
             余额：<span class="font"> {{ WBalance[bcoin] }}</span>
             <span class="minifont"> w{{ bcoin }}</span>
-            <el-button size="mini" type="primary" @click="addToken">
-              {{ $t("add-token") }}
-            </el-button>
+            <el-tooltip
+              placement="bottom"
+              content="添加当前代币信息到metaMask（小狐狸）钱包中"
+              ><el-button size="mini" type="primary" @click="addToken">
+                {{ $t("add-token") }}
+              </el-button></el-tooltip
+            >
           </el-col>
           <el-tabs>
             <el-tab-pane :label="$t('deposit')"
@@ -69,24 +73,12 @@ export default {
   }),
   data() {
     return {
-      balance: "",
     };
   },
   methods: {
     addToken: async function () {
       const coin = this.bcoin;
-      const res = await market.watchToken(coin);
-      console.log("add token", res);
-    },
-    coinBalance: function (coin) {
-      const lcoin = coin.toString().toLowerCase();
-      if (lcoin in this.WBalance && this.WBalance[lcoin]) {
-        this.balance = this.WBalance[lcoin];
-        return this.WBalance[lcoin];
-      } else {
-        this.balance = "---";
-        return "---";
-      }
+      await market.watchToken(coin);
     },
   },
 };

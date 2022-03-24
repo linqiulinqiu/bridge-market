@@ -7,11 +7,11 @@ import keeper from "pbweb-nftkeeper";
 let bsc = {}
 let myList = {}
 let marketList = {}
-const ptAddrs = {
-    'BNB': ethers.constants.AddressZero,
+const ptInfos = {}
+ptInfos[ethers.constants.AddressZero] = {
+    symbol: 'BNB',
+    decimals: 18
 }
-
-const tokenDecimals = {}
 
 async function connect(commit) {
     bsc = await market.connect(commit)
@@ -25,27 +25,35 @@ async function connect(commit) {
     return false
 }
 
+async function ptInfo(ctraddr) {
+    const ctr = pbwallet.erc20_contract(ctraddr)
+    const info = {
+        symbol: 'invalid',
+        decimals: 0
+    }
+    try {
+        info.symbol = await ctr.symbol()
+        info.decimals = await ctr.decimals()
+    } catch (e) {
+        console.log('read ctr', ctraddr, 'err, maybe not ERC20')
+    }
+    return info
+}
+
 async function tokenSymbol(ctraddr) {
     ctraddr = ethers.utils.getAddress(ctraddr)
-    for (var k in ptAddrs) {
-        if (ethers.utils.getAddress(ptAddrs[k]) == ctraddr) {
-            return k
-        }
+    if (!(ctraddr in ptInfos)) {
+        ptInfos[ctraddr] = await ptInfo(ctraddr)
     }
-    const symbol = await pbwallet.erc20_contract(ctraddr).symbol()
-    ptAddrs[symbol] = ctraddr
-    return symbol
+    return ptInfos[ctraddr].symbol
 }
 
 async function formatToken(ctraddr, val) {
     ctraddr = ethers.utils.getAddress(ctraddr)
-    if (ctraddr == ethers.constants.AddressZero) {
-        return ethers.utils.formatUnits(val)
+    if (!(ctraddr in ptInfos)) {
+        ptInfos[ctraddr] = await ptInfo(ctraddr)
     }
-    if (!(ctraddr in tokenDecimals)) {
-        tokenDecimals[ctraddr] = await pbwallet.erc20_contract(ctraddr).decimals()
-    }
-    return ethers.utils.formatUnits(val, tokenDecimals[ctraddr])
+    return ethers.utils.formatUnits(val, ptInfos[ctraddr].decimals)
 }
 
 function fix_uri(uri) {
@@ -86,11 +94,9 @@ async function loadMarketinfo(id) {
 }
 async function loadPbxs(pbtid) {
     const cointy = await getCoinTypes(pbtid)
-    console.log("cointy", pbtid, cointy)
     const pbxs = {}
     const cointyArr = cointy[0].concat(cointy[1])
     const atArr = Array.from(new Set(cointyArr))
-    console.log("atarr", cointy, cointyArr, atArr)
     for (let i = 0; i < atArr.length; i++) {
         const ct = parseInt(atArr[i])
         const winfo = pbwallet.wcoin_info(ct)

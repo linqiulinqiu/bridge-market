@@ -27,7 +27,7 @@ export default {
       coinMap.push(pbwallet.wcoin_info(i));
     }
     return {
-      addclass: coinMap[0].symbol,
+      addclass: coinMap[2].symbol,
       coinMap: coinMap,
     };
   },
@@ -35,7 +35,6 @@ export default {
     changeCoin: function (item) {
       this.addclass = item.symbol;
       this.$store.commit("setCurrentCoinType", item.index);
-      this.$store.commit("setBcoin", item.symbol);
     },
   },
 };

@@ -15,8 +15,8 @@
         <el-col class="btn-bar">
           <el-pagination
             background
-            layout="total,prev,pager,next"
             :total="Object.keys(this.myList).length"
+            layout="total,prev,pager,next"
             @current-change="handleCurrentChange"
             :current-page="this.pageNum"
             :page-size="this.pageSize"
@@ -31,17 +31,12 @@
       </el-col>
     </el-col>
     <el-col v-else>{{ $t("look-info") }}</el-col>
-    <NFTinfo
-      ref="mainNftInfo"
-      :curNFT="this.curNFT"
-      :visible="this.nftinfo_show"
-    />
   </el-col>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import NFTinfo from "./NFTinfo.vue";
+import NFTinfo from "./nftpanel/NFTinfo.vue";
 
 export default {
   name: "Mynft",
@@ -51,7 +46,6 @@ export default {
   props: ["myList", "pageSize", "curNFT"],
   computed: mapState({
     baddr: "baddr",
-    mode: "mode",
     bcoin: "bcoin",
     current: "current",
     nftlist(state) {
@@ -67,48 +61,21 @@ export default {
   watch: {
     myList: function (list) {
       this.$store.commit("setMylist", list);
-      this.nftlist;
-      console.log("watch mynft", list, this.nftlist, this.curNFT);
     },
     deep: true,
   },
   data() {
     return {
       pageNum: 1,
-      nftinfo_show: false,
-      coinMap: {
-        3: "XCC",
-        2: "HDD",
-        1: "XCH",
-      },
     };
   },
   methods: {
     openNFT: async function (id) {
       this.$store.commit("setCurrentPbtId", id);
-      if (this.current.pbtId) {
-        const mo = location.hash.substr(2);
-        if (mo == "market") {
-          this.$refs.mainNftInfo.show();
-        }
-      }
-      console.log("setCurrentID", this.curNFT);
     },
     handleCurrentChange(newPage) {
-      console.log("当前页:", newPage);
       this.pageNum = newPage;
     },
-  },
-  watch: {
-    // curNFT() {
-    //   const loading = this.$loading({
-    //     lock: true,
-    //     spinner: "el-icon-loading",
-    //     background: "rgba(200,230,200,0.6)",
-    //   });
-    //   loading.close();
-    // },
-    // deep: true,
   },
 };
 </script>
@@ -123,7 +90,6 @@ export default {
 #mynft {
   color: #ffffff;
   background-color: #25272e;
-  /* position: relative; */
 }
 i {
   margin-right: 8px;
@@ -137,7 +103,6 @@ i {
 .nftlist {
   width: 300px;
   height: 600px;
-  /* overflow-y: scroll; */
 }
 .content {
   min-height: 550px;
@@ -154,8 +119,6 @@ i {
   width: 132px;
   font-size: 14px;
   color: #000000;
-  /* float: right; */
-  /* margin: 0px 20px; */
 }
 .btn-bar {
   margin: 20px 0;

@@ -35,9 +35,14 @@
           :loading="conenct_loading"
           >Connect Wallet</el-button
         >
-        <span v-else style="color: #fff" class="baddr font">{{
-          baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
-        }}</span>
+        <span v-else style="color: #fff" class="baddr font">
+          <el-tooltip effect="light" placement="bottom">
+            <span slot="content" class="font">bsc钱包地址{{ baddr }}</span>
+            <span class="font">{{
+              baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
+            }}</span>
+          </el-tooltip>
+        </span>
       </el-col>
       <el-col :span="4">
         <el-select v-model="lang">

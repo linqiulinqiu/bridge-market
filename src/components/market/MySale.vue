@@ -11,40 +11,22 @@
     </ul>
     <el-col :offset="10">
       <el-pagination
-        :total="Object.keys(this.mySaleList).length"
         background
+        :total="Object.keys(this.mySaleList).length"
         @current-change="handleCurPageChange()"
         :current-page="this.mypageNum"
         :page-size="10"
         layout="total,prev,pager,next"
       ></el-pagination>
     </el-col>
-    <NFTinfo
-      ref="mainNftInfo"
-      :curNFT="this.curNFT"
-      :visible="this.nftinfo_show"
-    />
   </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
-import NFTinfo from "../content/nftpanel/NFTinfo.vue";
 export default {
   name: "MySale",
-  components: {
-    NFTinfo,
-  },
   props: ["mySaleList", "pageSize"],
   computed: mapState({
-    curNFT(state) {
-      if (state.current.pbtId) {
-        const pbtId = state.current.pbtId;
-        if (pbtId in this.mySaleList) {
-          return this.mySaleList[pbtId];
-        }
-        return false;
-      }
-    },
     mslist() {
       const start = this.mypageNum * this.pageSize - this.pageSize;
       const down = this.mypageNum * this.pageSize;
@@ -57,33 +39,17 @@ export default {
       return this.mySaleList;
     },
   }),
-  watch: {
-    mySaleList: function (newLists) {
-      this.$store.commit("setMySalelist", newLists);
-      this.mslist;
-    },
-    deep: true,
-    curNFT: function () {
-      this.curNFT;
-    },
-    deep: true,
-  },
   data() {
     return {
       mypageNum: 1,
-      nftinfo_show: false,
     };
   },
   methods: {
     handleCurPageChange(page) {
-      console.log("当前页:", page);
       this.mypageNum = page;
     },
     openNFT: function (nft) {
       this.$store.commit("setCurrentPbtId", nft.id);
-      console.log("curNFT", nft);
-      this.nftinfo_show = true;
-      this.$refs.mainNftInfo.show();
     },
   },
 };
@@ -105,7 +71,7 @@ export default {
   border: hidden;
 }
 i {
-  padding-right:10px;
+  padding-right: 10px;
   color: #38f2af;
 }
 

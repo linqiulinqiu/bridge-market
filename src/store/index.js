@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import pbw from 'pbwallet'
 Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         bsc: {},
-        bcoin: "XCC",
+        bcoin: false,
         baddr: false,
         current: {},
         myList: {},
@@ -21,12 +22,6 @@ export default new Vuex.Store({
         setBaddr(state, baddr) {
             state.baddr = baddr
         },
-        setBalance(state, balance) {
-            state.WBalance = balance
-        },
-        setCurrent(state, cur) {
-            state.current = cur
-        },
         setCurrentPbtId(state, pbtId) {
             if (pbtId != state.current.pbtId) {
                 state.current.pbtId = pbtId
@@ -38,10 +33,8 @@ export default new Vuex.Store({
             if (coinType != state.current.coinType) {
                 state.current.coinType = coinType
                 state.current = Object.assign({}, state.current);
+                state.bcoin = pbw.wcoin_info(coinType).symbol;
             }
-        },
-        setBcoin(state, bsccoin) {
-            state.bcoin = bsccoin
         },
         setMylist(state, list) {
             console.log('set-my-list', list)
