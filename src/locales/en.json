@@ -56,7 +56,7 @@
     "tips-waddr":"When an account is bound to multiple addresses of multiple wallets, the money may be randomly sent to one of them. Please pay attention to check.",
 
     "withdraw":"Withdraw",
-    "w-Rate":"Withdraw rate",
+    "w-rate":"Withdraw rate",
     "w-minFee":"Min withdraw fee",
     "w-limit":"The recommended limit for a single withdraw is :",
     "w-addr":"Withdraw {bcoin} will be send to this address"

@@ -11,14 +11,41 @@ const coinDecimals = {}
 const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
 }
+const ptInfos = {}
+ptInfos[ethers.constants.AddressZero] = {
+    symbol: 'BNB',
+    decimals: 18
+}
 
-//根据币种选择decimals
-async function getDecimals(coin) {
-    if (coin in coinDecimals) {
-        return coinDecimals[coin]
+async function ptInfo(ctraddr) {
+    const ctr = pbwallet.erc20_contract(ctraddr)
+    const info = {
+        symbol: 'invalid',
+        decimals: 0
     }
-    const decimals = await coinContract(coin).decimals()
-    return decimals
+    try {
+        info.symbol = await ctr.symbol()
+        info.decimals = await ctr.decimals()
+    } catch (e) {
+        console.log('read ctr', ctraddr, 'err, maybe not ERC20')
+    }
+    return info
+}
+
+async function tokenSymbol(ctraddr) {
+    ctraddr = ethers.utils.getAddress(ctraddr)
+    if (!(ctraddr in ptInfos)) {
+        ptInfos[ctraddr] = await ptInfo(ctraddr)
+    }
+    return ptInfos[ctraddr].symbol
+}
+
+async function formatToken(ctraddr, val) {
+    ctraddr = ethers.utils.getAddress(ctraddr)
+    if (!(ctraddr in ptInfos)) {
+        ptInfos[ctraddr] = await ptInfo(ctraddr)
+    }
+    return ethers.utils.formatUnits(val, ptInfos[ctraddr].decimals)
 }
 
 function coinContract(coin) {
@@ -92,10 +119,10 @@ async function tokenAllowance() {
     for (let i in oldTokenAddr) {
         let ctr = {}
         let allowance = {}
-        let decimals = {}
         ctr[i] = pbwallet.erc20_contract(oldTokenAddr[i])
         allowance[i] = await ctr[i].allowance(bsc.addr, bsc.ctrs.tokenredeem.address)
-        oldAllowance[i] = ethers.utils.formatUnits(allowance[i], decimals[i])
+        oldAllowance[i] = formatToken(oldTokenAddr[i], allowance[i])
+
     }
     console.log("oldAllowance =", oldAllowance)
     return oldAllowance
@@ -176,30 +203,6 @@ async function waitEventDone(tx, done) {
         }
     })
 }
-
-async function tokenSymbol(ctraddr) {
-    ctraddr = ethers.utils.getAddress(ctraddr)
-    for (var k in ptAddrs) {
-        if (ethers.utils.getAddress(ptAddrs[k]) == ctraddr) {
-            return k
-        }
-    }
-    const symbol = await pbwallet.erc20_contract(ctraddr).symbol()
-    ptAddrs[symbol] = ctraddr
-    return symbol
-}
-const tokenDecimals = {}
-
-async function formatToken(ctraddr, val) {
-    ctraddr = ethers.utils.getAddress(ctraddr)
-    if (ctraddr == ethers.constants.AddressZero) {
-        return ethers.utils.formatUnits(val)
-    }
-    if (!(ctraddr in tokenDecimals)) {
-        tokenDecimals[ctraddr] = await pbwallet.erc20_contract(ctraddr).decimals()
-    }
-    return ethers.utils.formatUnits(val, tokenDecimals[ctraddr])
-}
 async function reBindFee() {
     const rebindFee = await bsc.ctrs.pbpuzzlehash.rebindFee()
     const refee = {}
@@ -210,9 +213,10 @@ async function reBindFee() {
 }
 //绑定取款地址
 async function bindAddr(waddr, pbtId, cointy, rebind) {
+    const prefix = pbwallet.wcoin_info[cointy].prefix
     try {
         if ('ChiaUtils' in window) {
-            if (waddr.substr(0, 3) != (store.state.bcoin).toLowerCase()) return false
+            if (waddr.substr(0, 3) != prefix) return false
             const addr = window.ChiaUtils.address_to_puzzle_hash(waddr)
             let res = {}
             if (rebind) {

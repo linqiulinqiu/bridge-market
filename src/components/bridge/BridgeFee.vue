@@ -53,8 +53,8 @@ export default {
       const fees = await market.getfees(coin);
       this.wFeeRate = fees.withdrawFeeRate;
       this.wFee = fees.withdrawFee;
-      this.dFee = fees.depositeFee;
-      this.dFeeRate = fees.depositeFeeRate;
+      this.dFee = fees.depositFee;
+      this.dFeeRate = fees.depositFeeRate;
       console.log("feeeeeeee", fees);
       this.reBindfee = await market.reBindFee();
     },
