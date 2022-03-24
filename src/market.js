@@ -48,6 +48,14 @@ async function formatToken(ctraddr, val) {
     return ethers.utils.formatUnits(val, ptInfos[ctraddr].decimals)
 }
 
+async function parseToken(ctraddr, val) {
+    ctraddr = ethers.utils.getAddress(ctraddr)
+    if (!(ctraddr in ptInfos)) {
+        ptInfos[ctraddr] = await ptInfo(ctraddr)
+    }
+    return ethers.utils.parseUnits(val, ptInfos[ctraddr].decimals)
+}
+
 function coinContract(coin) {
     const wcoin = 'w' + coin.toLowerCase()
     return bsc.ctrs[wcoin]
@@ -61,23 +69,20 @@ async function ListenToWCoin(commit) {
     var ctr_xcc = coinContract("XCC")
     var ctr_xch = coinContract("XCH")
     var ctr_hdd = coinContract("HDD")
-    const decimals_xcc = await ctr_xcc.decimals()
-    const decimals_xch = await ctr_xch.decimals()
-    const decimals_hdd = await ctr_hdd.decimals()
 
     async function updateXCCBalance(evt) {
         const xccbalance = await ctr_xcc.balanceOf(bsc.addr)
-        wBalance.XCC = ethers.utils.formatUnits(xccbalance, decimals_xcc)
+        wBalance.XCC = await formatToken(ctr_xcc.address, xccbalance)
         commit('setWBalance', wBalance)
     }
     async function updateHDDBalance(evt) {
         const hddbalance = await ctr_hdd.balanceOf(bsc.addr)
-        wBalance.HDD = ethers.utils.formatUnits(hddbalance, decimals_hdd)
+        wBalance.HDD = await formatToken(ctr_hdd.address, hddbalance)
         commit('setWBalance', wBalance)
     }
     async function updateXCHBalance(evt) {
         const xchbalance = await ctr_xch.balanceOf(bsc.addr)
-        wBalance.XCH = ethers.utils.formatUnits(xchbalance, decimals_xch)
+        wBalance.XCH = await formatToken(ctr_xch.address, xchbalance)
         commit('setWBalance', wBalance)
     }
     await updateXCCBalance()
@@ -109,7 +114,7 @@ async function tokenBalance() {
     for (let i in oldTokenAddr) {
         info[i] = await keeper.tokenInfo(oldTokenAddr[i])
         ctr[i] = pbwallet.erc20_contract(oldTokenAddr[i])
-        oldBalance[i] = ethers.utils.formatUnits(await ctr[i].balanceOf(bsc.addr), info[i].decimals)
+        oldBalance[i] = await formatToken(oldTokenAddr[i], await ctr[i].balanceOf(bsc.addr))
     }
     console.log('token info=', info, "token ctr=", ctr, "token Balance =", oldBalance)
     return oldBalance
@@ -121,7 +126,7 @@ async function tokenAllowance() {
         let allowance = {}
         ctr[i] = pbwallet.erc20_contract(oldTokenAddr[i])
         allowance[i] = await ctr[i].allowance(bsc.addr, bsc.ctrs.tokenredeem.address)
-        oldAllowance[i] = formatToken(oldTokenAddr[i], allowance[i])
+        oldAllowance[i] = await formatToken(oldTokenAddr[i], allowance[i])
 
     }
     console.log("oldAllowance =", oldAllowance)
@@ -135,8 +140,7 @@ async function tokenApprove(bcoin) {
 }
 async function tokenRedeem(bcoin, amount) {
     const ctr = pbwallet.erc20_contract(oldTokenAddr[bcoin])
-    const decimals = await ctr.decimals()
-    amount = ethers.utils.parseUnits(amount, decimals)
+    amount = await parseToken(ctr.address, amount)
     const res = bsc.ctrs.tokenredeem.redeem(oldTokenAddr[bcoin], amount)
     await res
 }
@@ -144,7 +148,7 @@ async function getmintfee() {
     const options = {}
     const fee = await bsc.ctrs.pbt.mintFee();
     const info = await keeper.tokenInfo(fee[0])
-    options.price = ethers.utils.formatUnits(fee[1], info.decimals)
+    options.price = await formatToken(fee[0], fee[1])
     options.ptName = info.symbol
     console.log("options", options)
     return options
@@ -184,9 +188,8 @@ async function mintPBT() {
 }
 async function burnWcoin(amount, coin) {
     const ctr = coinContract(coin)
-    const decimals = await getDecimals(coin)
-    amount = ethers.utils.parseUnits(amount, decimals)
-    const wBalance = ethers.utils.parseUnits(store.state.WBalance[coin], decimals)
+    amount = await parseToken(ctr.address, amount)
+    const wBalance = await parseToken(ctr.address, store.state.WBalance[coin])
     if (amount.gt(wBalance)) {
         return false
     }
@@ -303,12 +306,8 @@ async function sendToMarket(id) {
     const res = await pb["safeTransferFrom(address,address,uint256)"](bsc.addr, bsc.ctrs.pbmarket.address, id)
     return res
 }
-async function setSellInfo(id, ptName, price, desc) {
-    var ptAddr = ptAddrs[ptName]
-    if (!ptAddr) {
-        ptAddr = ethers.constants.AddressZero
-    }
-    const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, ethers.utils.parseEther(price), desc)
+async function setSellInfo(id, ptAddr, price, desc) {
+    const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, await parseToken(ptAddr, price), desc)
     return res
 }
 async function checkAllowance(priceToken, spender) {
@@ -338,13 +337,11 @@ async function approveAllow(token, spender) {
     const res = await ctr.approve(spender, amount)
     res.fn = 'approve'
     return res
-
-
 }
 
 async function buyNFT(nft) {
-    const price = ethers.utils.parseEther(nft.market.price)
     const priceToken = nft.market.priceToken
+    const price = await parseToken(priceToken, nft.market.price)
     const id = ethers.BigNumber.from(nft.id)
     const options = {}
     if (priceToken == ethers.constants.AddressZero) {
@@ -370,18 +367,18 @@ async function retreatNFT(id) {
     return res
 }
 async function afterFee(coin, mode, amount) {
+    const ctr = coinContract(coin)
     const fees = await getfees(coin)
     const nowfee = {}
-    const decimals = await getDecimals(coin)
-    amount = ethers.utils.parseUnits(amount.toString(), decimals)
+    amount = await parseToken(ctr.address, amount)
     if (mode == 'deposit') {
-        nowfee.min = ethers.utils.parseUnits(fees.depositFee, decimals)
+        nowfee.min = await parseToken(ctr.address, fees.depositFee)
         nowfee.rate = fees.depositFeeRate
     } else if (mode == 'withdraw') {
-        nowfee.min = ethers.utils.parseUnits(fees.withdrawFee, decimals)
+        nowfee.min = await parseToken(ctr.address, fees.withdrawFee)
         nowfee.rate = fees.withdrawFeeRate
         console.log("after fee", nowfee)
-        if (amount.gt(ethers.utils.parseUnits(store.state.WBalance[coin], decimals))) {
+        if (amount.gt(await parseToken(ctr.address, store.state.WBalance[coin]))) {
             return "fund"
         }
     } else {
@@ -394,17 +391,16 @@ async function afterFee(coin, mode, amount) {
     if (amount.lte(fee)) {
         return false
     }
-    return ethers.utils.formatUnits(amount.sub(fee), decimals)
+    return formatToken(ctr.address, amount.sub(fee))
 }
 async function getfees(coin) {
-    const decimals = await getDecimals(coin)
     const ctr = coinContract(coin)
-    const depfee = await ctr.getDepositFee()
-    const wdfee = await ctr.getWithdrawFee()
+    const depfee = await ctr.depositFee()
+    const wdfee = await ctr.withdrawFee()
     const fee = {}
-    fee.depositFee = ethers.utils.formatUnits(depfee[1], decimals)
+    fee.depositFee = await formatToken(ctr.address, depfee[1])
     fee.depositFeeRate = depfee[0]
-    fee.withdrawFee = ethers.utils.formatUnits(wdfee[1], decimals)
+    fee.withdrawFee = await formatToken(ctr.address, wdfee[1])
     fee.withdrawFeeRate = wdfee[0]
     console.log("getfees", fee)
     return fee
@@ -413,9 +409,8 @@ async function getfees(coin) {
 async function getLimit(coin) {
     const ctr = coinContract(coin)
     let amount = await ctr.getCWAmount()
-    const decimals = await getDecimals(coin)
-    const amountMax = ethers.utils.formatUnits(amount[1], decimals)
-    const amountMin = ethers.utils.formatUnits(amount[0], decimals)
+    const amountMax = await formatToken(ctr.address, amount[1])
+    const amountMin = await formatToken(ctr.address, amount[0])
     amount = [amountMin, amountMax]
     return amount
 }

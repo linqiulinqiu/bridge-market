@@ -71,14 +71,20 @@ async function getCoinTypes(pid) {
 async function nftBriefInfo(id) {
     const uri = await bsc.ctrs.pbt.tokenURI(id.toNumber())
     const meta = await fetch(fix_uri(uri))
-    const img = await meta.json()
-    meta['image'] = await fix_uri(String(img.image))
-    const info = {
-        id: id.toNumber(),
-        uri: uri,
-        meta: meta,
+    try {
+        const img = await meta.json()
+        meta['image'] = await fix_uri(String(img.image))
+        const info = {
+            id: id.toNumber(),
+            uri: uri,
+            meta: meta,
+        }
+        return info
+
+    } catch (e) {
+        console.log('err', e.message)
     }
-    return info
+
 }
 async function loadMarketinfo(id) {
     const pbt = bsc.ctrs.pbt

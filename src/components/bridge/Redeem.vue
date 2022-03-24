@@ -4,7 +4,7 @@
     <el-col>
       <p>{{ $t("balance") }}:{{ balance[bcoin] }}</p>
       <el-col>
-        <el-input type="text" v-model.trim="redeemNum"></el-input>
+        <el-input type="text" v-model="redeemNum"></el-input>
         <el-col v-if="needApprove">
           <el-button @click="approve">Approve</el-button>
         </el-col>
@@ -56,7 +56,7 @@ export default {
     redeem: async function () {
       // const bcoin = this.bcoin;
       const bcoin = "XCC";
-      await market.tokenRedeem(bcoin, this.rAmount);
+      await market.tokenRedeem(bcoin, this.redeemNum);
       //TODO: watch tokenRedeem events
     },
   },
