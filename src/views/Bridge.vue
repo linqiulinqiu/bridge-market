@@ -37,14 +37,12 @@ export default {
       if (state.current.pbtId) {
         const pbtId = String(state.current.pbtId);
         if (pbtId in state.myList) {
-          console.log("Bridge-curNFT", JSON.stringify(state.myList[pbtId]));
-          return Object.assign({},state.myList[pbtId]);
+          return Object.assign({}, state.myList[pbtId]);
         }
         if (pbtId in state.mySaleList) {
-          return Object.assign({},state.mySaleList[pbtId]);
+          return Object.assign({}, state.mySaleList[pbtId]);
         }
       }
-      console.log("Bridge-curNFT:nothing");
       return false;
     },
   }),
