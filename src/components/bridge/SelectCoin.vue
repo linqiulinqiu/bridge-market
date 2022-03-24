@@ -27,7 +27,7 @@ export default {
       coinMap.push(pbwallet.wcoin_info(i));
     }
     return {
-      addclass: coinMap[2].symbol,
+      addclass: "",
       coinMap: coinMap,
     };
   },

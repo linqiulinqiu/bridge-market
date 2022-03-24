@@ -87,7 +87,8 @@
       </el-col>
     </el-col>
     <el-col v-else>
-      <el-skeleton :rows="5" animated></el-skeleton>
+      <!-- <el-skeleton :rows="5" animated></el-skeleton> -->
+      加载中
     </el-col>
   </el-col>
 </template>

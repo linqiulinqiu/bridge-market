@@ -48,22 +48,6 @@ export default {
       return false;
     },
   }),
-  watch: {
-    marketList: function (lists) {
-      this.$store.commit("setMarketlist", lists);
-      this.curNFT;
-      console.log("this.curNFT in bridge", this.curNFT, lists);
-      return this.$store.state.marketList;
-    },
-    deep: true,
-    mySaleList: function (lists) {
-      this.$store.commit("setMySalelist", lists);
-      this.curNFT;
-      console.log("this.curNFT in bridge", this.curNFT, lists);
-      return this.$store.state.mySaleList;
-    },
-    deep: true,
-  },
   data() {
     return {};
   },

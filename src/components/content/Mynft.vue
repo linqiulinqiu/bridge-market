@@ -58,12 +58,6 @@ export default {
       return listPage;
     },
   }),
-  watch: {
-    myList: function (list) {
-      this.$store.commit("setMylist", list);
-    },
-    deep: true,
-  },
   data() {
     return {
       pageNum: 1,

@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     approve: async function () {
-      const bcoin = this.bcoin;
       const res = await market.tokenApprove("XCC");
       console.log("res", res);
       //TODO: watch tokenRedeem events

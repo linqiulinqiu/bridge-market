@@ -5,6 +5,7 @@
         v-if="Object.keys(this.$store.state.myList).length == 0"
         class="mainpanel"
       >
+        <el-col></el-col>
         <el-col style="color: #fff">
           <h1>Bridge Guide</h1>
           <el-col>
@@ -22,14 +23,14 @@
           <el-col> <BridgeFee /> </el-col>
           <el-col id="balance">
             余额：<span class="font"> {{ WBalance[bcoin] }}</span>
-            <span class="minifont"> w{{ bcoin }}</span>
+            <span class="minifont"> {{ wcoin }}</span>
             <el-tooltip
               placement="bottom"
               content="添加当前代币信息到metaMask（小狐狸）钱包中"
               ><el-button size="mini" type="primary" @click="addToken">
                 {{ $t("add-token") }}
-              </el-button></el-tooltip
-            >
+              </el-button>
+            </el-tooltip>
           </el-col>
           <el-tabs>
             <el-tab-pane :label="$t('deposit')"
@@ -55,6 +56,7 @@ import Redeem from "./bridge/Redeem.vue";
 import BridgeFee from "./bridge/BridgeFee.vue";
 import { mapState } from "vuex";
 import market from "../market";
+import pbwallet from "pbwallet";
 
 export default {
   name: "BridgeMain",
@@ -67,13 +69,17 @@ export default {
   props: ["curNFT"],
   computed: mapState({
     WBalance: "WBalance",
-    current: "current",
     bcoin: "bcoin",
+    current: "current",
+    wcoin: (state) => {
+      const info = pbwallet.wcoin_info(state.current.coinType);
+      if (info) return info.bsymbol;
+      return "-";
+    },
     baddr: "baddr",
   }),
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     addToken: async function () {

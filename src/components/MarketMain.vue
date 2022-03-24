@@ -13,11 +13,16 @@
             >{{ $t("mintPBT") }}</el-button
           >
         </h2>
-        <el-col class="cointy">
-          <MarketList :marketList="this.marketList" :pageSize="this.pageSize" />
-        </el-col>
-        <el-col class="cointy">
-          <MySale :mySaleList="this.mySaleList" :pageSize="this.pageSize" />
+        <el-col>
+          <el-col class="cointy">
+            <MarketList
+              :marketList="this.marketList"
+              :pageSize="this.pageSize"
+            />
+          </el-col>
+          <el-col class="cointy">
+            <MySale :mySaleList="this.mySaleList" :pageSize="this.pageSize" />
+          </el-col>
         </el-col>
       </el-col>
       <el-col v-else>
