@@ -1,34 +1,32 @@
 <template>
-  <el-card>
-    <el-row type="flex" justify="center">
-      <el-col :span="10">
-        <el-col v-if="meta.image">
-          <img :src="meta.image" alt="Img" style="width: 300px" />
-        </el-col>
-        <p>id:#{{ this.nftId }}</p>
-        <el-col v-if="market">
-          <p v-if="market.price">
-            {{ $t("price") }}:
-            <span>{{ market.price }}&nbsp;&nbsp;&nbsp;</span>
-            <span>{{ market.ptName }}</span>
-          </p>
-          <p v-if="market.desc != ''">{{ $t("desc") }}:{{ market.desc }}</p>
-          <p v-else>No Description</p>
-        </el-col>
+  <el-row type="flex" justify="center">
+    <el-col :span="10">
+      <el-col v-if="meta.image">
+        <img :src="meta.image" alt="Img" style="width: 300px" />
       </el-col>
-      <el-col v-if="market" :span="13">
-        <el-col v-if="market.seller == '-self'">
-          <InfoMySale :curNFT="this.curNFT" />
-        </el-col>
-        <el-col v-if="market.seller == ''">
-          <InfoMarket :curNFT="this.curNFT" :approve="this.approve" />
-        </el-col>
+      <p>id:#{{ this.nftId }}</p>
+      <el-col v-if="market">
+        <p v-if="market.price">
+          {{ $t("price") }}:
+          <span>{{ market.price }}&nbsp;&nbsp;&nbsp;</span>
+          <span>{{ market.ptName }}</span>
+        </p>
+        <p v-if="market.desc != ''">{{ $t("desc") }}:{{ market.desc }}</p>
+        <p v-else>No Description</p>
       </el-col>
-      <el-col v-else :span="13">
-        <InfoMy :curNFT="this.curNFT" />
+    </el-col>
+    <el-col v-if="market" :span="13">
+      <el-col v-if="market.seller == '-self'">
+        <InfoMySale :curNFT="this.curNFT" />
       </el-col>
-    </el-row>
-  </el-card>
+      <el-col v-if="market.seller == ''">
+        <InfoMarket :curNFT="this.curNFT" :approve="this.approve" />
+      </el-col>
+    </el-col>
+    <el-col v-else :span="13">
+      <InfoMy :curNFT="this.curNFT" />
+    </el-col>
+  </el-row>
 </template>
 <script>
 import { mapState } from "vuex";
