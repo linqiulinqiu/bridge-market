@@ -71,10 +71,9 @@ async function connect(commit) {
     return false
 }
 const oldTokenAddr = {
-    "XCC": "0x2077bFC955E9fBA076CA344cD72004C6c4a80a09",
-    // "XCH": "0xFdF2F0995663a993A16929CeC5c39B039AB18Ef6",
-    // "HDD": "0xFfB8F22732e7fC4550a8Cda5DB03cCcCF082b357",
-    "HDD": "0xC8877338a418C659cD86A3dd769D66B069bC996A",
+    "XCC": "0x1B4bB84f3DCAc9899C41726838CdEC291DB52d25",
+    "XCH": "0xFdF2F0995663a993A16929CeC5c39B039AB18Ef6",
+    "HDD": "0xFfB8F22732e7fC4550a8Cda5DB03cCcCF082b357",
 }
 async function tokenBalance() {
     let oldBalance = {}
