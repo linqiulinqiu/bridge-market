@@ -9,7 +9,7 @@
         <el-col style="color: #fff">
           <h1>Bridge Guide</h1>
           <el-col>
-            <h4>1.请先点击选择一个NFT</h4>
+            <h4>1.请先点击选择一个NFT，并且选择一个币种。</h4>
             <h4>2.获取存款地址</h4>
             <h4>3.绑定取款地址</h4>
           </el-col>
@@ -20,29 +20,34 @@
           <h1>{{ $t("openNFT") }}</h1>
         </el-col>
         <el-col v-else>
-          <el-col> <BridgeFee /> </el-col>
-          <el-col id="balance">
-            余额：<span class="font"> {{ WBalance[bcoin] }}</span>
-            <span class="minifont"> {{ wcoin }}</span>
-            <el-tooltip
-              placement="bottom"
-              content="添加当前代币信息到metaMask（小狐狸）钱包中"
-              ><el-button size="mini" type="primary" @click="addToken">
-                {{ $t("add-token") }}
-              </el-button>
-            </el-tooltip>
+          <el-col v-if="!current.coinType">
+            <h4 style="color: #fff">请先选择一个币种</h4>
           </el-col>
-          <el-tabs>
-            <el-tab-pane :label="$t('deposit')"
-              ><Deposit :curNFT="this.curNFT"
-            /></el-tab-pane>
-            <el-tab-pane :label="$t('withdraw')"
-              ><Withdraw :curNFT="this.curNFT"
-            /></el-tab-pane>
-            <el-tab-pane :label="$t('redeem')"
-              ><Redeem :curNFT="this.curNFT"
-            /></el-tab-pane>
-          </el-tabs>
+          <el-col v-else>
+            <el-col> <BridgeFee /> </el-col>
+            <el-col id="balance">
+              余额：<span class="font"> {{ WBalance[bcoin] }}</span>
+              <span class="minifont"> {{ wcoin }}</span>
+              <el-tooltip
+                placement="bottom"
+                content="添加当前代币信息到metaMask（小狐狸）钱包中"
+                ><el-button size="mini" type="primary" @click="addToken">
+                  {{ $t("add-token") }}
+                </el-button>
+              </el-tooltip>
+            </el-col>
+            <el-tabs>
+              <el-tab-pane :label="$t('deposit')"
+                ><Deposit :curNFT="this.curNFT"
+              /></el-tab-pane>
+              <el-tab-pane :label="$t('withdraw')"
+                ><Withdraw :curNFT="this.curNFT"
+              /></el-tab-pane>
+              <el-tab-pane :label="$t('redeem')"
+                ><Redeem :curNFT="this.curNFT"
+              /></el-tab-pane>
+            </el-tabs>
+          </el-col>
         </el-col>
       </el-col>
     </el-col>
