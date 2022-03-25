@@ -25,37 +25,6 @@ async function connect(commit) {
     return false
 }
 
-async function ptInfo(ctraddr) {
-    const ctr = pbwallet.erc20_contract(ctraddr)
-    const info = {
-        symbol: 'invalid',
-        decimals: 0
-    }
-    try {
-        info.symbol = await ctr.symbol()
-        info.decimals = await ctr.decimals()
-    } catch (e) {
-        console.log('read ctr', ctraddr, 'err, maybe not ERC20')
-    }
-    return info
-}
-
-async function tokenSymbol(ctraddr) {
-    ctraddr = ethers.utils.getAddress(ctraddr)
-    if (!(ctraddr in ptInfos)) {
-        ptInfos[ctraddr] = await ptInfo(ctraddr)
-    }
-    return ptInfos[ctraddr].symbol
-}
-
-async function formatToken(ctraddr, val) {
-    ctraddr = ethers.utils.getAddress(ctraddr)
-    if (!(ctraddr in ptInfos)) {
-        ptInfos[ctraddr] = await ptInfo(ctraddr)
-    }
-    return ethers.utils.formatUnits(val, ptInfos[ctraddr].decimals)
-}
-
 function fix_uri(uri) {
     if (uri.startsWith('ipfs:')) {
         return uri.replace('ipfs://', 'https://ipfs.io/ipfs/')
@@ -91,8 +60,8 @@ async function loadMarketinfo(id) {
     const sinfo = await bsc.ctrs.pbmarket.getSaleInfo(pbt.address, Number(id))
     const info = {}
     info.priceToken = sinfo[0]
-    info.ptName = await tokenSymbol(sinfo[0])
-    info.price = await formatToken(sinfo[0], sinfo[1])
+    info.ptName = await keeper.tokenSymbol(sinfo[0])
+    info.price = await keeper.formatToken(sinfo[0], sinfo[1])
     info.desc = sinfo[2]
     info.seller = sinfo[3]
     info.owner = 'market'
@@ -118,7 +87,6 @@ async function loadPbxs(pbtid) {
                 addrInfo[k] = false
             }
         }
-        console.log("addrinfo", addrInfo)
         pbxs[String(ct)] = addrInfo
     }
     return pbxs
@@ -182,7 +150,6 @@ async function loadmylist_detail(myList, store) {
         if (!myList) {
             break
         }
-        console.log("myList__D in load_d", myList)
         store.commit("setMylist", myList)
     }
 }
@@ -208,7 +175,6 @@ async function loadmarketlist_detail(marketList, store) {
                 }
             }
         }
-        console.log("loadMarketlist_datail-list_useful = ", mklist_useful, mySaleList)
         store.commit("setMarketlist", mklist_useful)
         store.commit("setMySalelist", mySaleList)
     }

@@ -131,6 +131,10 @@ export default {
     };
   },
   watch: {
+    bcoin: function () {
+      this.depAmount = "";
+      this.getAmount = "";
+    },
     curNFT: function (nft, old) {
       this.hasPbx = nft && "pbxs" in nft;
       console.log("this.curNFT in dep=", nft);

@@ -11,50 +11,50 @@ const coinDecimals = {}
 const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
 }
-const ptInfos = {}
-ptInfos[ethers.constants.AddressZero] = {
-    symbol: 'BNB',
-    decimals: 18
-}
+// const ptInfos = {}
+// ptInfos[ethers.constants.AddressZero] = {
+//     symbol: 'BNB',
+//     decimals: 18
+// }
 
-async function ptInfo(ctraddr) {
-    const ctr = pbwallet.erc20_contract(ctraddr)
-    const info = {
-        symbol: 'invalid',
-        decimals: 0
-    }
-    try {
-        info.symbol = await ctr.symbol()
-        info.decimals = await ctr.decimals()
-    } catch (e) {
-        console.log('read ctr', ctraddr, 'err, maybe not ERC20')
-    }
-    return info
-}
+// async function ptInfo(ctraddr) {
+//     const ctr = pbwallet.erc20_contract(ctraddr)
+//     const info = {
+//         symbol: 'invalid',
+//         decimals: 0
+//     }
+//     try {
+//         info.symbol = await ctr.symbol()
+//         info.decimals = await ctr.decimals()
+//     } catch (e) {
+//         console.log('read ctr', ctraddr, 'err, maybe not ERC20')
+//     }
+//     return info
+// }
 
-async function tokenSymbol(ctraddr) {
-    ctraddr = ethers.utils.getAddress(ctraddr)
-    if (!(ctraddr in ptInfos)) {
-        ptInfos[ctraddr] = await ptInfo(ctraddr)
-    }
-    return ptInfos[ctraddr].symbol
-}
+// async function tokenSymbol(ctraddr) {
+//     ctraddr = ethers.utils.getAddress(ctraddr)
+//     if (!(ctraddr in ptInfos)) {
+//         ptInfos[ctraddr] = await ptInfo(ctraddr)
+//     }
+//     return ptInfos[ctraddr].symbol
+// }
 
-async function formatToken(ctraddr, val) {
-    ctraddr = ethers.utils.getAddress(ctraddr)
-    if (!(ctraddr in ptInfos)) {
-        ptInfos[ctraddr] = await ptInfo(ctraddr)
-    }
-    return ethers.utils.formatUnits(val, ptInfos[ctraddr].decimals)
-}
+// async function formatToken(ctraddr, val) {
+//     ctraddr = ethers.utils.getAddress(ctraddr)
+//     if (!(ctraddr in ptInfos)) {
+//         ptInfos[ctraddr] = await ptInfo(ctraddr)
+//     }
+//     return ethers.utils.formatUnits(val, ptInfos[ctraddr].decimals)
+// }
 
-async function parseToken(ctraddr, val) {
-    ctraddr = ethers.utils.getAddress(ctraddr)
-    if (!(ctraddr in ptInfos)) {
-        ptInfos[ctraddr] = await ptInfo(ctraddr)
-    }
-    return ethers.utils.parseUnits(val, ptInfos[ctraddr].decimals)
-}
+// async function parseToken(ctraddr, val) {
+//     ctraddr = ethers.utils.getAddress(ctraddr)
+//     if (!(ctraddr in ptInfos)) {
+//         ptInfos[ctraddr] = await ptInfo(ctraddr)
+//     }
+//     return ethers.utils.parseUnits(val, ptInfos[ctraddr].decimals)
+// }
 
 function coinContract(coin) {
     const wcoin = 'w' + coin.toLowerCase()
@@ -72,17 +72,17 @@ async function ListenToWCoin(commit) {
 
     async function updateXCCBalance(evt) {
         const xccbalance = await ctr_xcc.balanceOf(bsc.addr)
-        wBalance.XCC = await formatToken(ctr_xcc.address, xccbalance)
+        wBalance.XCC = await keeper.formatToken(ctr_xcc.address, xccbalance)
         commit('setWBalance', wBalance)
     }
     async function updateHDDBalance(evt) {
         const hddbalance = await ctr_hdd.balanceOf(bsc.addr)
-        wBalance.HDD = await formatToken(ctr_hdd.address, hddbalance)
+        wBalance.HDD = await keeper.formatToken(ctr_hdd.address, hddbalance)
         commit('setWBalance', wBalance)
     }
     async function updateXCHBalance(evt) {
         const xchbalance = await ctr_xch.balanceOf(bsc.addr)
-        wBalance.XCH = await formatToken(ctr_xch.address, xchbalance)
+        wBalance.XCH = await keeper.formatToken(ctr_xch.address, xchbalance)
         commit('setWBalance', wBalance)
     }
     await updateXCCBalance()
@@ -92,12 +92,41 @@ async function ListenToWCoin(commit) {
     ctr_xcc.on(ctr_xcc.filters.Transfer, updateXCCBalance)
     ctr_xcc.on(ctr_xch.filters.Transfer, updateXCHBalance)
 }
+async function listenRedeemEvt(commit) {
+    const oldTokenAddr = {
+        "XCC": "0x1B4bB84f3DCAc9899C41726838CdEC291DB52d25",
+        "XCH": "0xFdF2F0995663a993A16929CeC5c39B039AB18Ef6",
+        // "HDD": "0xFfB8F22732e7fC4550a8Cda5DB03cCcCF082b357",
+    }
+    async function updateOldBalance(evt) {
+        let oldBalance = {}
+        let info = {}
+        let ctr = {}
+        for (let i in oldTokenAddr) {
+            info[i] = await keeper.tokenSymbol(oldTokenAddr[i])
+            console.log("info", info)
+            ctr[i] = pbwallet.erc20_contract(oldTokenAddr[i])
+            oldBalance[i] = await keeper.formatToken(oldTokenAddr[i], await ctr[i].balanceOf(bsc.addr))
+        }
+        commit("setRedeemBalance", oldBalance)
+        console.log("updateOldBalance", evt, oldBalance)
+    }
+    await updateOldBalance()
+    // ctr[i]
+    const oldctr3 = pbwallet.erc20_contract(oldTokenAddr["XCC"])
+    const oldctr1 = pbwallet.erc20_contract(oldTokenAddr["XCH"])
+    oldctr3.on(oldctr3.filters.Transfer, updateOldBalance) // only update 1 balance
+    oldctr1.on(oldctr1.filters.Transfer, updateOldBalance) // only update 1 balance
+
+}
+
 async function connect(commit) {
     bsc = await pbwallet.connect(true)
     if (bsc) {
         console.log(bsc)
         store.commit("setBsc", bsc)
         await ListenToWCoin(commit)
+        await listenRedeemEvt(commit)
         return bsc
     }
     return false
@@ -107,18 +136,6 @@ const oldTokenAddr = {
     "XCH": "0xFdF2F0995663a993A16929CeC5c39B039AB18Ef6",
     "HDD": "0xFfB8F22732e7fC4550a8Cda5DB03cCcCF082b357",
 }
-async function tokenBalance() {
-    let oldBalance = {}
-    let info = {}
-    let ctr = {}
-    for (let i in oldTokenAddr) {
-        info[i] = await keeper.tokenInfo(oldTokenAddr[i])
-        ctr[i] = pbwallet.erc20_contract(oldTokenAddr[i])
-        oldBalance[i] = await formatToken(oldTokenAddr[i], await ctr[i].balanceOf(bsc.addr))
-    }
-    console.log('token info=', info, "token ctr=", ctr, "token Balance =", oldBalance)
-    return oldBalance
-}
 async function tokenAllowance() {
     const oldAllowance = {}
     for (let i in oldTokenAddr) {
@@ -126,29 +143,33 @@ async function tokenAllowance() {
         let allowance = {}
         ctr[i] = pbwallet.erc20_contract(oldTokenAddr[i])
         allowance[i] = await ctr[i].allowance(bsc.addr, bsc.ctrs.tokenredeem.address)
-        oldAllowance[i] = await formatToken(oldTokenAddr[i], allowance[i])
-
+        oldAllowance[i] = await keeper.formatToken(oldTokenAddr[i], allowance[i])
     }
     console.log("oldAllowance =", oldAllowance)
     return oldAllowance
 }
-async function tokenApprove(bcoin) {
+async function tokenApprove(bcoin, commit) {
     const ctr = pbwallet.erc20_contract(oldTokenAddr[bcoin])
     const supply = await ctr.totalSupply()
     const res = await ctr.approve(bsc.ctrs.tokenredeem.address, supply) // 1000x total supply, almost infinite
+    waitEventDone(res, async function () {
+        const newAllowance = await tokenAllowance()
+        commit("setRedeemAllowance", newAllowance)
+    })
     return res
 }
 async function tokenRedeem(bcoin, amount) {
     const ctr = pbwallet.erc20_contract(oldTokenAddr[bcoin])
     amount = await parseToken(ctr.address, amount)
-    const res = bsc.ctrs.tokenredeem.redeem(oldTokenAddr[bcoin], amount)
-    await res
+    const res = await bsc.ctrs.tokenredeem.redeem(oldTokenAddr[bcoin], amount)
+    console.log("redeem res", res.hash)
+    return res
 }
 async function getmintfee() {
     const options = {}
     const fee = await bsc.ctrs.pbt.mintFee();
     const info = await keeper.tokenInfo(fee[0])
-    options.price = await formatToken(fee[0], fee[1])
+    options.price = await keeper.formatToken(fee[0], fee[1])
     options.ptName = info.symbol
     console.log("options", options)
     return options
@@ -198,25 +219,21 @@ async function burnWcoin(amount, coin) {
     return receipt
 }
 async function waitEventDone(tx, done) {
-    const ctr = pbwallet.erc721_contract(tx.to)
-    ctr.on(ctr.filters.Transfer, function (evt) {
-        if (evt.transactionHash == tx.hash) {
-            done(tx, evt)
-            ctr.off(ctr.filters.Transfer)
-        }
+    bsc.provider.once(tx.hash, function (evt) {
+        console.log("evt", evt, evt.transactionHash)
+        done(tx, evt)
     })
 }
 async function reBindFee() {
     const rebindFee = await bsc.ctrs.pbpuzzlehash.rebindFee()
     const refee = {}
-    refee.symbol = await tokenSymbol(rebindFee[0])
-    refee.amount = await formatToken(rebindFee[0], rebindFee[1])
+    refee.symbol = await keeper.tokenSymbol(rebindFee[0])
+    refee.amount = await keeper.formatToken(rebindFee[0], rebindFee[1])
     console.log("rebindfee", rebindFee, refee)
     return refee
 }
-//绑定取款地址
 async function bindAddr(waddr, pbtId, cointy, rebind) {
-    const prefix = pbwallet.wcoin_info[cointy].prefix
+    const prefix = pbwallet.wcoin_info(cointy).prefix
     try {
         if ('ChiaUtils' in window) {
             if (waddr.substr(0, 3) != prefix) return false
@@ -241,11 +258,12 @@ async function bindAddr(waddr, pbtId, cointy, rebind) {
                             console.log("rebind addr ", bind)
                             return bind
                         })
-                        return res
+                        // return res
                     }
                     res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr, {
                         value: fee[1]
                     })
+                    return res
                 }
             } else {
                 res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr)
@@ -293,7 +311,7 @@ async function clearAddr(pbtid, cointy) {
                 console.log("rebind addr ", bind)
                 return bind
             })
-            return approveRes
+            // return approveRes
         }
         res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addrZero, {
             value: fee[1]
@@ -332,13 +350,12 @@ async function checkAllowance(priceToken, spender) {
 async function approveAllow(token, spender) {
     const ctr = pbwallet.erc20_contract(token)
     const amount = await ctr.totalSupply()
-    const total = await formatToken(token, amount)
+    const total = await keeper.formatToken(token, amount)
     console.log("totalsupply", total)
     const res = await ctr.approve(spender, amount)
     res.fn = 'approve'
     return res
 }
-
 async function buyNFT(nft) {
     const priceToken = nft.market.priceToken
     const price = await parseToken(priceToken, nft.market.price)
@@ -391,16 +408,26 @@ async function afterFee(coin, mode, amount) {
     if (amount.lte(fee)) {
         return false
     }
-    return formatToken(ctr.address, amount.sub(fee))
+    return await keeper.formatToken(ctr.address, amount.sub(fee))
 }
 async function getfees(coin) {
     const ctr = coinContract(coin)
-    const depfee = await ctr.depositFee()
-    const wdfee = await ctr.withdrawFee()
-    const fee = {}
-    fee.depositFee = await formatToken(ctr.address, depfee[1])
+    let fee = {}
+    let depfee = []
+    let wdfee = []
+    if (ctr.depositFee && ctr.withdrawFee) {
+        depfee = await ctr.depositFee()
+        wdfee = await ctr.withdrawFee()
+    } else if (ctr.getDepositFee && ctr.getWithdrawFee) {
+        depfee = await ctr.getDepositFee()
+        wdfee = await ctr.getWithdrawFee()
+    } else {
+        return "not get fee"
+    }
+    console.log("fee", depfee, wdfee)
+    fee.depositFee = await keeper.formatToken(ctr.address, depfee[1])
     fee.depositFeeRate = depfee[0]
-    fee.withdrawFee = await formatToken(ctr.address, wdfee[1])
+    fee.withdrawFee = await keeper.formatToken(ctr.address, wdfee[1])
     fee.withdrawFeeRate = wdfee[0]
     console.log("getfees", fee)
     return fee
@@ -409,8 +436,8 @@ async function getfees(coin) {
 async function getLimit(coin) {
     const ctr = coinContract(coin)
     let amount = await ctr.getCWAmount()
-    const amountMax = await formatToken(ctr.address, amount[1])
-    const amountMin = await formatToken(ctr.address, amount[0])
+    const amountMax = await keeper.formatToken(ctr.address, amount[1])
+    const amountMin = await keeper.formatToken(ctr.address, amount[0])
     amount = [amountMin, amountMax]
     return amount
 }
@@ -441,7 +468,6 @@ export default {
     burnWcoin: burnWcoin,
     tokenAllowance: tokenAllowance,
     tokenApprove: tokenApprove,
-    tokenBalance: tokenBalance,
     tokenRedeem: tokenRedeem,
     mintPBT: mintPBT,
     getMintAbles: getMintAbles,

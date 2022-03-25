@@ -1,21 +1,28 @@
 <template>
   <el-col id="redeem" class="tabs">
-    <h3>{{ $t("redeem") }}</h3>
-    <el-col>
-      <p>{{ $t("balance") }}:{{ redeemBalance[bcoin] }}</p>
+    <el-col v-if="current.coinType == '2'"> 没有此兑换 </el-col>
+    <el-col v-else>
+      <h3>{{ $t("redeem") }}</h3>
       <el-col>
-        <el-input type="text" v-model="redeemNum"></el-input>
-        <el-col v-if="needApprove">
-          <el-button @click="approve">Approve</el-button>
+        <p>{{ $t("balance") }}:{{ this.redeemBalance[bcoin] }}</p>
+        <el-col>
+          <el-input type="text" v-model="redeemNum"></el-input>
+          <el-col v-if="needApprove">
+            <el-button @click="approve" :loading="approve_loading">
+              Approve
+            </el-button>
+          </el-col>
+          <el-col v-else>
+            <el-button @click="redeemAll">{{ $t("all") }}</el-button>
+            <el-button @click="redeem" :loading="redeem_loading">{{
+              $t("redeem")
+            }}</el-button>
+          </el-col>
         </el-col>
-        <el-col v-else>
-          <el-button @click="redeemAll">{{ $t("all") }}</el-button>
-          <el-button @click="redeem">{{ $t("redeem") }}</el-button>
-        </el-col>
+        <p>
+          {{ $t("rd-info", { bcoin: bcoin }) }}
+        </p>
       </el-col>
-      <p>
-        {{ $t("rd-info", { bcoin: bcoin }) }}
-      </p>
     </el-col>
   </el-col>
 </template>
@@ -43,6 +50,8 @@ export default {
   data() {
     return {
       redeemNum: "",
+      approve_loading: false,
+      redeem_loading: false,
     };
   },
   methods: {
@@ -50,12 +59,27 @@ export default {
       this.redeemNum = this.redeemBalance[this.bcoin];
     },
     approve: async function () {
-      const res = await market.tokenApprove("XCC");
+      this.approve_loading = true;
+      const commit = this.$store.commit;
+      const res = await market.tokenApprove(this.bcoin, commit);
+      console.log("res1", res);
+
+      const obj = this;
+      market.waitEventDone(res, async function (evt) {
+        console.log("approve res", res, evt);
+        obj.approve_loading = false;
+      });
       console.log("res", res);
       //TODO: watch tokenRedeem events
     },
     redeem: async function () {
-      await market.tokenRedeem(this.bcoin, this.redeemNum);
+      this.redeem_loading = true;
+      const obj = this;
+      const res = await market.tokenRedeem(this.bcoin, this.redeemNum);
+      market.waitEventDone(res, async function (evt) {
+        console.log("redeem res", res, evt);
+        obj.redeem_loading = false;
+      });
       //TODO: watch tokenRedeem events
     },
   },

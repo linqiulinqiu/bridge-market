@@ -10,9 +10,9 @@
       </el-col>
       <el-col :span="7">
         <h5 style="line-height: 35px">
-          version:3/24 5.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.8
+          version:3/25 3.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.9
           <br />
-          keeper:#0.1.9.1 &nbsp;&nbsp;&nbsp;pb-ui:#0.0.13
+          keeper:#0.2.0 &nbsp;&nbsp;&nbsp;pb-ui:#0.0.13
         </h5>
       </el-col>
       <el-col class="nav" :span="8">
@@ -112,17 +112,9 @@ export default {
         commit("setBaddr", bsc.addr);
         await data.loadAlllists_brief(store);
         await data.loadAlllists_detail(store);
-
-        // const oldToken = "0x134315EF3D11eEd8159fD1305af32119a046375A";
-        // const oldToken = "0x1B4bB84f3DCAc9899C41726838CdEC291DB52d25"; // wxcc addr in testnet
-        const otBalance = await market.tokenBalance();
         const otAllowance = await market.tokenAllowance();
-        console.log("redeem p to w", otBalance, otAllowance);
-        this.$store.commit("setRedeemBalance", otBalance);
         this.$store.commit("setRedeemAllowance", otAllowance);
         this.conenct_loading = false;
-
-        return "ok";
       }
     },
   },
