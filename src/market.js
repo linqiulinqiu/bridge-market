@@ -11,50 +11,6 @@ const coinDecimals = {}
 const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
 }
-// const ptInfos = {}
-// ptInfos[ethers.constants.AddressZero] = {
-//     symbol: 'BNB',
-//     decimals: 18
-// }
-
-// async function ptInfo(ctraddr) {
-//     const ctr = pbwallet.erc20_contract(ctraddr)
-//     const info = {
-//         symbol: 'invalid',
-//         decimals: 0
-//     }
-//     try {
-//         info.symbol = await ctr.symbol()
-//         info.decimals = await ctr.decimals()
-//     } catch (e) {
-//         console.log('read ctr', ctraddr, 'err, maybe not ERC20')
-//     }
-//     return info
-// }
-
-// async function tokenSymbol(ctraddr) {
-//     ctraddr = ethers.utils.getAddress(ctraddr)
-//     if (!(ctraddr in ptInfos)) {
-//         ptInfos[ctraddr] = await ptInfo(ctraddr)
-//     }
-//     return ptInfos[ctraddr].symbol
-// }
-
-// async function formatToken(ctraddr, val) {
-//     ctraddr = ethers.utils.getAddress(ctraddr)
-//     if (!(ctraddr in ptInfos)) {
-//         ptInfos[ctraddr] = await ptInfo(ctraddr)
-//     }
-//     return ethers.utils.formatUnits(val, ptInfos[ctraddr].decimals)
-// }
-
-// async function parseToken(ctraddr, val) {
-//     ctraddr = ethers.utils.getAddress(ctraddr)
-//     if (!(ctraddr in ptInfos)) {
-//         ptInfos[ctraddr] = await ptInfo(ctraddr)
-//     }
-//     return ethers.utils.parseUnits(val, ptInfos[ctraddr].decimals)
-// }
 
 function coinContract(coin) {
     const wcoin = 'w' + coin.toLowerCase()
@@ -160,7 +116,7 @@ async function tokenApprove(bcoin, commit) {
 }
 async function tokenRedeem(bcoin, amount) {
     const ctr = pbwallet.erc20_contract(oldTokenAddr[bcoin])
-    amount = await parseToken(ctr.address, amount)
+    amount = await keeper.parseToken(ctr.address, amount)
     const res = await bsc.ctrs.tokenredeem.redeem(oldTokenAddr[bcoin], amount)
     console.log("redeem res", res.hash)
     return res
@@ -168,9 +124,9 @@ async function tokenRedeem(bcoin, amount) {
 async function getmintfee() {
     const options = {}
     const fee = await bsc.ctrs.pbt.mintFee();
-    const info = await keeper.tokenInfo(fee[0])
+    const symbol = await keeper.tokenSymbol(fee[0])
     options.price = await keeper.formatToken(fee[0], fee[1])
-    options.ptName = info.symbol
+    options.ptName = symbol
     console.log("options", options)
     return options
 }
@@ -209,8 +165,8 @@ async function mintPBT() {
 }
 async function burnWcoin(amount, coin) {
     const ctr = coinContract(coin)
-    amount = await parseToken(ctr.address, amount)
-    const wBalance = await parseToken(ctr.address, store.state.WBalance[coin])
+    amount = await keeper.parseToken(ctr.address, amount)
+    const wBalance = await keeper.parseToken(ctr.address, store.state.WBalance[coin])
     if (amount.gt(wBalance)) {
         return false
     }
@@ -325,7 +281,7 @@ async function sendToMarket(id) {
     return res
 }
 async function setSellInfo(id, ptAddr, price, desc) {
-    const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, await parseToken(ptAddr, price), desc)
+    const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, await keeper.parseToken(ptAddr, price), desc)
     return res
 }
 async function checkAllowance(priceToken, spender) {
@@ -358,7 +314,7 @@ async function approveAllow(token, spender) {
 }
 async function buyNFT(nft) {
     const priceToken = nft.market.priceToken
-    const price = await parseToken(priceToken, nft.market.price)
+    const price = await keeper.parseToken(priceToken, nft.market.price)
     const id = ethers.BigNumber.from(nft.id)
     const options = {}
     if (priceToken == ethers.constants.AddressZero) {
@@ -387,15 +343,15 @@ async function afterFee(coin, mode, amount) {
     const ctr = coinContract(coin)
     const fees = await getfees(coin)
     const nowfee = {}
-    amount = await parseToken(ctr.address, amount)
+    amount = await keeper.parseToken(ctr.address, amount)
     if (mode == 'deposit') {
-        nowfee.min = await parseToken(ctr.address, fees.depositFee)
+        nowfee.min = await keeper.parseToken(ctr.address, fees.depositFee)
         nowfee.rate = fees.depositFeeRate
     } else if (mode == 'withdraw') {
-        nowfee.min = await parseToken(ctr.address, fees.withdrawFee)
+        nowfee.min = await keeper.parseToken(ctr.address, fees.withdrawFee)
         nowfee.rate = fees.withdrawFeeRate
         console.log("after fee", nowfee)
-        if (amount.gt(await parseToken(ctr.address, store.state.WBalance[coin]))) {
+        if (amount.gt(await keeper.parseToken(ctr.address, store.state.WBalance[coin]))) {
             return "fund"
         }
     } else {
