@@ -10,7 +10,7 @@
       </el-col>
       <el-col :span="7">
         <h5 style="line-height: 35px">
-          version:3/28 6.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.12
+          version:3/28 7.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.12
           <br />
           keeper:#0.2.1.3 &nbsp;&nbsp;&nbsp;pb-ui:#0.0.13
         </h5>
