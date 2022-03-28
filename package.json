@@ -10,7 +10,7 @@
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
     "ethers": "^5.5.4",
-    "pbwallet": "github:tgarm/pbwallet#0.2.9",
+    "pbwallet": "github:tgarm/pbwallet#0.2.10",
     "pbweb-nftkeeper": "bitbucket:plotnet/pbweb-nftkeeper#0.2.0",
     "pbweb-ui": "bitbucket:plotnet/pbweb-ui#0.0.13",
     "vue": "^2.6.11",

@@ -414,11 +414,17 @@ async function watchToken(coin) {
     )
     return added
 }
+async function burnNFT(id) {
+    const pbtId = ethers.BigNumber.from(id)
+    const res = await bsc.ctrs.pbt.burn(pbtId)
+    return res
+}
 export default {
     connect: connect,
     checkAllowance: checkAllowance,
     approveAllow: approveAllow,
     afterFee: afterFee,
+    burnNFT: burnNFT,
     watchToken: watchToken,
     burnWcoin: burnWcoin,
     tokenAllowance: tokenAllowance,

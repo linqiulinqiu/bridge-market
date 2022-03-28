@@ -1,5 +1,8 @@
 <template>
   <el-col>
+    <el-col>
+      <p>销毁NFT <el-button @click="burnPBT">销毁NFT</el-button></p>
+    </el-col>
     <h2>售卖NFT</h2>
     <el-col v-if="sendToMarket">
       <p>
@@ -62,6 +65,11 @@ export default {
     };
   },
   methods: {
+    burnPBT: async function () {
+      const id = this.curNFT.id;
+      const res = await market.burnNFT(id);
+      console.log("burn res", res);
+    },
     send: async function () {
       this.send_loading = true;
       const id = this.curNFT.id;
