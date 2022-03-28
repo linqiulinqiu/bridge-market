@@ -52,7 +52,6 @@ async function listenRedeemEvt(commit) {
     const oldTokenAddr = {
         "XCC": "0x1B4bB84f3DCAc9899C41726838CdEC291DB52d25",
         "XCH": "0xFdF2F0995663a993A16929CeC5c39B039AB18Ef6",
-        // "HDD": "0xFfB8F22732e7fC4550a8Cda5DB03cCcCF082b357",
     }
     async function updateOldBalance(evt) {
         let oldBalance = {}

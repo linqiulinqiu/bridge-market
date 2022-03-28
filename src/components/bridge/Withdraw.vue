@@ -1,6 +1,6 @@
 <template>
   <el-col id="withdraw" class="tabs">
-    <el-col v-if="this.hasPbx">
+    <el-col v-if="this.hasPbx && this.hasCoin">
       <el-col v-if="this.withdrawAddr">
         <el-col>
           <p v-if="withdrawBinded > 1">
@@ -100,7 +100,10 @@
         </el-col>
       </el-col>
     </el-col>
-    <el-col v-else> 数据加载中。。。 </el-col>
+    <el-col v-else>
+      数据加载中。。。
+      <el-skeleton :rows="5" animated></el-skeleton>
+    </el-col>
 
     <el-dialog title="绑定取款地址" :visible.sync="bind_dialog">
       <el-card>
@@ -173,50 +176,14 @@ export default {
       }
       return binded;
     },
-    warning_waddr(state) {
-      let waddr_arr = {
-        XCC: [],
-        XCH: [],
-        HDD: [],
-      };
-      let warning_addr = {
-        XCH: false,
-        XCC: false,
-        HDD: false,
-      };
-      for (let i in state.myList) {
-        const item = state.myList[i];
-        if (Object.keys(item).includes("pbxs")) {
-          const pbxs = item.pbxs;
-          for (let j in pbxs) {
-            if (pbxs[j].withdrawAddr) {
-              for (let item in waddr_arr) {
-                let newArr = [];
-                const prefix = item.toLowerCase();
-                const arrpre = pbxs[j].withdrawAddr.substr(0, 3);
-                if (prefix == arrpre) {
-                  newArr.push(pbxs[j].withdrawAddr);
-                  waddr_arr[item] = newArr;
-                }
-              }
-            }
-          }
-        }
+    hasCoin(state) {
+      console.log("cointype", state.current.coinType);
+      let coin = false;
+      if (state.current.coinType != 0) {
+        coin = true;
+        this.hasPbx = this.curNFT && "pbxs" in this.curNFT;
       }
-      console.log("waddr_arr for mylist=", waddr_arr);
-      for (let i in warning_addr) {
-        for (let k in waddr_arr) {
-          waddr_arr[k] = Array.from(new Set(waddr_arr[k]));
-          if (i == k) {
-            if (waddr_arr[k].length <= 1) {
-              warning_addr[i] = false;
-            } else {
-              warning_addr[i] = true;
-            }
-          }
-        }
-      }
-      return warning_addr;
+      return coin;
     },
   }),
   data() {
@@ -241,6 +208,7 @@ export default {
     bcoin: async function () {
       this.wAmount = "";
       this.getwAmount = "";
+      this.hasPbx = this.curNFT && "pbxs" in this.curNFT;
     },
     withdrawAddr: function (newV) {
       console.log("this.withdrawAddr ==", newV);

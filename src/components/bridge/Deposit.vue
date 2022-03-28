@@ -1,6 +1,6 @@
 <template>
   <el-col id="deposit" class="tabs">
-    <el-col v-if="this.hasPbx">
+    <el-col v-if="this.hasPbx && this.hasCoin">
       <el-col v-if="this.depositAddr">
         <p>
           {{ $t("deposit") }}:<el-input
@@ -29,12 +29,13 @@
         </el-col>
         <el-col>
           <p>
-            {{ $t("get")
-            }}<span class="span"
-              ><span v-if="this.depAmount" class="font">
-                {{ getAmount }}</span
-              ></span
-            >
+            {{ $t("get") }}
+            <span class="span">
+              <span v-if="this.depAmount" class="font">
+                {{ getAmount }}
+              </span>
+              <span v-else> &nbsp;&nbsp;</span>
+            </span>
             w{{ bcoin }}，{{ $t("inbsc") }}。
           </p>
           <p v-if="this.tips_amount">
@@ -87,8 +88,8 @@
       </el-col>
     </el-col>
     <el-col v-else>
-      <!-- <el-skeleton :rows="5" animated></el-skeleton> -->
-      加载中
+      <el-skeleton :rows="5" animated></el-skeleton>
+      <!-- 加载中 -->
     </el-col>
   </el-col>
 </template>
@@ -115,6 +116,15 @@ export default {
       }
       return false;
     },
+    hasCoin(state) {
+      console.log("cointype", state.current.coinType);
+      let coin = false;
+      if (state.current.coinType != 0) {
+        coin = true;
+        this.hasPbx = this.curNFT && "pbxs" in this.curNFT;
+      }
+      return coin;
+    },
   }),
   data() {
     return {
@@ -131,7 +141,8 @@ export default {
     };
   },
   watch: {
-    bcoin: function () {
+    bcoin: function (newCoin, old) {
+      console.log("newCoin", newCoin, old);
       this.depAmount = "";
       this.getAmount = "";
     },
@@ -139,12 +150,6 @@ export default {
       this.hasPbx = nft && "pbxs" in nft;
       console.log("this.curNFT in dep=", nft);
     },
-    depositAddr: function (newV) {
-      console.log("new dep=", newV);
-      return newV;
-    },
-    deep: true,
-
     depAmount: async function () {
       var depamount = this.depAmount;
       if (!depamount || isNaN(depamount) || depamount == "") {

@@ -26,10 +26,14 @@ button {
 }
 
 .span {
-    width: 100px;
-    background-color: #cbdbcbfd;
+    width: 200px;
+    height: 40px;
+    background-color: #e3e9e3;
     display: inline-block;
     text-align: center;
+    margin-top: 5px;
+    border: #e2eee0 .5px solid;
+    border-radius: 20px;
 }
 
 .selectToken {

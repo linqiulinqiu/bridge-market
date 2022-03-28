@@ -10,7 +10,7 @@
             <router-view></router-view>
           </el-main>
         </el-container>
-        <el-footer style="height: 70px">
+        <el-footer style="height: 160px">
           <Plotfooter />
         </el-footer>
       </el-container>
@@ -44,7 +44,7 @@ export default {
 #app {
   min-height: 800px;
 }
-.el-header{
+.el-header {
   background-color: #25272e;
   color: #ffffff;
   text-align: center;
@@ -53,12 +53,14 @@ export default {
   user-select: none;
 }
 .el-footer {
+  width: 100%;
   background-color: #25272e;
   color: #ffffff;
   text-align: center;
-  line-height: 69px;
+  line-height: 35px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   user-select: none;
+  padding: 30px 20px !important;
 }
 
 .el-main {
