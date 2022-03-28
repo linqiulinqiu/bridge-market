@@ -197,7 +197,7 @@ export default {
   },
   watch: {
     curNFT: function (nft, old) {
-      this.hasPbxs = nft && "pbxs" in nft;
+      // this.hasPbxs = nft && "pbxs" in nft;
     },
     bcoin: async function () {
       this.wAmount = "";

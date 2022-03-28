@@ -140,7 +140,7 @@ export default {
       this.getAmount = "";
     },
     curNFT: function (nft, old) {
-      this.hasPbxs = nft && "pbxs" in nft;
+      // this.hasPbxs = nft && "pbxs" in nft;
     },
     depAmount: async function () {
       var depamount = this.depAmount;

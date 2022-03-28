@@ -188,6 +188,7 @@ async function reBindFee() {
     return refee
 }
 async function bindAddr(waddr, pbtId, cointy, rebind) {
+    const pbtid = ethers.BigNumber.from(pbtId)
     const prefix = pbwallet.wcoin_info(cointy).prefix
     try {
         if ('ChiaUtils' in window) {
@@ -197,7 +198,7 @@ async function bindAddr(waddr, pbtId, cointy, rebind) {
             if (rebind) {
                 const fee = await bsc.ctrs.pbpuzzlehash.rebindFee()
                 if (fee[0] == ethers.constants.AddressZero) { // fee in BNB
-                    res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr, {
+                    res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addr, {
                         value: fee[1]
                     })
                 } else { // erc20 token
@@ -209,19 +210,20 @@ async function bindAddr(waddr, pbtId, cointy, rebind) {
                         res.fn = 'approve'
                         await waitEventDone(res, async function (evt) {
                             console.log("approveAllowance evt done,evt=", evt)
-                            const bind = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr)
+                            const bind = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addr)
                             console.log("rebind addr ", bind)
                             return bind
                         })
                         // return res
                     }
-                    res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr, {
+                    res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addr, {
                         value: fee[1]
                     })
                     return res
                 }
             } else {
-                res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtId, cointy, addr)
+                console.log('withdraw-bind', pbtId, cointy, addr);
+                res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addr)
                 return res
             }
         }
@@ -250,7 +252,7 @@ async function clearAddr(pbtid, cointy) {
     const fee = await bsc.ctrs.pbpuzzlehash.rebindFee()
     let res = {}
     if (fee[0] == ethers.constants.AddressZero) { // fee in BNB
-        res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addr, {
+        res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addrZero, {
             value: fee[1]
         })
     } else { // erc20 token
