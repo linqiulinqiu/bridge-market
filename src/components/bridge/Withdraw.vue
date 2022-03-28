@@ -1,6 +1,6 @@
 <template>
   <el-col id="withdraw" class="tabs">
-    <el-col v-if="this.hasPbx && this.hasCoin">
+    <el-col v-if="this.hasPbxs">
       <el-col v-if="this.withdrawAddr">
         <el-col>
           <p v-if="withdrawBinded > 1">
@@ -176,14 +176,9 @@ export default {
       }
       return binded;
     },
-    hasCoin(state) {
-      console.log("cointype", state.current.coinType);
-      let coin = false;
-      if (state.current.coinType != 0) {
-        coin = true;
-        this.hasPbx = this.curNFT && "pbxs" in this.curNFT;
-      }
-      return coin;
+    hasPbxs() {
+      const pbxs = this.curNFT && "pbxs" in this.curNFT;
+      return pbxs;
     },
   }),
   data() {
@@ -202,16 +197,13 @@ export default {
   },
   watch: {
     curNFT: function (nft, old) {
-      this.hasPbx = nft && "pbxs" in nft;
-      console.log("this.curNFT in dep=", nft);
+      this.hasPbxs = nft && "pbxs" in nft;
     },
     bcoin: async function () {
       this.wAmount = "";
       this.getwAmount = "";
-      this.hasPbx = this.curNFT && "pbxs" in this.curNFT;
     },
     withdrawAddr: function (newV) {
-      console.log("this.withdrawAddr ==", newV);
       return newV;
     },
     wAmount: async function () {

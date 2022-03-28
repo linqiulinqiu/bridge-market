@@ -1,6 +1,6 @@
 <template>
   <el-col id="deposit" class="tabs">
-    <el-col v-if="this.hasPbx && this.hasCoin">
+    <el-col v-if="this.hasPbxs">
       <el-col v-if="this.depositAddr">
         <p>
           {{ $t("deposit") }}:<el-input
@@ -88,8 +88,8 @@
       </el-col>
     </el-col>
     <el-col v-else>
+      加载中。。。。
       <el-skeleton :rows="5" animated></el-skeleton>
-      <!-- 加载中 -->
     </el-col>
   </el-col>
 </template>
@@ -116,14 +116,9 @@ export default {
       }
       return false;
     },
-    hasCoin(state) {
-      console.log("cointype", state.current.coinType);
-      let coin = false;
-      if (state.current.coinType != 0) {
-        coin = true;
-        this.hasPbx = this.curNFT && "pbxs" in this.curNFT;
-      }
-      return coin;
+    hasPbxs() {
+      const pbxs = this.curNFT && "pbxs" in this.curNFT;
+      return pbxs;
     },
   }),
   data() {
@@ -137,18 +132,15 @@ export default {
       getAmount: "",
       tips_amount: false,
       getDep_loading: false,
-      hasPbx: false,
     };
   },
   watch: {
     bcoin: function (newCoin, old) {
-      console.log("newCoin", newCoin, old);
       this.depAmount = "";
       this.getAmount = "";
     },
     curNFT: function (nft, old) {
-      this.hasPbx = nft && "pbxs" in nft;
-      console.log("this.curNFT in dep=", nft);
+      this.hasPbxs = nft && "pbxs" in nft;
     },
     depAmount: async function () {
       var depamount = this.depAmount;
