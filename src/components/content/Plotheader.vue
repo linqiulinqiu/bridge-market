@@ -12,7 +12,7 @@
         <h5 style="line-height: 35px">
           version:3/29 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.12
           <br />
-          keeper:#0.2.2 &nbsp;&nbsp;&nbsp;pb-ui:#0.0.13
+          keeper:#0.2.4 &nbsp;&nbsp;&nbsp;pb-ui:#0.0.13
         </h5>
       </el-col>
       <el-col class="nav" :span="8">

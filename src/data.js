@@ -18,8 +18,6 @@ async function connect(commit) {
     console.log("bsc in connect", bsc)
     if (bsc) {
         commit("setBsc", bsc)
-        // const cnt = await keeper.preload(bsc, commit, myList)
-        // console.log('user owns', cnt.toString(), 'PBT')
         return bsc
     }
     return false
@@ -39,20 +37,21 @@ async function getCoinTypes(pid) {
 }
 async function nftBriefInfo(id) {
     const uri = await bsc.ctrs.pbt.tokenURI(id.toNumber())
+    let meta = {}
     try {
         const meta = await fetch(fix_uri(uri))
         const img = await meta.json()
         meta['image'] = await fix_uri(String(img.image))
-        const info = {
-            id: id.toNumber(),
-            uri: uri,
-            meta: meta,
-        }
-        return info
-
     } catch (e) {
-        console.log('err', e.message)
+        console.log("get info-brief err", e)
+        meta['image'] = "https://app.plotbridge.net/img/loading.png"
     }
+    const info = {
+        id: id.toNumber(),
+        uri: uri,
+        meta: meta,
+    }
+    return info
 
 }
 async function loadMarketinfo(id) {
