@@ -1,8 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from '../views/Home.vue'
-// const Home = () => import('views/home/Home')
+import RoadMap from "../components/document/RoadMap"
+import Guidefor from "../components/document/Guidefor"
+import GuideforMarket from "@/components/document/GuideforMarket"
+import GuideforWallet from "@/components/document/GuideforWallet"
+import GuideforBridge from "@/components/document/GuideforBridge"
+import Introduction from "@/components/document/Introduction"
 
 Vue.use(VueRouter)
 
@@ -30,7 +34,38 @@ const routes = [{
   {
     path: '/doc',
     name: 'Doc',
-    component: () => import('../views/Doc')
+    component: () => import('../views/Doc'),
+    children: [{
+        path: '/Introduction',
+        component: Introduction,
+        name: "Introduction"
+      },
+      {
+        path: '/RoadMap',
+        component: RoadMap,
+        name: "RoadMap"
+      },
+      {
+        path: '/Guidefor',
+        component: Guidefor,
+        name: "Guidefor"
+      },
+      {
+        path: '/GuideforMarket',
+        component: GuideforMarket,
+        name: "GuideforMarket"
+      },
+      {
+        path: '/GuideforBridge',
+        component: GuideforBridge,
+        name: "GuideforBridge"
+      },
+      {
+        path: '/GuideforWallet',
+        component: GuideforWallet,
+        name: "GuideforWallet"
+      }
+    ]
   },
 ]
 

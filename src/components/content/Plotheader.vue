@@ -10,9 +10,9 @@
       </el-col>
       <el-col :span="7">
         <h5 style="line-height: 35px">
-          version:3/28 7.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.12
+          version:3/29 2.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.12
           <br />
-          keeper:#0.2.1.3 &nbsp;&nbsp;&nbsp;pb-ui:#0.0.13
+          keeper:#0.2.2 &nbsp;&nbsp;&nbsp;pb-ui:#0.0.13
         </h5>
       </el-col>
       <el-col class="nav" :span="8">
@@ -37,7 +37,7 @@
         >
         <span v-else style="color: #fff" class="baddr font">
           <el-tooltip effect="light" placement="bottom">
-            <span slot="content" class="font">bsc钱包地址{{ baddr }}</span>
+            <span slot="content" class="font">bsc钱包地址: {{ baddr }}</span>
             <span class="font">{{
               baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
             }}</span>
