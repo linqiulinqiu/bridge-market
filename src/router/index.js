@@ -7,6 +7,7 @@ import GuideforMarket from "@/components/document/GuideforMarket"
 import GuideforWallet from "@/components/document/GuideforWallet"
 import GuideforBridge from "@/components/document/GuideforBridge"
 import Introduction from "@/components/document/Introduction"
+import MintPBT from "@/components/market/MintPBT"
 
 Vue.use(VueRouter)
 
@@ -29,7 +30,12 @@ const routes = [{
   {
     path: '/market',
     name: 'Market',
-    component: () => import('../views/Market')
+    component: () => import('../views/Market'),
+    children: [{
+      path: "/MintPBT",
+      component: MintPBT,
+      name: "MintPBT"
+    }]
   },
   {
     path: '/doc',

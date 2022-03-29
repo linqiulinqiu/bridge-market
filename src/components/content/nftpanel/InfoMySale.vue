@@ -8,7 +8,7 @@
           placeholder="input price"
           id="_price"
         ></el-input>
-        <el-select v-model="priceToken" class="selecToken">
+        <el-select v-model="ptName" class="selecToken">
           <el-option value="BNB" key="BNB" label="BNB"></el-option>
           <el-option value="BUSD" key="BUSD" label="BUSD"></el-option>
         </el-select>
@@ -46,7 +46,7 @@ export default {
     return {
       nftPrice: 0,
       nftDesc: "",
-      priceToken: "BNB",
+      ptName: "BNB",
       change_loading: false,
       re_loading: false,
     };
@@ -59,17 +59,16 @@ export default {
         this.$message("price is empty");
         this.change_loading = false;
       }
-      try {
+      try { 
         const res = await market.setSellInfo(
           id,
-          this.priceToken,
+          this.ptName,
           this.nftPrice,
           this.nftDesc
         );
         const obj = this;
         await market.waitEventDone(res, async function (evt) {
           obj.change_loading = false;
-          obj.show();
         });
       } catch (e) {
         this.change_loading = false;

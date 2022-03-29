@@ -27,7 +27,7 @@
             show-word-limit
             id="price"
           ></el-input>
-          <el-select v-model="priceToken" class="selecToken">
+          <el-select v-model="ptName" class="selecToken">
             <el-option value="BNB" key="BNB" label="BNB"></el-option>
             <el-option key="BUSD" label="BUSD" value="BUSD"></el-option>
           </el-select>
@@ -58,7 +58,7 @@ export default {
     return {
       nftPrice: 0,
       nftDesc: "",
-      priceToken: "BNB",
+      ptName: "BNB",
       sendToMarket: true,
       send_loading: false,
       set_loading: false,
@@ -101,7 +101,7 @@ export default {
       try {
         const res = await market.setSellInfo(
           id,
-          this.priceToken,
+          this.ptName,
           this.nftPrice,
           this.nftDesc
         );

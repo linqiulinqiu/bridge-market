@@ -10,6 +10,7 @@ var bsc = {}
 const coinDecimals = {}
 const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
+    'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
 }
 
 function coinContract(coin) {
@@ -281,8 +282,13 @@ async function sendToMarket(id) {
     const res = await pb["safeTransferFrom(address,address,uint256)"](bsc.addr, bsc.ctrs.pbmarket.address, id)
     return res
 }
-async function setSellInfo(id, ptAddr, price, desc) {
-    const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, await keeper.parseToken(ptAddr, price), desc)
+async function setSellInfo(id, ptName, price, desc) {
+    let ptAddr = ptAddrs[ptName]
+    if (!ptAddr) {
+        ptAddr = ethers.constants.AddressZero
+    }
+    const nftPrice = await keeper.parseToken(ptAddr, price)
+    const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, nftPrice, desc)
     return res
 }
 async function checkAllowance(priceToken, spender) {

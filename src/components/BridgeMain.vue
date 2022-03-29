@@ -47,6 +47,14 @@
                 ><Redeem :curNFT="this.curNFT"
               /></el-tab-pane>
             </el-tabs>
+            <el-col class="lplink">
+              <h3>
+                <a
+                  href="https://pancake.kiemtienonline360.com/#/swap?outputCurrency=0xCb7A587Ee1BBAF2385659D8ba8D3F4318601caE6"
+                  >lp for PBP</a
+                >
+              </h3>
+            </el-col>
           </el-col>
         </el-col>
       </el-col>
@@ -94,3 +102,25 @@ export default {
   },
 };
 </script>
+<style>
+.lplink {
+  position: absolute;
+  z-index: 10;
+  bottom: 15px;
+  left: 15px;
+  width: 150px;
+  height: 50px;
+  border: darkcyan 1px solid;
+  text-align: center;
+  border-radius: 20px;
+  padding: 7px;
+  box-shadow: -7px 6px 5px 5px cadetblue;
+}
+.lplink a {
+  color: #668b66;
+  text-decoration: none;
+}
+.lplink a:hover {
+  color: blueviolet;
+}
+</style>
