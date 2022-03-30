@@ -15,6 +15,9 @@
           keeper:#0.2.6 &nbsp;&nbsp;&nbsp;pb-ui:#0.0.13
         </h5>
       </el-col>
+      <!-- <el-col>
+
+      </el-col> -->
       <el-col class="nav" :span="8">
         <ul>
           <li
@@ -71,6 +74,14 @@ export default {
     baddr: "baddr",
     myList: "myList",
     marketList: "marketList",
+    nav() {
+      return [
+        { tag: this.$t("home"), link: "/home" },
+        { tag: this.$t("bridge"), link: "/bridge" },
+        { tag: this.$t("market"), link: "/market" },
+        { tag: this.$t("doc"), link: "/doc" },
+      ];
+    },
   }),
   watch: {
     lang: function () {
@@ -85,12 +96,6 @@ export default {
         { value: "zh", label: "简体中文" },
       ],
       lang: i18n.locale,
-      nav: [
-        { tag: "Home", link: "/home" },
-        { tag: this.$t("bridge"), link: "/bridge" },
-        { tag: this.$t("market"), link: "/market" },
-        { tag: "Doc", link: "/doc" },
-      ],
     };
   },
   methods: {

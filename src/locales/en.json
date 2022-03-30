@@ -23,13 +23,20 @@
     "dep-minFee":"Min deposit fee",
     "dep-limit":"The recommended limit for a single deposit is :",
     "dep-addr":"Get deposit address for {bcoin}",
+    "doc":"Doc",
 
     "function":"Function",
     
     "get":"You will get :",
     "getaddr":"No address for this type of deposit,please contract us with discord or telegram. ",
+    "guide-bridge":"Guide For Bridge",
+    "guide-market":"Guide For Market",
+    "guide-wallet":"Guide For Wallet",
+
+    "home":"Home",
 
     "inbsc":"In your BSC wallet",
+    "introduction":"Introduction",
 
     "look-info":"Looking the details info after connect wallet",
     
@@ -48,6 +55,7 @@
    
     "redeem":"Redeem",
     "rd-info":"Because of version upgrade, the previous tokens will be converted to current tokens on a one-to-one basis, e.g. 50 P{bcoin} Converted to 50 w{bcoin}",
+    "road-map":"RoadMap",
 
     "select-coin":"Select Coin",
 

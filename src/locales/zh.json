@@ -17,6 +17,8 @@
     "correct-addr":"请确认取款地址是自己钱包的收款地址，并且确认地址是正确的。",
     "deposit":"存款",
     "desc":"描述 :",
+    "doc":"文档",
+    
     "dep-limit":"单次存款建议限额为：",
     "dep-rate":"存款费率",
     "dep-minFee":"最小存款手续费",
@@ -24,7 +26,14 @@
     "function":"支持",
     "get":"你将会得到 :",
     "getaddr":"该类型的存款地址已经没有了，请在discord或电报上联系我们。",
+    "guide-bridge":"桥的说明",
+    "guide-market":"市场说明",
+    "guide-wallet":"钱包说明",
+
+    "home":"首页",
+
     "inbsc":"在你的BSC钱包中",
+    "introduction":"说明",
     "look-info":"查看具体信息请先连接钱包",
     "market":"市场",
     "mintPBT":"Mint PBT",
@@ -37,6 +46,8 @@
     "price":"价格 :",
     "redeem":"兑换",
     "rd-info":"因为版本升级，现将以前的代币按照一比一兑换为现在的代币，如 50 P{bcoin}转化为 50 w{bcoin}",
+    "road-map":"路线图",
+
 
     "select-coin":"选择币种",
 

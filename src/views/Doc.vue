@@ -5,15 +5,17 @@
         <h3>docs title</h3>
         <el-col>
           <el-menu
-            v-for="item in this.menuLink"
-            :key="item.index"
             :router="true"
-            :default-active="activeIndex"
+            :default-active="this.$route.path"
             text-color="#fff"
             background-color="#25272e"
             @select="handleSelect"
           >
-            <el-menu-item :index="item.link">
+            <el-menu-item
+              v-for="item in this.menuLink"
+              :index="item.link"
+              :key="item.index"
+            >
               <i class="el-icon-document"></i>
               <span slot="title">{{ item.value }}</span>
             </el-menu-item>
@@ -22,38 +24,26 @@
       </el-aside>
       <el-main>
         <router-view></router-view>
-        <!-- <el-col>
-          <el-col v-if="this.menuIndex == '1'"><Introduction /></el-col>
-          <el-col v-else-if="this.menuIndex == '2'"><RoadMap /></el-col>
-          <el-col v-else-if="this.menuIndex == '3'"><GuideforMarket /></el-col>
-          <el-col v-else-if="this.menuIndex == '4'"><GuideforWallet /></el-col>
-          <el-col v-else-if="this.menuIndex == '5'"><GuideforBridge /></el-col>
-          <el-col v-else-if="this.menuIndex == '6'"><Guidefor /></el-col>
-        </el-col> -->
       </el-main>
     </el-container>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "Doc",
-  computed: {},
-  data() {
-    return {
-      activeIndex: "/Introduction",
-      menuIndex: "1",
-      menuLink: [
+  computed: {
+    menuLink() {
+      return [
         {
           index: "1",
           link: "/Introduction",
-          value: "Introduction",
+          value: this.$t("introduction"),
         },
         {
           index: "2",
           link: "/RoadMap",
-          value: "RoadMap",
+          value: this.$t("road-map"),
         },
         {
           index: "3",
@@ -63,19 +53,29 @@ export default {
         {
           index: "4",
           link: "/GuideforBridge",
-          value: "GuideforBridge",
+          value: this.$t("guide-bridge"),
         },
         {
           index: "5",
           link: "/GuideforMarket",
-          value: "GuideforMarket",
+          value: this.$t("guide-market"),
         },
         {
           index: "6",
           link: "/GuideforWallet",
-          value: "GuideforWallet",
+          value: this.$t("guide-wallet"),
         },
-      ],
+      ];
+    },
+    // routerPath() {
+    //   return this.$route.meta.guidePath
+    //     ? this.$route.meta.jumpPath
+    //     : this.$route.path;
+    // },
+  },
+  data() {
+    return {
+      menuIndex: "1",
     };
   },
   methods: {
