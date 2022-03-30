@@ -376,17 +376,8 @@ async function afterFee(coin, mode, amount) {
 async function getfees(coin) {
     const ctr = coinContract(coin)
     let fee = {}
-    let depfee = []
-    let wdfee = []
-    if (ctr.depositFee && ctr.withdrawFee) {
-        depfee = await ctr.depositFee()
-        wdfee = await ctr.withdrawFee()
-    } else if (ctr.getDepositFee && ctr.getWithdrawFee) {
-        depfee = await ctr.getDepositFee()
-        wdfee = await ctr.getWithdrawFee()
-    } else {
-        return "not get fee"
-    }
+    const depfee = await ctr.depositFee()
+    const wdfee = await ctr.withdrawFee()
     console.log("fee", depfee, wdfee)
     fee.depositFee = await keeper.formatToken(ctr.address, depfee[1])
     fee.depositFeeRate = depfee[0]
@@ -398,7 +389,7 @@ async function getfees(coin) {
 }
 async function getLimit(coin) {
     const ctr = coinContract(coin)
-    let amount = await ctr.getCWAmount()
+    let amount = await ctr.cWAmount()
     const amountMax = await keeper.formatToken(ctr.address, amount[1])
     const amountMin = await keeper.formatToken(ctr.address, amount[0])
     amount = [amountMin, amountMax]
