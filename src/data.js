@@ -37,15 +37,18 @@ async function getCoinTypes(pid) {
 }
 async function nftBriefInfo(id) {
     const uri = await bsc.ctrs.pbt.tokenURI(id.toNumber())
-    let meta = {}
+    let meta = await fetch(fix_uri(uri))
+    console.log("mata", meta)
     try {
-        const meta = await fetch(fix_uri(uri))
+        // const meta = await fetch(fix_uri(uri))
         const img = await meta.json()
+        console.log("img", img)
         meta['image'] = await fix_uri(String(img.image))
     } catch (e) {
         console.log("get info-brief err", e)
         meta['image'] = "https://app.plotbridge.net/img/loading.png"
     }
+    console.log("meta", meta)
     const info = {
         id: id.toNumber(),
         uri: uri,
