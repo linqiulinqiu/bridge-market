@@ -9,11 +9,9 @@
         />
       </el-col>
       <el-col :span="7">
-        <h5 style="line-height: 35px">
-          version:3/30 3.0 &nbsp;&nbsp;&nbsp;pbwallet:#0.2.16
-          <br />
-          keeper:#0.2.6 &nbsp;&nbsp;&nbsp;pb-ui:#0.0.13
-        </h5>
+        <span v-for="(version,pkg) in versions">
+            <p>{{pkg}}-{{version}}</p>
+        </span>
       </el-col>
       <!-- <el-col>
 
@@ -68,6 +66,23 @@ import data from "../../data";
 import { i18n, setup } from "../../locales";
 import store from "../../store";
 
+function versions(){
+    const vs = {}
+    vs.App = process.env.VUE_APP_MY_VERSION
+    const dep = JSON.parse(process.env.VUE_APP_DEP_VERSIONS)
+    for(let n in dep){
+        const v = dep[n].split('/')
+        if(v.length>1){
+            const f = v[1].split('#')
+            if(f.length>1){
+                vs[f[0]] = f[1]
+            }
+        }
+    }
+    console.log('vs=', vs)
+    return vs
+}
+
 export default {
   name: "Plotheader",
   computed: mapState({
@@ -96,6 +111,7 @@ export default {
         { value: "zh", label: "简体中文" },
       ],
       lang: i18n.locale,
+      versions: versions()
     };
   },
   methods: {
