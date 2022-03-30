@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import Home from "@/views/Home"
+import Bridge from "@/views/Bridge"
+import Market from "@/views/Market"
+import Doc from "@/views/Doc"
 import RoadMap from "../components/document/RoadMap"
 import Guidefor from "../components/document/Guidefor"
 import GuideforMarket from "@/components/document/GuideforMarket"
@@ -12,25 +15,23 @@ import MintPBT from "@/components/market/MintPBT"
 Vue.use(VueRouter)
 
 const routes = [{
-    path: '/home',
+    path: "/",
+    redirect: "/Home",
+    component: Home,
+  }, {
+    path: '/Home',
     name: 'Home',
-    component: () => import('../views/Home'),
+    component: Home,
   },
   {
-    path: '/home',
-    redirect: '/',
-    component: () => import('../views/Home'),
-
-  },
-  {
-    path: '/bridge',
+    path: '/Bridge',
     name: 'Bridge',
-    component: () => import('../views/Bridge')
+    component: Bridge,
   },
   {
-    path: '/market',
+    path: '/Market',
     name: 'Market',
-    component: () => import('../views/Market'),
+    component: Market,
     children: [{
       path: "/MintPBT",
       component: MintPBT,
@@ -38,9 +39,10 @@ const routes = [{
     }]
   },
   {
-    path: '/doc',
+    path: '/Doc',
     name: 'Doc',
-    component: () => import('../views/Doc'),
+    component: Doc,
+    redirect: "/Introduction",
     children: [{
         path: '/Introduction',
         component: Introduction,

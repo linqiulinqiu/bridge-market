@@ -6,7 +6,7 @@
         <el-col>
           <el-menu
             :router="true"
-            :default-active="this.$route.path"
+            :default-active="this.menuIndex"
             text-color="#fff"
             background-color="#25272e"
             @select="handleSelect"
@@ -75,7 +75,7 @@ export default {
   },
   data() {
     return {
-      menuIndex: "1",
+      menuIndex: "/Introduction",
     };
   },
   methods: {

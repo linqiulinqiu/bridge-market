@@ -1,34 +1,36 @@
 <template>
   <div class="container">
     <el-row type="flex" justify="center">
-      <el-col :span="2">
+      <el-col :span="2" id="logo">
         <img
           style="width: 160px"
           src="../../assets/image/logo_000.png"
           alt="LOGO"
         />
       </el-col>
-      <el-col :span="7">
-        <span v-for="(version,pkg) in versions">
-            <p>{{pkg}}-{{version}}</p>
-        </span>
+      <el-col :span="7" id="version">
+        <p v-for="(version, pkg) in versions" :key="version">
+          <span>{{ pkg }}-{{ version }}<br /></span>
+        </p>
       </el-col>
-      <!-- <el-col>
-
-      </el-col> -->
-      <el-col class="nav" :span="8">
-        <ul>
-          <li
-            class="nav-item"
-            v-for="(item, index) in this.nav"
-            :key="index"
-            @click="liclick(item.link, index)"
-          >
-            {{ item.tag }}
-          </li>
-        </ul>
+      <el-col id="menu" :span="8">
+        <el-menu
+          :router="true"
+          :default-active="this.menuIndex"
+          text-color="#fff"
+          mode="horizontal"
+          background-color="#25272e"
+          @select="selectTag"
+        >
+          <el-menu-item
+            v-for="item in this.nav"
+            :key="item.link"
+            :index="item.link"
+            >{{ item.tag }}
+          </el-menu-item>
+        </el-menu>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="4" id="connect">
         <el-button
           v-if="!baddr"
           @click="connect_wallet"
@@ -45,7 +47,7 @@
           </el-tooltip>
         </span>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="4" id="changelang">
         <el-select v-model="lang">
           <el-option
             v-for="item in langs"
@@ -66,21 +68,21 @@ import data from "../../data";
 import { i18n, setup } from "../../locales";
 import store from "../../store";
 
-function versions(){
-    const vs = {}
-    vs.App = process.env.VUE_APP_MY_VERSION
-    const dep = JSON.parse(process.env.VUE_APP_DEP_VERSIONS)
-    for(let n in dep){
-        const v = dep[n].split('/')
-        if(v.length>1){
-            const f = v[1].split('#')
-            if(f.length>1){
-                vs[f[0]] = f[1]
-            }
-        }
+function versions() {
+  const vs = {};
+  vs.App = process.env.VUE_APP_MY_VERSION;
+  const dep = JSON.parse(process.env.VUE_APP_DEP_VERSIONS);
+  for (let n in dep) {
+    const v = dep[n].split("/");
+    if (v.length > 1) {
+      const f = v[1].split("#");
+      if (f.length > 1) {
+        vs[f[0]] = f[1];
+      }
     }
-    console.log('vs=', vs)
-    return vs
+  }
+  console.log("vs=", vs);
+  return vs;
 }
 
 export default {
@@ -91,10 +93,10 @@ export default {
     marketList: "marketList",
     nav() {
       return [
-        { tag: this.$t("home"), link: "/home" },
-        { tag: this.$t("bridge"), link: "/bridge" },
-        { tag: this.$t("market"), link: "/market" },
-        { tag: this.$t("doc"), link: "/doc" },
+        { tag: this.$t("home"), link: "/Home" },
+        { tag: this.$t("bridge"), link: "/Bridge" },
+        { tag: this.$t("market"), link: "/Market" },
+        { tag: this.$t("doc"), link: "/Doc" },
       ];
     },
   }),
@@ -111,20 +113,16 @@ export default {
         { value: "zh", label: "简体中文" },
       ],
       lang: i18n.locale,
-      versions: versions()
+      menuIndex: "/Home",
+      versions: versions(),
     };
   },
   methods: {
-    liclick(link, index) {
-      let arr = document.getElementsByClassName("nav-item");
-      let array = Array.from(arr);
-      array.forEach((element) => {
-        element.classList.remove("active");
-      });
-      array[index].classList.add("active");
+    selectTag: function (key) {
       this.$store.commit("setCurrentPbtId", false);
-      this.$router.push(link).catch((err) => err); //加catch,在router.push的时候捕获异常，防止重复点击报错
+      this.menuIndex = key;
     },
+
     connect_wallet: async function () {
       this.conenct_loading = true;
       const commit = this.$store.commit;
@@ -152,14 +150,18 @@ export default {
 .el-option {
   color: #38f2af;
 }
-.el-select-dropdown__item.hover,
-.el-select-dropdown__item:hover {
-  color: #38f2af;
-}
 .el-select-dropdown__item {
   color: black;
 }
-.connect {
+#connect,
+#logo,
+#version,
+#changelang {
+  height: 90px;
+  box-sizing: border-box;
+}
+#connect .el-button {
+  margin-top: 20px;
   background-color: #38f2af;
   color: #000000;
   width: 180px;
@@ -173,15 +175,35 @@ export default {
   font-size: 22px;
   display: inline-block;
 }
-li {
-  float: left;
-  color: #fff;
-  margin: 0 20px;
-  cursor: pointer;
-  float: left;
+#logo {
+  padding-top: 15px;
 }
-.active {
-  color: #38f2af;
-  border-bottom: 3px solid #38f2af;
+#version {
+  line-height: 30px !important;
+  padding-left: 50px;
+}
+#version span {
+  display: block;
+  float: left;
+  margin: 5px 20px 0px;
+}
+#menu {
+  height: 90px;
+  box-sizing: border-box;
+}
+.el-menu {
+  height: 90px;
+  border: none !important;
+  margin-left: 50px;
+}
+.el-menu--horizontal > .el-menu-item {
+  height: 90px;
+  font-size: 24px;
+  padding: 10px;
+  margin-left: 30px;
+}
+.el-menu--horizontal > .el-menu-item.is-active {
+  color: #38f2af !important;
+  border-bottom: #38f2af 2px solid !important;
 }
 </style>

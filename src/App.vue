@@ -2,8 +2,8 @@
   <div id="app">
     <keep-alive>
       <el-container>
-        <el-header style="height: 70px">
-          <plotheader />
+        <el-header style="height: 90px">
+          <Plotheader />
         </el-header>
         <el-container>
           <el-main style="padding: 0">
