@@ -5,13 +5,12 @@
         v-if="Object.keys(this.$store.state.myList).length == 0"
         class="mainpanel"
       >
-        <el-col></el-col>
         <el-col style="color: #fff">
-          <h1>Bridge Guide</h1>
+          <h1>{{ $t("bridge-guide") }}</h1>
           <el-col>
-            <h4>1.请先点击选择一个NFT，并且选择一个币种。</h4>
-            <h4>2.获取存款地址</h4>
-            <h4>3.绑定取款地址</h4>
+            <h4>1.{{ $t("b-guide1") }}</h4>
+            <h4>2.{{ $t("b-guide2") }}</h4>
+            <h4>3.{{ $t("b-guide3") }}</h4>
           </el-col>
         </el-col>
       </el-col>
@@ -21,16 +20,18 @@
         </el-col>
         <el-col v-else>
           <el-col v-if="!current.coinType">
-            <h4 style="color: #fff">请先选择一个币种</h4>
+            <h4 style="color: #fff">{{ $t("select-coin") }}</h4>
           </el-col>
           <el-col v-else>
             <el-col> <BridgeFee /> </el-col>
             <el-col id="balance">
-              余额：<span class="font"> {{ WBalance[bcoin] }}</span>
+              {{ this.$t("balance") }}：<span class="font">
+                {{ WBalance[bcoin] }}</span
+              >
               <span class="minifont"> {{ wcoin }}</span>
               <el-tooltip
                 placement="bottom"
-                content="添加当前代币信息到metaMask（小狐狸）钱包中"
+                :content="this.$t('add-token-tip')"
                 ><el-button size="mini" type="primary" @click="addToken">
                   {{ $t("add-token") }}
                 </el-button>

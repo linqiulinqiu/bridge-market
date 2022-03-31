@@ -3,7 +3,7 @@
     <el-col class="main" v-if="baddr">
       <el-col v-if="!current.pbtId">
         <h2>
-          PBT Market
+          PBT {{ $t("market") }}
           <el-button
             @click="getMintfee"
             size="small"

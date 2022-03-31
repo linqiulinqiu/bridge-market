@@ -32,7 +32,6 @@
 <script>
 function menuItem() {
   const mode = location.hash.substr(1, location.hash.length - 1);
-  console.log("mode-tag", mode);
   return mode;
 }
 
@@ -82,7 +81,6 @@ export default {
   methods: {
     handleSelect: function (key, keyPath) {
       this.menuIndex = key;
-      console.log("handleSelect key=", key, keyPath);
     },
   },
 };

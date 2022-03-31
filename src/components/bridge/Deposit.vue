@@ -17,7 +17,7 @@
           <span class="font">
             {{ this.depositAddr }}
           </span>
-          <el-tooltip content="复制到剪切板" placement="right">
+          <el-tooltip :content="this.$t('copy')" placement="right">
             <el-button
               size="mini"
               icon="el-icon-document-copy"

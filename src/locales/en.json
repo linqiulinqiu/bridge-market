@@ -1,13 +1,21 @@
 {   "add-token":"Add Token",
     "addr":"In the following address",
     "all":"All",
+    "approve":"Approve",
+    "add-token-tip":"Add the current token information to the metamask Wallet",
 
     "balance":"Balance",
     "bridge":"Bridge",
-    "buy":"Buy it",
+    "buy":"Buy",
     "burn":"burn",
+    "bind":"Bind",
     "beyond-limit":"After the amount limit is exceeded, the transaction time will increase significantly, please be patient",
     "bind-waddr":"Bind withdraw address",
+    "bind-waddr-tips":"You have bound {wbind} withdrawal addresses. The withdrawal operation may be sent to any address. Please pay attention to check. Or unbind {ubind} addresses",
+    "bridge-guide":"Bridge Guide",
+    "b-guide1":"Firstly,select a NFT and a coin.",
+    "b-guide2":"Get deposite address and bind withdraw address.",
+    "b-guide3":"After purchasing NFT, please check whether there is a withdrawal address. If so, please rebind your withdrawal address.",
 
     "cancel":"Cancel",
     "connect":"Connect Wallet",
@@ -16,7 +24,11 @@
     "clear-waddr":"Clear withdraw address",
     "correct-amount":"Please enter the correct amount",
     "correct-addr":"Please confirm that the withdrawal address is the collection address of your wallet and that the address is correct.",
-    
+    "copy":"Copy to clipboard",
+    "cpright1":"All rights reserved.",
+    "cpright2":"PlotBridge site is not affiliated with pancake",
+    "cpright3":"All third party trademarks are the property of their respective owners",
+
     "deposit":"Deposit",
     "desc":"description :",
     "dep-rate":"Deposit rate",
@@ -24,6 +36,8 @@
     "dep-limit":"The recommended limit for a single deposit is :",
     "dep-addr":"Get deposit address for {bcoin}",
     "doc":"Doc",
+    "data":"Data loading",
+    "destroy":"Destroy NFT",
 
     "function":"Function",
     
@@ -37,28 +51,44 @@
 
     "inbsc":"In your BSC wallet",
     "introduction":"Introduction",
+    "input-addr":"Input your withdrawal address below",
+    "input-desc":"Input the description",
+    "id":"Id",
 
     "look-info":"Looking the details info after connect wallet",
     
     "market":"Market",
     "mintPBT":"Mint PBT",
     "mintable":"NFT's currently available for minting :",
+    "my-nfts":"My NFTs",
+    "my-sale":"My Selling NFT",
     
     "none":"The number of mintable NFTs is 0 currently, no NFTs can be minted, please wait.",
     "no-waddr":"Unbound withdrawal address",
+    "no-redeem":"There is no such exchange",
+    "no-desc":"No Description",
+    "no-nft":"Any NFT you got,please go to the market，or mint it",
+    "no-selling":"Selling PBT not found yet... How about mint one?",
 
 
     "or":"OR",
     "openNFT":"Please select a nft first",
     
-    "price":"The price :",
+    "price":"Price",
+    "price-tips":"Price is Empty",
    
     "redeem":"Redeem",
     "rd-info":"Because of version upgrade, the previous tokens will be converted to current tokens on a one-to-one basis, e.g. 50 P{bcoin} Converted to 50 w{bcoin}",
     "road-map":"RoadMap",
+    "retreat":"Retreat",
 
     "select-coin":"Select Coin",
+    "sell":"Sell",
+    "send-tomk":"Send to the market",
+    "send":"Send",
+    "set-sell-info":"Set price and description",
 
+    "to-market":"Go to the market",    
     "tips-amount1":"The amount is too small, you won't receive anything.",
     "tips-amount2":"The amount is too much, and you don't have enough balance",
     "tips-waddr":"When an account is bound to multiple addresses of multiple wallets, the money may be randomly sent to one of them. Please pay attention to check.",

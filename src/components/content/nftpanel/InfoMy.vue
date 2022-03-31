@@ -1,24 +1,27 @@
 <template>
   <el-col>
     <el-col>
-      <p>销毁NFT <el-button @click="burnPBT">销毁NFT</el-button></p>
+      <p>
+        {{ $t("destroy") }} :
+        <el-button @click="burnPBT">{{ $t("destroy") }}</el-button>
+      </p>
     </el-col>
-    <h2>售卖NFT</h2>
+    <h2>{{ $t("sell") }}</h2>
     <el-col v-if="sendToMarket">
       <p>
-        1、发送此NFT到市场
-        <el-button @click="send" type="primary" :loading="send_loading"
-          >发送到市场</el-button
-        >
+        1、{{ $t("send-tomarket") }}
+        <el-button @click="send" type="primary" :loading="send_loading">{{
+          $t("send")
+        }}</el-button>
       </p>
     </el-col>
     <el-col v-else>
       <p>
-        2、设置价格与描述
+        2、{{ $t("set-sell-info") }}
         <span class="minifont">价格为零将不会出现在市场列表中</span>
       </p>
       <el-col>
-        <label for="price" class="labels">price </label>
+        <label for="price" class="labels">{{ $t("price") }}</label>
         <p>
           <el-input
             v-model="nftPrice"
@@ -33,17 +36,19 @@
           </el-select>
         </p>
 
-        <label for="description" class="labels"> Description: </label>
+        <label for="description" class="labels"> {{ $t("desc") }}</label>
         <el-input
           type="text"
-          placeholder="input description"
+          :placeholder="this.$t('input-desc')"
           v-model="nftDesc"
           maxlength="50"
           show-word-limit
           id="description"
         />
         <p>
-          <el-button @click="sellNFT" :loading="set_loading"> Sell </el-button>
+          <el-button @click="sellNFT" :loading="set_loading">
+            {{ $t("sell") }}
+          </el-button>
         </p>
       </el-col>
     </el-col>
@@ -94,7 +99,7 @@ export default {
       this.set_loading = true;
       const id = this.curNFT.id;
       if (this.nftPrice === 0 || this.nftPrice == null) {
-        this.$message("price is empty");
+        this.$message(this.$t("price-tips"));
         this.set_loading = false;
         this.change_loading = false;
       }
@@ -110,7 +115,6 @@ export default {
         await market.waitEventDone(res, async function (evt) {
           obj.set_loading = false;
           obj.sendToMarket = true;
-          obj.show();
         });
         return res;
       } catch (e) {

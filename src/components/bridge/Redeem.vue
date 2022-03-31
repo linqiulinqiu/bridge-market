@@ -1,6 +1,6 @@
 <template>
   <el-col id="redeem" class="tabs">
-    <el-col v-if="current.coinType == '2'"> 没有此兑换 </el-col>
+    <el-col v-if="current.coinType == '2'">{{ this.$t("no-redeem") }} </el-col>
     <el-col v-else>
       <h3>{{ $t("redeem") }}</h3>
       <el-col>
@@ -9,7 +9,7 @@
           <el-input type="text" v-model="redeemNum"></el-input>
           <el-col v-if="needApprove">
             <el-button @click="approve" :loading="approve_loading">
-              Approve
+              {{ this.$t("approve") }}
             </el-button>
           </el-col>
           <el-col v-else>

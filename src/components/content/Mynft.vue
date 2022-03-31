@@ -1,6 +1,6 @@
 <template>
   <el-col id="mynft">
-    <el-col class="title">My NFTs</el-col>
+    <el-col class="title">{{ $t("my-nfts") }}</el-col>
     <el-col v-if="baddr">
       <el-col v-if="Object.keys(this.myList).length > 0" class="nftarea">
         <el-col class="nftlist">
@@ -24,11 +24,13 @@
         </el-col>
       </el-col>
       <el-col v-else class="content">
-        You haven't got any NFTs. Please go to the market.
+        <el-col>
+          {{ $t("no-nft") }}
+        </el-col>
       </el-col>
       <el-col class="bottom-box">
         <router-link class="bottom" :to="this.market"
-          >Go to Market
+          >{{ $t("to-market") }}
         </router-link>
       </el-col>
     </el-col>

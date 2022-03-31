@@ -4,11 +4,12 @@
       <el-col v-if="this.withdrawAddr">
         <el-col>
           <p v-if="withdrawBinded > 1">
-            您已绑定{{
-              withdrawBinded
-            }}份取款地址，取款操作可能发送到任一个地址，请注意查收。或解除{{
-              withdrawBinded - 1
-            }}个绑定地址
+            {{
+              $t("bind-waddr-tips", {
+                wbind: this.withdrawBinded,
+                ubind: this.withdrawBinded - 1,
+              })
+            }}
           </p>
           <p>
             {{ $t("w-addr", { bcoin: bcoin }) }} : <br />
@@ -82,7 +83,7 @@
         </el-col>
         <el-col v-else>
           <p>
-            在下面输入你的取款地址：
+            {{ $t("input-addr") }}
             <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
           </p>
           <el-input
@@ -90,25 +91,26 @@
             v-model.trim="wAddr"
             clearable
             suffix-icon="el-icon-edit"
+            :placeholder="this.$t('bind-waddr')"
           ></el-input>
           <el-button
             type="primary"
             @click="bindWaddr"
             :loading="bind_loading"
-            >{{ $t("bind-waddr") }}</el-button
+            >{{ $t("bind") }}</el-button
           >
         </el-col>
       </el-col>
     </el-col>
     <el-col v-else>
-      数据加载中。。。
+      {{ $t("data") }}。。。
       <el-skeleton :rows="5" animated></el-skeleton>
     </el-col>
 
-    <el-dialog title="绑定取款地址" :visible.sync="bind_dialog">
+    <el-dialog :title="this.$t('bind-waddr')" :visible.sync="bind_dialog">
       <el-card>
         <p>
-          在下面输入你的取款地址：
+          {{ $t("input-addr") }}
           <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
           <el-button
             style="float: right"
@@ -212,7 +214,7 @@ export default {
       if (!wamount || isNaN(wamount) || wamount == "") {
         wamount = "0";
         console.log(wamount);
-        this.tips_amount = "请输入正确的金额";
+        this.tips_amount = this.$t("correct-amount");
         return false;
       }
       const after_fee = await market.afterFee(this.bcoin, "withdraw", wamount);
@@ -295,7 +297,7 @@ export default {
         console.log("bindWaddr", res, rebind);
         if (res == false) {
           this.bind_loading = false;
-          this.$message("请输入正确的取款地址");
+          this.$message(this.$t("correct-amount"));
         }
         // await market.waitEventDone(res, async function (evt) {
         obj.bind_loading = false;
