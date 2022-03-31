@@ -84,7 +84,12 @@ function versions() {
   console.log("vs=", vs);
   return vs;
 }
-
+function tags() {
+  const mode = location.hash.substr(2, location.hash.length - 2);
+  const tag = "/" + mode.substr(0, mode.indexOf("/"));
+  console.log("mode-tag", mode, tag);
+  return tag;
+}
 export default {
   name: "Plotheader",
   computed: mapState({
@@ -113,14 +118,14 @@ export default {
         { value: "zh", label: "简体中文" },
       ],
       lang: i18n.locale,
-      menuIndex: "/Home",
       versions: versions(),
+      menuIndex: tags(),
     };
   },
   methods: {
     selectTag: function (key) {
       this.$store.commit("setCurrentPbtId", false);
-      this.menuIndex = key;
+      // this.menuIndex = key;
     },
 
     connect_wallet: async function () {

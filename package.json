@@ -1,6 +1,6 @@
 {
   "name": "plotnetwork",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,8 +10,8 @@
     "core-js": "^3.21.1",
     "element-ui": "^2.15.6",
     "ethers": "^5.6.2",
-    "pbwallet": "github:tgarm/pbwallet#0.2.16",
-    "pbweb-nftkeeper": "bitbucket:plotnet/pbweb-nftkeeper#0.2.6",
+    "pbwallet": "github:tgarm/pbwallet#0.2.18",
+    "pbweb-nftkeeper": "bitbucket:plotnet/pbweb-nftkeeper#0.2.7",
     "pbweb-ui": "bitbucket:plotnet/pbweb-ui#0.0.13",
     "vue": "^2.6.11",
     "vue-clipboard2": "^0.3.3",

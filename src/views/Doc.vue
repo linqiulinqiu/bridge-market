@@ -30,6 +30,12 @@
 </template>
 
 <script>
+function menuItem() {
+  const mode = location.hash.substr(1, location.hash.length - 1);
+  console.log("mode-tag", mode);
+  return mode;
+}
+
 export default {
   name: "Doc",
   computed: {
@@ -37,52 +43,46 @@ export default {
       return [
         {
           index: "1",
-          link: "/Introduction",
+          link: "/Doc/Introduction",
           value: this.$t("introduction"),
         },
         {
           index: "2",
-          link: "/RoadMap",
+          link: "/Doc/RoadMap",
           value: this.$t("road-map"),
         },
         {
           index: "3",
-          link: "/Guidefor",
+          link: "/Doc/Guidefor",
           value: "Guidefor",
         },
         {
           index: "4",
-          link: "/GuideforBridge",
+          link: "/Doc/GuideforBridge",
           value: this.$t("guide-bridge"),
         },
         {
           index: "5",
-          link: "/GuideforMarket",
+          link: "/Doc/GuideforMarket",
           value: this.$t("guide-market"),
         },
         {
           index: "6",
-          link: "/GuideforWallet",
+          link: "/Doc/GuideforWallet",
           value: this.$t("guide-wallet"),
         },
       ];
     },
-    // routerPath() {
-    //   return this.$route.meta.guidePath
-    //     ? this.$route.meta.jumpPath
-    //     : this.$route.path;
-    // },
   },
   data() {
     return {
-      menuIndex: "/Introduction",
+      menuIndex: menuItem(),
     };
   },
   methods: {
-    handleSelect: function (key) {
+    handleSelect: function (key, keyPath) {
       this.menuIndex = key;
-      this.activeColor = key;
-      console.log("handleSelect key=", key, typeof key, this.activeColor);
+      console.log("handleSelect key=", key, keyPath);
     },
   },
 };
@@ -93,9 +93,6 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-.isActive {
-  color: #d82048;
 }
 .content {
   display: flex;

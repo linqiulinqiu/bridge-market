@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-aside width="350px">
-        <keep-alive v-if="Object.keys(myList).length > 0">
+        <keep-alive>
           <mynft :myList="myList" :pageSize="3" :curNFT="this.curNFT"
         /></keep-alive>
       </el-aside>

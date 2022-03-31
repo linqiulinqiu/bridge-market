@@ -42,34 +42,34 @@ const routes = [{
     path: '/Doc',
     name: 'Doc',
     component: Doc,
-    redirect: "/Introduction",
+    redirect: "/Doc/Introduction",
     children: [{
-        path: '/Introduction',
+        path: '/Doc/Introduction',
         component: Introduction,
         name: "Introduction"
       },
       {
-        path: '/RoadMap',
+        path: '/Doc/RoadMap',
         component: RoadMap,
         name: "RoadMap"
       },
       {
-        path: '/Guidefor',
+        path: '/Doc/Guidefor',
         component: Guidefor,
         name: "Guidefor"
       },
       {
-        path: '/GuideforMarket',
+        path: '/Doc/GuideforMarket',
         component: GuideforMarket,
         name: "GuideforMarket"
       },
       {
-        path: '/GuideforBridge',
+        path: '/Doc/GuideforBridge',
         component: GuideforBridge,
         name: "GuideforBridge"
       },
       {
-        path: '/GuideforWallet',
+        path: '/Doc/GuideforWallet',
         component: GuideforWallet,
         name: "GuideforWallet"
       }

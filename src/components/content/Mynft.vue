@@ -27,7 +27,9 @@
         You haven't got any NFTs. Please go to the market.
       </el-col>
       <el-col class="bottom-box">
-        <el-button class="bottom">Go to Market </el-button>
+        <router-link class="bottom" :to="this.market"
+          >Go to Market
+        </router-link>
       </el-col>
     </el-col>
     <el-col v-else>{{ $t("look-info") }}</el-col>
@@ -61,6 +63,7 @@ export default {
   data() {
     return {
       pageNum: 1,
+      market: "/Market",
     };
   },
   methods: {
