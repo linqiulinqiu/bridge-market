@@ -49,31 +49,25 @@ async function ListenToWCoin(commit) {
     ctr_xcc.on(ctr_xcc.filters.Transfer, updateXCCBalance)
     ctr_xcc.on(ctr_xch.filters.Transfer, updateXCHBalance)
 }
+
 async function listenRedeemEvt(commit) {
-    const oldTokenAddr = {
-        "XCC": "0x1B4bB84f3DCAc9899C41726838CdEC291DB52d25",
-        "XCH": "0xFdF2F0995663a993A16929CeC5c39B039AB18Ef6",
-    }
+    //TODO: redeem list may change in a very low frequency
+    const tlists = await bsc.ctrs.tokenredeem.getRedeemList()
+    const oldTokenAddrs = tlists[0]
+    const ctrs = []
     async function updateOldBalance(evt) {
         let oldBalance = {}
-        let info = {}
-        let ctr = {}
-        for (let i in oldTokenAddr) {
-            info[i] = await keeper.tokenSymbol(oldTokenAddr[i])
-            console.log("info", info)
-            ctr[i] = pbwallet.erc20_contract(oldTokenAddr[i])
-            oldBalance[i] = await keeper.formatToken(oldTokenAddr[i], await ctr[i].balanceOf(bsc.addr))
+        for(let i in ctrs){
+            oldBalance[i] = await keeper.formatToken(oldTokenAddrs[i], await ctrs[i].balanceOf(bsc.addr))
         }
         commit("setRedeemBalance", oldBalance)
         console.log("updateOldBalance", evt, oldBalance)
     }
+    for (let i in oldTokenAddrs) {
+        ctrs[i] = pbwallet.erc20_contract(oldTokenAddrs[i])
+        ctrs[i].on(ctrs[i].filters.Transfer, updateOldBalance)
+    }
     await updateOldBalance()
-    // ctr[i]
-    const oldctr3 = pbwallet.erc20_contract(oldTokenAddr["XCC"])
-    const oldctr1 = pbwallet.erc20_contract(oldTokenAddr["XCH"])
-    oldctr3.on(oldctr3.filters.Transfer, updateOldBalance) // only update 1 balance
-    oldctr1.on(oldctr1.filters.Transfer, updateOldBalance) // only update 1 balance
-
 }
 
 async function connect(commit) {
