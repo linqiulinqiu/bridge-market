@@ -1,11 +1,11 @@
 <template>
   <el-col class="copyRight">
     <p>
-      <a href=""> © 2022 Plot Network Ltd,All rights reserved. </a>
+      <a href=""> © 2022 Plot Network Ltd,{{ $t("cpright1") }} </a>
     </p>
-    <p>PlotBridge site is not affiliated with pancake</p>
+    <p>{{ $t("cpright2") }}</p>
     <p>
-      All third party trademarks are the property of their respective owners
+      {{ $t("cpright3") }}
     </p>
   </el-col>
 </template>

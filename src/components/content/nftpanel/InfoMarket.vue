@@ -1,14 +1,5 @@
 <template>
   <el-col>
-    <!-- <p>
-      The price :
-      <span v-if="market.price">{{ market.price }}&nbsp;</span>
-      <span v-if="market.ptName">{{ market.ptName }}</span>
-    </p>
-    <p>
-      Description:
-      <span v-if="market.desc">{{ market.desc }}</span>
-    </p> -->
     <el-col>
       <el-button
         @click="buyNFT"
@@ -16,7 +7,7 @@
         :loading="buy_loading"
         v-if="approve"
       >
-        Buy It
+        {{ $t("buy") }}
       </el-button>
       <el-button
         v-else
@@ -24,7 +15,7 @@
         type="priamry"
         :loading="approve_loading"
       >
-        Approve
+        {{ $t("approve") }}
       </el-button>
     </el-col>
   </el-col>

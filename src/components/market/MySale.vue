@@ -1,6 +1,6 @@
 <template>
   <el-col>
-    <h3>My Selling PBT</h3>
+    <h3>{{ $t("my-sale") }}</h3>
     <ul class="content">
       <li v-for="nft in this.mslist" :key="nft.uri" class="marketlist">
         <el-button @click="openNFT(nft)" class="nftbtn">
@@ -56,7 +56,6 @@ export default {
 </script>
 <style scoped>
 .marketlist {
-  /* margin: 10px; */
   float: left;
   position: relative;
 }
@@ -67,7 +66,6 @@ export default {
   box-sizing: border-box;
   margin: 10px;
   background-color: #272a34;
-  /* border: 2px solid rgba(255, 255, 255, 0.08); */
   border: hidden;
 }
 i {

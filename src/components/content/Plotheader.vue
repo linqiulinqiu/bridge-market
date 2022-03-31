@@ -35,7 +35,7 @@
           v-if="!baddr"
           @click="connect_wallet"
           class="connect"
-          :loading="conenct_loading"
+          :loading="connect_loading"
           >Connect Wallet</el-button
         >
         <span v-else style="color: #fff" class="baddr font">
@@ -86,8 +86,12 @@ function versions() {
 }
 function tags() {
   const mode = location.hash.substr(2, location.hash.length - 2);
-  const tag = "/" + mode.substr(0, mode.indexOf("/"));
-  console.log("mode-tag", mode, tag);
+  let tag = "";
+  if (mode.indexOf("/") != -1) {
+    tag = "/" + mode.substr(0, mode.indexOf("/"));
+  } else {
+    tag = "/" + mode;
+  }
   return tag;
 }
 export default {
@@ -112,7 +116,7 @@ export default {
   },
   data() {
     return {
-      conenct_loading: false,
+      connect_loading: false,
       langs: [
         { value: "en", label: "English" },
         { value: "zh", label: "简体中文" },
@@ -125,11 +129,10 @@ export default {
   methods: {
     selectTag: function (key) {
       this.$store.commit("setCurrentPbtId", false);
-      // this.menuIndex = key;
     },
 
     connect_wallet: async function () {
-      this.conenct_loading = true;
+      this.connect_loading = true;
       const commit = this.$store.commit;
       const bsc = await data.connect(commit);
       if (bsc) {
@@ -138,7 +141,7 @@ export default {
         await data.loadAlllists_detail(store);
         const otAllowance = await market.tokenAllowance();
         this.$store.commit("setRedeemAllowance", otAllowance);
-        this.conenct_loading = false;
+        this.connect_loading = false;
       }
     },
   },

@@ -1,13 +1,13 @@
 <template>
   <el-col>
-    <h3>
-      On Sale <span class="minifont">(价格为0的NFT将不会出现在市场列表中)</span>
-    </h3>
-    <ul class="content">
-      <li class="marketlist" v-for="nft in this.mklist" :key="nft.id">
-        <SellingItem :info="nft" @click.native="openNFT(nft)" />
-      </li>
-    </ul>
+    <div v-if="selling_count > 0">
+      <ul>
+        <li class="marketlist" v-for="nft in this.mklist" :key="nft.id">
+          <SellingItem :info="nft" @click.native="openNFT(nft)" />
+        </li>
+      </ul>
+    </div>
+    <p v-else>{{ $t("no-selling") }}</p>
     <el-col :offset="10">
       <el-pagination
         background
@@ -35,6 +35,11 @@ export default {
       );
       console.log("mklist", list, this.marketList);
       return list;
+    },
+    selling_count() {
+      const cnt = Object.keys(this.marketList).length;
+      console.log("selling count", cnt);
+      return cnt;
     },
   }),
   data() {

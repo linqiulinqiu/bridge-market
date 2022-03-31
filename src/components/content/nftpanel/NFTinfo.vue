@@ -4,7 +4,7 @@
       <el-col v-if="meta.image">
         <img :src="meta.image" alt="Img" style="width: 300px" />
       </el-col>
-      <p>id:#{{ this.nftId }}</p>
+      <p>{{ $t("id") }}:#{{ this.nftId }}</p>
       <el-col v-if="market">
         <p v-if="market.price">
           {{ $t("price") }}:
@@ -12,7 +12,7 @@
           <span>{{ market.ptName }}</span>
         </p>
         <p v-if="market.desc != ''">{{ $t("desc") }}:{{ market.desc }}</p>
-        <p v-else>No Description</p>
+        <p v-else>{{ $t("no-desc") }}</p>
       </el-col>
     </el-col>
     <el-col v-if="market" :span="13">
