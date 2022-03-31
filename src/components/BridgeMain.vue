@@ -49,12 +49,7 @@
               /></el-tab-pane>
             </el-tabs>
             <el-col class="lplink">
-              <h3>
-                <a
-                  href="https://pancake.kiemtienonline360.com/#/swap?outputCurrency=0xCb7A587Ee1BBAF2385659D8ba8D3F4318601caE6"
-                  >lp for PBP</a
-                >
-              </h3>
+                <LPLink :coinType="current.coinType"/>
             </el-col>
           </el-col>
         </el-col>
@@ -65,6 +60,7 @@
 </template>
 <script>
 import Deposit from "./bridge/Deposit.vue";
+import LPLink from "./bridge/LpLink.vue";
 import Withdraw from "./bridge/Withdraw.vue";
 import Redeem from "./bridge/Redeem.vue";
 import BridgeFee from "./bridge/BridgeFee.vue";
@@ -79,6 +75,7 @@ export default {
     Withdraw,
     Redeem,
     BridgeFee,
+    LPLink
   },
   props: ["curNFT"],
   computed: mapState({
