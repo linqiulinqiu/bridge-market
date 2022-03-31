@@ -65,15 +65,15 @@ function wsymbolByAddress(addr){
     return false
 }
 
+const oldTokenCtrs = {}
+
 async function listenRedeemEvt(commit) {
     //TODO: redeem list may change in a very low frequency
     const tlists = await bsc.ctrs.tokenredeem.getRedeemList()
-    const oldTokenAddrs = {}
-    const ctrs = []
     async function updateOldBalance(evt) {
         let oldBalance = {}
-        for(let i in ctrs){
-            oldBalance[i] = await keeper.formatToken(oldTokenAddrs[i], await ctrs[i].balanceOf(bsc.addr))
+        for(let i in oldTokenCtrs){
+            oldBalance[i] = await keeper.formatToken(oldTokenCtrs[i].address, await oldTokenCtrs[i].balanceOf(bsc.addr))
         }
         commit("setRedeemBalance", oldBalance)
         console.log("updateOldBalance", evt, oldBalance)
@@ -81,10 +81,9 @@ async function listenRedeemEvt(commit) {
     for (let i in tlists[0]) {
         const symbol = wsymbolByAddress(tlists[1][i])
         if(symbol){
-            oldTokenAddrs[symbol] = tlists[0][i]
-            ctrs[symbol] = pbwallet.erc20_contract(tlists[0][i])
-            ctrs[symbol].on(ctrs[symbol].filters.Transfer, updateOldBalance)
-            console.log('redeem-evt', symbol, tlists[1][i])
+            oldTokenCtrs[symbol] = pbwallet.erc20_contract(tlists[0][i])
+            oldTokenCtrs[symbol].on(oldTokenCtrs[symbol].filters.Transfer, updateOldBalance)
+            console.log('redeem-evt', symbol, oldTokenCtrs[symbol].address)
         }
     }
     await updateOldBalance()
@@ -101,25 +100,20 @@ async function connect(commit) {
     }
     return false
 }
-const oldTokenAddr = {
-    "XCC": "0x1B4bB84f3DCAc9899C41726838CdEC291DB52d25",
-    "XCH": "0xFdF2F0995663a993A16929CeC5c39B039AB18Ef6",
-    "HDD": "0xFfB8F22732e7fC4550a8Cda5DB03cCcCF082b357",
-}
+
 async function tokenAllowance() {
     const oldAllowance = {}
-    for (let i in oldTokenAddr) {
-        let ctr = {}
+    for (let symbol in oldTokenCtrs) {
         let allowance = {}
-        ctr[i] = pbwallet.erc20_contract(oldTokenAddr[i])
-        allowance[i] = await ctr[i].allowance(bsc.addr, bsc.ctrs.tokenredeem.address)
-        oldAllowance[i] = await keeper.formatToken(oldTokenAddr[i], allowance[i])
+        allowance[symbol] = await oldTokenCtrs[symbol].allowance(bsc.addr, bsc.ctrs.tokenredeem.address)
+        oldAllowance[symbol] = await keeper.formatToken(oldTokenCtrs[symbol].address, allowance[symbol])
     }
     console.log("oldAllowance =", oldAllowance)
     return oldAllowance
 }
+
 async function tokenApprove(bcoin, commit) {
-    const ctr = pbwallet.erc20_contract(oldTokenAddr[bcoin])
+    const ctr = oldTokenCtrs[bcoin]
     const supply = await ctr.totalSupply()
     const res = await ctr.approve(bsc.ctrs.tokenredeem.address, supply) // 1000x total supply, almost infinite
     waitEventDone(res, async function () {
@@ -128,13 +122,15 @@ async function tokenApprove(bcoin, commit) {
     })
     return res
 }
+
 async function tokenRedeem(bcoin, amount) {
-    const ctr = pbwallet.erc20_contract(oldTokenAddr[bcoin])
+    const ctr = oldTokenCtrs[bcoin]
     amount = await keeper.parseToken(ctr.address, amount)
-    const res = await bsc.ctrs.tokenredeem.redeem(oldTokenAddr[bcoin], amount)
+    const res = await bsc.ctrs.tokenredeem.redeem(ctr.address, amount)
     console.log("redeem res", res.hash)
     return res
 }
+
 async function getmintfee() {
     const options = {}
     const fee = await bsc.ctrs.pbt.mintFee();
