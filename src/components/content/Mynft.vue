@@ -1,6 +1,16 @@
 <template>
   <el-col id="mynft">
-    <el-col class="title">{{ $t("my-nfts") }}</el-col>
+    <el-col class="title">
+      {{ $t("my-nfts") }}
+      <el-button
+        @click="getMintfee"
+        size="small"
+        class="btn"
+        v-if="baddr"
+        type="primary"
+        >{{ $t("mintPBT") }}
+      </el-button>
+    </el-col>
     <el-col v-if="baddr">
       <el-col v-if="Object.keys(this.myList).length > 0" class="nftarea">
         <el-col class="nftlist">
@@ -35,17 +45,25 @@
       </el-col>
     </el-col>
     <el-col v-else>{{ $t("look-info") }}</el-col>
+    <el-dialog :visible.sync="mintVisible">
+      <el-card>
+        <MintPBT :mintAbles="this.mintNumber" :mintFee="this.mintFee" />
+      </el-card>
+    </el-dialog>
   </el-col>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import NFTinfo from "./nftpanel/NFTinfo.vue";
+import MintPBT from "../market/MintPBT.vue";
+import market from "../../market";
 
 export default {
   name: "Mynft",
   components: {
     NFTinfo,
+    MintPBT,
   },
   props: ["myList", "pageSize", "curNFT"],
   computed: mapState({
@@ -66,11 +84,26 @@ export default {
     return {
       pageNum: 1,
       market: "/Market",
+      mintNumber: "--",
+      mintVisible: false,
+      mintFee: {
+        price: 0,
+        token: "BNB",
+      },
     };
   },
   methods: {
     openNFT: async function (id) {
       this.$store.commit("setCurrentPbtId", id);
+    },
+    getMintfee: async function () {
+      const fee = await market.getmintfee();
+      this.mintFee.price = fee.price;
+      this.mintFee.token = fee.ptName;
+      const number = await market.getMintAbles();
+      console.log("mint number", number);
+      this.mintNumber = number;
+      this.mintVisible = true;
     },
     handleCurrentChange(newPage) {
       this.pageNum = newPage;
@@ -95,7 +128,8 @@ i {
 }
 .title {
   height: 50px;
-  font-size: 36px;
+  font-size: 20px;
+  font-weight: 600;
   line-height: 50px;
   text-align: center;
 }

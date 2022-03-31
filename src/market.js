@@ -7,7 +7,6 @@ import store from "./store"
 import keeper from "pbweb-nftkeeper"
 // 全局变量设置
 var bsc = {}
-const coinDecimals = {}
 const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
     'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')

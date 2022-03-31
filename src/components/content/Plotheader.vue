@@ -1,19 +1,25 @@
 <template>
   <div class="container">
-    <el-row type="flex" justify="center">
-      <el-col :span="2" id="logo">
+    <el-row type="flex" justify="space-between">
+      <el-col id="logo" :lg="3" :md="4" :sm="6" :xs="0">
         <img
           style="width: 160px"
           src="../../assets/image/logo_000.png"
           alt="LOGO"
         />
       </el-col>
-      <el-col :span="7" id="version">
+      <el-col id="version" :lg="4" :md="0" :sm="0" :xs="0">
         <p v-for="(version, pkg) in versions" :key="version">
           <span>{{ pkg }}-{{ version }}<br /></span>
         </p>
       </el-col>
-      <el-col id="menu" :span="8">
+      <el-col
+        id="menu"
+        :lg="{ span: 8, offset: 4 }"
+        :md="{ span: 9, offset: 1 }"
+        :sm="9"
+        :xs="14"
+      >
         <el-menu
           :router="true"
           :default-active="this.menuIndex"
@@ -30,13 +36,13 @@
           </el-menu-item>
         </el-menu>
       </el-col>
-      <el-col :span="4" id="connect">
+      <el-col id="connect" :lg="3" :md="5" :sm="4" :xs="5">
         <el-button
           v-if="!baddr"
           @click="connect_wallet"
           class="connect"
           :loading="connect_loading"
-          >Connect Wallet</el-button
+          >{{ $t("connect") }}</el-button
         >
         <span v-else style="color: #fff" class="baddr font">
           <el-tooltip effect="light" placement="bottom">
@@ -47,7 +53,7 @@
           </el-tooltip>
         </span>
       </el-col>
-      <el-col :span="4" id="changelang">
+      <el-col id="changelang" :lg="3" :md="5" :sm="5" :xs="5">
         <el-select v-model="lang">
           <el-option
             v-for="item in langs"
@@ -158,59 +164,70 @@ export default {
 .el-option {
   color: #38f2af;
 }
-.el-select-dropdown__item {
-  color: black;
-}
+
+#menu,
 #connect,
 #logo,
 #version,
 #changelang {
   height: 90px;
   box-sizing: border-box;
+  font-size: 16px;
+}
+#changelang {
+  margin-top: 6px;
+}
+#changelang .el-select {
+  width: 99%;
+  margin: 0 auto;
+  padding: 0px;
 }
 #connect .el-button {
-  margin-top: 20px;
+  margin-top: 25px;
   background-color: #38f2af;
   color: #000000;
-  width: 180px;
-  font-size: 22px;
+  width: 99%;
+  height: 40px;
+  text-align: center;
+  font-size: 14px;
   cursor: pointer;
+  padding: 0px;
   box-shadow: 0px 2px 2px 0px rgba(56, 242, 175, 0.08);
 }
-.baddr {
+#connect .baddr {
   color: #38f2af;
-  width: 180px;
-  font-size: 22px;
+  width: 99%;
+  margin: 0 auto;
+  font-size: 14px;
   display: inline-block;
+  margin: 0 auto;
 }
 #logo {
   padding-top: 15px;
 }
 #version {
   line-height: 30px !important;
-  padding-left: 50px;
+  text-align: center;
 }
 #version span {
   display: block;
   float: left;
   margin: 5px 20px 0px;
 }
-#menu {
-  height: 90px;
-  box-sizing: border-box;
-}
-.el-menu {
+#menu .el-menu {
+  width: 95%;
+  margin: 0 auto;
   height: 90px;
   border: none !important;
-  margin-left: 50px;
 }
-.el-menu--horizontal > .el-menu-item {
+#menu .el-menu--horizontal > .el-menu-item {
   height: 90px;
-  font-size: 24px;
-  padding: 10px;
-  margin-left: 30px;
+  width: 25%;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 15px 0px;
 }
-.el-menu--horizontal > .el-menu-item.is-active {
+#menu .el-menu--horizontal > .el-menu-item.is-active {
   color: #38f2af !important;
   border-bottom: #38f2af 2px solid !important;
 }

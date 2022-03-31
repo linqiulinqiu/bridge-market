@@ -2,7 +2,6 @@
   <div class="content">
     <el-container>
       <el-aside width="300px">
-        <h3>docs title</h3>
         <el-col>
           <el-menu
             :router="true"
