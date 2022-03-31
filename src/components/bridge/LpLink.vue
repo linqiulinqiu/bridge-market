@@ -1,10 +1,13 @@
 <template>
   <el-col>
     <el-button>
-      <a target="_" :href="this.pre_link + this.pbpAddr">Buy PBP</a>
+      <a target="_" :href="this.pre_link + 'swap?outputCurrency=' + this.pbpAddr">Buy PBP</a>
     </el-button>
     <el-button v-if="this.coinInfo">
-      <a target="_" :href="this.pre_link + this.coinInfo.address">Buy {{ coinInfo.bsymbol }}</a>
+      <a target="_" :href="this.pre_link + 'swap?outputCurrency=' + this.coinInfo.address">Buy {{ coinInfo.bsymbol }}</a>
+    </el-button>
+    <el-button v-if="this.coinInfo">
+      <a target="_" :href="this.pre_link + 'add/' + pbpAddr+'/'+ this.coinInfo.address">Add LP {{ coinInfo.bsymbol }}</a>
     </el-button>
   </el-col>
 </template>
@@ -31,7 +34,7 @@ export default {
   }),
   data() {
     return {
-      pre_link: "https://pancake.kiemtienonline360.com/#/swap?outputCurrency=",
+      pre_link: "https://pancake.kiemtienonline360.com/#/"
     };
   },
 };
