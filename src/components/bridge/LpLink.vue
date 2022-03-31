@@ -1,22 +1,34 @@
 <template>
   <el-col>
-    <p>
-      <a :href="this.pre_link + this.pbp_addr">PBP LP </a>
-      <!-- <a :href="this.pre_link + this.wcoin_addr">{{ bcoin }} lp</a> -->
-    </p>
+    <el-button>
+      <a target="_" :href="this.pre_link + this.pbpAddr">Buy PBP</a>
+    </el-button>
+    <el-button v-if="this.coinInfo">
+      <a target="_" :href="this.pre_link + this.coinInfo.address">Buy {{ coinInfo.bsymbol }}</a>
+    </el-button>
   </el-col>
 </template>
 <script>
+
+import { mapState } from "vuex";
+import pbwallet from "pbwallet";
+
 export default {
-  name: "LPlink",
-  computed: {
-    pbp_addr() {
-      return "f0xCb7A587Ee1BBAF2385659D8ba8D3F4318601caE6";
+  name: "LPLink",
+  props: ["coinType"],
+  computed: mapState({
+    pbpAddr(state) {
+      return state.bsc.ctrs.pbp.address
     },
-    // wcoin_addr(){
-    //   return
-    // }
-  },
+    coinInfo(state){
+        if(this.coinType&&this.coinType>0){
+            const info = pbwallet.wcoin_info(this.coinType)
+            info.address = state.bsc.ctrs[info.ctrname].address
+            return info
+        }
+        return false
+    }
+  }),
   data() {
     return {
       pre_link: "https://pancake.kiemtienonline360.com/#/swap?outputCurrency=",
