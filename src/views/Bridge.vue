@@ -1,14 +1,19 @@
 <template>
   <div>
     <el-container>
-      <el-aside width="350px">
+      <el-aside width="280px">
         <keep-alive>
           <mynft :myList="myList" :pageSize="3" :curNFT="this.curNFT"
         /></keep-alive>
       </el-aside>
-      <el-main><BridgeMain :curNFT="curNFT" /></el-main>
+      <el-main>
+        <el-col :lg="{ span: 10, offset: 2 }">
+          <BridgeMain :curNFT="curNFT" />
+        </el-col>
+      </el-main>
       <el-aside
-        width="200px"
+        width="150px"
+        id="coin_select"
         style="float: right; background: #25272e"
         v-if="Object.keys(myList).length > 0"
       >
@@ -50,8 +55,4 @@ export default {
 </script>
 
 <style scoped>
-.el-main {
-  height: calc(100vh - 140px);
-  width: calc(100vw - 250px);
-}
 </style>

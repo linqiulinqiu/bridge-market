@@ -198,7 +198,7 @@ export default {
   color: #38f2af;
   width: 99%;
   margin: 0 auto;
-  font-size: 14px;
+  font-size: 16px;
   display: inline-block;
   margin: 0 auto;
 }

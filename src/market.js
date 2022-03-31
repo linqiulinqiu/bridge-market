@@ -46,15 +46,15 @@ async function ListenToWCoin(commit) {
     await updateXCHBalance()
     ctr_hdd.on(ctr_hdd.filters.Transfer, updateHDDBalance)
     ctr_xcc.on(ctr_xcc.filters.Transfer, updateXCCBalance)
-    ctr_xcc.on(ctr_xch.filters.Transfer, updateXCHBalance)
+    ctr_xch.on(ctr_xch.filters.Transfer, updateXCHBalance)
 }
 
-function wsymbolByAddress(addr){
-    for(let cname in bsc.ctrs){
-        if(bsc.ctrs[cname].address == addr){
-            for(let wid = 1; pbwallet.wcoin_info(wid); wid++){
+function wsymbolByAddress(addr) {
+    for (let cname in bsc.ctrs) {
+        if (bsc.ctrs[cname].address == addr) {
+            for (let wid = 1; pbwallet.wcoin_info(wid); wid++) {
                 const winfo = pbwallet.wcoin_info(wid)
-                if(winfo.ctrname == cname){
+                if (winfo.ctrname == cname) {
                     return winfo.symbol
                 }
             }
@@ -71,7 +71,7 @@ async function listenRedeemEvt(commit) {
     const tlists = await bsc.ctrs.tokenredeem.getRedeemList()
     async function updateOldBalance(evt) {
         let oldBalance = {}
-        for(let i in oldTokenCtrs){
+        for (let i in oldTokenCtrs) {
             oldBalance[i] = await keeper.formatToken(oldTokenCtrs[i].address, await oldTokenCtrs[i].balanceOf(bsc.addr))
         }
         commit("setRedeemBalance", oldBalance)
@@ -79,7 +79,7 @@ async function listenRedeemEvt(commit) {
     }
     for (let i in tlists[0]) {
         const symbol = wsymbolByAddress(tlists[1][i])
-        if(symbol){
+        if (symbol) {
             oldTokenCtrs[symbol] = pbwallet.erc20_contract(tlists[0][i])
             oldTokenCtrs[symbol].on(oldTokenCtrs[symbol].filters.Transfer, updateOldBalance)
             console.log('redeem-evt', symbol, oldTokenCtrs[symbol].address)

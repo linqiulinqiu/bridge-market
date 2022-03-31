@@ -40,8 +40,28 @@ export default {
 };
 </script>
 <style>
+#selectCoin {
+  padding: 20px 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+#selectCoin > p {
+  color: #fff;
+}
 .isselect {
-  background: #668b66;
-  color: #51e9a7;
+  border: #38f2af 1px solid !important;
+  color: #38f2af;
+}
+.coinTypes {
+  width: 96%;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 5px;
+  border: #668b66 1px solid;
+  /* background-color: #d1fcd1; */
+  margin: 10px auto;
+  cursor: pointer;
 }
 </style>
