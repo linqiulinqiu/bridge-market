@@ -1,17 +1,17 @@
 <template>
   <el-col id="mynft">
-    <el-col class="title">
-      {{ $t("my-nfts") }}
-      <el-button
-        @click="getMintfee"
-        size="small"
-        class="btn"
-        v-if="baddr"
-        type="primary"
-        >{{ $t("mintPBT") }}
-      </el-button>
-    </el-col>
     <el-col v-if="baddr">
+      <el-col class="my-title">
+        {{ $t("my-nfts") }}
+        <el-button
+          @click="getMintfee"
+          size="small"
+          class="btn"
+          v-if="baddr"
+          type="primary"
+          >{{ $t("mintPBT") }}
+        </el-button>
+      </el-col>
       <el-col v-if="Object.keys(this.myList).length > 0" class="nftarea">
         <el-col class="nftlist">
           <keep-alive>
@@ -26,7 +26,7 @@
           <el-pagination
             background
             :total="Object.keys(this.myList).length"
-            layout="total,prev,pager,next"
+            layout="prev,pager,next"
             @current-change="handleCurrentChange"
             :current-page="this.pageNum"
             :page-size="this.pageSize"
@@ -113,11 +113,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  color: #ffffff;
-  background: #adefab25;
-  height: calc(100vh - 235px);
-}
 .el-col,
 #mynft {
   color: #ffffff;
@@ -126,15 +121,15 @@ export default {
 i {
   margin-right: 8px;
 }
-.title {
-  height: 50px;
+.my-title {
+  height: 40px;
   font-size: 20px;
   font-weight: 600;
-  line-height: 50px;
+  line-height: 40px;
   text-align: center;
 }
 .nftlist {
-  width: 300px;
+  width: 250px;
   height: 600px;
 }
 .content {
@@ -156,6 +151,9 @@ i {
 .btn-bar {
   margin: 20px 0;
   padding: 0 50px;
+}
+.btn-bar .el-pagination {
+  background-color: #25272e;
 }
 .addclass {
   background: rgb(173, 195, 235);

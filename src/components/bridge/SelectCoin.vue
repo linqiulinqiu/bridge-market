@@ -60,7 +60,6 @@ export default {
   line-height: 50px;
   border-radius: 5px;
   border: #668b66 1px solid;
-  /* background-color: #d1fcd1; */
   margin: 10px auto;
   cursor: pointer;
 }

@@ -1,19 +1,21 @@
 <template>
-  <el-col id="deposit" class="tabs">
+  <el-col id="deposit">
     <el-col v-if="this.hasPbxs">
       <el-col v-if="this.depositAddr">
         <p>
-          {{ $t("deposit") }}:<el-input
+          <span>{{ $t("deposit") }}:</span>
+          <el-input
             type="text"
             clearable
-            maxlength="40"
+            maxlength="20"
             class="amount-input"
             suffix-icon="el-icon-edit"
             v-model.trim="depAmount"
-          />{{ bcoin }}
+          />
+          <span>{{ bcoin }}</span>
         </p>
-        <span>{{ $t("addr") }} ：</span>
-        <el-col class="aa">
+        <span class="follow">{{ $t("addr") }} ：</span>
+        <el-col>
           <span class="font">
             {{ this.depositAddr }}
           </span>
@@ -27,10 +29,10 @@
             ></el-button>
           </el-tooltip>
         </el-col>
-        <el-col>
+        <el-col id="after-get">
           <p>
             {{ $t("get") }}
-            <span class="span">
+            <span class="get-amount">
               <span v-if="this.depAmount" class="font">
                 {{ getAmount }}
               </span>
@@ -198,5 +200,33 @@ export default {
 <style>
 .a-link {
   margin: 25px;
+}
+.get-amount {
+  width: 200px;
+  background-color: #373943;
+  display: inline-block;
+  height: 42px;
+  border-radius: 10px;
+  margin-top: 20px;
+  line-height: 42px;
+  padding-left: 10px;
+}
+.follow {
+  margin: 20px 0px;
+  display: inline-block;
+}
+#deposit {
+  font-size: 20px;
+}
+#deposit .el-input__inner {
+  background: #373943;
+  border: none;
+  box-sizing: border-box;
+  color: #38f2af;
+  border-radius: 10px;
+}
+#deposit .el-input {
+  margin: 0px 10px;
+  color: #fff;
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <el-col>
-    <h3>{{ $t("my-sale") }}</h3>
-    <ul class="content">
+    <ul>
       <li v-for="nft in this.mslist" :key="nft.uri" class="marketlist">
         <el-button @click="openNFT(nft)" class="nftbtn">
           <i>#{{ nft.id }}</i>
@@ -9,14 +8,14 @@
         </el-button>
       </li>
     </ul>
-    <el-col :offset="10">
+    <el-col :offset="19" :span="5">
       <el-pagination
         background
         :total="Object.keys(this.mySaleList).length"
         @current-change="handleCurPageChange()"
         :current-page="this.mypageNum"
         :page-size="10"
-        layout="total,prev,pager,next"
+        layout="prev,pager,next"
       ></el-pagination>
     </el-col>
   </el-col>

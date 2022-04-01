@@ -7,7 +7,7 @@
         /></keep-alive>
       </el-aside>
       <el-main>
-        <el-col :lg="{ span: 10, offset: 2 }">
+        <el-col :lg="{ span: 24, offset: 0 }">
           <BridgeMain :curNFT="curNFT" />
         </el-col>
       </el-main>

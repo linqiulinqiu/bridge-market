@@ -1,5 +1,5 @@
 <template>
-  <el-col id="withdraw" class="tabs">
+  <el-col id="withdraw">
     <el-col v-if="this.hasPbxs">
       <el-col v-if="this.withdrawAddr">
         <el-col>
@@ -12,12 +12,12 @@
             }}
           </p>
           <p>
-            {{ $t("w-addr", { bcoin: bcoin }) }} : <br />
-            <span style="font-size: 10px">
+            <span>{{ $t("w-addr", { bcoin: bcoin }) }} :</span> <br />
+            <span class="tips">
               {{ $t("correct-addr") }}
             </span>
           </p>
-          <el-col class="aa">
+          <el-col class="follow">
             <span class="font">
               {{ this.withdrawAddr }}
             </span>
@@ -30,13 +30,13 @@
             ></el-button>
           </el-col>
           <el-col>
-            <el-col style="height: 45px; margin-top: 10px">
-              {{ $t("burn") }}
+            <el-col id="burn-amount">
+              {{ $t("burn") }} :
               <el-input
                 v-model.trim="wAmount"
                 class="amount-input"
                 clearable
-                maxlength="40"
+                maxlength="20"
                 suffix-icon="el-icon-edit"
               ></el-input>
               <el-button
@@ -54,13 +54,13 @@
                 >{{ $t("withdraw") }}
               </el-button>
             </el-col>
-            <el-col style="height: 70px">
+            <el-col>
               <p>
                 {{ $t("get") }}
-                <span class="span">
-                  <span class="font" v-if="this.wAmount != ''">{{
-                    getwAmount
-                  }}</span>
+                <span class="get-amount">
+                  <span v-if="this.wAmount != ''">
+                    {{ getwAmount }}
+                  </span>
                 </span>
                 {{ bcoin }}
               </p>
@@ -311,6 +311,26 @@ export default {
 };
 </script>
 <style>
+#withdraw {
+  font-size: 20px;
+}
+#withdraw .get-amount {
+  line-height: 10px;
+}
+#burn-amount .el-input__inner {
+  background: #373943;
+  border: none;
+  box-sizing: border-box;
+  color: #38f2af;
+  border-radius: 10px;
+}
+#burn-amount .el-input {
+  margin: 0px 10px;
+  color: #fff;
+}
+.tips {
+  font-size: 14px;
+}
 .bindWaddr {
   margin: 20px 0px;
   text-align: center;

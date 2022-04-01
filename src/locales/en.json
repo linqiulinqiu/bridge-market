@@ -1,6 +1,6 @@
 {   "add-token":"Add Token",
     "addr":"In the following address",
-    "all":"All",
+    "all":"Max",
     "approve":"Approve",
     "add-token-tip":"Add the current token information to the metamask Wallet",
 
@@ -73,6 +73,7 @@
 
     "or":"OR",
     "openNFT":"Please select a nft first",
+    "onSale":"On Sale",
     
     "price":"Price",
     "price-tips":"Price is Empty",

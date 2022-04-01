@@ -1,16 +1,24 @@
 <template>
-  <el-row>
-    <el-col class="main" v-if="baddr">
-      <el-col v-if="!current.pbtId">
-        <h2>PBT {{ $t("market") }}</h2>
+  <el-col>
+    <el-col v-if="baddr">
+      <el-col v-if="!current.pbtId" class="mk-list">
+        <h3>PBT {{ $t("market") }}</h3>
         <el-col>
-          <el-col class="cointy">
+          <el-col class="mk-title">
+            <h4>{{ $t("onSale") }}</h4>
+          </el-col>
+          <el-col class="cointy" :xs="{ span: 24 }" :span="22" :offset="1">
             <MarketList
               :marketList="this.marketList"
               :pageSize="this.pageSize"
             />
           </el-col>
-          <el-col class="cointy">
+        </el-col>
+        <el-col>
+          <el-col class="mk-title">
+            <h4>{{ $t("my-sale") }}</h4>
+          </el-col>
+          <el-col class="cointy" :span="22" :offset="1">
             <MySale :mySaleList="this.mySaleList" :pageSize="this.pageSize" />
           </el-col>
         </el-col>
@@ -21,7 +29,7 @@
       </el-col>
     </el-col>
     <el-col v-else>{{ $t("connect") }}</el-col>
-  </el-row>
+  </el-col>
 </template>
 <script>
 import MarketList from "./market/MarketList.vue";
@@ -62,16 +70,24 @@ export default {
   },
 };
 </script>
-<style>
-.main {
-  height: calc(100vh - 140px);
-  padding: 40px 40px;
+<style >
+.mk-title {
+  height: 80px;
+  margin-bottom: 5px;
+  line-height: 80px;
+}
+.mk-title h4 {
+  padding-left: 2%;
+}
+.cointy {
+  min-height: 300px;
+  border-radius: 10px;
+  background-color: #373943;
+  position: relative;
+  padding: 10px;
 }
 .content {
   display: flex;
-}
-.nftlist {
-  margin: 15px;
 }
 .emptyImg {
   float: left;

@@ -59,7 +59,7 @@
     "mintPBT":"Mint PBT",
     "mintable":"目前可以铸造的NFT数目：",
     "my-nfts":"我的NFT",
-        "my-sale":"我的正在售卖的NFT",
+    "my-sale":"我的正在售卖的NFT",
 
     "none":"目前可铸造数为0,不可铸造NFT，请等待",
     "no-waddr":"未绑定取款地址",
@@ -73,6 +73,7 @@
     "openNFT":"请先选择一个NFT",
     "price":"价格",   
     "price-tips":"价格为空",
+    "onSale":"正在售卖",
 
 
     "redeem":"兑换",

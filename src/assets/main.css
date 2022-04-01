@@ -1,16 +1,8 @@
 /* common style */
 ul li {
-    /* float: left; */
     list-style: none;
 }
 
-/* p,
-div,
-span,
-li,
-button {
-    color: #668b66
-} */
 .aa {
     height: 100px;
     background-color: #e3e9e3fd;
@@ -19,6 +11,8 @@ button {
 
 .font {
     font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    font-weight: 500;
 }
 
 .minifont {
@@ -60,8 +54,8 @@ button {
 
 .nftlist {
     height: 480px;
-    padding: 0px 50px;
     margin-top: 15px;
+    padding: 0px 15px;
     background-color: #d1fcd1;
 }
 
@@ -104,12 +98,7 @@ button {
     top: -5px;
 }
 
-.cointy {
-    min-height: 300px;
-    border: #d3fde1 1px solid;
-    position: relative;
-    padding: 30px;
-}
+
 
 /* 输入数字*/
 .amount-input {
@@ -119,28 +108,22 @@ button {
 
 .el-input__inner {
     font-family: 'Courier New', Courier, monospace;
+
 }
 
 /* /* tab 标签页面 */
 .el-tabs {
-    width: 830px;
-    height: 500px;
-    background-color: #F5F7FA;
+    min-height: 500px;
     position: relative;
-}
-
-/* .el-tabs {
-    border: none;
-} */
-
-.el-tabs__nav-scroll {
-    text-align: center;
+    color: #fff;
 }
 
 .el-tabs__nav {
     width: 100%;
     height: 70px;
     padding-top: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+
 }
 
 .el-tabs__item {
@@ -150,16 +133,14 @@ button {
     font-weight: 700;
     padding: 0px;
     text-align: center;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .el-tabs__active-bar {
-    background-color: #668b66;
+    background-color: #fff;
     width: 120px;
 }
 
-.el-tabs__nav-scroll {
-    padding: 0px 30%;
-}
 
 .el-tab-pane {
     padding: 30px 30px;
@@ -168,7 +149,7 @@ button {
 
 
 .el-tabs>.el-tabs__header .el-tabs__item.is-active {
-    color: #668b66;
+    color: #fff;
     border: none;
 }
 
@@ -182,50 +163,6 @@ button {
 }
 
 
-/* getfee btnstyle */
-
-.fees {
-    position: relative;
-    margin: 0 auto;
-    margin-top: 100px;
-}
-
-.mainpanel {
-    position: relative;
-    width: 760px;
-    height: 500px;
-    box-sizing: border-box;
-}
-
-.btn-fee {
-    position: absolute;
-    z-index: 3;
-    top: 15px;
-    right: 30px;
-}
-
-#balance {
-    position: absolute;
-    top: 10px;
-    left: 0px;
-    width: 180px;
-    height: 50px;
-    background-color: rgb(226, 238, 224);
-    z-index: 5;
-    padding: 10px 0px;
-    border-radius: 20px;
-}
-
-.el-tabs>.el-tabs__header .el-tabs__item:not(.is-active):hover {
-    color: #668b66;
-}
-
-
-.el-tabs>.el-tabs__header .el-tabs__item[class~=is-active]:hover {
-    color: #051105;
-}
-
-/* get info button */
 .el-icon-info:before {
     font-size: xx-large;
 }
@@ -248,6 +185,7 @@ button {
     margin-top: 20px;
     min-height: 600px;
 }
+
 .el-button:hover {
     color: #668b66;
 }

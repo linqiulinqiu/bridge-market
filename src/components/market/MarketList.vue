@@ -8,14 +8,14 @@
       </ul>
     </div>
     <p v-else>{{ $t("no-selling") }}</p>
-    <el-col :offset="10">
+    <el-col :offset="19" :span="5">
       <el-pagination
         background
         :total="Object.keys(this.marketList).length"
         @current-change="handleXccPaegChange"
         :current-page="this.xccpageNum"
         :page-size="4"
-        layout="total,prev,pager,next"
+        layout="prev,pager,next"
       ></el-pagination>
     </el-col>
   </el-col>
@@ -58,8 +58,29 @@ export default {
   },
 };
 </script>
-<style scoped>
-.content {
-  min-height: 500px;
+<style>
+.el-pagination {
+  background-color: #373943;
+}
+.el-pager li {
+  background-color: #373943 !important;
+  color: #fff !important;
+}
+.el-pager li.active {
+  color: #38f2af !important;
+}
+.el-pagination button,
+.el-pagination span:not([class*="suffix"]) {
+  color: #d1fcd1;
+  background-color: #373943 !important;
+}
+.el-pagination .btn-next,
+.el-pagination .btn-prev {
+  color: #38f2af !important;
+  background-color: #373943;
+}
+.el-pagination button:disabled {
+  color: rgb(18, 24, 22) !important;
+  background-color: #373943;
 }
 </style>

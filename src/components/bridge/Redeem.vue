@@ -1,14 +1,24 @@
 <template>
-  <el-col id="redeem" class="tabs">
+  <el-col id="redeem">
     <el-col v-if="current.coinType == '2'">{{ this.$t("no-redeem") }} </el-col>
     <el-col v-else>
       <h3>{{ $t("redeem") }}</h3>
       <el-col>
         <p>{{ $t("balance") }}:{{ this.redeemBalance[bcoin] }}</p>
         <el-col>
-          <el-input type="text" v-model="redeemNum"></el-input>
+          <el-input
+            type="text"
+            v-model="redeemNum"
+            clearable
+            maxlength="20"
+            suffix-icon="el-icon-edit"
+          ></el-input>
           <el-col v-if="needApprove">
-            <el-button @click="approve" :loading="approve_loading">
+            <el-button
+              @click="approve"
+              :loading="approve_loading"
+              type="primary"
+            >
               {{ this.$t("approve") }}
             </el-button>
           </el-col>
@@ -85,3 +95,13 @@ export default {
   },
 };
 </script>
+<style>
+#redeem {
+  font-size: 20px;
+}
+#redeem .el-input {
+  width: 200px;
+  float: left;
+  margin: 20px;
+}
+</style>

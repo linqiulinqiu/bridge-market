@@ -1,42 +1,39 @@
 <template>
-  <el-row id="bridge-main" type="flex" justify="center">
-    <el-col class="fees" :span="14" v-if="baddr">
-      <el-col
-        v-if="Object.keys(this.$store.state.myList).length == 0"
-        class="mainpanel"
-      >
-        <el-col style="color: #fff">
-          <h1>{{ $t("bridge-guide") }}</h1>
-          <el-col>
-            <h4>1.{{ $t("b-guide1") }}</h4>
-            <h4>2.{{ $t("b-guide2") }}</h4>
-            <h4>3.{{ $t("b-guide3") }}</h4>
-          </el-col>
+  <el-col v-if="baddr">
+    <el-col v-if="Object.keys(this.$store.state.myList).length == 0">
+      <el-col style="color: #fff">
+        <h1>{{ $t("bridge-guide") }}</h1>
+        <el-col>
+          <h4>1.{{ $t("b-guide1") }}</h4>
+          <h4>2.{{ $t("b-guide2") }}</h4>
+          <h4>3.{{ $t("b-guide3") }}</h4>
         </el-col>
       </el-col>
+    </el-col>
+    <el-col v-else>
+      <el-col v-if="!current.pbtId">
+        <h1>{{ $t("openNFT") }}</h1>
+      </el-col>
       <el-col v-else>
-        <el-col v-if="!current.pbtId" style="color: #fff">
-          <h1>{{ $t("openNFT") }}</h1>
+        <el-col v-if="!current.coinType">
+          <h4>{{ $t("select-coin") }}</h4>
         </el-col>
         <el-col v-else>
-          <el-col v-if="!current.coinType">
-            <h4 style="color: #fff">{{ $t("select-coin") }}</h4>
+          <el-col id="balance" :lg="12">
+            {{ this.$t("balance") }}：
+            <span class="font">
+              {{ WBalance[bcoin] }}
+            </span>
+            <span class="minifont"> {{ wcoin }}</span>
+            <el-tooltip placement="bottom" :content="this.$t('add-token-tip')">
+              <el-button size="mini" type="primary" @click="addToken">
+                {{ $t("add-token") }}
+              </el-button>
+            </el-tooltip>
+            <el-col id="bridge-fee"> <BridgeFee /> </el-col>
           </el-col>
-          <el-col v-else>
-            <el-col> <BridgeFee /> </el-col>
-            <el-col id="balance">
-              {{ this.$t("balance") }}：<span class="font">
-                {{ WBalance[bcoin] }}</span
-              >
-              <span class="minifont"> {{ wcoin }}</span>
-              <el-tooltip
-                placement="bottom"
-                :content="this.$t('add-token-tip')"
-                ><el-button size="mini" type="primary" @click="addToken">
-                  {{ $t("add-token") }}
-                </el-button>
-              </el-tooltip>
-            </el-col>
+
+          <el-col :lg="{ span: 17 }">
             <el-tabs>
               <el-tab-pane :label="$t('deposit')"
                 ><Deposit :curNFT="this.curNFT"
@@ -48,15 +45,15 @@
                 ><Redeem :curNFT="this.curNFT"
               /></el-tab-pane>
             </el-tabs>
-            <el-col class="lplink">
-                <LPLink :coinType="current.coinType"/>
-            </el-col>
+          </el-col>
+          <el-col>
+            <LPLink :coinType="current.coinType" />
           </el-col>
         </el-col>
       </el-col>
     </el-col>
-    <el-col v-else> {{ $t("connect") }} </el-col>
-  </el-row>
+  </el-col>
+  <el-col v-else> {{ $t("connect") }} </el-col>
 </template>
 <script>
 import Deposit from "./bridge/Deposit.vue";
@@ -75,7 +72,7 @@ export default {
     Withdraw,
     Redeem,
     BridgeFee,
-    LPLink
+    LPLink,
   },
   props: ["curNFT"],
   computed: mapState({
@@ -101,24 +98,18 @@ export default {
 };
 </script>
 <style>
-.lplink {
+
+#balance {
+  color: #fff;
+  padding: 10px;
+  position: relative;
+}
+#balance .el-button {
+  margin-left: 15px;
+}
+#balance #bridge-fee {
   position: absolute;
-  z-index: 10;
-  bottom: 15px;
-  left: 15px;
-  width: 150px;
-  height: 50px;
-  border: darkcyan 1px solid;
-  text-align: center;
-  border-radius: 20px;
-  padding: 7px;
-  box-shadow: -7px 6px 5px 5px cadetblue;
-}
-.lplink a {
-  color: #668b66;
-  text-decoration: none;
-}
-.lplink a:hover {
-  color: blueviolet;
+  top: 5.25px;
+  left: 300px;
 }
 </style>
