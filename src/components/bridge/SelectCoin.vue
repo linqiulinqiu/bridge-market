@@ -7,7 +7,7 @@
         :key="item.symbol"
         @click="changeCoin(item)"
         class="coinTypes"
-        :class="{ isselect: item.symbol == addclass }"
+        :class="{ isselect: item.index == addclass }"
       >
         {{ item.name }}
       </li>
@@ -20,6 +20,10 @@ import pbwallet from "pbwallet";
 export default {
   computed: mapState({
     bcoin: "bcoin",
+    current: "current",
+    addclass: function (state) {
+      if (state.current.coinType) return state.current.coinType;
+    },
   }),
   data() {
     const coinMap = [];
@@ -27,13 +31,11 @@ export default {
       coinMap.push(pbwallet.wcoin_info(i));
     }
     return {
-      addclass: "",
       coinMap: coinMap,
     };
   },
   methods: {
     changeCoin: function (item) {
-      this.addclass = item.symbol;
       this.$store.commit("setCurrentCoinType", item.index);
     },
   },

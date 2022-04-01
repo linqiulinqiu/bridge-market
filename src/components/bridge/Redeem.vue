@@ -71,25 +71,32 @@ export default {
     approve: async function () {
       this.approve_loading = true;
       const commit = this.$store.commit;
-      const res = await market.tokenApprove(this.bcoin, commit);
-      console.log("res1", res);
+      try {
+        const res = await market.tokenApprove(this.bcoin, commit);
+        const obj = this;
+        market.waitEventDone(res, async function (evt) {
+          obj.approve_loading = false;
+        });
+      } catch (e) {
+        console.log("approve err", e);
+        this.approve_loading = false;
+      }
 
-      const obj = this;
-      market.waitEventDone(res, async function (evt) {
-        console.log("approve res", res, evt);
-        obj.approve_loading = false;
-      });
-      console.log("res", res);
       //TODO: watch tokenRedeem events
     },
     redeem: async function () {
       this.redeem_loading = true;
       const obj = this;
-      const res = await market.tokenRedeem(this.bcoin, this.redeemNum);
-      market.waitEventDone(res, async function (evt) {
-        console.log("redeem res", res, evt);
-        obj.redeem_loading = false;
-      });
+      try {
+        const res = await market.tokenRedeem(this.bcoin, this.redeemNum);
+        market.waitEventDone(res, async function (evt) {
+          obj.redeem_loading = false;
+        });
+      } catch (e) {
+        console.log("redeem err", e);
+        this.redeem_loading = false;
+      }
+
       //TODO: watch tokenRedeem events
     },
   },

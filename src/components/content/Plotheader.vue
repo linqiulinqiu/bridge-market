@@ -90,8 +90,8 @@ function versions() {
   console.log("vs=", vs);
   return vs;
 }
-function tags() {
-  const mode = location.hash.substr(2, location.hash.length - 2);
+function tags(path) {
+  const mode = path.substr(1, path.length - 1);
   let tag = "";
   if (mode.indexOf("/") != -1) {
     tag = "/" + mode.substr(0, mode.indexOf("/"));
@@ -114,6 +114,10 @@ export default {
         { tag: this.$t("doc"), link: "/Doc" },
       ];
     },
+    menuIndex() {
+      const path = tags(this.$route.path);
+      return path;
+    },
   }),
   watch: {
     lang: function () {
@@ -129,7 +133,6 @@ export default {
       ],
       lang: i18n.locale,
       versions: versions(),
-      menuIndex: tags(),
     };
   },
   methods: {
