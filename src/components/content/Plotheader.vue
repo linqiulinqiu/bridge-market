@@ -148,7 +148,7 @@ export default {
         commit("setBaddr", bsc.addr);
         await data.loadAlllists_brief(store);
         await data.loadAlllists_detail(store);
-        const otAllowance = await market.tokenAllowance();
+        const otAllowance = await market.tokenAllowance(false);
         this.$store.commit("setRedeemAllowance", otAllowance);
         this.connect_loading = false;
       }

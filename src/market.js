@@ -91,15 +91,21 @@ async function connect(commit) {
     return false
 }
 
-async function tokenAllowance() {
+async function tokenAllowance(approve) {
     const oldAllowance = {}
     for (let symbol in oldTokenCtrs) {
         let allowance = {}
-        allowance[symbol] = await oldTokenCtrs[symbol].allowance(bsc.addr, bsc.ctrs.tokenredeem.address)
-        oldAllowance[symbol] = await keeper.formatToken(oldTokenCtrs[symbol].address, allowance[symbol])
+        if (approve) {
+            allowance[symbol] = await oldTokenCtrs[symbol].allowance(bsc.addr, bsc.ctrs.tokenredeem.address)
+            oldAllowance[symbol] = await keeper.formatToken(oldTokenCtrs[symbol].address, allowance[symbol])
+
+        } else {
+            oldAllowance[symbol] = 0.0
+        }
+        console.log("oldAllowance =", oldAllowance)
+        return oldAllowance
     }
-    console.log("oldAllowance =", oldAllowance)
-    return oldAllowance
+
 }
 
 async function tokenApprove(bcoin, commit) {
@@ -107,7 +113,7 @@ async function tokenApprove(bcoin, commit) {
     const supply = await ctr.totalSupply()
     const res = await ctr.approve(bsc.ctrs.tokenredeem.address, supply) // 1000x total supply, almost infinite
     waitEventDone(res, async function () {
-        const newAllowance = await tokenAllowance()
+        const newAllowance = await tokenAllowance(true)
         commit("setRedeemAllowance", newAllowance)
     })
     return res
