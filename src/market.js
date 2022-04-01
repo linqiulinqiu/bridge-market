@@ -49,21 +49,6 @@ async function ListenToWCoin(commit) {
     ctr_xch.on(ctr_xch.filters.Transfer, updateXCHBalance)
 }
 
-function wsymbolByAddress(addr) {
-    for (let cname in bsc.ctrs) {
-        if (bsc.ctrs[cname].address == addr) {
-            for (let wid = 1; pbwallet.wcoin_info(wid); wid++) {
-                const winfo = pbwallet.wcoin_info(wid)
-                if (winfo.ctrname == cname) {
-                    return winfo.symbol
-                }
-            }
-            return false
-        }
-    }
-    return false
-}
-
 const oldTokenCtrs = {}
 
 async function listenRedeemEvt(commit) {
@@ -78,8 +63,9 @@ async function listenRedeemEvt(commit) {
         console.log("updateOldBalance", evt, oldBalance)
     }
     for (let i in tlists[0]) {
-        const symbol = wsymbolByAddress(tlists[1][i])
-        if (symbol) {
+        const info = pbwallet.wcoin_info(tlists[1][i],'address')
+        if (info) {
+            const symbol = info.symbol
             oldTokenCtrs[symbol] = pbwallet.erc20_contract(tlists[0][i])
             oldTokenCtrs[symbol].on(oldTokenCtrs[symbol].filters.Transfer, updateOldBalance)
             console.log('redeem-evt', symbol, oldTokenCtrs[symbol].address)
@@ -129,7 +115,6 @@ async function tokenRedeem(bcoin, amount) {
     console.log("redeem res", res.hash)
     return res
 }
-
 async function getmintfee() {
     const options = {}
     const fee = await bsc.ctrs.pbt.mintFee();
@@ -258,11 +243,10 @@ async function getDepAddr(pbtId, cointy) {
     }
 }
 async function clearAddr(pbtid, cointy) {
-    const addrZero = '0x0000000000000000000000000000000000000000000000000000000000000000'
     const fee = await bsc.ctrs.pbpuzzlehash.rebindFee()
     let res = {}
     if (fee[0] == ethers.constants.AddressZero) { // fee in BNB
-        res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addrZero, {
+        res = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, fee[0], {
             value: fee[1]
         })
     } else { // erc20 token
@@ -274,7 +258,7 @@ async function clearAddr(pbtid, cointy) {
             approveRes.fn = 'approve'
             await waitEventDone(approveRes, async function (evt) {
                 console.log("approveAllowance evt done,evt=", evt)
-                const bind = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, addrZero)
+                const bind = await bsc.ctrs.pbpuzzlehash.bindWithdrawPuzzleHash(pbtid, cointy, ethers.constants.AddressZero)
                 console.log("rebind addr ", bind)
                 return bind
             })
