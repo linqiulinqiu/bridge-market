@@ -42,12 +42,15 @@
               <el-tab-pane :label="$t('deposit')"
                 ><Deposit :curNFT="this.curNFT"
               /></el-tab-pane>
-              <el-tab-pane :label="$t('withdraw')"
-                ><Withdraw :curNFT="this.curNFT"
-              /></el-tab-pane>
-              <el-tab-pane :label="$t('redeem')"
-                ><Redeem :curNFT="this.curNFT"
-              /></el-tab-pane>
+              <el-tab-pane :label="$t('withdraw')">
+                <Withdraw :curNFT="this.curNFT" />
+              </el-tab-pane>
+              <el-tab-pane :label="$t('redeem')">
+                <Redeem :curNFT="this.curNFT" />
+              </el-tab-pane>
+              <el-tab-pane :label="$t('swap')">
+                <Swap />
+              </el-tab-pane>
             </el-tabs>
           </el-col>
           <el-col>
@@ -64,6 +67,8 @@ import LPLink from "./bridge/LpLink.vue";
 import Withdraw from "./bridge/Withdraw.vue";
 import Redeem from "./bridge/Redeem.vue";
 import BridgeFee from "./bridge/BridgeFee.vue";
+import Swap from "./bridge/Swap.vue";
+
 import { mapState } from "vuex";
 import market from "../market";
 import pbwallet from "pbwallet";
@@ -76,6 +81,7 @@ export default {
     Redeem,
     BridgeFee,
     LPLink,
+    Swap,
   },
   props: ["curNFT"],
   computed: mapState({

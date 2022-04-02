@@ -58,14 +58,17 @@ async function listenRedeemEvt(commit) {
     const oldAddrs = tlists[0]
     const newAddrs = tlists[1]
     for (let i = 0; i < newAddrs.length; i++) {
-        const oldCoinAddr = oldAddrs[i]
-        const info = pbwallet.wcoin_info(newAddrs[i], 'address')
-        console.log("info", info, newAddrs[i], oldCoinAddr)
-        if (info) {
-            const symbol = info.symbol
-            oldTokenCtrs[symbol] = pbwallet.erc20_contract(oldCoinAddr)
-            oldTokenCtrs[symbol].on(oldTokenCtrs[symbol].filters.Transfer, updateOldBalance)
-            console.log('redeem-evt', symbol, oldTokenCtrs[symbol].address)
+        for (let j = 0; j < oldAddrs.length; j++) {
+            const oldCoinAddr = oldAddrs[i]
+            const newCoinAddr = newAddrs[j]
+            const info = pbwallet.wcoin_info(newAddrs[i], 'address')
+            console.log("info", info, newCoinAddr, oldCoinAddr)
+            if (info) {
+                const symbol = info.symbol
+                oldTokenCtrs[symbol] = pbwallet.erc20_contract(oldCoinAddr)
+                oldTokenCtrs[symbol].on(oldTokenCtrs[symbol].filters.Transfer, updateOldBalance)
+                console.log('redeem-evt', symbol, oldTokenCtrs[symbol].address)
+            }
         }
     }
     async function updateOldBalance(evt) {
@@ -74,7 +77,7 @@ async function listenRedeemEvt(commit) {
             oldBalance[i] = await keeper.formatToken(oldTokenCtrs[i].address, await oldTokenCtrs[i].balanceOf(bsc.addr))
         }
         commit("setRedeemBalance", oldBalance)
-        console.log("updateOldBalance", evt, oldBalance)
+        console.log("updateOldBalance", evt, oldBalance, oldTokenCtrs)
     }
     await updateOldBalance()
 }
@@ -93,6 +96,7 @@ async function connect(commit) {
 
 async function tokenAllowance(approve) {
     const oldAllowance = {}
+    console.log("approve", oldTokenCtrs)
     for (let symbol in oldTokenCtrs) {
         let allowance = {}
         if (approve) {
@@ -102,10 +106,9 @@ async function tokenAllowance(approve) {
         } else {
             oldAllowance[symbol] = 0.0
         }
-        console.log("oldAllowance =", oldAllowance)
-        return oldAllowance
+        console.log("oldAllowance =", allowance, oldAllowance)
     }
-
+    return oldAllowance
 }
 
 async function tokenApprove(bcoin, commit) {
