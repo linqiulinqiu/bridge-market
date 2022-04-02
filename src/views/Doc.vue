@@ -94,6 +94,7 @@ export default {
 .content {
   display: flex;
   color: #ffffff;
+  font-size: 14px;
 }
 .el-main {
   height: calc(100vh - 70px);

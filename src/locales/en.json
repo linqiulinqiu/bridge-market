@@ -25,12 +25,14 @@
     "correct-amount":"Please enter the correct amount",
     "correct-addr":"Please confirm that the withdrawal address is the collection address of your wallet and that the address is correct.",
     "copy":"Copy to clipboard",
+    "copy-ok":"The address has been copied to the clipboard!",
+    "copy-err":"Sorry，address copy failed.",
     "cpright1":"All rights reserved.",
     "cpright2":"PlotBridge site is not affiliated with pancake",
     "cpright3":"All third party trademarks are the property of their respective owners",
 
     "deposit":"Deposit",
-    "desc":"description :",
+    "desc":"description",
     "dep-rate":"Deposit rate",
     "dep-minFee":"Min deposit fee",
     "dep-limit":"The recommended limit for a single deposit is :",
@@ -61,7 +63,7 @@
     "mintPBT":"Mint PBT",
     "mintable":"NFT's currently available for minting :",
     "my-nfts":"My NFTs",
-    "my-sale":"My Selling NFT",
+    "my-sale":"My Selling",
     
     "none":"The number of mintable NFTs is 0 currently, no NFTs can be minted, please wait.",
     "no-waddr":"Unbound withdrawal address",
@@ -69,6 +71,7 @@
     "no-desc":"No Description",
     "no-nft":"Any NFT you got,please go to the market，or mint it",
     "no-selling":"Selling PBT not found yet... How about mint one?",
+    "no-mysale":"You don't sell anything",
 
 
     "or":"OR",

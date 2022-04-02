@@ -3,12 +3,6 @@ ul li {
     list-style: none;
 }
 
-.aa {
-    height: 100px;
-    background-color: #e3e9e3fd;
-    padding: 14px 10px;
-}
-
 .font {
     font-family: 'Courier New', Courier, monospace;
     font-size: 18px;
@@ -19,56 +13,8 @@ ul li {
     font-size: 14px;
 }
 
-.span {
-    width: 200px;
-    height: 40px;
-    background-color: #e3e9e3;
-    display: inline-block;
-    text-align: center;
-    margin-top: 5px;
-    border: #e2eee0 .5px solid;
-    border-radius: 20px;
-}
-
-.selectToken {
-    width: 100px;
-}
-
-/* connect wallet template */
-.refresh {
-    position: absolute;
-    top: -70px;
-    right: 0px;
-    z-index: 1;
-}
-
-.user {
-    min-height: 200px;
-    border: 1px solid #abcdef;
-    position: relative;
-}
-
-.user>.el-button {
-    margin-top: 70px;
-}
-
-.nftlist {
-    height: 480px;
-    margin-top: 15px;
-    padding: 0px 15px;
-    background-color: #d1fcd1;
-}
-
-
-/* badge simbol */
-.simbol {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-}
-
 .labels {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 60px;
 }
 
@@ -83,21 +29,6 @@ ul li {
 .el-select:hover .el-input__inner {
     border: #d1fcd1 1px solid;
 }
-
-.closeInfo {
-    float: right;
-    position: relative;
-    right: -20px;
-    top: -20px;
-    border: none;
-}
-
-/* market */
-.btn {
-    position: relative;
-    top: -5px;
-}
-
 
 
 /* 输入数字*/
@@ -171,20 +102,6 @@ ul li {
     padding: 0px;
 }
 
-/* //mynft 页面 */
-#mynft {
-    background-color: #d1fcd1;
-    min-height: 650px;
-    height: calc(100vh - 140px);
-    padding-top: 20px;
-    padding-bottom: 20px;
-    width: 350px;
-}
-
-.nftarea {
-    margin-top: 20px;
-    min-height: 600px;
-}
 
 .el-button:hover {
     color: #668b66;

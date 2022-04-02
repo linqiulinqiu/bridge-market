@@ -1,34 +1,28 @@
 <template>
-  <el-col>
-    <el-col v-if="baddr">
-      <el-col v-if="!current.pbtId" class="mk-list">
-        <h3>PBT {{ $t("market") }}</h3>
-        <el-col>
-          <el-col class="mk-title">
-            <h4>{{ $t("onSale") }}</h4>
-          </el-col>
-          <el-col class="cointy" :xs="{ span: 24 }" :span="22" :offset="1">
-            <MarketList
-              :marketList="this.marketList"
-              :pageSize="this.pageSize"
-            />
-          </el-col>
+  <el-col id="marketMain">
+    <el-col v-if="!current.pbtId" class="mk-list">
+      <h3>{{ $t("market") }}</h3>
+      <el-col>
+        <el-col class="mk-title">
+          <h4>{{ $t("onSale") }}</h4>
         </el-col>
-        <el-col>
-          <el-col class="mk-title">
-            <h4>{{ $t("my-sale") }}</h4>
-          </el-col>
-          <el-col class="cointy" :span="22" :offset="1">
-            <MySale :mySaleList="this.mySaleList" :pageSize="this.pageSize" />
-          </el-col>
+        <el-col class="cointy" :xs="{ span: 24 }" :span="20" :offset="1">
+          <MarketList :marketList="this.marketList" :pageSize="this.pageSize" />
         </el-col>
       </el-col>
-      <el-col v-else>
-        <el-button @click="clearCurrentId">Back</el-button>
-        <el-col><NFTinfo :curNFT="curNFT" /></el-col>
+      <el-col>
+        <el-col class="mk-title">
+          <h4>{{ $t("my-sale") }}</h4>
+        </el-col>
+        <el-col class="cointy" :span="20" :offset="1">
+          <MySale :mySaleList="this.mySaleList" :pageSize="this.pageSize" />
+        </el-col>
       </el-col>
     </el-col>
-    <el-col v-else>{{ $t("connect") }}</el-col>
+    <el-col v-else>
+      <el-button @click="clearCurrentId">Back</el-button>
+      <el-col><NFTinfo :curNFT="curNFT" /></el-col>
+    </el-col>
   </el-col>
 </template>
 <script>

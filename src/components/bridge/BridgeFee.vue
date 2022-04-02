@@ -1,6 +1,6 @@
 <template>
   <el-col id="fee">
-    <el-popover placement="left" trigger="click" title="fees">
+    <el-popover placement="right" trigger="click" title="fees">
       <p>
         {{ $t("dep-limit") }}{{ this.depAmount }}<br />
         {{ $t("w-limit") }}：{{ this.wAmount }}<br />

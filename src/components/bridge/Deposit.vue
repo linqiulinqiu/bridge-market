@@ -141,9 +141,6 @@ export default {
       this.depAmount = "";
       this.getAmount = "";
     },
-    curNFT: function (nft, old) {
-      // this.hasPbxs = nft && "pbxs" in nft;
-    },
     depAmount: async function () {
       var depamount = this.depAmount;
       if (!depamount || isNaN(depamount) || depamount == "") {
@@ -169,10 +166,10 @@ export default {
   },
   methods: {
     onCopy: function (e) {
-      this.$message.success("地址已经复制到剪切板！");
+      this.$message.success(this.$t("copy-ok"));
     },
     onError: function (e) {
-      this.$message.error("抱歉，复制地址失败。");
+      this.$message.error(this.$t("copy-err"));
     },
     getDepositAddr: async function () {
       this.getDep_loading = true;

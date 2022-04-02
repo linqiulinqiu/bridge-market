@@ -1,8 +1,7 @@
 <template>
   <el-col id="redeem">
-    <el-col v-if="current.coinType == '2'">{{ this.$t("no-redeem") }} </el-col>
-    <el-col v-else>
-      <h3>{{ $t("redeem") }}</h3>
+    <!-- <el-col v-if="current.coinType == '2'">{{ this.$t("no-redeem") }} </el-col> -->
+    <el-col>
       <el-col>
         <p>{{ $t("balance") }}:{{ this.redeemBalance[bcoin] }}</p>
         <el-col>
@@ -109,6 +108,6 @@ export default {
 #redeem .el-input {
   width: 200px;
   float: left;
-  margin: 20px;
+  margin: 20px 0px;
 }
 </style>

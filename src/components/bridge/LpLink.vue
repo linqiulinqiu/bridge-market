@@ -1,20 +1,20 @@
 <template>
   <el-col id="lplink">
-    <el-button>
+    <el-button class="lp-style">
       <a
         target="_"
         :href="this.pre_link + 'swap?outputCurrency=' + this.pbpAddr"
         >Buy PBP</a
       >
     </el-button>
-    <el-button v-if="this.coinInfo">
+    <el-button v-if="this.coinInfo" class="lp-style">
       <a
         target="_"
         :href="this.pre_link + 'swap?outputCurrency=' + this.coinInfo.address"
         >Buy {{ coinInfo.bsymbol }}</a
       >
     </el-button>
-    <el-button v-if="this.coinInfo">
+    <el-button v-if="this.coinInfo" class="lp-style">
       <a
         target="_"
         :href="this.pre_link + 'add/' + pbpAddr + '/' + this.coinInfo.address"
@@ -51,24 +51,16 @@ export default {
 };
 </script>
 <style scoped>
-.lplink {
-  position: absolute;
-  z-index: 10;
-  bottom: 15px;
-  left: 15px;
-  width: 150px;
-  height: 50px;
-  border: darkcyan 1px solid;
-  text-align: center;
-  border-radius: 20px;
-  padding: 7px;
-  box-shadow: -7px 6px 5px 5px cadetblue;
+.lp-style {
+  background-color: #2b2c33;
+  border: 1px solid #38f2af;
+  border-radius: 5px;
 }
-.lplink a {
-  color: #668b66;
+.lp-style a {
+  color: #38f2af;
   text-decoration: none;
 }
-.lplink a:hover {
-  color: blueviolet;
+.lp-style:hover {
+  background-color: #373943;
 }
 </style>

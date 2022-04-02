@@ -1,22 +1,27 @@
 <template>
   <el-col>
-    <ul>
-      <li v-for="nft in this.mslist" :key="nft.uri" class="marketlist">
-        <el-button @click="openNFT(nft)" class="nftbtn">
-          <i>#{{ nft.id }}</i>
-          <img v-if="nft.meta" v-lazy="nft.meta.image" alt="img" />
-        </el-button>
-      </li>
-    </ul>
-    <el-col :offset="19" :span="5">
-      <el-pagination
-        background
-        :total="Object.keys(this.mySaleList).length"
-        @current-change="handleCurPageChange()"
-        :current-page="this.mypageNum"
-        :page-size="10"
-        layout="prev,pager,next"
-      ></el-pagination>
+    <el-col v-if="Object.keys(this.mySaleList).length > 0">
+      <ul>
+        <li v-for="nft in this.mslist" :key="nft.uri" class="marketlist">
+          <el-button @click="openNFT(nft)" class="nftbtn">
+            <i>#{{ nft.id }}</i>
+            <img v-if="nft.meta" v-lazy="nft.meta.image" alt="img" />
+          </el-button>
+        </li>
+      </ul>
+      <el-col :offset="19" :span="5">
+        <el-pagination
+          background
+          :total="Object.keys(this.mySaleList).length"
+          @current-change="handleCurPageChange()"
+          :current-page="this.mypageNum"
+          :page-size="10"
+          layout="prev,pager,next"
+        ></el-pagination>
+      </el-col>
+    </el-col>
+    <el-col v-else>
+      <h4>{{ $t("no-mysale") }}</h4>
     </el-col>
   </el-col>
 </template>

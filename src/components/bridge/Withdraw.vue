@@ -81,10 +81,10 @@
             </p>
           </el-col>
         </el-col>
-        <el-col v-else>
+        <el-col v-else class="bind-waddr">
           <p>
             {{ $t("input-addr") }}
-            <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
+            <span class="tips"> ({{ $t("correct-addr") }}) </span>
           </p>
           <el-input
             type="text"
@@ -329,7 +329,13 @@ export default {
   color: #fff;
 }
 .tips {
-  font-size: 14px;
+  font-size: 16px;
+}
+.bind-waddr > .el-input {
+  margin: 20px;
+}
+.bind-waddr > .el-button {
+  margin-left: 20px;
 }
 .bindWaddr {
   margin: 20px 0px;

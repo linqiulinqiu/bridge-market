@@ -1,7 +1,7 @@
 <template>
-  <el-col v-if="baddr">
+  <el-col id="bridgeMain">
     <el-col v-if="Object.keys(this.$store.state.myList).length == 0">
-      <el-col style="color: #fff">
+      <el-col>
         <h1>{{ $t("bridge-guide") }}</h1>
         <el-col>
           <h4>1.{{ $t("b-guide1") }}</h4>
@@ -25,7 +25,11 @@
               {{ WBalance[bcoin] }}
             </span>
             <span class="minifont"> {{ wcoin }}</span>
-            <el-tooltip placement="bottom" :content="this.$t('add-token-tip')">
+            <el-tooltip
+              placement="bottom"
+              effect="light"
+              :content="this.$t('add-token-tip')"
+            >
               <el-button size="mini" type="primary" @click="addToken">
                 {{ $t("add-token") }}
               </el-button>
@@ -53,7 +57,6 @@
       </el-col>
     </el-col>
   </el-col>
-  <el-col v-else> {{ $t("connect") }} </el-col>
 </template>
 <script>
 import Deposit from "./bridge/Deposit.vue";
@@ -98,9 +101,10 @@ export default {
 };
 </script>
 <style>
-
-#balance {
+#bridgeMain {
   color: #fff;
+}
+#balance {
   padding: 10px;
   position: relative;
 }

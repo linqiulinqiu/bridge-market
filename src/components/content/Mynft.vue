@@ -1,50 +1,46 @@
 <template>
   <el-col id="mynft">
-    <el-col v-if="baddr">
-      <el-col class="my-title">
-        {{ $t("my-nfts") }}
-        <el-button
-          @click="getMintfee"
-          size="small"
-          class="btn"
-          v-if="baddr"
-          type="primary"
-          >{{ $t("mintPBT") }}
-        </el-button>
+    <el-col class="my-title">
+      {{ $t("my-nfts") }}
+      <el-button
+        @click="getMintfee"
+        size="small"
+        class="btn"
+        v-if="baddr"
+        type="primary"
+        >{{ $t("mintPBT") }}
+      </el-button>
+    </el-col>
+    <el-col v-if="Object.keys(this.myList).length > 0" class="nftarea">
+      <el-col class="nftlist">
+        <MylistPage
+          v-bind:nftlist="nftlist"
+          v-bind:open="openNFT"
+          v-bind:current="current"
+        />
       </el-col>
-      <el-col v-if="Object.keys(this.myList).length > 0" class="nftarea">
-        <el-col class="nftlist">
-          <keep-alive>
-            <MylistPage
-              v-bind:nftlist="nftlist"
-              v-bind:open="openNFT"
-              v-bind:current="current"
-            />
-          </keep-alive>
-        </el-col>
-        <el-col class="btn-bar">
-          <el-pagination
-            background
-            :total="Object.keys(this.myList).length"
-            layout="prev,pager,next"
-            @current-change="handleCurrentChange"
-            :current-page="this.pageNum"
-            :page-size="this.pageSize"
-          ></el-pagination>
-        </el-col>
-      </el-col>
-      <el-col v-else class="content">
-        <el-col>
-          {{ $t("no-nft") }}
-        </el-col>
-      </el-col>
-      <el-col class="bottom-box">
-        <router-link class="bottom" :to="this.market"
-          >{{ $t("to-market") }}
-        </router-link>
+      <el-col class="btn-bar">
+        <el-pagination
+          background
+          :total="Object.keys(this.myList).length"
+          layout="prev,pager,next"
+          @current-change="handleCurrentChange"
+          :current-page="this.pageNum"
+          :page-size="this.pageSize"
+        ></el-pagination>
       </el-col>
     </el-col>
-    <el-col v-else>{{ $t("look-info") }}</el-col>
+    <el-col v-else class="content">
+      <el-col>
+        {{ $t("no-nft") }}
+      </el-col>
+    </el-col>
+    <el-col class="bottom-box">
+      <router-link class="bottom" :to="this.market"
+        >{{ $t("to-market") }}
+      </router-link>
+    </el-col>
+
     <el-dialog :visible.sync="mintVisible">
       <el-card>
         <MintPBT :mintAbles="this.mintNumber" :mintFee="this.mintFee" />
@@ -113,10 +109,13 @@ export default {
 </script>
 
 <style scoped>
-.el-col,
 #mynft {
-  color: #ffffff;
   background-color: #25272e;
+  min-height: 650px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
 }
 i {
   margin-right: 8px;
@@ -128,19 +127,25 @@ i {
   line-height: 40px;
   text-align: center;
 }
+.btn {
+  position: relative;
+  top: -5px;
+}
+.nftarea {
+  margin-top: 5px;
+  min-height: 500px;
+}
 .nftlist {
-  width: 250px;
   height: 600px;
+  padding: 0px 15px;
 }
 .content {
-  min-height: 550px;
-  font-size: 24px;
+  min-height: 400px;
   line-height: 36px;
   padding: 40px;
 }
 .bottom-box {
-  padding: 0 110px;
-  margin-top: 40px;
+  padding: 0 10px;
 }
 .bottom {
   background-color: #38f2af;

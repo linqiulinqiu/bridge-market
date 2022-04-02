@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <div class="content">
+  <el-col>
+    <el-container v-if="baddr">
       <el-aside width="280px">
-        <keep-alive>
-          <Mynft :myList="myList" :curNFT="this.curNFT" :pageSize="3" />
-        </keep-alive>
+        <Mynft :myList="myList" :curNFT="this.curNFT" :pageSize="3" />
       </el-aside>
       <el-main>
-        <el-col :span="23">
+        <el-col :span="23" class="mkMain">
           <MarketMain
             :marketList="marketList"
             :mySaleList="mySaleList"
@@ -15,8 +13,9 @@
           />
         </el-col>
       </el-main>
-    </div>
-  </div>
+    </el-container>
+    <el-col v-else> {{ $t("look-info") }} </el-col>
+  </el-col>
 </template>
 
 <script>
@@ -62,10 +61,8 @@ export default {
 }
 .el-main {
   background-color: #2b2c33;
-  color: #fff;
 }
-.el-main > .el-col {
+.mkMain {
   margin-left: 2%;
-  /* padding-top: 10px; */
 }
 </style>

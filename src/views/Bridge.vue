@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <el-container>
+  <el-col id="Bridge">
+    <el-container v-if="baddr">
       <el-aside width="280px">
-        <keep-alive>
-          <mynft :myList="myList" :pageSize="3" :curNFT="this.curNFT"
-        /></keep-alive>
+        <mynft :myList="myList" :pageSize="3" :curNFT="this.curNFT" />
       </el-aside>
       <el-main>
         <el-col :lg="{ span: 24, offset: 0 }">
@@ -20,7 +18,10 @@
         <SelectCoin />
       </el-aside>
     </el-container>
-  </div>
+    <el-col v-else>
+      {{ $t("look-info") }}
+    </el-col>
+  </el-col>
 </template>
 
 <script>
@@ -38,6 +39,7 @@ export default {
   },
   computed: mapState({
     myList: "myList",
+    baddr: "baddr",
     curNFT(state) {
       if (state.current.pbtId) {
         const pbtId = String(state.current.pbtId);

@@ -6,18 +6,18 @@
           <SellingItem :info="nft" @click.native="openNFT(nft)" />
         </li>
       </ul>
+      <el-col :offset="19" :span="5">
+        <el-pagination
+          background
+          :total="Object.keys(this.marketList).length"
+          @current-change="handleXccPaegChange"
+          :current-page="this.xccpageNum"
+          :page-size="4"
+          layout="prev,pager,next"
+        ></el-pagination>
+      </el-col>
     </div>
     <p v-else>{{ $t("no-selling") }}</p>
-    <el-col :offset="19" :span="5">
-      <el-pagination
-        background
-        :total="Object.keys(this.marketList).length"
-        @current-change="handleXccPaegChange"
-        :current-page="this.xccpageNum"
-        :page-size="4"
-        layout="prev,pager,next"
-      ></el-pagination>
-    </el-col>
   </el-col>
 </template>
 <script>
