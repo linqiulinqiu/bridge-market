@@ -10,7 +10,7 @@
         <span>{{ this.mintFee.token }}</span>
       </p>
       <p>
-        <span>{{ $t("mintable") }}{{ mintAbles }}个</span>
+        <span>{{ $t("mintable") }}{{ mintAbles }}</span>
       </p>
       <p>
         <el-button

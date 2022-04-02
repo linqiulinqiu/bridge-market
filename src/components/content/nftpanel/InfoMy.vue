@@ -1,25 +1,24 @@
 <template>
-  <el-col>
-    <el-col>
+  <el-col id="infoMy">
+    <el-col id="destroy">
       <p>
         {{ $t("destroy") }} :
-        <el-button @click="burnPBT">{{ $t("destroy") }}</el-button>
+        <el-button @click="burnPBT" type="primary">{{
+          $t("destroy")
+        }}</el-button>
       </p>
     </el-col>
-    <h2>{{ $t("sell") }}</h2>
-    <el-col v-if="sendToMarket">
+    <p>{{ $t("sell") }} :</p>
+    <el-col>
       <p>
-        1、{{ $t("send-tomarket") }}
+        1、{{ $t("send-tomk") }}
         <el-button @click="send" type="primary" :loading="send_loading">{{
           $t("send")
         }}</el-button>
       </p>
     </el-col>
-    <el-col v-else>
-      <p>
-        2、{{ $t("set-sell-info") }}
-        <span class="minifont">价格为零将不会出现在市场列表中</span>
-      </p>
+    <el-col>
+      <p>2、{{ $t("set-sell-info") }}</p>
       <el-col>
         <label for="price" class="labels">{{ $t("price") }}</label>
         <p>
@@ -29,6 +28,7 @@
             maxlength="20"
             show-word-limit
             id="price"
+            class="price-input"
           ></el-input>
           <el-select v-model="ptName" class="selecToken">
             <el-option value="BNB" key="BNB" label="BNB"></el-option>
@@ -44,12 +44,21 @@
           maxlength="50"
           show-word-limit
           id="description"
+          class="desc"
         />
         <p>
-          <el-button @click="sellNFT" :loading="set_loading">
+          <el-button
+            type="primary"
+            @click="sellNFT"
+            :loading="set_loading"
+            class="btn-infomy"
+          >
             {{ $t("sell") }}
           </el-button>
         </p>
+        <el-button class="btn-infomk btn-cancel" @click="clearPbtId">{{
+          $t("cancel")
+        }}</el-button>
       </el-col>
     </el-col>
   </el-col>
@@ -58,10 +67,10 @@
 import market from "../../../market";
 export default {
   name: "InfoMy",
-  props: ["curNFT", "show"],
+  props: ["curNFT", "clearPbtId"],
   data() {
     return {
-      nftPrice: 0,
+      nftPrice: "",
       nftDesc: "",
       ptName: "BNB",
       sendToMarket: true,
@@ -125,3 +134,26 @@ export default {
   },
 };
 </script>
+<style>
+#destroy {
+  height: 70px;
+}
+#infoMy {
+  font-size: 18px;
+}
+.price-input {
+  width: 200px;
+  margin-right: 10px;
+}
+.el-select {
+  width: 100px;
+}
+.desc {
+  width: 70%;
+  display: block;
+  min-width: 300px;
+}
+.btn-infomy {
+  margin: 20px 0px;
+}
+</style>

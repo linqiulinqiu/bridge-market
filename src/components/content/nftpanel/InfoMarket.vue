@@ -1,23 +1,26 @@
 <template>
   <el-col>
-    <el-col>
-      <el-button
-        @click="buyNFT"
-        type="primary"
-        :loading="buy_loading"
-        v-if="approve"
-      >
-        {{ $t("buy") }}
-      </el-button>
-      <el-button
-        v-else
-        @click="approveCoin"
-        type="priamry"
-        :loading="approve_loading"
-      >
-        {{ $t("approve") }}
-      </el-button>
-    </el-col>
+    <el-button
+      @click="buyNFT"
+      type="primary"
+      :loading="buy_loading"
+      class="btn-infomk"
+      v-if="approve"
+    >
+      {{ $t("buy") }}
+    </el-button>
+    <el-button
+      v-else
+      @click="approveCoin"
+      type="priamry"
+      class="btn-infomk"
+      :loading="approve_loading"
+    >
+      {{ $t("approve") }}
+    </el-button>
+    <el-button class="btn-infomk btn-cancel" @click="clearPbtId">{{
+      $t("cancel")
+    }}</el-button>
   </el-col>
 </template>
 <script>
@@ -25,7 +28,7 @@ import { mapState } from "vuex";
 import market from "../../../market";
 export default {
   name: "InfoMarket",
-  props: ["curNFT", "show", "approve"],
+  props: ["curNFT", "approve", "clearPbtId"],
   computed: mapState({
     market() {
       if (this.curNFT && "market" in this.curNFT) return this.curNFT.market;
@@ -78,3 +81,12 @@ export default {
   },
 };
 </script>
+<style>
+.btn-infomk {
+  margin-top: 100px;
+}
+.btn-cancel {
+  margin-left: 20px;
+  color: brown;
+}
+</style>

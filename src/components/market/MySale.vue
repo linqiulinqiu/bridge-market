@@ -3,13 +3,10 @@
     <el-col v-if="Object.keys(this.mySaleList).length > 0">
       <ul>
         <li v-for="nft in this.mslist" :key="nft.uri" class="marketlist">
-          <el-button @click="openNFT(nft)" class="nftbtn">
-            <i>#{{ nft.id }}</i>
-            <img v-if="nft.meta" v-lazy="nft.meta.image" alt="img" />
-          </el-button>
+          <SellingItem :info="nft" @click.native="openNFT(nft)" />
         </li>
       </ul>
-      <el-col :offset="19" :span="5">
+      <el-col :lg="{ sapn: 4, offset: 18 }" :span="8">
         <el-pagination
           background
           :total="Object.keys(this.mySaleList).length"

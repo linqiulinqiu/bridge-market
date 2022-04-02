@@ -20,7 +20,7 @@
       </el-col>
     </el-col>
     <el-col v-else>
-      <el-button @click="clearCurrentId">Back</el-button>
+      <el-col @click="clearCurrentId" id="back">Back</el-col>
       <el-col><NFTinfo :curNFT="curNFT" /></el-col>
     </el-col>
   </el-col>
@@ -65,6 +65,9 @@ export default {
 };
 </script>
 <style >
+#back {
+  margin: 15px 0px;
+}
 .mk-title {
   height: 80px;
   margin-bottom: 5px;

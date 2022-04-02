@@ -97,7 +97,7 @@ export default {
   font-size: 14px;
 }
 .el-main {
-  height: calc(100vh - 70px);
+  /* height: calc(100vh); */
   width: 100vw;
 }
 </style>

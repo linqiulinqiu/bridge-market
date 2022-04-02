@@ -3,6 +3,11 @@ ul li {
     list-style: none;
 }
 
+.flex-aside {
+    position: fixed;
+}
+
+
 .font {
     font-family: 'Courier New', Courier, monospace;
     font-size: 18px;
@@ -13,23 +18,45 @@ ul li {
     font-size: 14px;
 }
 
+
+
 .labels {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 60px;
+    /* padding-left: 20px; */
+}
+
+.el-select-dropdown {
+    background-color: #373943;
 }
 
 .el-select-dropdown__item.selected {
+    color: #38F2AF;
+}
+
+.el-select-dropdown__item {
+    color: #fff;
+}
+
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+    background-color: #373943;
     color: #668b66;
 }
 
 .el-select .el-input__inner {
     border: #668b66 1px solid;
+    background-color: #373943;
+    color: #38F2AF;
 }
 
-.el-select:hover .el-input__inner {
-    border: #d1fcd1 1px solid;
+.el-popper[x-placement^=bottom] .popper__arrow::after {
+    border-bottom-color: #373943
 }
 
+.el-popper[x-placement^=top] .popper__arrow::after {
+    border-bottom-color: #373943
+}
 
 /* 输入数字*/
 .amount-input {
@@ -39,6 +66,16 @@ ul li {
 
 .el-input__inner {
     font-family: 'Courier New', Courier, monospace;
+    background-color: #373943;
+    color: #38F2AF;
+}
+
+.el-input__suffix-inner {
+    background-color: #373943;
+}
+
+.el-input .el-input__count .el-input__count-inner {
+    background-color: #373943;
 
 }
 

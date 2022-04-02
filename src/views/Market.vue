@@ -56,9 +56,6 @@ export default {
 </script>
 
 <style scoped>
-::-webkit-scrollbar {
-  display: none;
-}
 .el-main {
   background-color: #2b2c33;
 }

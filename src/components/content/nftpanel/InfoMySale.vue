@@ -7,6 +7,7 @@
           v-model="nftPrice"
           placeholder="input price"
           id="_price"
+          class="price-input"
         ></el-input>
         <el-select v-model="ptName" class="selecToken">
           <el-option value="BNB" key="BNB" label="BNB"></el-option>
@@ -21,16 +22,29 @@
         maxlength="50"
         show-word-limit
         id="description"
+        class="desc"
       />
-      <el-button @click="sellNFT" type="primary" :loading="change_loading">
-        {{ $t("change-price") }}
-      </el-button>
-    </el-col>
-    <el-col style="margin: 20px">--- {{ $t("or") }} ---</el-col>
-    <el-col>
-      <el-button @click="retreatNFT" type="primary" :loading="re_loading">
-        {{ $t("retreat") }}
-      </el-button>
+      <p>
+        <el-button
+          @click="sellNFT"
+          type="primary"
+          :loading="change_loading"
+          class="btn-infoms"
+        >
+          {{ $t("change-price") }}
+        </el-button>
+        <el-button
+          @click="retreatNFT"
+          type="primary"
+          :loading="re_loading"
+          class="btn-infoms"
+        >
+          {{ $t("retreat") }}
+        </el-button>
+        <el-button class="btn-infoms btn-cancel" @click="clearPbtId">{{
+          $t("cancel")
+        }}</el-button>
+      </p>
     </el-col>
   </el-col>
 </template>
@@ -40,11 +54,11 @@ import market from "../../../market";
 
 export default {
   name: "InfoMySale",
-  props: ["show", "curNFT"],
+  props: ["clearPbtId", "curNFT"],
   computed: mapState({ bcoin: "bcoin", current: "current" }),
   data() {
     return {
-      nftPrice: 0,
+      nftPrice: "",
       nftDesc: "",
       ptName: "BNB",
       change_loading: false,
@@ -83,7 +97,6 @@ export default {
         const obj = this;
         await market.waitEventDone(res, async function (evt) {
           obj.re_loading = false;
-          obj.show();
         });
       } catch (e) {
         this.re_loading = false;
@@ -93,3 +106,8 @@ export default {
   },
 };
 </script>
+<style>
+.btn-infoms {
+  margin: 30px 15px 0px 0px;
+}
+</style>

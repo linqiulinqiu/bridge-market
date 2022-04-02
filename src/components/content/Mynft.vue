@@ -148,10 +148,9 @@ i {
   padding: 0 10px;
 }
 .bottom {
-  background-color: #38f2af;
   width: 132px;
-  font-size: 14px;
-  color: #000000;
+  font-size: 16px;
+  color: #38f2af;
 }
 .btn-bar {
   margin: 20px 0;

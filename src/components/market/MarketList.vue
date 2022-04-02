@@ -6,7 +6,7 @@
           <SellingItem :info="nft" @click.native="openNFT(nft)" />
         </li>
       </ul>
-      <el-col :offset="19" :span="5">
+      <el-col :lg="{ sapn: 4, offset: 18 }" :span="8">
         <el-pagination
           background
           :total="Object.keys(this.marketList).length"

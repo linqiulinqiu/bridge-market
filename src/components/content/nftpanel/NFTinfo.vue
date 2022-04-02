@@ -17,14 +17,18 @@
     </el-col>
     <el-col v-if="market" :span="13">
       <el-col v-if="market.seller == '-self'">
-        <InfoMySale :curNFT="this.curNFT" />
+        <InfoMySale :curNFT="this.curNFT" :clearPbtId="this.clearPbtId" />
       </el-col>
       <el-col v-if="market.seller == ''">
-        <InfoMarket :curNFT="this.curNFT" :approve="this.approve" />
+        <InfoMarket
+          :curNFT="this.curNFT"
+          :approve="this.approve"
+          :clearPbtId="this.clearPbtId"
+        />
       </el-col>
     </el-col>
     <el-col v-else :span="13">
-      <InfoMy :curNFT="this.curNFT" />
+      <InfoMy :curNFT="this.curNFT" :clearPbtId="this.clearPbtId" />
     </el-col>
   </el-row>
 </template>
@@ -73,6 +77,9 @@ export default {
           this.approve = await market.checkAllowance(nft);
         }
       }
+    },
+    clearPbtId: function () {
+      this.$store.commit("setCurrentPbtId", false);
     },
   },
 };

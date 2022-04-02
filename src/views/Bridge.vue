@@ -2,7 +2,11 @@
   <el-col id="Bridge">
     <el-container v-if="baddr">
       <el-aside width="280px">
-        <mynft :myList="myList" :pageSize="3" :curNFT="this.curNFT" />
+        <Mynft
+          :myList="myList"
+          :pageSize="3"
+          :curNFT="this.curNFT"
+        />
       </el-aside>
       <el-main>
         <el-col :lg="{ span: 24, offset: 0 }">
