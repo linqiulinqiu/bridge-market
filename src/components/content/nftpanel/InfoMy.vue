@@ -56,7 +56,7 @@
             {{ $t("sell") }}
           </el-button>
         </p>
-        <el-button class="btn-infomk btn-cancel" @click="clearPbtId">{{
+        <el-button class="btn-cancel" @click="clearPbtId">{{
           $t("cancel")
         }}</el-button>
       </el-col>
@@ -140,20 +140,5 @@ export default {
 }
 #infoMy {
   font-size: 18px;
-}
-.price-input {
-  width: 200px;
-  margin-right: 10px;
-}
-.el-select {
-  width: 100px;
-}
-.desc {
-  width: 70%;
-  display: block;
-  min-width: 300px;
-}
-.btn-infomy {
-  margin: 20px 0px;
 }
 </style>

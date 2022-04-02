@@ -41,7 +41,7 @@
         >
           {{ $t("retreat") }}
         </el-button>
-        <el-button class="btn-infoms btn-cancel" @click="clearPbtId">{{
+        <el-button class="btn-cancel" @click="clearPbtId">{{
           $t("cancel")
         }}</el-button>
       </p>
@@ -107,7 +107,4 @@ export default {
 };
 </script>
 <style>
-.btn-infoms {
-  margin: 30px 15px 0px 0px;
-}
 </style>

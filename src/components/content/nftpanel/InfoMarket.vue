@@ -18,7 +18,7 @@
     >
       {{ $t("approve") }}
     </el-button>
-    <el-button class="btn-infomk btn-cancel" @click="clearPbtId">{{
+    <el-button class="btn-cancel" @click="clearPbtId">{{
       $t("cancel")
     }}</el-button>
   </el-col>
@@ -82,11 +82,4 @@ export default {
 };
 </script>
 <style>
-.btn-infomk {
-  margin-top: 100px;
-}
-.btn-cancel {
-  margin-left: 20px;
-  color: brown;
-}
 </style>

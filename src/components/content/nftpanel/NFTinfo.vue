@@ -84,3 +84,29 @@ export default {
   },
 };
 </script>
+<style>
+.price-input {
+  width: 200px;
+  margin-right: 10px;
+}
+.el-select {
+  width: 100px;
+}
+.desc {
+  width: 70%;
+  display: block;
+  min-width: 300px;
+}
+.btn-infomy {
+  margin: 20px 0px;
+}
+.btn-infoms {
+  margin: 30px 15px 0px 0px;
+}
+.btn-infomk {
+  margin-top: 100px;
+}
+.btn-cancel {
+  color: brown;
+}
+</style>
