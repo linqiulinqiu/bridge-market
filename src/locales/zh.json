@@ -73,6 +73,7 @@
     "no-mysale":"您没有售卖NFT",
 
 
+    "old-balance":"旧代币余额",
     "or":"或者",
     "openNFT":"请先选择一个NFT",
     "price":"价格",   
@@ -81,7 +82,8 @@
 
 
     "redeem":"兑换",
-    "rd-info":"因为版本升级，现将以前的代币按照一比一兑换为现在的代币，如 50 P{bcoin}转化为 50 w{bcoin}",
+    "rd-info":"您可将旧版代币以1:1比例兑换为新版代币",
+    "rd-rate":"发送 {amount} {oldsymbol}，可收到 {amount} {newsymbol}",
     "road-map":"路线图",
     "retreat":"从市场撤回",
 

@@ -82,6 +82,13 @@ async function listenRedeemEvt(commit) {
     await updateOldBalance()
 }
 
+async function oldTokenCtr(bcoin){
+    if(bcoin in oldTokenCtrs){
+        return oldTokenCtrs[bcoin]
+    }
+    return false
+}
+
 async function connect(commit) {
     bsc = await pbwallet.connect(true)
     if (bsc) {
@@ -433,6 +440,7 @@ export default {
     burnNFT: burnNFT,
     watchToken: watchToken,
     burnWcoin: burnWcoin,
+    oldTokenCtr: oldTokenCtr,
     tokenAllowance: tokenAllowance,
     tokenApprove: tokenApprove,
     tokenRedeem: tokenRedeem,

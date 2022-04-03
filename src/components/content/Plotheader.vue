@@ -111,6 +111,7 @@ export default {
         { tag: this.$t("home"), link: "/Home" },
         { tag: this.$t("bridge"), link: "/Bridge" },
         { tag: this.$t("market"), link: "/Market" },
+        { tag: this.$t("swap"), link: "/Swap" },
         { tag: this.$t("doc"), link: "/Doc" },
       ];
     },
@@ -225,7 +226,7 @@ export default {
 }
 #menu .el-menu--horizontal > .el-menu-item {
   height: 90px;
-  width: 25%;
+  width: 20%;
   font-size: 15px;
   font-weight: 700;
   padding: 15px 0px;

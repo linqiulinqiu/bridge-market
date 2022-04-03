@@ -1,6 +1,6 @@
 {   "add-token":"Add Token",
     "addr":"In the following address",
-    "all":"Max",
+    "all":"All",
     "approve":"Approve",
     "add-token-tip":"Add the current token information to the metamask Wallet",
 
@@ -73,7 +73,7 @@
     "no-selling":"Selling PBT not found yet... How about mint one?",
     "no-mysale":"You don't sell anything",
 
-
+    "old-balance":"Old Token Balance",
     "or":"OR",
     "openNFT":"Please select a nft first",
     "onSale":"On Sale",
@@ -81,8 +81,9 @@
     "price":"Price",
     "price-tips":"Price is Empty",
    
-    "redeem":"Redeem",
-    "rd-info":"Because of version upgrade, the previous tokens will be converted to current tokens on a one-to-one basis, e.g. 50 P{bcoin} Converted to 50 w{bcoin}",
+    "redeem":"Upgrade",
+    "rd-info":"Tokens in previous version of PlotBridge can be upgraded here.",
+    "rd-rate":"send {amount} {oldsymbol}, then {amount} {newsymbol} will be received",
     "road-map":"RoadMap",
     "retreat":"Retreat from market",
 

@@ -46,10 +46,7 @@
                 <Withdraw :curNFT="this.curNFT" />
               </el-tab-pane>
               <el-tab-pane :label="$t('redeem')">
-                <Redeem :curNFT="this.curNFT" />
-              </el-tab-pane>
-              <el-tab-pane :label="$t('swap')">
-                <Swap />
+                <Redeem :bsc="this.bsc" :new-token="this.waddr" />
               </el-tab-pane>
             </el-tabs>
           </el-col>
@@ -67,7 +64,6 @@ import LPLink from "./bridge/LpLink.vue";
 import Withdraw from "./bridge/Withdraw.vue";
 import Redeem from "./bridge/Redeem.vue";
 import BridgeFee from "./bridge/BridgeFee.vue";
-import Swap from "./bridge/Swap.vue";
 
 import { mapState } from "vuex";
 import market from "../market";
@@ -81,10 +77,10 @@ export default {
     Redeem,
     BridgeFee,
     LPLink,
-    Swap,
   },
   props: ["curNFT"],
   computed: mapState({
+    bsc: "bsc",
     WBalance: "WBalance",
     bcoin: "bcoin",
     current: "current",
@@ -92,6 +88,12 @@ export default {
       const info = pbwallet.wcoin_info(state.current.coinType);
       if (info) return info.bsymbol;
       return "-";
+    },
+    waddr: (state) => {
+      const info = pbwallet.wcoin_info(state.current.coinType)
+      console.log('waddr', info)
+      if (info) return info.address
+      return false
     },
     baddr: "baddr",
   }),

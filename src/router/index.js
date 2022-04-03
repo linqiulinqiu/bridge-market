@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from "@/views/Home"
 import Bridge from "@/views/Bridge"
 import Market from "@/views/Market"
+import SwapMain from "@/components/SwapMain"
 import Doc from "@/views/Doc"
 import RoadMap from "../components/document/RoadMap"
 import Guidefor from "../components/document/Guidefor"
@@ -30,15 +31,18 @@ const routes = [{
   },
   {
     path: '/Market',
-    name: 'Market',
+    name: 'NFT Market',
     component: Market,
     children: [{
       path: "/MintPBT",
       component: MintPBT,
       name: "MintPBT"
     }]
-  },
-  {
+  },{
+      path: '/swap',
+      name: 'Swap',
+      component: SwapMain,
+  },{
     path: '/Doc',
     name: 'Doc',
     component: Doc,
