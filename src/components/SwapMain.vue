@@ -45,7 +45,7 @@ export default {
   computed: mapState({
     bsc: "bsc",
     from_val: function(){
-        return ethers.utils.parseUnits(this.from_amount)    // TODO: use decimals
+        return ethers.utils.parseUnits(`${this.from_amount}`, 18)    // TODO: use keeper.parseToken?decimals
     }
   }),
   data(){
