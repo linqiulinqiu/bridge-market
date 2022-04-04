@@ -40,23 +40,23 @@ async function path_for_pair(bsc, from, to){
 }
 
 async function estimate(bsc,from, to, amount_in){
-    const paths = await path_for_pair(from, to)
+    const paths = await path_for_pair(bsc, from, to)
     const aouts = await bsc.ctrs.router.getAmountsOut(amount_in, paths)
     return aouts[aouts.length-1]
 }
 
 async function swap(bsc, from, to, amount_in, min_out, lasting){
     const deadline = parseInt((new Date()).getTime()/1000) + lasting
-    const paths = await path_for_pair(from, to)
+    const paths = await path_for_pair(bsc,from, to)
     let receipt = false
     if(paths[0]==bsc.ctrs.wbnb.address){
-        receipt = await bsc.ctrs.router.swapExactETHForTokens(min_out, paths, bsc.signer.address, deadline, {
-            value: ethers.utils.parseEther(amount_in)
+        receipt = await bsc.ctrs.router.swapExactETHForTokens(min_out, paths, bsc.addr, deadline, {
+            value: amount_in
         })
     }else if(paths[paths.length-1]==bsc.ctrs.wbnb.address){
-        receipt = await bsc.ctrs.router.swapExactTokensForETH(amount_in, min_out, paths, bsc.signer.address, deadline)
+        receipt = await bsc.ctrs.router.swapExactTokensForETH(amount_in, min_out, paths, bsc.addr, deadline)
     }else{
-        receipt = await bsc.ctrs.router.swapExactTokensForTokens(amount_in, min_out, paths, bsc.signer.address, deadline)
+        receipt = await bsc.ctrs.router.swapExactTokensForTokens(amount_in, min_out, paths, bsc.addr, deadline)
     }
     return receipt.hash
 }

@@ -12,6 +12,7 @@
   </el-col>
 </template>
 <script>
+import { ethers } from 'ethers'
 export default {
   name: "ApproveButton",
   props: ["bsc","token","spender","minReq"],
@@ -34,7 +35,10 @@ export default {
   methods: {
       checkAllowance: async function (){
           console.log('checkAllowance', this.token.address, this.spender, this.minReq)
-          if(this.token&&this.token.allowance&&this.spender&&this.minReq) {
+          if(this.token&&this.token.address==ethers.constants.AddressZero){ // no approval needed for BNB
+              this.needApprove = false
+              this.checking = false
+          }else if(this.token&&this.token.allowance&&this.spender&&this.minReq) {
               const allow = await this.token.allowance(this.bsc.addr, this.spender)
               console.log('allowance token', this.token.address, this.spender)
               if(allow&&allow.gte(this.minReq)){
