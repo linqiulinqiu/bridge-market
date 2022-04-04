@@ -40,11 +40,11 @@ export default {
               this.checking = false
           }else if(this.token&&this.token.allowance&&this.spender&&this.minReq) {
               const allow = await this.token.allowance(this.bsc.addr, this.spender)
-              console.log('allowance token', this.token.address, this.spender)
+              console.log('allowance token', this.token.address, this.spender, allow, this.minReq)
               if(allow&&allow.gte(this.minReq)){
-                  this.needApprove = true
+                  this.needApprove = false 
               }else{
-                  this.needApprove = false
+                  this.needApprove = true
               }
               this.checking = false
           }

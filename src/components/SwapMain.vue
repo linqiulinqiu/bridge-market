@@ -23,9 +23,9 @@
         </el-select>
     </el-col>
 
-    <ApproveButton :bsc="bsc" :token="this.from_ctr" :spender="this.bsc.ctrs.router.address" :min-req="this.from_val">
+    <ApproveButton :bsc="this.bsc" :token="this.from_ctr" :spender="this.bsc.ctrs.router.address" :min-req="this.from_val">
       <el-button @click="all">{{ $t("all") }}</el-button>
-      <el-button @click="swap" :loading="swapping">{{
+      <el-button v-if="from_coin!=to_coin" @click="swap" :loading="swapping">{{
         $t("swap")
       }}</el-button>
     </ApproveButton>
@@ -51,7 +51,7 @@ export default {
           from_balance: false,
           from_amount: 0,
           from_val: 0,
-          from_coin: ethers.constants.AddressZero,
+          from_coin: false,
           from_ctr: false,
           swapping: false,
           to_balance: false,
@@ -65,59 +65,64 @@ export default {
           this.to_coin = this.bsc.ctrs.pbp.address 
       },
       from_amount: async function(newa,olda){
-          if(!newa){
-              newa = '0'
-          }
-          console.log('from_amount', newa, this.from_coin)
-          this.from_val = await keeper.parseToken(this.from_coin, newa)
-          if(this.from_coin&&this.to_coin&&this.from_coin!=this.to_coin){
-              try{
-                  const est = await swap.estimate(this.bsc, this.from_coin, this.to_coin, this.from_val)
-                  this.to_val = est
-                  this.to_amount = await keeper.formatToken(this.to_coin, est)
-              }catch(e){
-                  console.log('estimate failed', e)
-              }
-          }
+        await this.update_amounts(newa)
       },
       from_coin: async function(newc, oldc){
-          if(newc){
-              if(newc==ethers.constants.AddressZero){
-                  this.from_ctr = {
-                      address: newc
-                  }
-                  const fbalance = ethers.utils.formatEther(await this.bsc.provider.getBalance(this.bsc.addr))
-                  this.from_balance = fbalance
-              }else{
-                  this.from_ctr = pbwallet.erc20_contract(newc)
-                  const fbalance = await this.from_ctr.balanceOf(this.bsc.addr)
-                  this.from_balance = await keeper.formatToken(newc, fbalance)
-              }
-          }
+          await this.update_balance('from')
+          await this.update_amounts(this.from_amount)
       },
       to_coin: async function(newc, oldc){
-          if(newc){
-              if(newc==ethers.constants.AddressZero){
-                  this.to_ctr = {
-                      address: newc
-                  }
-                  const fbalance = ethers.utils.formatEther(await this.bsc.provider.getBalance(this.bsc.addr))
-                  this.to_balance = fbalance
-              }else{
-                  this.to_ctr = pbwallet.erc20_contract(newc)
-                  const fbalance = await this.to_ctr.balanceOf(this.bsc.addr)
-                  this.to_balance = await keeper.formatToken(newc, fbalance)
-              }
-          }
+          await this.update_balance('to')
+          await this.update_amounts(this.from_amount)
       }
   },
   methods: {
+      update_amounts: async function(){
+          if(ethers.utils.isAddress(this.from_coin)){
+              let newa = this.from_amount
+              if(!newa){
+                  newa = '0'
+              }
+              console.log('from_amount', newa, this.from_coin)
+              this.from_val = await keeper.parseToken(this.from_coin, newa)
+              if(this.from_coin&&ethers.utils.isAddress(this.to_coin)&&this.from_coin!=this.to_coin&&this.from_val.gt(0)){
+                  try{
+                      const est = await swap.estimate(this.bsc, this.from_coin, this.to_coin, this.from_val)
+                      this.to_val = est
+                      this.to_amount = await keeper.formatToken(this.to_coin, est)
+                  }catch(e){
+                      console.log('estimate failed', e)
+                  }
+              }
+          }
+      },
+      update_balance: async function(from_to){
+          let coin = this.from_coin
+          let myaddr = this.bsc.addr
+          if(from_to=='to'){
+              coin = this.to_coin
+          }
+          const info = {}
+           if(coin==ethers.constants.AddressZero){
+              info.ctr = { address: coin }
+              info.balance = ethers.utils.formatEther(await this.bsc.provider.getBalance(myaddr))
+          }else{
+              info.ctr = pbwallet.erc20_contract(coin)
+              const balance = await info.ctr.balanceOf(myaddr)
+              info.balance = await keeper.formatToken(coin, balance)
+          }
+          if(from_to=='to'){
+              this.to_balance = info.balance
+          }else{
+              this.from_balance = info.balance
+              this.from_ctr = info.ctr
+          }
+      },
       all: function(){
           console.log('set all')
       },
       swap: async function (){
           const minreq = this.to_val.sub(this.to_val.div(100))
-          console.log('signer', this.bsc.signer.address)
           console.log('swapping', this.from_coin, this.to_coin, this.from_val, minreq, 120)
           const receipt = await swap.swap(this.bsc, this.from_coin, this.to_coin, 
             this.from_val, minreq, 120)
