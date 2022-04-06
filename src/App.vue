@@ -6,7 +6,7 @@
           <Plotheader />
         </el-header>
         <el-main style="padding: 0px">
-          <router-view></router-view>
+          <router-view :key="$route.fullPath"></router-view>
         </el-main>
         <el-footer style="height: 160px">
           <Plotfooter />
