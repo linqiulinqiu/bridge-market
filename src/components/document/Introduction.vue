@@ -22,6 +22,6 @@ export default {
   padding: 30px;
 }
 .el-col p {
-  line-height: 25px;
+  line-height: 35px;
 }
 </style>

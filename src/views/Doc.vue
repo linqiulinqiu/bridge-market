@@ -51,23 +51,23 @@ export default {
         },
         {
           index: "3",
-          link: "/Doc/Guidefor",
-          value: "Guidefor",
-        },
-        {
-          index: "4",
           link: "/Doc/GuideforBridge",
           value: this.$t("guide-bridge"),
         },
         {
-          index: "5",
+          index: "4",
           link: "/Doc/GuideforMarket",
           value: this.$t("guide-market"),
         },
         {
-          index: "6",
+          index: "5",
           link: "/Doc/GuideforWallet",
           value: this.$t("guide-wallet"),
+        },
+        {
+          index: "6",
+          link: "/Doc/Contact",
+          value: this.$t("contact"),
         },
       ];
     },
