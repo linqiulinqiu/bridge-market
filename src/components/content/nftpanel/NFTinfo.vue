@@ -1,8 +1,13 @@
 <template>
-  <el-row type="flex" justify="center">
-    <el-col :span="10">
+  <el-col type="flex">
+    <el-col
+      :lg="{ span: 8, offset: 1 }"
+      :md="{ span: 9, offset: 1 }"
+      :sm="14"
+      :xs="18"
+    >
       <el-col v-if="meta.image">
-        <img :src="meta.image" alt="Img" style="width: 300px" />
+        <img :src="meta.image" alt="Img" class="info-img" />
       </el-col>
       <p>{{ $t("id") }}:#{{ this.nftId }}</p>
       <el-col v-if="market">
@@ -15,22 +20,24 @@
         <p v-else>{{ $t("no-desc") }}</p>
       </el-col>
     </el-col>
-    <el-col v-if="market" :span="13">
-      <el-col v-if="market.seller == '-self'">
-        <InfoMySale :curNFT="this.curNFT" :clearPbtId="this.clearPbtId" />
+    <el-col :lg="{ span: 10, offset: 1 }" :md="{ span: 11, offset: 1 }">
+      <el-col v-if="market">
+        <el-col v-if="market.seller == '-self'">
+          <InfoMySale :curNFT="this.curNFT" :clearPbtId="this.clearPbtId" />
+        </el-col>
+        <el-col v-if="market.seller == ''">
+          <InfoMarket
+            :curNFT="this.curNFT"
+            :approve="this.approve"
+            :clearPbtId="this.clearPbtId"
+          />
+        </el-col>
       </el-col>
-      <el-col v-if="market.seller == ''">
-        <InfoMarket
-          :curNFT="this.curNFT"
-          :approve="this.approve"
-          :clearPbtId="this.clearPbtId"
-        />
+      <el-col v-else>
+        <InfoMy :curNFT="this.curNFT" :clearPbtId="this.clearPbtId" />
       </el-col>
     </el-col>
-    <el-col v-else :span="13">
-      <InfoMy :curNFT="this.curNFT" :clearPbtId="this.clearPbtId" />
-    </el-col>
-  </el-row>
+  </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -85,9 +92,13 @@ export default {
 };
 </script>
 <style>
-.price-input {
+/* .price-input {
   width: 200px;
   margin-right: 10px;
+}
+.info-img {
+  width: 90%;
+  min-width: 250px;
 }
 .el-select {
   width: 100px;
@@ -108,5 +119,5 @@ export default {
 }
 .btn-cancel {
   color: brown;
-}
+} */
 </style>

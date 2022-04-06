@@ -1,5 +1,5 @@
 <template>
-  <el-col>
+  <el-col id="swap">
     <el-container v-if="'addr' in bsc">
       <el-main>
         <el-col
@@ -35,5 +35,9 @@ export default {
   border-radius: 20px;
   padding: 50px;
   box-sizing: border-box;
+  margin-top: 100px;
+}
+#swap .el-main {
+  min-height: 830px;
 }
 </style>

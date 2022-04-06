@@ -9,7 +9,12 @@
         <p>
           From<span class="clearfix">Balance: {{ this.from_balance }}</span>
         </p>
-        <el-input v-model="from_amount"></el-input>
+        <el-input
+          v-model="from_amount"
+          class="amount-ipt"
+          clearable
+          maxlength="20"
+        ></el-input>
         <el-select v-model="from_coin">
           <el-option
             v-for="w in wlist()"
@@ -24,7 +29,12 @@
         <p>
           To<span class="clearfix">Balance: {{ this.to_balance }}</span>
         </p>
-        <el-input v-model="to_amount"></el-input>
+        <el-input
+          v-model="to_amount"
+          class="amount-ipt"
+          clearable
+          maxlength="20"
+        ></el-input>
         <el-select v-model="to_coin">
           <el-option
             v-for="w in wlist()"
@@ -203,19 +213,20 @@ export default {
 };
 </script>
 <style>
-#swapmain .el-input {
-  width: 80%;
+.amount-ipt.el-input {
+  width: 70%;
   margin-right: 5px;
   margin-bottom: 5px;
+  min-width: 200px;
 }
 #swapmain .el-select {
-  width: 100px;
+  width: 150px;
 }
 .swap-input {
-  border: 2px solid #d1fcd1;
   padding: 30px 30px;
   border-radius: 20px;
   margin-top: 25px;
+  background-color: rgba(43, 44, 51, 0.3);
 }
 .swap-btn {
   text-align: center;
