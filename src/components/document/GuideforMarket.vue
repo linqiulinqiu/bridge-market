@@ -1,6 +1,6 @@
-<template>
+<template> 
   <el-col>
-    <h1>Guide For Market</h1>
+    <h2>Guide For Market</h2>
   </el-col>
 </template>
 
