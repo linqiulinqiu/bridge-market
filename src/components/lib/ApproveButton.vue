@@ -31,6 +31,10 @@ export default {
   mounted: function () {
     this.checkAllowance();
   },
+  beforRouterUpdate: function () {
+    console.log("routrte", this.$route);
+    this.checkAllowance();
+  },
   watch: {
     token(newt, oldt) {
       console.log("props", this.$props);
