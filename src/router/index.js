@@ -6,7 +6,7 @@ import Market from "@/views/Market"
 import SwapMain from "@/components/SwapMain"
 import Doc from "@/views/Doc"
 import RoadMap from "../components/document/RoadMap"
-import Guidefor from "../components/document/Guidefor"
+import Contact from "../components/document/Contact"
 import GuideforMarket from "@/components/document/GuideforMarket"
 import GuideforWallet from "@/components/document/GuideforWallet"
 import GuideforBridge from "@/components/document/GuideforBridge"
@@ -58,9 +58,9 @@ const routes = [{
         name: "RoadMap"
       },
       {
-        path: '/Doc/Guidefor',
-        component: Guidefor,
-        name: "Guidefor"
+        path: '/Doc/contact',
+        component: Contact,
+        name: "Contact"
       },
       {
         path: '/Doc/GuideforMarket',

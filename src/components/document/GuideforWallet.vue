@@ -3,9 +3,9 @@
     <h2>Guide For Wallet</h2>
       <el-col>
         <h1>
-          # 操作指南：将 MetaMask 连接到币安智能链
+          操作指南：将 MetaMask 连接到币安智能链
         </h1>
-        <h4>## 安装和设置 MetaMask </h4>
+        <h4>安装和设置 MetaMask </h4>
         <p>
         首先下载适用于 Chrome、Brave、iOS 和 Android 的MetaMask。<br>
 
@@ -16,7 +16,7 @@
         到这一步,您的钱包已准备好发送、存储和接收代币。
         </p>
         <h4>
-          ## 自动配置钱包
+          自动配置钱包
         </h4>
        
         <p>
@@ -25,7 +25,7 @@
         点击这个按钮之后，会跳出MetaMask的添加网络页面，点击Approve,允许添加
         这时，你已经完成了币安智能链的配置，并且可以在币安智能链上进行交易了。
         </p>
-        <h4>## 手动配置钱包</h4>
+        <h4>手动配置钱包</h4>
         <p>
         如果您暂时无法访问币安链区块浏览器（bscscan.com），您也可以手动来配置币安智能链。 <br>
         我们需要点击设置来将钱包转到币安智能链。<br>
@@ -40,7 +40,7 @@
         Block Explorer URL: `https://bscscan.com` <br>
         当你设置完，点击保存返回到主页，你会发现：网络已经自动设置为您刚才设置的币安智能链，计价单位不再是ETH，而是BNB。<br>
 
-        想了解所有最近的公告和更新，请与我们联系：
+        想了解所有最近的公告和更新，请与我们联系。
 
         <!-- [Website](https://plotbridge.onrender.com) | [Discord](https://discord.com/invite/xHC9fBfeVW) | [Telegram]( https://t.me/PlotBridge) | [Twitter]( https://twitter.com/plot_bridge) -->
         </p> 
@@ -54,6 +54,13 @@ export default {
 };
 </script>
 <style scoped>
+.el-col {
+  padding: 30px;
+}
+p {
+  line-height: 35px;
+  /* text-indent: 20px; */
+}
 a{
   text-decoration: none;
   color: aqua;

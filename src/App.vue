@@ -51,7 +51,7 @@ export default {
   user-select: none;
 }
 .el-footer {
-  width: 100%;
+  /* width: 100%; */
   background-color: #25272e;
   text-align: center;
   line-height: 35px;
