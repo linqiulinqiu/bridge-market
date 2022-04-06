@@ -32,7 +32,7 @@
           ></el-input>
           <el-select v-model="ptName" class="selecToken">
             <el-option value="BNB" key="BNB" label="BNB"></el-option>
-            <el-option key="BUSD" label="BUSD" value="BUSD"></el-option>
+            <el-option key="USDT" label="USDT" value="USDT"></el-option>
           </el-select>
         </p>
 

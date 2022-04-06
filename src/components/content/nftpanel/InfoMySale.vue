@@ -11,7 +11,7 @@
         ></el-input>
         <el-select v-model="ptName" class="selecToken">
           <el-option value="BNB" key="BNB" label="BNB"></el-option>
-          <el-option value="BUSD" key="BUSD" label="BUSD"></el-option>
+          <el-option value="USDT" key="USDT" label="USDT"></el-option>
         </el-select>
       </p>
       <label for="description" class="labels">{{ $t("desc") }}</label>

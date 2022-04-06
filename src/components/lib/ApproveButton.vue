@@ -12,7 +12,7 @@
       >
         {{ this.$t("approve") }}
       </el-button>
-      <slot v-else></slot>
+      <slot v-else>000</slot>
     </el-col>
   </el-col>
 </template>
@@ -29,10 +29,6 @@ export default {
     };
   },
   mounted: function () {
-    this.checkAllowance();
-  },
-  beforRouterUpdate: function () {
-    console.log("routrte", this.$route);
     this.checkAllowance();
   },
   watch: {
