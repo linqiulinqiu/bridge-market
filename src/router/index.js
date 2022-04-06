@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from "@/views/Home"
 import Bridge from "@/views/Bridge"
 import Market from "@/views/Market"
-import SwapMain from "@/components/SwapMain"
+import Swap from "@/views/Swap"
 import Doc from "@/views/Doc"
 import RoadMap from "../components/document/RoadMap"
 import Contact from "../components/document/Contact"
@@ -38,11 +38,11 @@ const routes = [{
       component: MintPBT,
       name: "MintPBT"
     }]
-  },{
-      path: '/swap',
-      name: 'Swap',
-      component: SwapMain,
-  },{
+  }, {
+    path: '/Swap',
+    name: 'Swap',
+    component: Swap,
+  }, {
     path: '/Doc',
     name: 'Doc',
     component: Doc,

@@ -20,8 +20,7 @@
       </el-col>
     </el-col>
     <el-col v-else>
-      <el-col @click="clearCurrentId" id="back">Back</el-col>
-      <el-col><NFTinfo :curNFT="curNFT" /></el-col>
+      <el-col id="infoMain"><NFTinfo :curNFT="curNFT" /></el-col>
     </el-col>
   </el-col>
 </template>
@@ -65,9 +64,6 @@ export default {
 };
 </script>
 <style >
-#back {
-  margin: 15px 0px;
-}
 .mk-title {
   height: 80px;
   margin-bottom: 5px;
@@ -88,5 +84,8 @@ export default {
 }
 .emptyImg {
   float: left;
+}
+#infoMain {
+  margin-top: 50px;
 }
 </style>
