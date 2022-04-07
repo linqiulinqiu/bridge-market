@@ -1,12 +1,14 @@
 <template>
   <el-col>
-    <h2>Contact us</h2>
+    <h1>Contact us</h1>
     <el-col>
-      <h1>联系我们:</h1>
-      <p>- Discord: <a href="https://discord.com/invite/xHC9fBfeVW" target="_blank">https://discord.com/invite/xHC9fBfeVW</a></p>
-      <p>- 电报: <a href="https://t.me/PlotBridge" target="_blank">https://t.me/PlotBridge</a></p>
-      <p>- 推特: <a href="https://twitter.com/plot_bridge" target="_blank">https://twitter.com/plot_bridge</a></p>
-    </el-col>
+      <h2>联系我们:</h2>
+      <el-col>
+        <p>- Discord: <a href="https://discord.com/invite/xHC9fBfeVW" target="_blank">https://discord.com/invite/xHC9fBfeVW</a></p>
+        <p>- 电报: <a href="https://t.me/PlotBridge" target="_blank">https://t.me/PlotBridge</a></p>
+        <p>- 推特: <a href="https://twitter.com/plot_bridge" target="_blank">https://twitter.com/plot_bridge</a></p>
+      </el-col>
+     </el-col>
   </el-col>
 </template>
 <script>

@@ -32,7 +32,7 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
-
+@import  './assets/base.css';
 * {
   margin: 0;
   padding: 0;
@@ -63,7 +63,7 @@ export default {
 .el-main {
   background-color: #2b2c33;
   /* height: calc(100vh); */
-  min-height: 650px;
+  min-height: 820px;
 }
 
 body > .el-container {

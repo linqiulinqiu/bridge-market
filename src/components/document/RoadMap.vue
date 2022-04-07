@@ -9,3 +9,8 @@ export default {
   name: "RoadMap",
 };
 </script>
+<style scoped>
+.el-col {
+  padding: 30px;
+}
+</style>

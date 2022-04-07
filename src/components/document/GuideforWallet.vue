@@ -1,11 +1,11 @@
 <template>
   <el-col>
-    <h2>Guide For Wallet</h2>
+    <h1>Guide For Wallet</h1>
       <el-col>
-        <h1>
+        <h2>
           操作指南：将 MetaMask 连接到币安智能链
-        </h1>
-        <h4>安装和设置 MetaMask </h4>
+        </h2>
+        <h3>安装和设置 MetaMask </h3>
         <p>
         首先下载适用于 Chrome、Brave、iOS 和 Android 的MetaMask。<br>
 
@@ -15,9 +15,9 @@
         - 最后，按照屏幕上的说明确认您的助记词 <br>
         到这一步,您的钱包已准备好发送、存储和接收代币。
         </p>
-        <h4>
+        <h3>
           自动配置钱包
-        </h4>
+        </h3>
        
         <p>
         您可能会注意到刚创建好的钱包仍在以太坊网络链。它并不适用于币安智能链 ，如果不转换到币安智能链，可能会造成将资金发送到您实际上无法使用的地址而导致资金损失。<br>
@@ -25,7 +25,7 @@
         点击这个按钮之后，会跳出MetaMask的添加网络页面，点击Approve,允许添加
         这时，你已经完成了币安智能链的配置，并且可以在币安智能链上进行交易了。
         </p>
-        <h4>手动配置钱包</h4>
+        <h3>手动配置钱包</h3>
         <p>
         如果您暂时无法访问币安链区块浏览器（bscscan.com），您也可以手动来配置币安智能链。 <br>
         我们需要点击设置来将钱包转到币安智能链。<br>
@@ -57,12 +57,5 @@ export default {
 .el-col {
   padding: 30px;
 }
-p {
-  line-height: 35px;
-  /* text-indent: 20px; */
-}
-a{
-  text-decoration: none;
-  color: aqua;
-}
+
 </style>
