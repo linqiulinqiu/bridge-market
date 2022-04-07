@@ -80,7 +80,7 @@ export default {
 
         this.approving = true;
         if ("hash" in receipt) {
-          await this.bsc.provider.waitTransaction(receipt.hash);
+          await this.bsc.provider.waitForTransaction(receipt.hash);
           await this.checkAllowance();
         }
         this.approving = false;
