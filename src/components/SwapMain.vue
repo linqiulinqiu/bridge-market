@@ -17,6 +17,7 @@
         ></el-input>
         <el-select v-model="from_coin">
           <el-option
+            v-once
             v-for="w in wlist()"
             :key="w.address"
             :label="w.bsymbol"
@@ -37,7 +38,8 @@
         ></el-input>
         <el-select v-model="to_coin">
           <el-option
-            v-for="w in wlist()"
+            v-once
+            v-for="w in coinlist"
             :key="w.address"
             :label="w.bsymbol"
             :value="w.address"
@@ -72,6 +74,7 @@ import ApproveButton from "./lib/ApproveButton.vue";
 import pbwallet from "pbwallet";
 import keeper from "pbweb-nftkeeper";
 import swap from "../swap";
+import market from "../market";
 export default {
   name: "SwapMain",
   components: {
@@ -79,7 +82,13 @@ export default {
   },
   computed: mapState({
     bsc: "bsc",
+    coinlist() {
+      const list = this.wlist();
+      console.log("list", list);
+      return list;
+    },
   }),
+
   data() {
     return {
       from_balance: false,
@@ -168,6 +177,7 @@ export default {
       this.from_amount = this.from_balance;
     },
     swap: async function () {
+      this.swapping = true;
       const minreq = this.to_val.sub(this.to_val.div(100));
       console.log(
         "swapping",
@@ -177,15 +187,27 @@ export default {
         minreq,
         120
       );
-      const receipt = await swap.swap(
-        this.bsc,
-        this.from_coin,
-        this.to_coin,
-        this.from_val,
-        minreq,
-        120
-      );
-      console.log("swap", receipt);
+      const obj = this;
+      try {
+        const receipt = await swap.swap(
+          this.bsc,
+          this.from_coin,
+          this.to_coin,
+          this.from_val,
+          minreq,
+          120
+        );
+        console.log("swap", receipt);
+        await market.waitEventDone(receipt, async function (evt) {
+          console.log("evt", evt);
+          obj.swapping = false;
+          await obj.update_balance("from");
+          await obj.update_balance("to");
+        });
+      } catch (e) {
+        console.log("err", e);
+        this.swapping = false;
+      }
     },
     wlist: function () {
       const wsymbols = pbwallet.wcoin_list("bsymbol");
@@ -198,7 +220,12 @@ export default {
         {
           bsymbol: "PBP",
           address: this.bsc.ctrs.pbp.address,
-          decimals: 9, // TODO: should call contract to obtain decimals
+          // decimals: await this.bsc.ctrs.pbp.decimals(), // TODO: should call contract to obtain decimals
+        },
+        {
+          bsymbol: "USDT",
+          address: this.bsc.ctrs.usdt.address,
+          // decimals: await this.bsc.ctrs.usdt.decimals(),
         },
       ];
       for (let i in wsymbols) {
