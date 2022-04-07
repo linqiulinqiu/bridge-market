@@ -5,10 +5,10 @@
         <el-header style="height: 90px">
           <Plotheader />
         </el-header>
-        <el-main style="padding: 0px">
+        <el-main style="padding: 0px;min-height: calc(100vh - 190px)">
           <router-view :key="$route.fullPath"></router-view>
         </el-main>
-        <el-footer style="height: 160px">
+        <el-footer style="height: 100px">
           <Plotfooter />
         </el-footer>
       </el-container>

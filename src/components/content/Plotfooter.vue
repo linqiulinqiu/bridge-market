@@ -3,10 +3,10 @@
     <p>
       <a href=""> © 2022 Plot Network Ltd,{{ $t("cpright1") }} </a>
     </p>
-    <p>{{ $t("cpright2") }}</p>
+    <!-- <p>{{ $t("cpright2") }}</p>
     <p>
       {{ $t("cpright3") }}
-    </p>
+    </p> -->
   </el-col>
 </template>
 
