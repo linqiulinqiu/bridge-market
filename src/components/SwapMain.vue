@@ -1,7 +1,7 @@
 <template>
   <el-col id="swapmain">
     <el-col v-if="'addr' in this.bsc">
-      <el-col class="clearfix">
+      <el-col>
         <h3>Simple Swap</h3>
         <p>Trade common tokens (powered by PancakeSwap)</p>
       </el-col>
@@ -15,7 +15,7 @@
           clearable
           maxlength="20"
         ></el-input>
-        <el-select v-model="from_coin">
+        <el-select v-model="from_coin" placeholder="请选择">
           <el-option
             v-once
             v-for="w in wlist()"
@@ -25,6 +25,15 @@
           >
           </el-option>
         </el-select>
+      </el-col>
+      <el-col id="swap-exc">
+        <el-button
+          circle
+          icon="el-icon-bottom"
+          size="large"
+          @click="change_coin"
+          :disabled="change_dis"
+        ></el-button>
       </el-col>
       <el-col class="swap-input">
         <p>
@@ -36,10 +45,10 @@
           clearable
           maxlength="20"
         ></el-input>
-        <el-select v-model="to_coin">
+        <el-select v-model="to_coin" placeholder="请选择">
           <el-option
             v-once
-            v-for="w in coinlist"
+            v-for="w in wlist()"
             :key="w.address"
             :label="w.bsymbol"
             :value="w.address"
@@ -82,10 +91,11 @@ export default {
   },
   computed: mapState({
     bsc: "bsc",
-    coinlist() {
-      const list = this.wlist();
-      console.log("list", list);
-      return list;
+    change_dis() {
+      if (this.from_coin != "" && this.to_coin != "") {
+        return false;
+      }
+      return true;
     },
   }),
 
@@ -94,13 +104,15 @@ export default {
       from_balance: false,
       from_amount: 0,
       from_val: 0,
-      from_coin: false,
+      from_coin: "",
       from_ctr: false,
       swapping: false,
       to_balance: false,
       to_amount: 0,
       to_val: 0,
-      to_coin: false,
+      to_coin: "",
+      dis_f: false,
+      dis_to: false,
     };
   },
   watch: {
@@ -120,6 +132,18 @@ export default {
     },
   },
   methods: {
+    isDis_from: function (w) {
+      console.log("from_w==", w, this.dis_f, this.dis_to);
+    },
+    isDis_to: function (w) {
+      console.log("to_w==", w);
+    },
+    change_coin: function () {
+      const old_from_coin = this.from_coin;
+      this.from_coin = this.to_coin;
+      this.to_coin = old_from_coin;
+      console.log("from=", this.from_coin, "to=", this.to_coin);
+    },
     update_amounts: async function () {
       if (ethers.utils.isAddress(this.from_coin)) {
         let newa = this.from_amount;
@@ -238,6 +262,22 @@ export default {
 };
 </script>
 <style>
+.clearfix {
+  margin-left: 10px;
+}
+#swap-exc {
+  height: 50px;
+  text-align: center;
+}
+#swap-exc .el-button {
+  width: 40px;
+  height: 40px;
+  margin-top: 17px;
+}
+#swap-exc .el-button .el-icon-bottom::before {
+  display: inline-block;
+  font-size: 30px;
+}
 .amount-ipt.el-input {
   width: 70%;
   margin-right: 5px;
