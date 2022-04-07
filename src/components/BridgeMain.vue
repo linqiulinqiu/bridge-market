@@ -22,9 +22,9 @@
           <el-col id="balance" :lg="12">
             {{ this.$t("balance") }}：
             <span class="font">
-              {{ WBalance[bcoin] }}
+              {{ WBalance[coinInfo.symbol] }}
             </span>
-            <span class="minifont"> {{ wcoin }}</span>
+            <span class="minifont"> {{ coinInfo.bsymbol }}</span>
             <el-tooltip
               placement="bottom"
               effect="light"
@@ -46,7 +46,7 @@
                 <Withdraw :curNFT="this.curNFT" />
               </el-tab-pane>
               <el-tab-pane :label="$t('redeem')">
-                <Redeem :bsc="this.bsc" :new-token="this.waddr" />
+                <Redeem :bsc="this.bsc" :new-token="this.coinInfo.address" />
               </el-tab-pane>
             </el-tabs>
           </el-col>
@@ -82,27 +82,19 @@ export default {
   computed: mapState({
     bsc: "bsc",
     WBalance: "WBalance",
-    bcoin: "bcoin",
     current: "current",
-    wcoin: (state) => {
+    coinInfo: (state) => {
       const info = pbwallet.wcoin_info(state.current.coinType);
-      if (info) return info.bsymbol;
+      if (info) return info;
       return "-";
     },
-    waddr: (state) => {
-      const info = pbwallet.wcoin_info(state.current.coinType)
-      console.log('waddr', info)
-      if (info) return info.address
-      return false
-    },
-    baddr: "baddr",
   }),
   data() {
     return {};
   },
   methods: {
     addToken: async function () {
-      const coin = this.bcoin;
+      const coin = this.coinInfo.symbol;
       await market.watchToken(coin);
     },
   },
@@ -122,6 +114,6 @@ export default {
 #balance #bridge-fee {
   position: absolute;
   top: 5.25px;
-  left: 300px;
+  left: 340px;
 }
 </style>

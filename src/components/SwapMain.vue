@@ -165,9 +165,7 @@ export default {
       }
     },
     all: function () {
-      console.log("set all", this.from_balance);
       this.from_amount = this.from_balance;
-      console.log("bbbb", this.from_amount);
     },
     swap: async function () {
       const minreq = this.to_val.sub(this.to_val.div(100));

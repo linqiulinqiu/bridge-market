@@ -9,13 +9,14 @@ import keeper from "pbweb-nftkeeper"
 var bsc = {}
 const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
-    'BUSD': ethers.utils.getAddress('0x78867bbeef44f2326bf8ddd1941a4439382ef2a7')
+    // "USDT": bsc.ctrs.usdt.address
 }
 
 function coinContract(coin) {
     const wcoin = 'w' + coin.toLowerCase()
     return bsc.ctrs[wcoin]
 }
+
 async function ListenToWCoin(commit) {
     let wBalance = {
         XCC: '',
@@ -82,8 +83,8 @@ async function listenRedeemEvt(commit) {
     await updateOldBalance()
 }
 
-async function oldTokenCtr(bcoin){
-    if(bcoin in oldTokenCtrs){
+async function oldTokenCtr(bcoin) {
+    if (bcoin in oldTokenCtrs) {
         return oldTokenCtrs[bcoin]
     }
     return false
@@ -299,9 +300,11 @@ async function sendToMarket(id) {
 async function setSellInfo(id, ptName, price, desc) {
     let ptAddr = ptAddrs[ptName]
     if (!ptAddr) {
-        ptAddr = ethers.constants.AddressZero
+        console.log("info", ptName, )
+        ptAddr = bsc.ctrs[ptName.toLowerCase()].address
     }
     const nftPrice = await keeper.parseToken(ptAddr, price)
+    console.log("ptaddr", ptName, ptAddr, nftPrice)
     const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, nftPrice, desc)
     return res
 }
