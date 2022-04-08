@@ -177,3 +177,15 @@ ul li {
 .el-button:hover {
     color: #668b66;
 }
+
+
+
+.el-dialog {
+    background-color: #373943;
+    color: #fff;
+}
+
+.el-dialog__body .el-card {
+    background-color: #373943;
+    color: #fff;
+}

@@ -1,7 +1,7 @@
 <template>
   <el-row type="flex" justify="center">
     <el-col :sapn="10">
-      <el-empty :image-size="100"></el-empty>
+      <el-empty :description="this.$t('img')"></el-empty>
     </el-col>
     <el-col :span="12">
       <p>
@@ -35,7 +35,7 @@ export default {
       mint_loading: false,
     };
   },
-  
+
   methods: {
     mintNFT: async function () {
       this.mint_loading = true;

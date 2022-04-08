@@ -113,7 +113,7 @@
       <el-card>
         <p>
           {{ $t("input-addr") }}
-          <span style="font-size: 10px"> ({{ $t("correct-addr") }}) </span>
+          <span style="font-size: 14px"> ({{ $t("correct-addr") }}) </span>
           <el-button
             style="float: right"
             icon="el-icon-delete"
