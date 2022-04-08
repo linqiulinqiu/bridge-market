@@ -18,16 +18,18 @@
             </span>
           </p>
           <el-col class="follow">
-            <span class="font">
-              {{ this.withdrawAddr }}
-            </span>
-            <el-button
-              style="float: right"
-              icon="el-icon-edit"
-              type="primary"
-              size="mini"
-              @click="bind_dialog = true"
-            ></el-button>
+            <el-col class="withdraw-addr">
+              <span class="font">
+                {{ this.withdrawAddr }}
+              </span>
+              <el-button
+                style="float: right"
+                icon="el-icon-edit"
+                type="primary"
+                size="mini"
+                @click="bind_dialog = true"
+              ></el-button>
+            </el-col>
           </el-col>
           <el-col>
             <el-col id="burn-amount">
@@ -320,6 +322,10 @@ export default {
   box-sizing: border-box;
   color: #38f2af;
   border-radius: 10px;
+}
+.withdraw-addr {
+  height: auto;
+  word-wrap: break-word;
 }
 #burn-amount .el-input {
   margin: 0px 10px;
