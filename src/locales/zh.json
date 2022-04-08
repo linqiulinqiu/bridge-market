@@ -31,6 +31,7 @@
     "cpright2":"PlotBridge 网站与 pancake 无关",
     "cpright3":"所有的第三方商标的权利属于他们自己",
     "contact":"联系我们",
+    "contact1":"- Discord: <a href='https://discord.com/invite/xHC9fBfeVW' target='_blank'>https://discord.com/invite/xHC9fBfeVW</a> <br>- 电报: <a href='https://t.me/PlotBridge' target='_blank'>https://t.me/PlotBridge</a><br>- 推特: <a href='https://twitter.com/plot_bridge' target='_blank'>https://twitter.com/plot_bridge</a>",
 
     "deposit":"存款",
     "desc":"描述",
@@ -53,10 +54,24 @@
     "home":"首页",
 
     "inbsc":"在你的BSC钱包中",
-    "introduction":"说明",
     "input-addr":"在下面输入你的取款地址：",
     "id":"编号",
     "img":"一切皆有可能。",
+    "intoduction":"关于我们",
+    "intoduction1":"PlotBridge(PB)是连通时空证明类区块链网络（即常说的空间挖矿，如奇亚，韭菜）和成熟的智能区块链（如币安智能链）之间的桥梁。可使用PB将原生币如奇亚(XCH)，韭菜(XCC)转换成对应的代币如WXCH,WXCC。当然，也可以将代币转换回对应的原生币。<br>当前支持的原生币种: <br>- 奇亚(XCH) <br>- 韭菜(XCC) <br> 当前支持的智能链: <br>- 币安智能链(BSC)",
+    "intoduction2":"我们是谁?",
+    "intoduction3":"- 我们是Chia和分叉农民。我们致力于开发一款应用程序来服务其他农民，让我们的工作和生活更轻松。",
+    "intoduction4":"我们遇到了什么问题?",
+    "intoduction5":"- 难用：还没有 DeFi、游戏或其他应用；<br> - 难以保留大量全节点钱包；<br> - Chia 的生态系统要解决这些问题，可能还需要几年时间的发展才能做到。",
+    "intoduction6":"PlotBridge 都做了些什么?",
+    "intoduction7":"- 它将 Chia 和分叉连接到 币安智能链(BSC)，甚至更多的链。<br> - Chia 和分叉（如 Chia、Chives、HDDcoin、Profit 等）可以在 BSC 上 1:1 转换为BSC代币，反之亦然。我们还计划为农民制作更多的应用程序，例如轻钱包。",
+    "intoduction8":"对用户的好处?",
+    "intoduction9":"- 作为 BSC 中的代币，代币可以在 DeFi 系统中使用，例如：<br> - 1. 即时兑换其他代币或 BNB，<br> - 2. 提供流动性并获得回报，<br> - 3. 储蓄，<br> -  4. 借贷。<br>-  因此，这些沉寂的代币可以轻松的使用或出售。人们也更容易购买代币并通过桥回到Chia 和分叉原生链。",
+    "intoduction10":"风险和解决方案",
+    "intoduction11":"- 风险：代币丢失。代币需要存放在 PlotBridge 钱包中作为保管。如果我们被黑客入侵，或者我们“退出诈骗”，代币就会丢失。<br>- 解决：每个币有 2 个 PlotBridge 运营钱包：<br>- 1. 支票账户：日常充提币使用，账户保管人可以在不超过上限的情况下铸造WCoin。<br>- 2. 储蓄账户：不经常使用。保留大部分托管币，控制铸币上限。<br>-  储蓄账户和保管人可以在防火墙内运行全节点的计算机上运行，​​在更值得信赖的团队（例如硬币官方团队）的管理员下，所以如果我们的支票账户被黑，或者我们“退出诈骗”，储蓄账户中的硬币仍然可以保留。这样可以降低风险。",
+    "intoduction12":"我们的支出和收益",
+    "intoduction13":"- 除了团队正常运行和服务器维护，对于每笔代币的储存，我们需要支付：<br>- 1. WCoin 铸造费用，<br>- 2. WCoin铸币上限调整费用。<br>- 我们收取以下费用：<br>- 1. NFT 铸造，<br>- 2. WCoin存款，<br>- 3. WCoin 提现。",
+
 
 
     "look-info":"查看具体信息请先连接钱包",
