@@ -2,7 +2,7 @@
   <el-col id="redeem">
     <el-col>
       <p v-if="this.curci.oldBalance">
-        {{ $t("old-balance") }}:{{ redeemBalance[bcoin] }}
+        {{ $t("old-balance") }}:{{ this.oldBalanceStr }}
       </p>
       <el-col>
         <el-input
@@ -20,7 +20,7 @@
           :min-req="this.curci.oldBalance"
         >
           <el-button @click="all">{{ $t("all") }}</el-button>
-          <el-button @click="redeem" :loading="redeeming">{{
+          <el-button @click="redeem" type="primary" :loading="redeeming">{{
             $t("redeem")
           }}</el-button>
         </ApproveButton>
@@ -46,7 +46,8 @@ import ApproveButton from "../lib/ApproveButton.vue";
 import market from "../../market";
 import pbwallet from "pbwallet";
 import { ethers } from "ethers";
-const redeemCache = {}; // new redeem created very unusual, so we assume it won't happen in a single web session
+import keeper from "pbweb-nftkeeper";
+// const redeemCache = {}; // new redeem created very unusual, so we assume it won't happen in a single web session
 
 export default {
   name: "Redeem",
@@ -60,8 +61,8 @@ export default {
       bcoin: "bcoin",
     }),
     oldBalanceStr() {
-      if (this.newToken in redeemCache) {
-        const ci = redeemCache[this.newToken];
+      if (this.newToken in this.redeemCache) {
+        const ci = this.redeemCache[this.newToken];
         const num = ethers.utils.formatUnits(ci.oldBalance, ci.decimals);
         const symbol = ci.oldSymbol;
         return `${num} ${symbol}`;
@@ -71,24 +72,32 @@ export default {
   },
   data() {
     return {
+      oBalance: false,
       minReq: 0,
       amount: 0,
       curci: { oldctr: false },
       redeeming: false,
+      redeemCache: {},
     };
   },
   mounted() {
     this.loadRedeems();
   },
   watch: {
+    deep: true,
     newToken: function () {
       this.updateOldBalance();
     },
-    amount: function (newv, oldv) {
+    amount: async function (newv, oldv) {
+      let reAmount = this.amount;
+      if (!reAmount || isNaN(reAmount) || reAmount == "") {
+        return false;
+      }
       if ("oldBalance" in this.curci) {
-        const newb = ethers.utils.parseUnits(newv, this.curci.decimals);
+        const newb = await keeper.parseToken(this.curci.oldctr.address, newv);
         if (newb.gt(this.curci.oldBalance)) {
-          this.amount = ethers.utils.formatUnits(newb, this.curci.decimals);
+          reAmount = await keeper.formatToken(this.curci.oldctr.address, newb);
+          return reAmount;
         }
       }
     },
@@ -98,7 +107,7 @@ export default {
       const rds = await this.bsc.ctrs.tokenredeem.getRedeemList();
       for (let i in rds[0]) {
         const key = rds[1][i];
-        if (!(key in redeemCache)) {
+        if (!(key in this.redeemCache)) {
           const ci = {};
           const oldctr = pbwallet.erc20_contract(rds[0][i]);
           const newctr = pbwallet.erc20_contract(rds[1][i]);
@@ -107,15 +116,15 @@ export default {
           ci.oldSymbol = await oldctr.symbol();
           ci.oldctr = oldctr;
           ci.newSymbol = await newctr.symbol();
-          redeemCache[key] = ci;
+          this.redeemCache[key] = ci;
         }
       }
-      console.log("loadRedeems redeemCache", redeemCache);
+      console.log("loadRedeems redeemCache", this.redeemCache);
       this.updateOldBalance();
     },
     updateOldBalance: function () {
-      if (this.newToken in redeemCache) {
-        this.curci = redeemCache[this.newToken];
+      if (this.newToken in this.redeemCache) {
+        this.curci = this.redeemCache[this.newToken];
       }
     },
     all: function () {
