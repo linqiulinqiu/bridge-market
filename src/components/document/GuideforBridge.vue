@@ -8,7 +8,7 @@
         1. 推荐在Chrome浏览器上访问PlotBridge。<br>
         2. 运访问PlotBridge前，需要安装MetaMask钱包的Chrome插件，并在钱包注册一个账号。<br>
         3. 登录MetaMask钱包，连接到币安智能链主网。<br>
-        4. 通过 <a href="https://bridgemarket.onrender.com/#/Bridge" target="_blank">https://bridgemarket.onrender.com/#/Bridge</a>  运行 PlotBridge 。<br>
+        4. 通过 <a href='https://bridgemarket.onrender.com/#/Bridge' target='_blank'>https://bridgemarket.onrender.com/#/Bridge</a>  运行 PlotBridge 。<br>
         5. 点击“连接钱包”，会弹出一个确认连接的窗口。<br>
         6. 如果连接成功，会在右上角显示钱包的地址同时在页面左侧的“我的NFT”侧框中会显示您所拥有的NFT。<br>
         7. 您需要至少一个NFT来运用桥的功能，一个NFT可以绑定多个不同币种的存款地址，NFT可以通过“铸造NFT”按钮自行铸造，也可以在市场上购买，您也可以在市场上出售自己的NFT。<br>

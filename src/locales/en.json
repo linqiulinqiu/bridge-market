@@ -31,6 +31,7 @@
     "cpright2":"PlotBridge site is not affiliated with pancake",
     "cpright3":"All third party trademarks are the property of their respective owners",
     "contact":"Contact us",
+    "contact1":"- Discord: <a href='https://discord.com/invite/xHC9fBfeVW' target='_blank'>https://discord.com/invite/xHC9fBfeVW</a> <br>- Telegram: <a href='https://t.me/PlotBridge' target='_blank'>https://t.me/PlotBridge</a><br>- Twitter: <a href='https://twitter.com/plot_bridge' target='_blank'>https://twitter.com/plot_bridge</a>",
 
     "deposit":"Deposit",
     "desc":"description",
@@ -53,10 +54,23 @@
     "home":"Home",
 
     "inbsc":"In your BSC wallet",
-    "introduction":"Introduction",
     "input-addr":"Input your withdrawal address below",
     "input-desc":"Input the description",
     "id":"Id",
+    "intoduction":"Intoduction",
+    "intoduction1":"PlotBridge is a gateway/bridge between various plot-based blockchain networks (PoST networks like Chia, Chives, etc.) and mature smart blockchain networks (Binance Smart Chain, etc.) It can be used to wrap native coins like Chia(XCH), Chives(XCC) into corresponding tokens like WXCH, WXCC, and, course, unwrap tokens back into corresponding native coins.<br>Currently supported coins:<br>- Chia(XCH)<br>- Chives(XCC)<br>Currently supported smart chains:<br>- Binance Smart Chain (BSC)",
+    "intoduction2":"Who are we?",
+    "intoduction3":"- We are Chia and forks farmers. We are working on develop apps to serve other farmers, to make our work and life a little easier.",
+    "intoduction4":"What problem we met?",
+    "intoduction5":"- Difficult to use: No DeFi, game or other app yet<br>- Difficult to keep a lot of full-node wallets<br>- It may require a couple of years for the ecosystem of Chia and forks to grow, to solve these problem.",
+    "intoduction6":"What does PlotBridge do?",
+    "intoduction7":"- It connects Chia and forks to the Binance Smart Chain (BSC), and maybe more chains.Chia and forks (such as Chia, Chives, HDDcoin, Profit, etc.) can be converted 1:1 to tokens on BSC, and vice-versa.<br>We also plan to make more app for farmers, such as light-wallet.",
+    "intoduction8":"Advantage for users?",
+    "intoduction9":"- As tokens in BSC, tokens can be used in DeFi systems, such as:<br>- Instant swap to other tokens or BNB<br>- Provide liquidity and get reward<br>- Saving<br>- Lending<br>- So, these sleeping coins can be used, or sold easily. It’s also easier for people to buy coins and bridge back to Chia and forks native chain.",
+    "intoduction10":"Risk and our resolution",
+    "intoduction11":"- Risk: Loss of coins,Coins need to be stored in PlotBridge wallets as custody. If we got hacked, or we “exit-scam”, coins will be lost.<br>- Resolution: For each coin, there are 2 PlotBridge operation wallets:<br>- 1.Checking account:Daily use for deposit and withdraw, keeper can mint WCoin without exceed the limitation.- 2.Saving account:Not used so often. Keeps most part of the custodial coins, controls the minting limitation.- The saving account and keeper can run in a computer running full-node inside firewall, under the admin of a more trustworthy team (such as the coin official team), so: If our checking account got hacked, or we “exit-scam”, coins in the saving account can still keep. The loss are limited.",
+    "intoduction12":"What we pay and earn",
+    "intoduction13":"- Aside for team living and server maintenance. For each coin deposit, we need to pay for:<br>- 1. WCoin mint<br>- 2. WCoin mint limitation adjustment<br>We charge fee on:<br>- 1.NFT mint<br>- 2. WCoin deposit<br>- 3. WCoin withdraw",
 
     "look-info":"Looking the details info after connect wallet",
     

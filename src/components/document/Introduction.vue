@@ -1,17 +1,24 @@
 <template>
   <el-col>
-    <h1>Intoduction</h1>
+    <h1>{{$t('intoduction')}}</h1>
     <el-col>
-      <p>
-        PlotBridge(PB)是连通时空证明类区块链网络（即常说的空间挖矿，如奇亚，韭菜）和成熟的智能区块链（如币安智能链）之间的桥梁。
-        可使用PB将原生币如奇亚(XCH)，韭菜(XCC)转换成对应的代币如WXCH,WXCC。当然，也可以将代币转换回对应的原生币。
-        当前支持的原生币种: 奇亚(XCH) 韭菜(XCC) 当前支持的智能链:
-        币安智能链(BSC)
-      </p>
+      <p v-html="$t('intoduction1')"></p>
     </el-col>
     <h2>FAQ：</h2>
     <el-col>
-      <h3>我们是谁?</h3>
+      <h3 v-html="$t('intoduction2')"></h3>
+      <p v-html="$t('intoduction3')"></p>
+      <h3 v-html="$t('intoduction4')"></h3>
+      <p v-html="$t('intoduction5')"></p>
+      <h3 v-html="$t('intoduction6')"></h3>
+      <p v-html="$t('intoduction7')"></p>
+      <h3 v-html="$t('intoduction8')"></h3>
+      <p v-html="$t('intoduction9')"></p>
+      <h3 v-html="$t('intoduction10')"></h3>
+      <p v-html="$t('intoduction11')"></p>
+      <h3 v-html="$t('intoduction12')"></h3>
+      <p v-html="$t('intoduction13')"></p>
+      <!-- <h3>我们是谁?</h3>
       <p>- 我们是Chia和分叉农民。我们致力于开发一款应用程序来服务其他农民，让我们的工作和生活更轻松。</p>
       <h3>我们遇到了什么问题?</h3>
       <p>- 难用：还没有 DeFi、游戏或其他应用；<br> - 难以保留大量全节点钱包；<br> - Chia 的生态系统要解决这些问题，可能还需要几年时间的发展才能做到。</p>
@@ -25,7 +32,7 @@
         - 1. 支票账户：日常充提币使用，账户保管人可以在不超过上限的情况下铸造WCoin。<br>
         - 2. 储蓄账户：不经常使用。保留大部分托管币，控制铸币上限。<br>-  储蓄账户和保管人可以在防火墙内运行全节点的计算机上运行，​​在更值得信赖的团队（例如硬币官方团队）的管理员下，所以如果我们的支票账户被黑，或者我们“退出诈骗”，储蓄账户中的硬币仍然可以保留。这样可以降低风险。</p>
       <h3>我们的支出和收益</h3>
-      <p>- 除了团队正常运行和服务器维护，对于每笔代币的储存，我们需要支付：1. WCoin 铸造费用，2. WCoin铸币上限调整费用。<br>- 我们收取以下费用：<br>- 1. NFT 铸造，<br>- 2. WCoin存款，<br>- 3. WCoin 提现。</p>
+      <p>- 除了团队正常运行和服务器维护，对于每笔代币的储存，我们需要支付：1. WCoin 铸造费用，2. WCoin铸币上限调整费用。<br>- 我们收取以下费用：<br>- 1. NFT 铸造，<br>- 2. WCoin存款，<br>- 3. WCoin 提现。</p> -->
     </el-col>
   </el-col>
 </template>
