@@ -12,8 +12,6 @@ export default new Vuex.Store({
         marketList: {},
         mySaleList: {},
         WBalance: 0,
-        redeemBalance: "0",
-        redeemAllowance: "0",
     },
     mutations: {
         setBsc(state, bsc) {
@@ -45,12 +43,6 @@ export default new Vuex.Store({
         },
         setMySalelist(state, list) {
             state.mySaleList = list
-        },
-        setRedeemBalance(state, balance) {
-            state.redeemBalance = balance
-        },
-        setRedeemAllowance(state, allowance) {
-            state.redeemAllowance = allowance
         },
         setWBalance(state, balance) {
             state.WBalance = balance

@@ -239,6 +239,8 @@ export default {
         await market.waitEventDone(receipt, async function (evt) {
           console.log("evt", evt);
           obj.swapping = false;
+          obj.from_amount = "";
+          obj.to_amount = "";
           await obj.update_balance("from");
           await obj.update_balance("to");
         });
