@@ -3,7 +3,7 @@
     <el-col id="destroy">
       <p>
         {{ $t("destroy") }} :
-        <el-button @click="burnPBT" type="primary">{{
+        <el-button @click="burnPBT" type="primary" :loading="burn_loading">{{
           $t("destroy")
         }}</el-button>
       </p>
@@ -64,6 +64,7 @@
   </el-col>
 </template>
 <script>
+import { mapState } from "vuex";
 import market from "../../../market";
 export default {
   name: "InfoMy",
@@ -76,13 +77,20 @@ export default {
       sendToMarket: true,
       send_loading: false,
       set_loading: false,
+      burn_loading: false,
     };
   },
   methods: {
     burnPBT: async function () {
+      this.burn_loading = true;
       const id = this.curNFT.id;
       const res = await market.burnNFT(id);
+      const obj = this;
       console.log("burn res", res);
+      await market.waitEventDone(res, function (evt) {
+        obj.burn_loading = false;
+        commit("setCurrentPbtId", false);
+      });
     },
     send: async function () {
       this.send_loading = true;
@@ -124,6 +132,7 @@ export default {
         await market.waitEventDone(res, async function (evt) {
           obj.set_loading = false;
           obj.sendToMarket = true;
+          commit("setCurrentPbtId", false);
         });
         return res;
       } catch (e) {
