@@ -50,6 +50,13 @@
     "guide-bridge":"Guide For Bridge",
     "guide-market":"Guide For Market",
     "guide-wallet":"Guide For Wallet",
+    "guide-wallet1":"How-to Guide: Connecting MetaMask to Binance Smart Chain",
+    "guide-wallet2":"Installing and setting up MetaMask",
+    "guide-wallet3":"Start by downloading MetaMask for Chrome, Brave, iOS, and Android.<br>- Next, create a wallet<br>- Write down the backup seed phrase somewhere secure (preferably not on an Internet-connected device)<br>- Without this phrase, your funds can’t be recovered if your device is damaged or lost<br>- Finally, confirm your seed phrase by following the on-screen instructions<br>- And voila! Your wallet is ready to send, store, and receive tokens.",
+    "guide-wallet4":"Fast configuring the wallet",
+    "guide-wallet5":"- You might notice that we’re still at the Ethereum main network.This won’t work with Binance Smart Chain DApps. At worst, you could lose funds by sending them to addresses you can’t actually use.<br>- You can quickly configure binance smart chain by visiting <a href='https://bscscan.com' target='_blank'>Binance Smart Chain Explorer(bscscan.com)</a>,After accessing the homepage of<a href='https://bscscan.com' target='_blank'>Binance Smart Chain Explorer(bscscan.com)</a>, you will see a button with MetaMask icon and “Add BSC Network” on the bottom right of the page.<br>- click this button, MetaMask extension will pop up, and click Approve to give permission.Now you have completed the configuration,and you are ready to use your wallet on Binance Smart Chain.",
+    "guide-wallet6":"Manually configuring the wallet",
+    "guide-wallet7":"- If you are temporarily unable to access Binance Smart Chain Explorer (bscscan.com), you can also manually configure the wallet.<br>- Let’s change that. We need to access Settings to point the wallet towards Binance Smart Chain nodes.<br>- On the Settings page, click the Networks.<br>- Click Add Network in the top-right corner to manually add Binance Smart Chain Mainnet.<br>- Network Name: Binance Smart Chain<br>- New RPC URL: https://bsc-dataseed.binance.org/<br>- ChainID: 56<br>- Symbol: BNB<br>- Block Explorer URL: https://bscscan.com<br>- Once you Save the Network and return to the main view, you’ll notice two things: the network has automatically been set to the one you just entered, and the units are no longer denominated in ETH, but in BNB.<br>- For all recent announcements and updates, connect with us.",
 
     "home":"Home",
 
