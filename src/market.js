@@ -11,6 +11,18 @@ const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
     // "USDT": bsc.ctrs.usdt.address
 }
+var coinlist = {}
+
+function loadCoinlist() {
+    const coinSb = pbwallet.wcoin_list("index")
+    const clist = {}
+    for (let i in coinSb) {
+        clist[coinSb[i]] = pbwallet.wcoin_info(coinSb[i], "index")
+    }
+    console.log("coinlist", clist)
+    coinlist = clist
+    return coinlist
+}
 
 function coinContract(coin) {
     const wcoin = 'w' + coin.toLowerCase()
@@ -18,36 +30,22 @@ function coinContract(coin) {
 }
 
 async function ListenToWCoin(commit) {
-    let wBalance = {
-        XCC: '',
-        HDD: '',
-        XCH: ""
-    }
-    var ctr_xcc = coinContract("XCC")
-    var ctr_xch = coinContract("XCH")
-    var ctr_hdd = coinContract("HDD")
-
-    async function updateXCCBalance(evt) {
-        const xccbalance = await ctr_xcc.balanceOf(bsc.addr)
-        wBalance.XCC = await keeper.formatToken(ctr_xcc.address, xccbalance)
+    const coinlist = loadCoinlist()
+    const wBalance = {}
+    var ctr = {}
+    async function updateBalnce() {
+        for (let i in coinlist) {
+            ctr[coinlist[i].ctrname] = bsc.ctrs[coinlist[i].ctrname]
+            const balance = await ctr[coinlist[i].ctrname].balanceOf(bsc.addr)
+            wBalance[i] = await keeper.formatToken(ctr[coinlist[i].ctrname].address, balance)
+        }
+        console.log("balance", wBalance)
         commit('setWBalance', wBalance)
     }
-    async function updateHDDBalance(evt) {
-        const hddbalance = await ctr_hdd.balanceOf(bsc.addr)
-        wBalance.HDD = await keeper.formatToken(ctr_hdd.address, hddbalance)
-        commit('setWBalance', wBalance)
+    await updateBalnce()
+    for (let i in ctr) {
+        ctr[i].on(ctr[i].filters.Transfer, updateBalnce)
     }
-    async function updateXCHBalance(evt) {
-        const xchbalance = await ctr_xch.balanceOf(bsc.addr)
-        wBalance.XCH = await keeper.formatToken(ctr_xch.address, xchbalance)
-        commit('setWBalance', wBalance)
-    }
-    await updateXCCBalance()
-    await updateHDDBalance()
-    await updateXCHBalance()
-    ctr_hdd.on(ctr_hdd.filters.Transfer, updateHDDBalance)
-    ctr_xcc.on(ctr_xcc.filters.Transfer, updateXCCBalance)
-    ctr_xch.on(ctr_xch.filters.Transfer, updateXCHBalance)
 }
 
 
@@ -339,13 +337,15 @@ async function getLimit(coin) {
     amount = [amountMin, amountMax]
     return amount
 }
+
 async function watchToken(coin) {
     const ctr = coinContract(coin)
     if (!bsc.provider) return false
-    var img_name = 'w' + coin.toLowerCase() + '-logo.svg'
+    const cinfo = pbwallet.wcoin_info(coin, 'symbol')
+    var img_name = cinfo.ctrname + '-logo.svg'
     const options = {
         address: ctr.address,
-        symbol: "w" + coin,
+        symbol: cinfo.bsymbol,
         decimals: await ctr.decimals(),
         image: "https://www.plotbridge.net/img/" + img_name,
     }
@@ -385,4 +385,5 @@ export default {
     getLimit: getLimit,
     getfees: getfees,
     getmintfee: getmintfee,
+    loadCoinlist: loadCoinlist
 }
