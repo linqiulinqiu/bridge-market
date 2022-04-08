@@ -49,6 +49,7 @@
     "getaddr":"该类型的存款地址已经没有了，请在discord或电报上联系我们。",
     "guide-bridge":"桥的说明",
     "guide-market":"市场说明",
+    "guide-market1":"在市场中，您可以根据您的喜好购买NFT，也可以上架自己的NFT进行出售，目前支持用BNB和BUSD来出售或者购买NFT。",
     "guide-wallet":"钱包说明",
     "guide-wallet1":"操作指南：将 MetaMask 连接到币安智能链",
     "guide-wallet2":"安装和设置 MetaMask",
