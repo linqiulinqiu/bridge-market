@@ -16,9 +16,9 @@
         </p>
         <span class="follow">{{ $t("addr") }} ：</span>
         <el-col>
-          <span class="font">
-            {{ this.depositAddr }}
-          </span>
+          <el-col class="deposit-addr">
+            <p class="font">{{ this.depositAddr }}</p>
+          </el-col>
           <el-tooltip :content="this.$t('copy')" placement="right">
             <el-button
               size="mini"
@@ -214,6 +214,10 @@ export default {
 }
 #deposit {
   font-size: 20px;
+}
+.deposit-addr {
+  height: auto;
+  word-wrap: break-word;
 }
 #deposit .el-input__inner {
   background: #373943;
