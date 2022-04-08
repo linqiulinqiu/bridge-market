@@ -41,8 +41,6 @@
         当你设置完，点击保存返回到主页，你会发现：网络已经自动设置为您刚才设置的币安智能链，计价单位不再是ETH，而是BNB。<br>
 
         想了解所有最近的公告和更新，请与我们联系。
-
-        <!-- [Website](https://plotbridge.onrender.com) | [Discord](https://discord.com/invite/xHC9fBfeVW) | [Telegram]( https://t.me/PlotBridge) | [Twitter]( https://twitter.com/plot_bridge) -->
         </p> 
       </el-col>
   </el-col>
