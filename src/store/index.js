@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import pbw from 'pbwallet'
+import tokens from '../tokens'
+
 Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
@@ -15,6 +17,7 @@ export default new Vuex.Store({
     },
     mutations: {
         setBsc(state, bsc) {
+            tokens.setbsc(bsc)  // TODO: remove this injection later
             state.bsc = bsc
         },
         setBaddr(state, baddr) {

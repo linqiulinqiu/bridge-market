@@ -62,8 +62,6 @@ async function connect(commit) {
     return false
 }
 
-
-
 async function getmintfee() {
     const options = {}
     const fee = await bsc.ctrs.pbt.mintFee();

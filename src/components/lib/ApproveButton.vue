@@ -18,6 +18,8 @@
 </template>
 <script>
 import { ethers } from "ethers";
+import tokens from '../../tokens'
+
 export default {
   name: "ApproveButton",
   props: ["bsc", "token", "spender", "minReq"],
@@ -36,58 +38,39 @@ export default {
       console.log("props", this.$props);
       this.checkAllowance();
     },
+    minReq(newm, oldm){
+      this.checkAllowance();
+    }
   },
   methods: {
     checkAllowance: async function () {
       console.log(
         "checkAllowance",
-        this.token.address,
+        this.token,
         this.spender,
         this.minReq
       );
-      if (this.token && this.token.address == ethers.constants.AddressZero) {
-        // no approval needed for BNB
+      this.checking = true
+      const allow = await tokens.allowance(this.token, this.spender)
+      if (allow && allow.gte(this.minReq)) {
         this.needApprove = false;
-        this.checking = false;
-      } else if (
-        this.token &&
-        this.token.allowance &&
-        this.spender &&
-        this.minReq
-      ) {
-        const allow = await this.token.allowance(this.bsc.addr, this.spender);
-        console.log(
-          "allowance token",
-          this.token.address,
-          this.spender,
-          allow,
-          this.minReq
-        );
-        if (allow && allow.gte(this.minReq)) {
-          this.needApprove = false;
-        } else {
-          this.needApprove = true;
-        }
-        this.checking = false;
+      } else {
+        this.needApprove = true;
       }
+      this.checking = false;
     },
     approve: async function () {
       try {
-        const receipt = await this.token.approve(
-          this.spender,
-          await this.token.totalSupply()
-        );
-
         this.approving = true;
-        if ("hash" in receipt) {
-          await this.bsc.provider.waitForTransaction(receipt.hash);
+        const done = await tokens.approve(this.spender)
+        if(done){
           await this.checkAllowance();
         }
         this.approving = false;
       } catch (e) {
         console.log("maybe rejected?", e);
       }
-      console.log("approve:", this.token.address, this.spender);
+      console.log("approve:", this.token, this.spender);
     },
   },
 };
