@@ -17,11 +17,11 @@
         ></el-input>
         <el-select v-model="from_coin" placeholder="请选择">
           <el-option
-            v-once
-            v-for="w in wlist()"
+            v-for="w in this.wraplist"
             :key="w.address"
             :label="w.bsymbol"
             :value="w.address"
+            :disabled="w.disabled"
           >
           </el-option>
         </el-select>
@@ -47,11 +47,11 @@
         ></el-input>
         <el-select v-model="to_coin" placeholder="请选择">
           <el-option
-            v-once
-            v-for="w in wlist()"
+            v-for="w in this.wraplist"
             :key="w.address"
             :label="w.bsymbol"
             :value="w.address"
+            :disabled="w.disabled"
           >
           </el-option>
         </el-select>
@@ -98,9 +98,14 @@ export default {
       return true;
     },
   }),
+  mounted: function () {
+    this.wlist();
+    console.log("mounted list", this.wraplist);
+  },
 
   data() {
     return {
+      wraplist: [],
       from_balance: false,
       from_amount: 0,
       from_val: 0,
@@ -125,6 +130,15 @@ export default {
     from_coin: async function (newc, oldc) {
       await this.update_balance("from");
       await this.update_amounts(this.from_amount);
+      for (let i in this.wraplist) {
+        this.wraplist[i].disabled = false;
+        if (this.wraplist[i].address == newc) {
+          this.wraplist[i].disabled = true;
+        }
+        if (this.wraplist[i] == oldc) {
+          this.wraplist[i].disabled = false;
+        }
+      }
     },
     to_coin: async function (newc, oldc) {
       await this.update_balance("to");
@@ -204,7 +218,7 @@ export default {
       this.swapping = true;
       const minreq = this.to_val.sub(this.to_val.div(100));
       console.log(
-        "swapping",
+        "swapping params",
         this.from_coin,
         this.to_coin,
         this.from_val,
@@ -255,7 +269,11 @@ export default {
       for (let i in wsymbols) {
         wlist.push(pbwallet.wcoin_info(wsymbols[i], "bsymbol"));
       }
+      for (let i in wlist) {
+        wlist[i]["disabled"] = false;
+      }
       console.log("wlist", wlist);
+      this.wraplist = wlist;
       return wlist;
     },
   },
