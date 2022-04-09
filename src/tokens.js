@@ -47,7 +47,6 @@ async function tokenSymbol(ctraddr) {
 
 async function formatToken(ctraddr, val) {
     const info = await tokenInfo(ctraddr)
-    console.log('formatToken', val, info)
     return ethers.utils.formatUnits(val, await info.decimals)
 }
 
@@ -58,7 +57,8 @@ async function parseToken(ctraddr, val) {
     if(typeof(val)!='string'){
         val = val.toString()
     }
-    return ethers.utils.parseUnits(val, await tokenInfo(ctraddr).decimals)
+    const info = await tokenInfo(ctraddr)
+    return ethers.utils.parseUnits(val, info.decimals)
 }
 
 async function balance(ctraddr, owner) {
@@ -98,9 +98,10 @@ function setbsc(b){
     bsc = b
 }
 
-exports.setbsc = setbsc
 exports.allowance = allowance
+exports.approve = approve
 exports.balance = balance
 exports.format = formatToken
 exports.parse = parseToken
+exports.setbsc = setbsc
 exports.symbol = tokenSymbol

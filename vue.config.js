@@ -7,6 +7,9 @@ module.exports = {
     runtimeCompiler: true,
     lintOnSave: false,
     devServer: {
+        host: 'localhost',
         hot: "only",
+        compress: true,
+        open: true
     }
 }

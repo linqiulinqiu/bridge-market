@@ -35,7 +35,6 @@ export default {
   },
   watch: {
     token(newt, oldt) {
-      console.log("props", this.$props);
       this.checkAllowance();
     },
     minReq(newm, oldm){
@@ -44,12 +43,6 @@ export default {
   },
   methods: {
     checkAllowance: async function () {
-      console.log(
-        "checkAllowance",
-        this.token,
-        this.spender,
-        this.minReq
-      );
       this.checking = true
       const allow = await tokens.allowance(this.token, this.spender)
       if (allow && allow.gte(this.minReq)) {
@@ -62,15 +55,14 @@ export default {
     approve: async function () {
       try {
         this.approving = true;
-        const done = await tokens.approve(this.spender)
+        const done = await tokens.approve(this.token, this.spender)
         if(done){
           await this.checkAllowance();
         }
-        this.approving = false;
       } catch (e) {
         console.log("maybe rejected?", e);
       }
-      console.log("approve:", this.token, this.spender);
+      this.approving = false;
     },
   },
 };

@@ -15,6 +15,7 @@
           clearable
           maxlength="20"
         ></el-input>
+        <el-button v-if="from_balance>0" @click="from_all">{{ $t("all") }}</el-button>
         <el-select v-model="from_coin" placeholder="请选择">
           <el-option
             v-for="w in wlist"
@@ -63,7 +64,6 @@
           :spender="this.bsc.ctrs.router.address"
           :min-req="this.from_val"
         >
-          <el-button @click="all" type="primary">{{ $t("all") }}</el-button>
           <el-button
             v-if="from_coin != to_coin"
             @click="swap"
@@ -141,6 +141,7 @@ export default {
       console.log('update-amounts', this.from_coin, this.to_coin)
       if (this.from_coin!='') {
         this.from_val = await tokens.parse(this.from_coin, this.from_amount);
+        console.log('from', this.from_amount, this.from_val)
         if (this.from_coin!='' && this.to_coin!='' && this.from_val.gt(0)){
           try {
             const est = await swap.estimate(
@@ -171,7 +172,7 @@ export default {
             this.to_balance = await tokens.format(this.to_coin, to_balance)
         }
     },
-    all: function () {
+    from_all: function () {
       this.from_amount = this.from_balance;
     },
     swap: async function () {
