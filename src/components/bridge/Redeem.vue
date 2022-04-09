@@ -50,7 +50,7 @@ import market from "../../market";
 import pbwallet from "pbwallet";
 import { ethers } from "ethers";
 import tokens from '../../tokens'
-import keeper from "pbweb-nftkeeper";
+import debounce from 'lodash/debounce';
 const redeemCache = {}; // new redeem created very unusual, so we assume it won't happen in a single web session
 
 export default {
@@ -79,22 +79,19 @@ export default {
     this.loadRedeems();
   },
   watch: {
-    newToken: function () {
+    newToken: debounce(function () {
       this.loadPair();
-    },
-    amount: async function (newv, oldv) {
-      let reAmount = this.amount;
-      if (!reAmount || isNaN(reAmount) || reAmount == "") {
-        return false;
+    },500),
+    amount: debounce(async function (newv, oldv) {
+      if (!newv || isNaN(newv) || newv == "") {
+        this.amount = 0;
       }
-      if ("oldBalance" in this.curci) {
-        const newb = await keeper.parseToken(this.curci.oldctr.address, newv);
-        if (newb.gt(this.curci.oldBalance)) {
-          reAmount = await keeper.formatToken(this.curci.oldctr.address, newb);
-          return reAmount;
-        }
+      const val = await tokens.parse(this.oldToken, newv);
+      const oldbal = await tokens.parse(this.oldToken, this.oldBalance)
+      if (val.gt(oldbal)){
+          this.amount = this.oldBalance
       }
-    },
+    },500),
   },
   methods: {
     loadRedeems: async function () {

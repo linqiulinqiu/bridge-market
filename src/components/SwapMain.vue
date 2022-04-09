@@ -78,6 +78,7 @@
 </template>
 <script>
 import { ethers } from "ethers";
+import debounce from 'lodash/debounce';
 import { mapState } from "vuex";
 import ApproveButton from "./lib/ApproveButton.vue";
 import pbwallet from "pbwallet";
@@ -118,17 +119,17 @@ export default {
     };
   },
   watch: {
-    from_amount: async function (newa, olda) {
+    from_amount: debounce(async function (newa, olda) {
       await this.update_amounts();
-    },
-    from_coin: async function (newc, oldc) {
+    },500),
+    from_coin: debounce(async function (newc, oldc) {
       await this.update_balance(true,false);
       await this.update_amounts();
-    },
-    to_coin: async function (newc, oldc) {
+    },500),
+    to_coin: debounce(async function (newc, oldc) {
       await this.update_balance(false,true);
       await this.update_amounts()
-    },
+    },500),
   },
   methods: {
     order_swap: function () {
