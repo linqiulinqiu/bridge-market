@@ -286,19 +286,21 @@ async function retreatNFT(id) {
     const res = await bsc.ctrs.pbmarket.offSale(bsc.ctrs.pbt.address, id)
     return res
 }
-async function afterFee(coin, mode, amount) {
-    const ctr = coinContract(coin)
-    const fees = await getfees(coin)
+async function afterFee(coinInfo, mode, amount) {
+    const ctr = bsc.ctrs[coinInfo.ctrname]
+    const fees = await getfees(coinInfo.symbol)
     const nowfee = {}
     amount = await keeper.parseToken(ctr.address, amount)
+    console.log("string amount", amount)
+
     if (mode == 'deposit') {
         nowfee.min = await keeper.parseToken(ctr.address, fees.depositFee)
         nowfee.rate = fees.depositFeeRate
     } else if (mode == 'withdraw') {
         nowfee.min = await keeper.parseToken(ctr.address, fees.withdrawFee)
         nowfee.rate = fees.withdrawFeeRate
-        console.log("after fee", nowfee)
-        if (amount.gt(await keeper.parseToken(ctr.address, store.state.WBalance[coin]))) {
+        console.log("12333333333333333", nowfee)
+        if (amount.gt(await keeper.parseToken(ctr.address, store.state.WBalance[coinInfo.index]))) {
             return "fund"
         }
     } else {
@@ -311,14 +313,15 @@ async function afterFee(coin, mode, amount) {
     if (amount.lte(fee)) {
         return false
     }
-    return await keeper.formatToken(ctr.address, amount.sub(fee))
+    const f = await keeper.formatToken(ctr.address, amount.sub(fee))
+    console.log("return in afterFee", f)
+    return f
 }
 async function getfees(coin) {
     const ctr = coinContract(coin)
     let fee = {}
     const depfee = await ctr.depositFee()
     const wdfee = await ctr.withdrawFee()
-    console.log("fee", depfee, wdfee)
     fee.depositFee = await keeper.formatToken(ctr.address, depfee[1])
     fee.depositFeeRate = depfee[0]
     fee.withdrawFee = await keeper.formatToken(ctr.address, wdfee[1])

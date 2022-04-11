@@ -36,7 +36,7 @@
             <el-col id="burn-amount">
               {{ $t("burn") }} :
               <el-input
-                v-model.trim="wAmount"
+                v-model="wAmount"
                 class="amount-input"
                 clearable
                 maxlength="20"
@@ -145,6 +145,8 @@
 import { mapState } from "vuex";
 import market from "../../market";
 import BridgeFee from "./BridgeFee.vue";
+import debounce from "lodash/debounce";
+
 export default {
   components: {
     BridgeFee,
@@ -208,23 +210,19 @@ export default {
     withdrawAddr: function (newV) {
       return newV;
     },
-    wAmount: async function () {
-      var wamount = this.wAmount;
-      if (!wamount || isNaN(wamount) || wamount == "") {
-        wamount = "0";
-        console.log(wamount);
+    wAmount: debounce(async function (amount) {
+      if (!amount || isNaN(amount) || amount == "") {
+        amount = "0";
         this.tips_amount = this.$t("correct-amount");
         return false;
       }
       const after_fee = await market.afterFee(
-        this.coinInfo.symbol,
+        this.coinInfo,
         "withdraw",
-        wamount
+        amount
       );
-      console.log("afterfee", after_fee);
       if (!after_fee) {
         this.w_disabled = true;
-
         this.getwAmount = "";
         this.tips_amount = this.$t("tips-amount1");
       } else if (after_fee == "fund") {
@@ -237,7 +235,7 @@ export default {
         this.w_disabled = false;
       }
       return after_fee;
-    },
+    }, 150),
   },
   methods: {
     amount_valid: async function (wAmount) {
@@ -293,7 +291,6 @@ export default {
       const cointy = this.current.coinType;
       const id = this.current.pbtId;
       const addr = this.wAddr.toString();
-      const obj = this;
       try {
         let rebind = false;
         if (this.withdrawAddr != false) {
@@ -306,9 +303,10 @@ export default {
           this.bind_loading = false;
           this.$message(this.$t("correct-amount"));
         }
-        // await market.waitEventDone(res, async function (evt) {
-        obj.bind_loading = false;
-        // });
+        const obj = this;
+        await market.waitEventDone(res, async function (evt) {
+          obj.bind_loading = false;
+        });
       } catch (e) {
         this.bind_loading = false;
         console.log("bind withdraw addr err", e.message);
