@@ -4,7 +4,7 @@
       <router-link to="/Swap">Buy PBP</router-link>
     </el-button>
     <el-button v-if="this.coinInfo" class="lp-style">
-      <router-link to="/Swap">Buy {{ coinInfo.bsymbol }}</router-link>
+      <router-link to="/Swap">Buy {{ this.coinInfo.bsymbol }}</router-link>
 
       <!-- <a :href="this.pre_link + 'swap?outputCurrency=' + this.coinInfo.address"
         >Buy {{ coinInfo.bsymbol }}</a
@@ -14,29 +14,20 @@
       <a
         target="_"
         :href="this.pre_link + 'add/' + pbpAddr + '/' + this.coinInfo.address"
-        >Add LP {{ coinInfo.bsymbol }}</a
+        >Add LP {{ this.coinInfo.bsymbol }}</a
       >
     </el-button>
   </el-col>
 </template>
 <script>
 import { mapState } from "vuex";
-import pbwallet from "pbwallet";
 
 export default {
   name: "LPLink",
-  props: ["coinType"],
+  props: ["coinInfo"],
   computed: mapState({
     pbpAddr(state) {
       return state.bsc.ctrs.pbp.address;
-    },
-    coinInfo(state) {
-      if (this.coinType && this.coinType > 0) {
-        const info = pbwallet.wcoin_info(this.coinType);
-        info.address = state.bsc.ctrs[info.ctrname].address;
-        return info;
-      }
-      return false;
     },
   }),
   data() {
