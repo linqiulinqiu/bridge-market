@@ -19,7 +19,6 @@ import { mapState } from "vuex";
 import market from "../../market";
 export default {
   computed: mapState({
-    bcoin: "bcoin",
     current: "current",
     addclass: function (state) {
       if (state.current.coinType) return state.current.coinType;

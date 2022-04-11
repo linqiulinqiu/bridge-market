@@ -22,7 +22,7 @@
           <el-col id="balance" :lg="12">
             {{ this.$t("balance") }}：
             <span class="font">
-              {{ WBalance[coinInfo.symbol] }}
+              {{ WBalance[coinInfo.index] }}
             </span>
             <span class="minifont"> {{ coinInfo.bsymbol }}</span>
             <el-tooltip
@@ -34,16 +34,18 @@
                 {{ $t("add-token") }}
               </el-button>
             </el-tooltip>
-            <el-col id="bridge-fee"> <BridgeFee /> </el-col>
+            <el-col id="bridge-fee">
+              <BridgeFee :coinInfo="coinInfo" />
+            </el-col>
           </el-col>
 
           <el-col :lg="{ span: 17 }">
             <el-tabs>
               <el-tab-pane :label="$t('deposit')"
-                ><Deposit :curNFT="this.curNFT"
+                ><Deposit :curNFT="this.curNFT" :coinInfo="coinInfo"
               /></el-tab-pane>
               <el-tab-pane :label="$t('withdraw')">
-                <Withdraw :curNFT="this.curNFT" />
+                <Withdraw :curNFT="this.curNFT" :coinInfo="coinInfo" />
               </el-tab-pane>
               <el-tab-pane :label="$t('redeem')">
                 <Redeem :bsc="this.bsc" :newToken="this.coinInfo.address" />
@@ -51,7 +53,7 @@
             </el-tabs>
           </el-col>
           <el-col>
-            <LPLink :coinType="current.coinType" />
+            <LPLink :coinInfo="coinInfo" />
           </el-col>
         </el-col>
       </el-col>

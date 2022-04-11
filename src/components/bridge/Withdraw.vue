@@ -12,7 +12,8 @@
             }}
           </p>
           <p>
-            <span>{{ $t("w-addr", { bcoin: bcoin }) }} :</span> <br />
+            <span>{{ $t("w-addr", { bcoin: this.coinInfo.symbol }) }} :</span>
+            <br />
             <span class="tips">
               {{ $t("correct-addr") }}
             </span>
@@ -44,10 +45,10 @@
               <el-button
                 type="primary"
                 size="small"
-                @click="wAmount = WBalance[bcoin]"
+                @click="wAmount = WBalance[this.coinInfo.index]"
                 >{{ $t("all") }}
               </el-button>
-              W{{ bcoin }}，
+              {{ this.coinInfo.bsymbol }}，
               <el-button
                 type="primary"
                 :loading="w_loading"
@@ -64,7 +65,7 @@
                     {{ getwAmount }}
                   </span>
                 </span>
-                {{ bcoin }}
+                {{ this.coinInfo.symbol }}
               </p>
               <p v-if="this.tips_amount" class="minifont">
                 <i v-if="this.wAmount.length > 0">{{ this.tips_amount }}</i>
@@ -148,10 +149,9 @@ export default {
   components: {
     BridgeFee,
   },
-  props: ["curNFT"],
+  props: ["curNFT", "coinInfo"],
   computed: mapState({
     baddr: "baddr",
-    bcoin: "bcoin",
     WBalance: "WBalance",
     current: "current",
     withdrawAddr(state) {
@@ -200,23 +200,27 @@ export default {
     };
   },
   watch: {
-    bcoin: async function () {
+    current: async function () {
       this.wAmount = "";
       this.getwAmount = "";
     },
+    deep: true,
     withdrawAddr: function (newV) {
       return newV;
     },
     wAmount: async function () {
       var wamount = this.wAmount;
-      console.log("wamount", this.bcoin, wamount);
       if (!wamount || isNaN(wamount) || wamount == "") {
         wamount = "0";
         console.log(wamount);
         this.tips_amount = this.$t("correct-amount");
         return false;
       }
-      const after_fee = await market.afterFee(this.bcoin, "withdraw", wamount);
+      const after_fee = await market.afterFee(
+        this.coinInfo.symbol,
+        "withdraw",
+        wamount
+      );
       console.log("afterfee", after_fee);
       if (!after_fee) {
         this.w_disabled = true;
@@ -240,7 +244,11 @@ export default {
       if (!wAmount || isNaN(wAmount)) {
         return false;
       }
-      const after_fee = await market.afterFee(this.bcoin, "withdraw", wAmount);
+      const after_fee = await market.afterFee(
+        this.coinInfo.symbol,
+        "withdraw",
+        wAmount
+      );
       if (!after_fee || isNaN(after_fee) || parseFloat(after_fee) <= 0) {
         return false;
       }
@@ -249,7 +257,7 @@ export default {
     withdraw: async function () {
       this.w_loading = true;
       const amount = this.wAmount;
-      const coin = this.bcoin;
+      const coin = this.coinInfo.symbol;
       if (await this.amount_valid(this.wAmount)) {
         try {
           const obj = this;
