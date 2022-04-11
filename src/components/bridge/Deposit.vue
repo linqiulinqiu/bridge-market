@@ -148,11 +148,10 @@ export default {
         return false;
       }
       const after_fee = await market.afterFee(
-        this.coinInfo.symbol,
+        this.coinInfo,
         "deposit",
         depamount
       );
-      console.log("aftrerfee", after_fee);
       if (!after_fee) {
         this.getAmount = "0";
         this.tips_amount = this.$t("tips-amount1");
@@ -163,7 +162,6 @@ export default {
         this.getAmount = after_fee;
         this.tips_amount = false;
       }
-      console.log("aft", after_fee, this.getAmount);
       return after_fee;
     },
   },
@@ -214,7 +212,6 @@ export default {
   display: inline-block;
   height: 42px;
   border-radius: 10px;
-  margin-top: 20px;
   line-height: 42px;
   padding-left: 10px;
 }
