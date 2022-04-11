@@ -1,8 +1,8 @@
 <template>
   <el-col id="redeem">
-    <el-col v-if="this.oldBalance">
+    <el-col v-if="this.oldBalance.gt(0)">
       <p>
-        {{ $t("old-balance") }}:{{ this.oldBalance}}
+        {{ $t("old-balance") }}:{{ this.obStr}}
       </p>
       <el-col>
         <el-input
@@ -65,11 +65,11 @@ export default {
   }),
   data() {
     return {
-      oldBalance: '',
+      oldBalance: ethers.BigNumber.from(0),
       oldToken: false,
       oldSymbol: false,
       newSymbol: false,
-      oBalance: false,
+      obStr: '',
       amount: 0,
       checking: false,
       redeeming: false,
@@ -87,15 +87,15 @@ export default {
         this.amount = 0;
       }
       const val = await tokens.parse(this.oldToken, newv);
-      const oldbal = await tokens.parse(this.oldToken, this.oldBalance)
+      const oldbal = await tokens.parse(this.oldToken, this.obStr)
       if (val.gt(oldbal)){
-          this.amount = this.oldBalance
+          this.amount = this.obStr
       }
     },500),
   },
   methods: {
     loadRedeems: async function () {
-      if(redeemCache.length==0){
+      if(Object.keys(redeemCache).length==0){
           const rds = await this.bsc.ctrs.tokenredeem.getRedeemList();
           for (let i in rds[0]) {
             const key = rds[1][i];
@@ -119,7 +119,10 @@ export default {
         this.newSymbol = await tokens.symbol(this.newToken)
         this.oldSymbol = await tokens.symbol(this.oldToken)
         const balance = await tokens.balance(this.oldToken)
-        this.oldBalance = await tokens.format(this.oldToken, balance)
+        this.oldBalance = balance
+        this.obStr = await tokens.format(this.oldToken, balance)
+      }else{
+          console.log('newToken not in cache', this.newToken, redeemCache)
       }
     },
     all: async function () {
