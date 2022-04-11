@@ -1,9 +1,15 @@
 <template>
   <el-col id="swapmain">
     <el-col v-if="'addr' in this.bsc">
-      <el-col>
+      <el-col id="swapTitle">
         <h3>Simple Swap</h3>
         <p>Trade common tokens (powered by PancakeSwap)</p>
+        <el-button
+          icon="el-icon-setting"
+          circle
+          size="medium"
+          @click="dia_slip = true"
+        ></el-button>
       </el-col>
       <el-col class="swap-input">
         <p>
@@ -85,6 +91,29 @@
         </ApproveButton>
       </el-col>
     </el-col>
+    <el-dialog title="Settings" :visible.sync="dia_slip">
+      <el-card id="slipcard">
+        <el-col class="cardheader">
+          <h3>Slippage tolenrance</h3>
+          <el-tooltip effect="light" placement="right-start">
+            <span slot="content" class="tooltip">
+              Your transation will revert if the price changes unfavorably by
+              more than this percentage.
+            </span>
+            <el-button icon="el-icon-question" circle></el-button>
+          </el-tooltip>
+        </el-col>
+        <el-col v-for="i in this.slippage" :key="i" id="slip-group">
+          <el-button
+            class="slipbtn"
+            @click="slipAmount = i"
+            :class="{ isActive: i == slipAmount }"
+            >{{ i / 100 }}%
+          </el-button>
+        </el-col>
+        <el-col v-if="transferOK"><p>Your transaction may fail.</p> </el-col>
+      </el-card>
+    </el-dialog>
   </el-col>
 </template>
 <script>
@@ -109,6 +138,10 @@ export default {
       }
       return true;
     },
+    transferOK() {
+      if (this.slipAmount == 20) return true;
+      return false;
+    },
   }),
   mounted: function () {
     this.load_wlist();
@@ -127,9 +160,16 @@ export default {
       to_amount: 0,
       to_val: 0,
       to_coin: "",
+      slipAmount: 100,
+      dia_slip: false,
+      slippage: [20, 50, 100, 200],
     };
   },
   watch: {
+    slipAmount: function (newnum, oldnum) {
+      console.log("slip amount ,old = ", oldnum, "newnum = ", newnum);
+      this.slipAmount = newnum;
+    },
     from_amount: debounce(async function (newa, olda) {
       await this.update_amounts();
     }, 500),
@@ -194,13 +234,15 @@ export default {
     },
     swap: async function () {
       this.swapping = true;
-      const minreq = this.to_val.sub(this.to_val.div(100));
+      console.log(this.slipAmount / 100, "%");
+      const minreq = this.to_val.sub(this.to_val.mul(this.slipAmount).div(100));
       console.log(
         "swapping params",
         this.from_coin,
         this.to_coin,
         this.from_val,
         minreq,
+        this.slipAmount,
         120
       );
       const obj = this;
@@ -252,6 +294,48 @@ export default {
 };
 </script>
 <style>
+.tooltip {
+  font-size: 14px;
+}
+#slip-group {
+  float: left;
+  margin-left: 20px;
+  width: 80px;
+}
+#slipcard .el-button {
+  color: #fff;
+  background: #373943;
+  float: left;
+  margin-left: 20px;
+}
+#slipcard {
+  padding: 20px 10px;
+}
+.cardheader .el-button {
+  border: none;
+  position: relative;
+  top: -25px;
+  right: -110px;
+}
+.isActive {
+  color: #38f2af !important;
+  background: #373943 !important;
+}
+#swapTitle {
+  position: relative;
+}
+#swapTitle .el-icon-setting {
+  color: #38f2af;
+  background: #373943;
+  font-size: 30px;
+}
+#swapTitle .el-button {
+  background: #373943;
+  border: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
 .clearfix {
   margin-left: 10px;
 }

@@ -185,7 +185,21 @@ ul li {
     color: #fff;
 }
 
+/* .el-dialog .el-card{} */
+.el-dialog__header .el-dialog__title {
+    color: #fff;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+    color: #fff;
+}
+
 .el-dialog__body .el-card {
     background-color: #373943;
     color: #fff;
+    min-height: 300px;
+}
+
+.el-icon-question {
+    font-size: 25px;
 }
