@@ -14,14 +14,14 @@ tokenInfoList[ethers.constants.AddressZero] = {
 let bsc = {}
 
 async function tokenInfo(ctraddr) {
-    if(ctraddr==""){
+    if (ctraddr == "") {
         ctraddr = ethers.constants.AddressZero
     }
-    if(typeof(ctraddr)=='object' && 'address' in ctraddr){
+    if (typeof (ctraddr) == 'object' && 'address' in ctraddr) {
         ctraddr = ctraddr.address
     }
     ctraddr = ethers.utils.getAddress(ctraddr)
-    if(!(ctraddr in tokenInfoList)){
+    if (!(ctraddr in tokenInfoList)) {
         const ctr = pbw.erc20_contract(ctraddr)
         let info = {
             symbol: "invalid",
@@ -51,10 +51,10 @@ async function formatToken(ctraddr, val) {
 }
 
 async function parseToken(ctraddr, val) {
-    if(!val){
+    if (!val) {
         val = 0
     }
-    if(typeof(val)!='string'){
+    if (typeof (val) != 'string') {
         val = val.toString()
     }
     const info = await tokenInfo(ctraddr)
@@ -63,30 +63,30 @@ async function parseToken(ctraddr, val) {
 
 async function balance(ctraddr, owner) {
     const info = await tokenInfo(ctraddr)
-    if(!owner){
+    if (!owner) {
         owner = bsc.addr
     }
-    if(info.ctr.address == ethers.constants.AddressZero){
+    if (info.ctr.address == ethers.constants.AddressZero) {
         return await bsc.provider.getBalance(owner)
     }
     return await info.ctr.balanceOf(owner)
 }
 
-async function allowance(ctraddr, spender){
+async function allowance(ctraddr, spender) {
     const info = await tokenInfo(ctraddr)
-    if(info.ctr.address == ethers.constants.AddressZero){
+    if (info.ctr.address == ethers.constants.AddressZero) {
         return ethers.constants.MaxUint256
     }
     return await info.ctr.allowance(bsc.addr, spender)
 }
 
-async function approve(ctraddr, spender){
+async function approve(ctraddr, spender) {
     const info = await tokenInfo(ctraddr)
-    if(info.ctr.address != ethers.constants.AddressZero){
+    if (info.ctr.address != ethers.constants.AddressZero) {
         const receipt = await info.ctr.approve(spender, await info.ctr.totalSupply())
         console.log('approve receipt', receipt)
-        if('hash' in receipt){
-            await bsc.provider.waitForTransaction(receipt.transactionHash)
+        if ('hash' in receipt) {
+            await bsc.provider.waitForTransaction(receipt.hash)
             return true
         }
         return false
@@ -94,7 +94,7 @@ async function approve(ctraddr, spender){
     return true
 }
 
-function setbsc(b){
+function setbsc(b) {
     bsc = b
 }
 
