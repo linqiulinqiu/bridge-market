@@ -1,9 +1,7 @@
 <template>
   <el-col id="redeem">
-    <el-col v-if="this.oldBalance">
-      <p>
-        {{ $t("old-balance") }}:{{ this.oldBalance}}
-      </p>
+    <el-col v-if="this.oldBalance.gt(0)">
+      <p>{{ $t("old-balance") }}:{{ this.obStr }}</p>
       <el-col>
         <el-input
           type="text"
@@ -39,7 +37,7 @@
       </p>
     </el-col>
     <el-col v-else>
-        <p>You don't have old token to upgrade</p>
+      <p>You don't have old token to upgrade</p>
     </el-col>
   </el-col>
 </template>
@@ -49,9 +47,9 @@ import ApproveButton from "../lib/ApproveButton.vue";
 import market from "../../market";
 import pbwallet from "pbwallet";
 import { ethers } from "ethers";
-import tokens from '../../tokens'
-import debounce from 'lodash/debounce';
-const redeemCache = {}; // new redeem created very unusual, so we assume it won't happen in a single web session
+import tokens from "../../tokens";
+import debounce from "lodash/debounce";
+const redeemCache = []; // new redeem created very unusual, so we assume it won't happen in a single web session
 
 export default {
   name: "Redeem",
@@ -60,12 +58,12 @@ export default {
     ApproveButton,
   },
   computed: mapState({
-      redeemBalance: "redeemBalance",
-      bcoin: "bcoin",
+    redeemBalance: "redeemBalance",
   }),
   data() {
     return {
-      oldBalance: '',
+      oldBalance: ethers.BigNumber.from(0),
+      obStr: '',
       oldToken: false,
       oldSymbol: false,
       newSymbol: false,
@@ -81,64 +79,63 @@ export default {
   watch: {
     newToken: debounce(function () {
       this.loadPair();
-    },500),
+    }, 500),
     amount: debounce(async function (newv, oldv) {
       if (!newv || isNaN(newv) || newv == "") {
         this.amount = 0;
       }
       const val = await tokens.parse(this.oldToken, newv);
-      const oldbal = await tokens.parse(this.oldToken, this.oldBalance)
-      if (val.gt(oldbal)){
-          this.amount = this.oldBalance
+      if (val.gt(this.oldBalance)) {
+        this.amount = await tokens.format(this.oldToken, this.oldBalance)
       }
-    },500),
+    }, 500),
+    oldBalance: async function(newv, oldv){
+      this.obStr = await tokens.format(this.oldToken, this.oldBalance)
+    }
   },
   methods: {
     loadRedeems: async function () {
-      if(redeemCache.length==0){
-          const rds = await this.bsc.ctrs.tokenredeem.getRedeemList();
-          for (let i in rds[0]) {
-            const key = rds[1][i];
-            if (!(key in redeemCache)) {
-              const ci = {};
-              ci.old_token = rds[0][i]
-              ci.new_token = rds[1][i]
-              redeemCache[key] = ci;
-            }
+      if (redeemCache.length == 0) {
+        const rds = await this.bsc.ctrs.tokenredeem.getRedeemList();
+        for (let i in rds[0]) {
+          const key = rds[1][i];
+          if (!(key in redeemCache)) {
+            const ci = {};
+            ci.old_token = rds[0][i];
+            ci.new_token = rds[1][i];
+            redeemCache[key] = ci;
           }
-          console.log("loadRedeems redeemCache", redeemCache);
-      }else{
-          console.log("redeemCache already load, skip loading:", redeemCache);
+        }
+        console.log("loadRedeems redeemCache", redeemCache);
+      } else {
+        console.log("redeemCache already load, skip loading:", redeemCache);
       }
       this.loadPair();
     },
     loadPair: async function () {
       if (this.newToken in redeemCache) {
         const pair = redeemCache[this.newToken];
-        this.oldToken = pair.old_token
-        this.newSymbol = await tokens.symbol(this.newToken)
-        this.oldSymbol = await tokens.symbol(this.oldToken)
-        const balance = await tokens.balance(this.oldToken)
-        this.oldBalance = await tokens.format(this.oldToken, balance)
+        console.log("pair", pair);
+        this.oldToken = pair.old_token;
+        this.newSymbol = await tokens.symbol(this.newToken);
+        this.oldSymbol = await tokens.symbol(this.oldToken);
+        this.oldBalance = await tokens.balance(this.oldToken);
       }
     },
     all: async function () {
-        const balance = await tokens.balance(this.oldToken)
-        this.amount = await tokens.format(this.oldToken, balance)
+      const balance = await tokens.balance(this.oldToken);
+      this.amount = await tokens.format(this.oldToken, balance);
     },
     redeem: async function () {
       this.redeeming = true;
       const obj = this;
       try {
-        const am = tokens.parse(this.oldToken, this.amount)
-        const res = await this.bsc.ctrs.tokenredeem.redeem(
-          this.oldToken,
-          am
-        );
+        const am = tokens.parse(this.oldToken, this.amount);
+        const res = await this.bsc.ctrs.tokenredeem.redeem(this.oldToken, am);
         market.waitEventDone(res, async function (evt) {
           obj.redeeming = false;
-          obj.amount = 0
-          this.loadPair()   // TODO: maybe a notice could be better after redeem
+          obj.amount = 0;
+          obj.loadPair(); // TODO: maybe a notice could be better after redeem
         });
       } catch (e) {
         console.log("redeem err", e);

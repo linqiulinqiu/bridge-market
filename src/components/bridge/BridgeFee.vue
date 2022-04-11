@@ -7,11 +7,11 @@
         {{ $t("beyond-limit") }}<br />
         {{ $t("dep-rate") }}{{ this.dFeeRate / 100 }}%，{{
           $t("dep-minFee")
-        }}：{{ this.dFee }}{{ bcoin }}
+        }}：{{ this.dFee }}{{ this.coinInfo.symbol }}
         <br />
         {{ $t("w-rate") }}：{{ this.wFeeRate / 100 }}%，{{ $t("w-minFee") }}：{{
           this.wFee
-        }}{{ bcoin }}
+        }}{{ this.coinInfo.symbol }}
         <br />
         rebindFee:{{ this.reBindfee.amount }} {{ this.reBindfee.symbol }}
       </p>
@@ -29,8 +29,8 @@
 import { mapState } from "vuex";
 import market from "../../market";
 export default {
+  props: ["coinInfo"],
   computed: mapState({
-    bcoin: "bcoin",
     baddr: "baddr",
   }),
   data() {
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     getAmountLimit: async function () {
-      const coin = this.bcoin;
+      const coin = this.coinInfo.symbol;
       const amount = await market.getLimit(coin);
       this.depAmount = (amount[1] - amount[0]) / 2;
       this.wAmount = amount[0];

@@ -12,7 +12,7 @@
             suffix-icon="el-icon-edit"
             v-model.trim="depAmount"
           />
-          <span>{{ bcoin }}</span>
+          <span>{{ this.coinInfo.symbol }}</span>
         </p>
         <span class="follow">{{ $t("addr") }} ：</span>
         <el-col>
@@ -38,7 +38,7 @@
               </span>
               <span v-else> &nbsp;&nbsp;</span>
             </span>
-            w{{ bcoin }}，{{ $t("inbsc") }}。
+            {{ this.coinInfo.bsymbol }}，{{ $t("inbsc") }}。
           </p>
           <p v-if="this.tips_amount">
             <i v-if="this.depAmount.length > 0">{{ this.tips_amount }}</i>
@@ -46,13 +46,13 @@
         </el-col>
       </el-col>
       <el-col v-else>
-        <el-col v-if="this.bAbles[bcoin]">
+        <el-col v-if="this.bables">
           <el-button
             type="primary"
             class="getdeposte"
             @click="getDepositAddr"
             :loading="getDep_loading"
-            >{{ $t("dep-addr", { bcoin: bcoin }) }}
+            >{{ $t("dep-addr", { bcoin: this.coinInfo.symbol }) }}
           </el-button>
         </el-col>
         <el-col v-else>
@@ -103,10 +103,9 @@ export default {
   components: {
     BridgeFee,
   },
-  props: ["curNFT"],
+  props: ["curNFT", "coinInfo"],
   computed: mapState({
     baddr: "baddr",
-    bcoin: "bcoin",
     current: "current",
     depositAddr(state) {
       const pbxs = this.curNFT.pbxs;
@@ -125,19 +124,19 @@ export default {
   }),
   data() {
     return {
-      bAbles: {
-        XCC: true,
-        XCH: true,
-        HDD: true,
-      },
+      coinlist: {},
       depAmount: "",
       getAmount: "",
       tips_amount: false,
       getDep_loading: false,
+      bables: true,
     };
   },
+  mounted() {
+    this.bindables();
+  },
   watch: {
-    bcoin: function (newCoin, old) {
+    current: function (newCoin, old) {
       this.depAmount = "";
       this.getAmount = "";
     },
@@ -148,8 +147,11 @@ export default {
         this.tips_amount = this.$t("correct-amount");
         return false;
       }
-      const after_fee = await market.afterFee(this.bcoin, "deposit", depamount);
-      console.log("aftrerfee", after_fee);
+      const after_fee = await market.afterFee(
+        this.coinInfo,
+        "deposit",
+        depamount
+      );
       if (!after_fee) {
         this.getAmount = "0";
         this.tips_amount = this.$t("tips-amount1");
@@ -160,11 +162,17 @@ export default {
         this.getAmount = after_fee;
         this.tips_amount = false;
       }
-      console.log("aft", after_fee, this.getAmount);
       return after_fee;
     },
   },
   methods: {
+    bindables: async function () {
+      this.bables = await market.getBindables(this.coinInfo.index);
+      const count = parseInt(this.bables);
+      console.log("count", count);
+      if (count > 0) return true;
+      return false;
+    },
     onCopy: function (e) {
       this.$message.success(this.$t("copy-ok"));
     },
@@ -180,7 +188,7 @@ export default {
         if (res == false) {
           console.log("存款地址没有了");
           this.$message(this.$t("getaddr"));
-          this.bAbles[this.bcoin] = false;
+          this.bables = false;
         }
         const obj = this;
         await market.waitEventDone(res, async function (evt) {
@@ -204,7 +212,6 @@ export default {
   display: inline-block;
   height: 42px;
   border-radius: 10px;
-  margin-top: 20px;
   line-height: 42px;
   padding-left: 10px;
 }

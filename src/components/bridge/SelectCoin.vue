@@ -16,27 +16,29 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import pbwallet from "pbwallet";
+import market from "../../market";
 export default {
   computed: mapState({
-    bcoin: "bcoin",
     current: "current",
     addclass: function (state) {
       if (state.current.coinType) return state.current.coinType;
     },
   }),
+  mounted() {
+    this.loadcoin();
+  },
   data() {
-    const coinMap = [];
-    for (let i = 1; i <= 3; i++) {
-      coinMap.push(pbwallet.wcoin_info(i));
-    }
     return {
-      coinMap: coinMap,
+      coinMap: {},
     };
   },
   methods: {
     changeCoin: function (item) {
       this.$store.commit("setCurrentCoinType", item.index);
+    },
+    loadcoin: function () {
+      this.coinMap = market.loadCoinlist();
+      console.log("this.coinMap", this.coinMap);
     },
   },
 };

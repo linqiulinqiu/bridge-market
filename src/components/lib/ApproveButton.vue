@@ -18,7 +18,7 @@
 </template>
 <script>
 import { ethers } from "ethers";
-import tokens from '../../tokens'
+import tokens from "../../tokens";
 
 export default {
   name: "ApproveButton",
@@ -37,14 +37,16 @@ export default {
     token(newt, oldt) {
       this.checkAllowance();
     },
-    minReq(newm, oldm){
+    minReq(newm, oldm) {
       this.checkAllowance();
-    }
+    },
   },
   methods: {
     checkAllowance: async function () {
-      this.checking = true
-      const allow = await tokens.allowance(this.token, this.spender)
+      this.checking = true;
+      console.log("token allowance", this.token, this.spender);
+      const allow = await tokens.allowance(this.token, this.spender);
+      console.log("allow", allow, allow.gte(this.minReq), this.minReq);
       if (allow && allow.gte(this.minReq)) {
         this.needApprove = false;
       } else {
@@ -55,8 +57,8 @@ export default {
     approve: async function () {
       try {
         this.approving = true;
-        const done = await tokens.approve(this.token, this.spender)
-        if(done){
+        const done = await tokens.approve(this.token, this.spender);
+        if (done) {
           await this.checkAllowance();
         }
       } catch (e) {

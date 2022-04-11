@@ -11,6 +11,18 @@ const ptAddrs = {
     'BNB': ethers.constants.AddressZero,
     // "USDT": bsc.ctrs.usdt.address
 }
+var coinlist = {}
+
+function loadCoinlist() {
+    const coinSb = pbwallet.wcoin_list("index")
+    const clist = {}
+    for (let i in coinSb) {
+        clist[coinSb[i]] = pbwallet.wcoin_info(coinSb[i], "index")
+    }
+    console.log("coinlist", clist)
+    coinlist = clist
+    return coinlist
+}
 
 function coinContract(coin) {
     const wcoin = 'w' + coin.toLowerCase()
@@ -18,36 +30,22 @@ function coinContract(coin) {
 }
 
 async function ListenToWCoin(commit) {
-    let wBalance = {
-        XCC: '',
-        HDD: '',
-        XCH: ""
-    }
-    var ctr_xcc = coinContract("XCC")
-    var ctr_xch = coinContract("XCH")
-    var ctr_hdd = coinContract("HDD")
-
-    async function updateXCCBalance(evt) {
-        const xccbalance = await ctr_xcc.balanceOf(bsc.addr)
-        wBalance.XCC = await keeper.formatToken(ctr_xcc.address, xccbalance)
+    const coinlist = loadCoinlist()
+    const wBalance = {}
+    var ctr = {}
+    async function updateBalnce() {
+        for (let i in coinlist) {
+            ctr[coinlist[i].ctrname] = bsc.ctrs[coinlist[i].ctrname]
+            const balance = await ctr[coinlist[i].ctrname].balanceOf(bsc.addr)
+            wBalance[i] = await keeper.formatToken(ctr[coinlist[i].ctrname].address, balance)
+        }
+        console.log("balance", wBalance)
         commit('setWBalance', wBalance)
     }
-    async function updateHDDBalance(evt) {
-        const hddbalance = await ctr_hdd.balanceOf(bsc.addr)
-        wBalance.HDD = await keeper.formatToken(ctr_hdd.address, hddbalance)
-        commit('setWBalance', wBalance)
+    await updateBalnce()
+    for (let i in ctr) {
+        ctr[i].on(ctr[i].filters.Transfer, updateBalnce)
     }
-    async function updateXCHBalance(evt) {
-        const xchbalance = await ctr_xch.balanceOf(bsc.addr)
-        wBalance.XCH = await keeper.formatToken(ctr_xch.address, xchbalance)
-        commit('setWBalance', wBalance)
-    }
-    await updateXCCBalance()
-    await updateHDDBalance()
-    await updateXCHBalance()
-    ctr_hdd.on(ctr_hdd.filters.Transfer, updateHDDBalance)
-    ctr_xcc.on(ctr_xcc.filters.Transfer, updateXCCBalance)
-    ctr_xch.on(ctr_xch.filters.Transfer, updateXCHBalance)
 }
 
 
@@ -288,19 +286,21 @@ async function retreatNFT(id) {
     const res = await bsc.ctrs.pbmarket.offSale(bsc.ctrs.pbt.address, id)
     return res
 }
-async function afterFee(coin, mode, amount) {
-    const ctr = coinContract(coin)
-    const fees = await getfees(coin)
+async function afterFee(coinInfo, mode, amount) {
+    const ctr = bsc.ctrs[coinInfo.ctrname]
+    const fees = await getfees(coinInfo.symbol)
     const nowfee = {}
     amount = await keeper.parseToken(ctr.address, amount)
+    console.log("string amount", amount)
+
     if (mode == 'deposit') {
         nowfee.min = await keeper.parseToken(ctr.address, fees.depositFee)
         nowfee.rate = fees.depositFeeRate
     } else if (mode == 'withdraw') {
         nowfee.min = await keeper.parseToken(ctr.address, fees.withdrawFee)
         nowfee.rate = fees.withdrawFeeRate
-        console.log("after fee", nowfee)
-        if (amount.gt(await keeper.parseToken(ctr.address, store.state.WBalance[coin]))) {
+        console.log("12333333333333333", nowfee)
+        if (amount.gt(await keeper.parseToken(ctr.address, store.state.WBalance[coinInfo.index]))) {
             return "fund"
         }
     } else {
@@ -313,14 +313,15 @@ async function afterFee(coin, mode, amount) {
     if (amount.lte(fee)) {
         return false
     }
-    return await keeper.formatToken(ctr.address, amount.sub(fee))
+    const f = await keeper.formatToken(ctr.address, amount.sub(fee))
+    console.log("return in afterFee", f)
+    return f
 }
 async function getfees(coin) {
     const ctr = coinContract(coin)
     let fee = {}
     const depfee = await ctr.depositFee()
     const wdfee = await ctr.withdrawFee()
-    console.log("fee", depfee, wdfee)
     fee.depositFee = await keeper.formatToken(ctr.address, depfee[1])
     fee.depositFeeRate = depfee[0]
     fee.withdrawFee = await keeper.formatToken(ctr.address, wdfee[1])
@@ -337,13 +338,15 @@ async function getLimit(coin) {
     amount = [amountMin, amountMax]
     return amount
 }
+
 async function watchToken(coin) {
     const ctr = coinContract(coin)
     if (!bsc.provider) return false
-    var img_name = 'w' + coin.toLowerCase() + '-logo.svg'
+    const cinfo = pbwallet.wcoin_info(coin, 'symbol')
+    var img_name = cinfo.ctrname + '-logo.svg'
     const options = {
         address: ctr.address,
-        symbol: "w" + coin,
+        symbol: cinfo.bsymbol,
         decimals: await ctr.decimals(),
         image: "https://www.plotbridge.net/img/" + img_name,
     }
@@ -383,4 +386,5 @@ export default {
     getLimit: getLimit,
     getfees: getfees,
     getmintfee: getmintfee,
+    loadCoinlist: loadCoinlist
 }

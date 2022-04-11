@@ -35,7 +35,7 @@
         {{ $t("no-nft") }}
       </el-col>
     </el-col>
-    <el-col class="bottom-box">
+    <el-col class="bottom-box" v-if="isMarket">
       <router-link class="bottom" :to="this.market"
         >{{ $t("to-market") }}
       </router-link>
@@ -74,6 +74,13 @@ export default {
         Object.entries(state.myList).slice(start, down)
       );
       return listPage;
+    },
+    isMarket() {
+      if (this.$route.path == "/Market") {
+        return false;
+      } else {
+        return true;
+      }
     },
   }),
   data() {

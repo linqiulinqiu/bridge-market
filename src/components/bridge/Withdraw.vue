@@ -12,7 +12,8 @@
             }}
           </p>
           <p>
-            <span>{{ $t("w-addr", { bcoin: bcoin }) }} :</span> <br />
+            <span>{{ $t("w-addr", { bcoin: this.coinInfo.symbol }) }} :</span>
+            <br />
             <span class="tips">
               {{ $t("correct-addr") }}
             </span>
@@ -35,7 +36,7 @@
             <el-col id="burn-amount">
               {{ $t("burn") }} :
               <el-input
-                v-model.trim="wAmount"
+                v-model="wAmount"
                 class="amount-input"
                 clearable
                 maxlength="20"
@@ -44,10 +45,10 @@
               <el-button
                 type="primary"
                 size="small"
-                @click="wAmount = WBalance[bcoin]"
+                @click="wAmount = WBalance[this.coinInfo.index]"
                 >{{ $t("all") }}
               </el-button>
-              W{{ bcoin }}，
+              {{ this.coinInfo.bsymbol }}，
               <el-button
                 type="primary"
                 :loading="w_loading"
@@ -64,7 +65,7 @@
                     {{ getwAmount }}
                   </span>
                 </span>
-                {{ bcoin }}
+                {{ this.coinInfo.symbol }}
               </p>
               <p v-if="this.tips_amount" class="minifont">
                 <i v-if="this.wAmount.length > 0">{{ this.tips_amount }}</i>
@@ -144,14 +145,15 @@
 import { mapState } from "vuex";
 import market from "../../market";
 import BridgeFee from "./BridgeFee.vue";
+import debounce from "lodash/debounce";
+
 export default {
   components: {
     BridgeFee,
   },
-  props: ["curNFT"],
+  props: ["curNFT", "coinInfo"],
   computed: mapState({
     baddr: "baddr",
-    bcoin: "bcoin",
     WBalance: "WBalance",
     current: "current",
     withdrawAddr(state) {
@@ -200,27 +202,27 @@ export default {
     };
   },
   watch: {
-    bcoin: async function () {
+    current: async function () {
       this.wAmount = "";
       this.getwAmount = "";
     },
+    deep: true,
     withdrawAddr: function (newV) {
       return newV;
     },
-    wAmount: async function () {
-      var wamount = this.wAmount;
-      console.log("wamount", this.bcoin, wamount);
-      if (!wamount || isNaN(wamount) || wamount == "") {
-        wamount = "0";
-        console.log(wamount);
+    wAmount: debounce(async function (amount) {
+      if (!amount || isNaN(amount) || amount == "") {
+        amount = "0";
         this.tips_amount = this.$t("correct-amount");
         return false;
       }
-      const after_fee = await market.afterFee(this.bcoin, "withdraw", wamount);
-      console.log("afterfee", after_fee);
+      const after_fee = await market.afterFee(
+        this.coinInfo,
+        "withdraw",
+        amount
+      );
       if (!after_fee) {
         this.w_disabled = true;
-
         this.getwAmount = "";
         this.tips_amount = this.$t("tips-amount1");
       } else if (after_fee == "fund") {
@@ -233,14 +235,18 @@ export default {
         this.w_disabled = false;
       }
       return after_fee;
-    },
+    }, 150),
   },
   methods: {
     amount_valid: async function (wAmount) {
       if (!wAmount || isNaN(wAmount)) {
         return false;
       }
-      const after_fee = await market.afterFee(this.bcoin, "withdraw", wAmount);
+      const after_fee = await market.afterFee(
+        this.coinInfo.symbol,
+        "withdraw",
+        wAmount
+      );
       if (!after_fee || isNaN(after_fee) || parseFloat(after_fee) <= 0) {
         return false;
       }
@@ -249,7 +255,7 @@ export default {
     withdraw: async function () {
       this.w_loading = true;
       const amount = this.wAmount;
-      const coin = this.bcoin;
+      const coin = this.coinInfo.symbol;
       if (await this.amount_valid(this.wAmount)) {
         try {
           const obj = this;
@@ -285,7 +291,6 @@ export default {
       const cointy = this.current.coinType;
       const id = this.current.pbtId;
       const addr = this.wAddr.toString();
-      const obj = this;
       try {
         let rebind = false;
         if (this.withdrawAddr != false) {
@@ -298,9 +303,10 @@ export default {
           this.bind_loading = false;
           this.$message(this.$t("correct-amount"));
         }
-        // await market.waitEventDone(res, async function (evt) {
-        obj.bind_loading = false;
-        // });
+        const obj = this;
+        await market.waitEventDone(res, async function (evt) {
+          obj.bind_loading = false;
+        });
       } catch (e) {
         this.bind_loading = false;
         console.log("bind withdraw addr err", e.message);
