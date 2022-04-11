@@ -76,7 +76,7 @@ export default {
       return listPage;
     },
     isMarket() {
-      if (tihs.$route.path == "/Market") {
+      if (this.$route.path == "/Market") {
         return false;
       } else {
         return true;
