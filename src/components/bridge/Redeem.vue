@@ -1,8 +1,8 @@
 <template>
   <el-col id="redeem">
-    <el-col>
-      <p v-if="this.curci.oldBalance">
-        {{ $t("old-balance") }}:{{ this.oldBalanceStr }}
+    <el-col v-if="this.oldBalance">
+      <p>
+        {{ $t("old-balance") }}:{{ this.oldBalance}}
       </p>
       <el-col>
         <el-input
@@ -15,9 +15,9 @@
 
         <ApproveButton
           :bsc="bsc"
-          :token="this.curci.oldctr"
+          :token="this.oldToken"
           :spender="this.bsc.ctrs.tokenredeem.address"
-          :min-req="this.curci.oldBalance"
+          :min-req="this.oldBalance"
         >
           <el-button @click="all">{{ $t("all") }}</el-button>
           <el-button @click="redeem" type="primary" :loading="redeeming">{{
@@ -32,11 +32,14 @@
         {{
           $t("rd-rate", {
             amount: parseFloat(this.amount),
-            oldsymbol: this.curci.oldSymbol,
-            newsymbol: this.curci.newSymbol,
+            oldsymbol: this.oldSymbol,
+            newsymbol: this.newSymbol,
           })
         }}
       </p>
+    </el-col>
+    <el-col v-else>
+        <p>You don't have old token to upgrade</p>
     </el-col>
   </el-col>
 </template>
@@ -46,8 +49,9 @@ import ApproveButton from "../lib/ApproveButton.vue";
 import market from "../../market";
 import pbwallet from "pbwallet";
 import { ethers } from "ethers";
-import keeper from "pbweb-nftkeeper";
-// const redeemCache = {}; // new redeem created very unusual, so we assume it won't happen in a single web session
+import tokens from '../../tokens'
+import debounce from 'lodash/debounce';
+const redeemCache = {}; // new redeem created very unusual, so we assume it won't happen in a single web session
 
 export default {
   name: "Redeem",
@@ -55,99 +59,90 @@ export default {
   components: {
     ApproveButton,
   },
-  computed: {
-    ...mapState({
+  computed: mapState({
       redeemBalance: "redeemBalance",
       bcoin: "bcoin",
-    }),
-    oldBalanceStr() {
-      if (this.newToken in this.redeemCache) {
-        const ci = this.redeemCache[this.newToken];
-        const num = ethers.utils.formatUnits(ci.oldBalance, ci.decimals);
-        const symbol = ci.oldSymbol;
-        return `${num} ${symbol}`;
-      }
-      return false;
-    },
-  },
+  }),
   data() {
     return {
+      oldBalance: '',
+      oldToken: false,
+      oldSymbol: false,
+      newSymbol: false,
       oBalance: false,
-      minReq: 0,
       amount: 0,
-      curci: { oldctr: false },
+      checking: false,
       redeeming: false,
-      redeemCache: {},
     };
   },
   mounted() {
     this.loadRedeems();
   },
   watch: {
-    deep: true,
-    newToken: function () {
-      this.updateOldBalance();
-    },
-    amount: async function (newv, oldv) {
-      let reAmount = this.amount;
-      if (!reAmount || isNaN(reAmount) || reAmount == "") {
-        return false;
+    newToken: debounce(function () {
+      this.loadPair();
+    },500),
+    amount: debounce(async function (newv, oldv) {
+      if (!newv || isNaN(newv) || newv == "") {
+        this.amount = 0;
       }
-      if ("oldBalance" in this.curci) {
-        const newb = await keeper.parseToken(this.curci.oldctr.address, newv);
-        if (newb.gt(this.curci.oldBalance)) {
-          reAmount = await keeper.formatToken(this.curci.oldctr.address, newb);
-          return reAmount;
-        }
+      const val = await tokens.parse(this.oldToken, newv);
+      const oldbal = await tokens.parse(this.oldToken, this.oldBalance)
+      if (val.gt(oldbal)){
+          this.amount = this.oldBalance
       }
-    },
+    },500),
   },
   methods: {
     loadRedeems: async function () {
-      const rds = await this.bsc.ctrs.tokenredeem.getRedeemList();
-      for (let i in rds[0]) {
-        const key = rds[1][i];
-        if (!(key in this.redeemCache)) {
-          const ci = {};
-          const oldctr = pbwallet.erc20_contract(rds[0][i]);
-          const newctr = pbwallet.erc20_contract(rds[1][i]);
-          ci.oldBalance = await oldctr.balanceOf(this.bsc.addr);
-          ci.decimals = await oldctr.decimals();
-          ci.oldSymbol = await oldctr.symbol();
-          ci.oldctr = oldctr;
-          ci.newSymbol = await newctr.symbol();
-          this.redeemCache[key] = ci;
-        }
+      if(redeemCache.length==0){
+          const rds = await this.bsc.ctrs.tokenredeem.getRedeemList();
+          for (let i in rds[0]) {
+            const key = rds[1][i];
+            if (!(key in redeemCache)) {
+              const ci = {};
+              ci.old_token = rds[0][i]
+              ci.new_token = rds[1][i]
+              redeemCache[key] = ci;
+            }
+          }
+          console.log("loadRedeems redeemCache", redeemCache);
+      }else{
+          console.log("redeemCache already load, skip loading:", redeemCache);
       }
-      console.log("loadRedeems redeemCache", this.redeemCache);
-      this.updateOldBalance();
+      this.loadPair();
     },
-    updateOldBalance: function () {
-      if (this.newToken in this.redeemCache) {
-        this.curci = this.redeemCache[this.newToken];
+    loadPair: async function () {
+      if (this.newToken in redeemCache) {
+        const pair = redeemCache[this.newToken];
+        this.oldToken = pair.old_token
+        this.newSymbol = await tokens.symbol(this.newToken)
+        this.oldSymbol = await tokens.symbol(this.oldToken)
+        const balance = await tokens.balance(this.oldToken)
+        this.oldBalance = await tokens.format(this.oldToken, balance)
       }
     },
-    all: function () {
-      this.amount = ethers.utils.formatUnits(
-        this.curci.oldBalance,
-        this.curci.decimals
-      );
+    all: async function () {
+        const balance = await tokens.balance(this.oldToken)
+        this.amount = await tokens.format(this.oldToken, balance)
     },
     redeem: async function () {
-      this.redeem_loading = true;
+      this.redeeming = true;
       const obj = this;
       try {
-        const am = ethers.utils.parseUnits(this.amount, this.curci.decimals);
+        const am = tokens.parse(this.oldToken, this.amount)
         const res = await this.bsc.ctrs.tokenredeem.redeem(
-          this.curci.oldctr.address,
+          this.oldToken,
           am
         );
         market.waitEventDone(res, async function (evt) {
-          obj.redeem_loading = false;
+          obj.redeeming = false;
+          obj.amount = 0
+          this.loadPair()   // TODO: maybe a notice could be better after redeem
         });
       } catch (e) {
         console.log("redeem err", e);
-        this.redeem_loading = false;
+        this.redeeming = false;
       }
 
       //TODO: watch tokenRedeem events
