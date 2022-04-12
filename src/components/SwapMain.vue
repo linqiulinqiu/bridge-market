@@ -2,14 +2,16 @@
   <el-col id="swapmain">
     <el-col v-if="'addr' in this.bsc">
       <el-col id="swapTitle">
-        <h3>{{$t('s-swap')}}</h3>
-        <p>{{$t('s-swap1')}}</p>
-        <el-button
-          icon="el-icon-setting"
-          circle
-          size="medium"
-          @click="dia_slip = true"
-        ></el-button>
+        <h3>{{ $t("s-swap") }}</h3>
+        <p>{{ $t("s-swap1") }}</p>
+        <el-tooltip effect="light" content="setting">
+          <el-button
+            icon="el-icon-setting"
+            circle
+            size="medium"
+            @click="dia_slip = true"
+          ></el-button>
+        </el-tooltip>
       </el-col>
       <el-col class="swap-input">
         <p>
@@ -329,6 +331,9 @@ export default {
   background: #373943;
   font-size: 30px;
 }
+#swapTitle .el-icon-setting:hover {
+  color: #fff;
+}
 #swapTitle .el-button {
   background: #373943;
   border: none;
@@ -347,10 +352,15 @@ export default {
   width: 40px;
   height: 40px;
   margin-top: 17px;
+  background-color: #2b2c33;
+  border: none;
+  color: #38f2af;
+  font-size: 30px;
+  font-weight: 400;
 }
 #swap-exc .el-button .el-icon-bottom::before {
   display: inline-block;
-  font-size: 30px;
+  /* font-size: 30px; */
 }
 #swapmain .el-input-group__append {
   color: #fff;
