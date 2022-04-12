@@ -102,10 +102,10 @@ async function mintPBT() {
         return text
     }
 }
-async function burnWcoin(amount, coin) {
-    const ctr = coinContract(coin)
+async function burnWcoin(amount, coinInfo) {
+    const ctr = bsc.ctrs[coinInfo.ctrname]
     amount = await keeper.parseToken(ctr.address, amount)
-    const wBalance = await keeper.parseToken(ctr.address, store.state.WBalance[coin])
+    const wBalance = await keeper.parseToken(ctr.address, store.state.WBalance[coinInfo.index])
     if (amount.gt(wBalance)) {
         return false
     }
@@ -288,18 +288,15 @@ async function retreatNFT(id) {
 }
 async function afterFee(coinInfo, mode, amount) {
     const ctr = bsc.ctrs[coinInfo.ctrname]
-    const fees = await getfees(coinInfo.symbol)
+    const fees = await getfees(coinInfo.ctrname)
     const nowfee = {}
     amount = await keeper.parseToken(ctr.address, amount)
-    console.log("string amount", amount)
-
     if (mode == 'deposit') {
         nowfee.min = await keeper.parseToken(ctr.address, fees.depositFee)
         nowfee.rate = fees.depositFeeRate
     } else if (mode == 'withdraw') {
         nowfee.min = await keeper.parseToken(ctr.address, fees.withdrawFee)
         nowfee.rate = fees.withdrawFeeRate
-        console.log("12333333333333333", nowfee)
         if (amount.gt(await keeper.parseToken(ctr.address, store.state.WBalance[coinInfo.index]))) {
             return "fund"
         }
@@ -317,8 +314,8 @@ async function afterFee(coinInfo, mode, amount) {
     console.log("return in afterFee", f)
     return f
 }
-async function getfees(coin) {
-    const ctr = coinContract(coin)
+async function getfees(ctrname) {
+    const ctr = bsc.ctrs[ctrname]
     let fee = {}
     const depfee = await ctr.depositFee()
     const wdfee = await ctr.withdrawFee()
@@ -330,8 +327,8 @@ async function getfees(coin) {
     return fee
 
 }
-async function getLimit(coin) {
-    const ctr = coinContract(coin)
+async function getLimit(ctrname) {
+    const ctr = bsc.ctrs[ctrname]
     let amount = await ctr.cWAmount()
     const amountMax = await keeper.formatToken(ctr.address, amount[1])
     const amountMin = await keeper.formatToken(ctr.address, amount[0])

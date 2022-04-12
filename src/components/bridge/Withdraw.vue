@@ -45,7 +45,7 @@
               <el-button
                 type="primary"
                 size="small"
-                @click="wAmount = WBalance[this.coinInfo.index]"
+                @click="wAmount = WBalance[coinInfo.index]"
                 >{{ $t("all") }}
               </el-button>
               {{ this.coinInfo.bsymbol }}，
@@ -57,19 +57,20 @@
                 >{{ $t("withdraw") }}
               </el-button>
             </el-col>
-            <el-col>
+            <el-col class="after-get">
               <p>
                 {{ $t("get") }}
-                <span class="get-amount">
-                  <span v-if="this.wAmount != ''">
+                <span>
+                  <span v-if="this.wAmount != ''" class="after-amount font">
                     {{ getwAmount }}
                   </span>
+                  <span v-else> --- </span>
                 </span>
                 {{ this.coinInfo.symbol }}
               </p>
-              <p v-if="this.tips_amount" class="minifont">
+              <el-col v-if="this.tips_amount" class="minifont">
                 <i v-if="this.wAmount.length > 0">{{ this.tips_amount }}</i>
-              </p>
+              </el-col>
             </el-col>
           </el-col>
         </el-col>
@@ -243,7 +244,7 @@ export default {
         return false;
       }
       const after_fee = await market.afterFee(
-        this.coinInfo.symbol,
+        this.coinInfo,
         "withdraw",
         wAmount
       );
@@ -255,11 +256,10 @@ export default {
     withdraw: async function () {
       this.w_loading = true;
       const amount = this.wAmount;
-      const coin = this.coinInfo.symbol;
       if (await this.amount_valid(this.wAmount)) {
         try {
           const obj = this;
-          const res = await market.burnWcoin(amount, coin);
+          const res = await market.burnWcoin(amount, this.coinInfo);
           await market.waitEventDone(res, async function (evt) {
             obj.w_loading = false;
           });
@@ -316,6 +316,10 @@ export default {
 };
 </script>
 <style>
+.after-amount {
+  color: #38f2af;
+  margin: 0px 10px;
+}
 #withdraw {
   font-size: 20px;
 }
