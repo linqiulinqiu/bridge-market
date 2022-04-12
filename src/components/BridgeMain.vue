@@ -12,11 +12,11 @@
     </el-col>
     <el-col v-else>
       <el-col v-if="!current.pbtId">
-        <h1>{{ $t("openNFT") }}</h1>
+        <h3>{{ $t("openNFT") }}</h3>
       </el-col>
       <el-col v-else>
         <el-col v-if="!current.coinType">
-          <h4>{{ $t("select-coin") }}</h4>
+          <h3>{{ $t("select-coin") }}</h3>
         </el-col>
         <el-col v-else>
           <el-col id="balance" :lg="12">
