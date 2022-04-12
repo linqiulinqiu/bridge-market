@@ -340,13 +340,26 @@ async function getLimit(coin) {
 }
 
 async function watchToken(coin) {
-    const ctr = coinContract(coin)
     if (!bsc.provider) return false
     const cinfo = pbwallet.wcoin_info(coin, 'symbol')
-    var img_name = cinfo.ctrname + '-logo.svg'
+    let ctr = {}
+    let img_name = ''
+    console.log("cinfo", cinfo)
+    if (cinfo) {
+        ctr = bsc.ctrs[cinfo.ctrname]
+        img_name = cinfo.ctrname + '-logo.svg'
+    } else {
+        const lowCoin = coin.toLowerCase()
+        console.log("lowCoin", lowCoin, bsc.ctrs)
+        if (lowCoin in bsc.ctrs) {
+            ctr = bsc.ctrs[lowCoin]
+            img_name = lowCoin + '-logo.svg'
+        }
+    }
+    console.log("img-name=", img_name, "ctr=", ctr)
     const options = {
         address: ctr.address,
-        symbol: cinfo.bsymbol,
+        symbol: coin,
         decimals: await ctr.decimals(),
         image: "https://www.plotbridge.net/img/" + img_name,
     }

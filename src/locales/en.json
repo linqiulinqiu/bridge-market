@@ -16,6 +16,7 @@
     "b-guide1":"Firstly,select a NFT and a coin.",
     "b-guide2":"Get deposite address and bind withdraw address.",
     "b-guide3":"After purchasing NFT, please check whether there is a withdrawal address. If so, please rebind your withdrawal address.",
+    "bsc":"BSC wallet address",
 
     "cancel":"Cancel",
     "connect":"Connect Wallet",

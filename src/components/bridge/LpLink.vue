@@ -3,6 +3,7 @@
     <el-button class="lp-style">
       <router-link to="/Swap">Buy PBP</router-link>
     </el-button>
+    <el-button class="lp-style" @click="watchPBP">Add PBP To Wallet</el-button>
     <el-button v-if="this.coinInfo" class="lp-style">
       <router-link to="/Swap">Buy {{ this.coinInfo.bsymbol }}</router-link>
 
@@ -21,6 +22,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import market from "../../market";
 
 export default {
   name: "LPLink",
@@ -35,19 +37,25 @@ export default {
       pre_link: "https://pancake.kiemtienonline360.com/#/",
     };
   },
+  methods: {
+    watchPBP: async function () {
+      await market.watchToken("PBP");
+    },
+  },
 };
 </script>
 <style scoped>
-.lp-style {
+#lplink .lp-style {
   background-color: #2b2c33;
   border: 1px solid #38f2af;
   border-radius: 5px;
+  color: #38f2af;
 }
 .lp-style a {
   color: #38f2af;
   text-decoration: none;
 }
-.lp-style:hover {
+#lplink .lp-style:hover {
   background-color: #373943;
 }
 </style>

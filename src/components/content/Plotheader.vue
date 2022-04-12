@@ -46,10 +46,12 @@
         >
         <span v-else style="color: #fff" class="baddr font">
           <el-tooltip effect="light" placement="bottom">
-            <span slot="content" class="font">bsc钱包地址: {{ baddr }}</span>
-            <span class="font">{{
+            <span slot="content" class="font">
+              {{ $t("bsc") }}: {{ baddr }}
+            </span>
+            <el-button class="font">{{
               baddr.substr(0, 6) + "..." + baddr.substr(-4, 4)
-            }}</span>
+            }}</el-button>
           </el-tooltip>
         </span>
       </el-col>
