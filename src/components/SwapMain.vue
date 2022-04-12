@@ -288,6 +288,11 @@ export default {
         address: this.bsc.ctrs.usdt.address,
         decimals: await this.bsc.ctrs.usdt.decimals(),
       });
+      this.wlist.push({
+        bsymbol: "BUSD",
+        address: this.bsc.ctrs.busd.address,
+        decimals: await this.bsc.ctrs.usdt.decimals(),
+      });
       for (let i in wsymbols) {
         this.wlist.push(pbwallet.wcoin_info(wsymbols[i], "bsymbol"));
       }
