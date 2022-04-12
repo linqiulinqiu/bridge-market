@@ -2,8 +2,8 @@
   <el-col id="swapmain">
     <el-col v-if="'addr' in this.bsc">
       <el-col id="swapTitle">
-        <h3>Simple Swap</h3>
-        <p>Trade common tokens (powered by PancakeSwap)</p>
+        <h3>{{$t('s-swap')}}</h3>
+        <p>{{$t('s-swap1')}}</p>
         <el-button
           icon="el-icon-setting"
           circle
