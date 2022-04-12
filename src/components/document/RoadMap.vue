@@ -1,6 +1,6 @@
 <template>
   <el-col id="doc">
-    <h1>RoadMap</h1>
+    <h1>{{$t('road-map')}}</h1>
   </el-col>
 </template>
 
