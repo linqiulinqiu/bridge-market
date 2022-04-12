@@ -47,16 +47,16 @@
     
     "get":"You will get :",
     "getaddr":"No address for this type of deposit,please contract us with discord or telegram. ",
-    "guide-bridge":"Guide For Bridge",
+    "guide-bridge":"How to run Bridge",
     "guide-bridge1":"How to convert XCC into BSC chain token WXCC",
     "guide-bridge2":"1. It is recommended to use Chrome to visit PlotBridge.<br>2. Before visit PlotBridge, you need install Chrome extension of MeteMask wallet, and register an account for the wallet.<br>3. Login MetaMask wallet, connect to Binance Smart Chain Mainnet.<br>4. Run PlotBridge at url: <a href='https://bridgemarket.onrender.com/#/Bridge' target='_blank'>https://bridgemarket.onrender.com/#/Bridge</a><br>5. Click “Connect Wallet”， will pop up a window let you confirm for the connect.<br>6. The address of the wallet will displayed on top if wallet connection succeed.<br>7. You need at least one NFT to run bridge,one NFT can bind every the type of coins,you can mint NFT by yourself or choose buy NFT on marketpalce,you also can sell your own NFT on marketplace.<br>8. Select one NFT that you have，and select the coin type that you want to convert(here we select XCC as a demo),then click the ‘Get deposit address for XCC’button.<br>9. On the middle of the page, shows the bridge address which can receive tokens (e.g., Chives). Each NFT has a unique bridge address. You can send tokens from your wallet or your exchange account. <br>10. Click the address, it will be kept in the system clipboard and used as a receiving address for you to send coins.<br>11. The PlotBridge will convert received chives tokens(xcc) coins to BEP20 token PXCC and save them in your MetaMask wallet. You may swap the tokens to other tokens (e.g., BNB) in PancakeSwap website.<br>",
     "guide-bridge3":"How to convert WXCC back to XCC",
     "guide-bridge4":"1. In Withdraw page, you need to bind your Chives wallet address first where you want to draw back and save the Chives token(xcc) to.<br>2. Input the amount of PXCC, click “Withdraw” button, certain amount of XCC will transfer to your Chives wallet. <br>3. The bridge will charge little transaction fee.",
     "guide-bridge5":"What should i do with my PXCC token?",
     "guide-bridge6":"You can exchange the old version token PXCC to the new token WXCC in a 1:1 ratio on the Swap page.",
-    "guide-market":"Guide For Market",
+    "guide-market":"MarketPlace",
     "guide-market1":"In the market, you can buy NFT as you like, or you can sell your own NFT. You can sell or buy NFT using BNB and BUSD currently.",
-    "guide-wallet":"Guide For Wallet",
+    "guide-wallet":"Create Wallet",
     "guide-wallet1":"How-to Guide: Connecting MetaMask to Binance Smart Chain",
     "guide-wallet2":"Installing and setting up MetaMask",
     "guide-wallet3":"Start by downloading MetaMask for Chrome, Brave, iOS, and Android.<br>- Next, create a wallet<br>- Write down the backup seed phrase somewhere secure (preferably not on an Internet-connected device)<br>- Without this phrase, your funds can’t be recovered if your device is damaged or lost<br>- Finally, confirm your seed phrase by following the on-screen instructions<br>- And voila! Your wallet is ready to send, store, and receive tokens.",
@@ -91,7 +91,7 @@
 
     "look-info":"Looking the details info after connect wallet",
     
-    "market":"Market",
+    "market":"MarketPlace",
     "mintPBT":"Mint PBT",
     "mintable":"NFT's currently available for minting :",
     "my-nfts":"My NFTs",
@@ -125,6 +125,8 @@
     "send":"Send",
     "set-sell-info":"Set price and description",
     "swap":"Swap",
+    "s-swap":"Simple Swap",
+    "s-swap1":"Trade common tokens (powered by PancakeSwap)",
 
     "to-market":"Go to the market",    
     "tips-amount1":"The amount is too small, you won't receive anything.",
