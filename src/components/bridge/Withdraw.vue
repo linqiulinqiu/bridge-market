@@ -57,19 +57,20 @@
                 >{{ $t("withdraw") }}
               </el-button>
             </el-col>
-            <el-col>
+            <el-col class="after-get">
               <p>
                 {{ $t("get") }}
-                <span class="get-amount">
-                  <span v-if="this.wAmount != ''">
+                <span>
+                  <span v-if="this.wAmount != ''" class="after-amount font">
                     {{ getwAmount }}
                   </span>
+                  <span v-else> --- </span>
                 </span>
                 {{ this.coinInfo.symbol }}
               </p>
-              <p v-if="this.tips_amount" class="minifont">
+              <el-col v-if="this.tips_amount" class="minifont">
                 <i v-if="this.wAmount.length > 0">{{ this.tips_amount }}</i>
-              </p>
+              </el-col>
             </el-col>
           </el-col>
         </el-col>
@@ -316,6 +317,10 @@ export default {
 };
 </script>
 <style>
+.after-amount {
+  color: #38f2af;
+  margin: 0px 10px;
+}
 #withdraw {
   font-size: 20px;
 }

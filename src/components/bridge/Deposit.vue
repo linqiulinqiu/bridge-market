@@ -29,20 +29,20 @@
             ></el-button>
           </el-tooltip>
         </el-col>
-        <el-col id="after-get">
-          <p>
+        <el-col class="after-get">
+          <el-col>
             {{ $t("get") }}
-            <span class="get-amount">
-              <span v-if="this.depAmount" class="font">
+            <span>
+              <span v-if="this.depAmount" class="font after-amount">
                 {{ getAmount }}
               </span>
-              <span v-else> &nbsp;&nbsp;</span>
+              <span v-else> --- </span>
             </span>
             {{ this.coinInfo.bsymbol }}，{{ $t("inbsc") }}。
-          </p>
-          <p v-if="this.tips_amount">
+          </el-col>
+          <el-col v-if="this.tips_amount">
             <i v-if="this.depAmount.length > 0">{{ this.tips_amount }}</i>
-          </p>
+          </el-col>
         </el-col>
       </el-col>
       <el-col v-else>
@@ -205,6 +205,10 @@ export default {
 <style>
 .a-link {
   margin: 25px;
+}
+.after-get {
+  min-height: 100px;
+  padding: 15px 0px;
 }
 .get-amount {
   width: 200px;
