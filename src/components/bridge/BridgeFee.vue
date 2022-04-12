@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     getAmountLimit: async function () {
-      const coin = this.coinInfo.symbol;
+      const coin = this.coinInfo.ctrname;
       const amount = await market.getLimit(coin);
       this.depAmount = (amount[1] - amount[0]) / 2;
       this.wAmount = amount[0];

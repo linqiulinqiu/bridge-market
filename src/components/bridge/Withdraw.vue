@@ -45,7 +45,7 @@
               <el-button
                 type="primary"
                 size="small"
-                @click="wAmount = WBalance[this.coinInfo.index]"
+                @click="wAmount = WBalance[coinInfo.index]"
                 >{{ $t("all") }}
               </el-button>
               {{ this.coinInfo.bsymbol }}，
@@ -244,7 +244,7 @@ export default {
         return false;
       }
       const after_fee = await market.afterFee(
-        this.coinInfo.symbol,
+        this.coinInfo,
         "withdraw",
         wAmount
       );
@@ -256,11 +256,10 @@ export default {
     withdraw: async function () {
       this.w_loading = true;
       const amount = this.wAmount;
-      const coin = this.coinInfo.symbol;
       if (await this.amount_valid(this.wAmount)) {
         try {
           const obj = this;
-          const res = await market.burnWcoin(amount, coin);
+          const res = await market.burnWcoin(amount, this.coinInfo);
           await market.waitEventDone(res, async function (evt) {
             obj.w_loading = false;
           });
