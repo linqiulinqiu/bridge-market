@@ -193,10 +193,10 @@ export default {
     },
     update_amounts: async function () {
       let to_val = ethers.BigNumber.from(0);
-      console.log("update-amounts", this.from_coin, this.to_coin);
-      if (this.from_coin != "") {
+      if (this.from_amount == "") {
+        this.to_amount = "";
+      } else if (this.from_coin != "") {
         this.from_val = await tokens.parse(this.from_coin, this.from_amount);
-        console.log("from", this.from_amount, this.from_val);
         if (this.from_coin != "" && this.to_coin != "" && this.from_val.gt(0)) {
           try {
             const est = await swap.estimate(
@@ -210,9 +210,10 @@ export default {
             console.log("estimate failed", e);
           }
         }
+        this.to_val = to_val;
+        this.to_amount = await tokens.format(this.to_coin, to_val);
       }
-      this.to_val = to_val;
-      this.to_amount = await tokens.format(this.to_coin, to_val);
+
       console.log("to-amount-from", this.from_val, this.from_amount);
       console.log("to-amount-to", this.to_val, this.to_amount);
     },
