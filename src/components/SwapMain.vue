@@ -4,7 +4,7 @@
       <el-col id="swapTitle">
         <h3>{{ $t("s-swap") }}</h3>
         <p>{{ $t("s-swap1") }}</p>
-        <el-tooltip effect="light" content="setting">
+        <el-tooltip effect="light" :content="this.$t('setting')">
           <el-button
             icon="el-icon-setting"
             circle
@@ -16,7 +16,7 @@
       <el-col class="swap-input">
         <p>
           From<span class="clearfix" v-if="from_balance"
-            >Balance: {{ this.from_balance }}</span
+            >{{ $t("balance") }}: {{ this.from_balance }}</span
           >
         </p>
         <el-input
@@ -33,7 +33,7 @@
             >{{ $t("all") }}</el-button
           >
         </el-input>
-        <el-select v-model="from_coin" placeholder="请选择">
+        <el-select v-model="from_coin" :placeholder="this.$t('select')">
           <el-option
             v-for="w in wlist"
             :key="w.address"
@@ -56,7 +56,7 @@
       <el-col class="swap-input">
         <p>
           To<span class="clearfix" v-if="to_balance"
-            >Balance: {{ this.to_balance }}</span
+            >{{ $t("balance") }}: {{ this.to_balance }}</span
           >
         </p>
         <el-input
@@ -65,7 +65,7 @@
           clearable
           maxlength="20"
         ></el-input>
-        <el-select v-model="to_coin" placeholder="请选择">
+        <el-select v-model="to_coin" :placeholder="this.$t('select')">
           <el-option
             v-for="w in wlist"
             :key="w.address"
@@ -93,14 +93,14 @@
         </ApproveButton>
       </el-col>
     </el-col>
-    <el-dialog title="Settings" :visible.sync="dia_slip">
+    <el-dialog :title="this.$t('setting')" :visible.sync="dia_slip">
+      <!-- <span slot="title">{{ $t("setting") }}</span> -->
       <el-card id="slipcard">
         <el-col class="cardheader">
-          <h3>Slippage tolenrance</h3>
+          <h3>{{ $t("slippage") }}</h3>
           <el-tooltip effect="light" placement="right-start">
             <span slot="content" class="tooltip">
-              Your transation will revert if the price changes unfavorably by
-              more than this percentage.
+              {{ $t("slip-tip") }}
             </span>
             <el-button icon="el-icon-question" circle></el-button>
           </el-tooltip>
@@ -113,7 +113,9 @@
             >{{ i / 100 }}%
           </el-button>
         </el-col>
-        <el-col v-if="transferOK"><p>Your transaction may fail.</p> </el-col>
+        <el-col v-if="transferOK">
+          <p>{{ $t("slip-fail") }}</p>
+        </el-col>
       </el-card>
     </el-dialog>
   </el-col>
@@ -153,13 +155,13 @@ export default {
     return {
       wlist: [],
       from_balance: false,
-      from_amount: 0,
+      from_amount: "",
       from_val: 0,
       from_coin: "",
       from_ctr: false,
       swapping: false,
       to_balance: false,
-      to_amount: 0,
+      to_amount: "",
       to_val: 0,
       to_coin: "",
       slipAmount: 100,
@@ -169,7 +171,6 @@ export default {
   },
   watch: {
     slipAmount: function (newnum, oldnum) {
-      console.log("slip amount ,old = ", oldnum, "newnum = ", newnum);
       this.slipAmount = newnum;
     },
     from_amount: debounce(async function (newa, olda) {
@@ -381,13 +382,13 @@ export default {
   min-width: 200px;
 }
 #swapmain .el-select {
-  width: 150px;
+  width: 160px;
 }
 .swap-input {
   padding: 30px 30px;
   border-radius: 20px;
   margin-top: 25px;
-  background-color: rgba(43, 44, 51, 0.3);
+  background-color: rgba(43, 44, 51, 0.8);
 }
 .swap-btn {
   text-align: center;
