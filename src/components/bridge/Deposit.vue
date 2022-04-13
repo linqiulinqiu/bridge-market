@@ -203,6 +203,9 @@ export default {
 };
 </script>
 <style>
+.el-skeleton__item {
+  opacity: 0.5;
+}
 .a-link {
   margin: 25px;
 }

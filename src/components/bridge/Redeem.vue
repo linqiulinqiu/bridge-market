@@ -63,12 +63,12 @@ export default {
   data() {
     return {
       oldBalance: ethers.BigNumber.from(0),
-      obStr: '',
+      obStr: "",
       oldToken: false,
       oldSymbol: false,
       newSymbol: false,
       oBalance: false,
-      amount: 0,
+      amount: "",
       checking: false,
       redeeming: false,
     };
@@ -82,16 +82,16 @@ export default {
     }, 500),
     amount: debounce(async function (newv, oldv) {
       if (!newv || isNaN(newv) || newv == "") {
-        this.amount = 0;
+        this.amount = "";
       }
       const val = await tokens.parse(this.oldToken, newv);
       if (val.gt(this.oldBalance)) {
-        this.amount = await tokens.format(this.oldToken, this.oldBalance)
+        this.amount = await tokens.format(this.oldToken, this.oldBalance);
       }
     }, 500),
-    oldBalance: async function(newv, oldv){
-      this.obStr = await tokens.format(this.oldToken, this.oldBalance)
-    }
+    oldBalance: async function (newv, oldv) {
+      this.obStr = await tokens.format(this.oldToken, this.oldBalance);
+    },
   },
   methods: {
     loadRedeems: async function () {
