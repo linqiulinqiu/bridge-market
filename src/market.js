@@ -340,25 +340,24 @@ async function watchToken(coin) {
     if (!bsc.provider) return false
     const cinfo = pbwallet.wcoin_info(coin, 'symbol')
     let ctr = {}
-    let img_name = ''
+    const img_prefix = 'https://pancakeswap.finance/images/tokens/'
+    let img_url = ''
     console.log("cinfo", cinfo)
     if (cinfo) {
         ctr = bsc.ctrs[cinfo.ctrname]
-        img_name = cinfo.ctrname + '-logo.svg'
+        img_url = "https://www.plotbridge.net/img/" + cinfo.ctrname + '-logo.svg'
     } else {
         const lowCoin = coin.toLowerCase()
-        console.log("lowCoin", lowCoin, bsc.ctrs)
         if (lowCoin in bsc.ctrs) {
             ctr = bsc.ctrs[lowCoin]
-            img_name = lowCoin + '-logo.svg'
+            img_url = img_prefix + ctr.address + '.png'
         }
     }
-    console.log("img-name=", img_name, "ctr=", ctr)
     const options = {
         address: ctr.address,
         symbol: coin,
         decimals: await ctr.decimals(),
-        image: "https://www.plotbridge.net/img/" + img_name,
+        image: img_url
     }
     const added = await bsc.provider.send(
         'wallet_watchAsset', {

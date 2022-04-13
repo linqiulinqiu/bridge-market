@@ -3,6 +3,7 @@
     "all":"All",
     "approve":"Approve",
     "add-token-tip":"Add the current token information to the metamask Wallet",
+    "add-to-wallet":"add {coin} to wallet",
 
     "balance":"Balance",
     "bridge":"Bridge",
