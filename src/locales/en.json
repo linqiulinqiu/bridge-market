@@ -13,10 +13,10 @@
     "bind-waddr":"Bind withdraw address",
     "bind-waddr-tips":"You have bound {wbind} withdrawal addresses. The withdrawal operation may be sent to any address. Please pay attention to check. Or unbind {ubind} addresses",
     "bridge-guide":"Bridge Guide",
-    "b-guide1":"Firstly,select a NFT and a coin.",
+    "b-guide1":"Please select a NFT and a cointype first.",
     "b-guide2":"Get deposite address and bind withdraw address.",
     "b-guide3":"After purchasing NFT, please check whether there is a withdrawal address. If so, please rebind your withdrawal address.",
-    "bsc":"BSC wallet address",
+    "bsc":"BSC wallet address","beyond-limit":"After exceeding the amount limit, the transaction time will increase significantly, please wait patiently",
 
     "cancel":"Cancel",
     "connect":"Connect Wallet",
@@ -90,7 +90,7 @@
     "intoduction12":"What we pay and earn",
     "intoduction13":"- Aside for team living and server maintenance. For each coin deposit, we need to pay for:<br>- 1. WCoin mint<br>- 2. WCoin mint limitation adjustment<br>We charge fee on:<br>- 1.NFT mint<br>- 2. WCoin deposit<br>- 3. WCoin withdraw",
 
-    "look-info":"Looking the details info after connect wallet",
+    "look-info":"More details after connect wallet",
     
     "market":"MarketPlace",
     "mintPBT":"Mint PBT",
@@ -102,9 +102,9 @@
     "no-waddr":"Unbound withdrawal address",
     "no-redeem":"There is no such exchange",
     "no-desc":"No Description",
-    "no-nft":"Any NFT you got,please go to the market，or mint it",
-    "no-selling":"Selling PBT not found yet... How about mint one?",
-    "no-mysale":"You don't sell anything",
+    "no-nft":"No NFT in your wallet,please go to the market，or mint one",
+    "no-selling":"Selling NFT not found yet... How about mint one?",
+    "no-mysale":"You don't selling any NFT",
 
     "old-balance":"Old Token Balance",
     "or":"OR",
