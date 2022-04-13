@@ -18,8 +18,8 @@
         <SelectCoin />
       </el-aside>
     </el-container>
-    <el-col v-else>
-      {{ $t("look-info") }}
+    <el-col v-else class="info">
+      <h2> {{ $t("look-info") }}</h2>
     </el-col>
   </el-col>
 </template>
@@ -57,4 +57,10 @@ export default {
 </script>
 
 <style scoped>
+.info{
+  margin-top: 300px;
+}
+h2 {
+  text-align: center;
+}
 </style>

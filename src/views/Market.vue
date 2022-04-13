@@ -14,7 +14,9 @@
         </el-col>
       </el-main>
     </el-container>
-    <el-col v-else> {{ $t("look-info") }} </el-col>
+    <el-col class="info" v-else> 
+      <h2>  {{ $t("look-info") }} </h2>
+    </el-col>
   </el-col>
 </template>
 
@@ -61,5 +63,11 @@ export default {
 }
 .mkMain {
   margin-left: 2%;
+}
+.info{
+  margin-top: 300px;
+}
+h2 {
+  text-align: center;
 }
 </style>
