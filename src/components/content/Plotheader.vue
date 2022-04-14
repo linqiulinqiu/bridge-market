@@ -114,6 +114,7 @@ export default {
         { tag: this.$t("bridge"), link: "/Bridge" },
         { tag: this.$t("market"), link: "/Market" },
         { tag: this.$t("swap"), link: "/Swap" },
+        { tag: this.$t("stake"), link: "/Stake" },
         { tag: this.$t("doc"), link: "/Doc" },
       ];
     },
