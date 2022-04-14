@@ -50,7 +50,7 @@ export default {
         const res = await market.buyNFT(curNFT);
         await market.waitEventDone(res, async function (evt) {
           obj.buy_loading = false;
-          this.$store.commit("setCurrentPbtId", false);
+          obj.$store.commit("setCurrentPbtId", false);
         });
       } catch (e) {
         obj.buy_loading = false;
