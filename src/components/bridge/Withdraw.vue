@@ -57,7 +57,7 @@
                 >{{ $t("withdraw") }}
               </el-button>
             </el-col>
-            <el-col class="after-get">
+            <el-col class="after-get" v-if="this.wAmount">
               <p>
                 {{ $t("get") }}
                 <span>
@@ -217,6 +217,10 @@ export default {
         this.tips_amount = this.$t("correct-amount");
         return false;
       }
+      if (amount == 0) {
+        this.getwAmount = 0;
+        return false;
+      }
       const after_fee = await market.afterFee(
         this.coinInfo,
         "withdraw",
@@ -228,7 +232,7 @@ export default {
         this.tips_amount = this.$t("tips-amount1");
       } else if (after_fee == "fund") {
         this.w_disabled = true;
-        this.getwAmount = "";
+        this.getwAmount = 0;
         this.tips_amount = this.$t("tips-amount2");
       } else {
         this.getwAmount = after_fee;
