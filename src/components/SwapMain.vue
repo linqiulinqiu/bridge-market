@@ -94,7 +94,7 @@
       </el-col>
       <el-col class="swap-add">
         <el-button @click="watchToken" v-if="this.watchCoin">{{
-          $t("add-to-wallet", { coin: watchCoin })
+          $t("add-to-wallet", { coin: this.watchCoin.bsymbol })
         }}</el-button>
       </el-col>
     </el-col>
@@ -142,34 +142,12 @@ export default {
   computed: mapState({
     bsc: "bsc",
     watchCoin() {
-      const blist = pbwallet.wcoin_list("bsymbol");
-      const coinlist = this.allwlist;
-      for (let i in coinlist) {
-        for (let k in blist) {
-          if (blist[k] == coinlist[i].bsymbol) {
-            console.log("I", i);
-            coinlist.slice(i);
-          }
-        }
-      }
-      console.log("llist", coinlist);
+      const watchlist = this.watchlist();
       if (this.from_coin && this.from_coin != "") {
-        console.log("0");
-        if (this.from_coin == ethers.constants.AddressZero) {
-          console.log("1");
-          return false;
-        }
-        for (let j in coinlist) {
-          if (coinlist[j].address == this.from_coin) {
-            console.log("coinlist[j", coinlist[j], j);
-            console.log("2");
-          }
-          console.log("3");
-          return coinlist[j];
+        for (let j in watchlist) {
+          if (watchlist[j].address == this.from_coin) return watchlist[j];
         }
       }
-      console.log("4");
-
       return false;
     },
     change_dis() {
@@ -351,15 +329,19 @@ export default {
     watchlist: function () {
       const blist = pbwallet.wcoin_list("bsymbol");
       const coinlist = this.allwlist;
+      const list = {};
       for (let i in coinlist) {
-        for (let k in blist) {
-          if (blist[k] == coinlist[i].bsymbol) {
-            coinlist.slice(i);
-          }
+        if (coinlist[i].address != ethers.constants.AddressZero) {
+          list[coinlist[i].address] = coinlist[i];
         }
       }
-      console.log("coinlist method", coinlist, this.allwlist);
-      return coinlist;
+      for (let j in list) {
+        for (let k in blist) {
+          if (list[j] != undefined)
+            if (list[j].bsymbol == blist[k]) delete list[j];
+        }
+      }
+      return list;
     },
   },
 };

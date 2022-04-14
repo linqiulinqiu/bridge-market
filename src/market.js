@@ -340,7 +340,7 @@ async function watchToken(coin) {
     if (!bsc.provider) return false
     const cinfo = pbwallet.wcoin_info(coin, 'symbol')
     let ctr = {}
-    const img_prefix = 'https://pancakeswap.finance/images/tokens/'
+    const img_prefix = "https://pancakeswap.finance/images/tokens/"
     let img_url = ''
     console.log("cinfo", cinfo)
     if (cinfo) {
@@ -351,6 +351,7 @@ async function watchToken(coin) {
         if (lowCoin in bsc.ctrs) {
             ctr = bsc.ctrs[lowCoin]
             img_url = img_prefix + ctr.address + '.png'
+            console.log("ctr", ctr, img_url)
         }
     }
     const options = {
