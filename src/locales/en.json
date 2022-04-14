@@ -16,8 +16,8 @@
     "b-guide1":"Please select a NFT and a cointype first.",
     "b-guide2":"Get deposite address and bind withdraw address.",
     "b-guide3":"After purchasing NFT, please check whether there is a withdrawal address. If so, please rebind your withdrawal address.",
-    "bsc":"BSC wallet address","beyond-limit":"After exceeding the amount limit, the transaction time will increase significantly, please wait patiently",
-
+    "bsc":"BSC wallet address",
+    
     "cancel":"Cancel",
     "connect":"Connect Wallet",
     "change-price":"Change sale info",
@@ -128,11 +128,6 @@
     "swap":"Swap",
     "s-swap":"Simple Swap",
     "s-swap1":"Trade common tokens (powered by PancakeSwap)",
-    "setting":"Setting",
-    "slippage":"Slippage tolerance",
-    "slip-tip":" Your transation will revert if the price changes unfavorably by more than this percentage.",
-    "slip-fail":"Your transaction may fail",
-    "select":"Please select",
 
     "to-market":"Go to the market",    
     "tips-amount1":"The amount is too small, you won't receive anything.",
