@@ -1,6 +1,6 @@
 {
   "name": "bridgemarket",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -11,7 +11,7 @@
     "element-ui": "^2.15.6",
     "lodash": "^4.17.21",
     "pbwallet": "github:tgarm/pbwallet#0.2.30",
-    "pbweb-nftkeeper": "bitbucket:plotnet/pbweb-nftkeeper#0.2.15",
+    "pbweb-nftkeeper": "bitbucket:plotnet/pbweb-nftkeeper#0.2.16",
     "pbweb-ui": "bitbucket:plotnet/pbweb-ui#0.0.14",
     "vue": "^2.6.11",
     "vue-async-computed": "^3.9.0",
