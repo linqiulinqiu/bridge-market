@@ -4,6 +4,7 @@
     "all":"全部",
     "approve":"授权",
     "add-token-tip":"添加当前代币信息到metaMask（小狐狸）钱包中",
+    "add-to-wallet":"添加{coin}到钱包",
 
     "balance":"余额",
     "bridge":"桥梁",
@@ -135,6 +136,7 @@
     "slip-tip":"如果价格的不利变化超过此百分比，您的交易将恢复。",
     "slip-fail":"您的交易可能失败",
     "select":"请选择",
+    "stake":"质押",
 
 
     "to-market":"去往市场",    

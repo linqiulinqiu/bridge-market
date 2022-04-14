@@ -83,7 +83,7 @@ export default {
         const obj = this;
         await market.waitEventDone(res, async function (evt) {
           obj.change_loading = false;
-          this.$store.commit("setCurrentPbtId", false);
+          obj.$store.commit("setCurrentPbtId", false);
         });
       } catch (e) {
         this.change_loading = false;
@@ -98,7 +98,7 @@ export default {
         const obj = this;
         await market.waitEventDone(res, async function (evt) {
           obj.re_loading = false;
-          this.$store.commit("setCurrentPbtId", false);
+          obj.$store.commit("setCurrentPbtId", false);
         });
       } catch (e) {
         this.re_loading = false;

@@ -35,7 +35,7 @@
         </el-input>
         <el-select v-model="from_coin" :placeholder="this.$t('select')">
           <el-option
-            v-for="w in wlist"
+            v-for="w in allwlist"
             :key="w.address"
             :label="w.bsymbol"
             :value="w.address"
@@ -67,7 +67,7 @@
         ></el-input>
         <el-select v-model="to_coin" :placeholder="this.$t('select')">
           <el-option
-            v-for="w in wlist"
+            v-for="w in allwlist"
             :key="w.address"
             :label="w.bsymbol"
             :value="w.address"
@@ -91,6 +91,11 @@
             >{{ $t("swap") }}
           </el-button>
         </ApproveButton>
+      </el-col>
+      <el-col class="swap-add">
+        <el-button @click="watchToken" v-if="this.watchCoin">{{
+          $t("add-to-wallet", { coin: this.watchCoin.bsymbol })
+        }}</el-button>
       </el-col>
     </el-col>
     <el-dialog :title="this.$t('setting')" :visible.sync="dia_slip">
@@ -136,6 +141,15 @@ export default {
   },
   computed: mapState({
     bsc: "bsc",
+    watchCoin() {
+      const watchlist = this.watchlist();
+      if (this.from_coin && this.from_coin != "") {
+        for (let j in watchlist) {
+          if (watchlist[j].address == this.from_coin) return watchlist[j];
+        }
+      }
+      return false;
+    },
     change_dis() {
       if (this.from_coin != "" && this.to_coin != "") {
         return false;
@@ -153,7 +167,7 @@ export default {
 
   data() {
     return {
-      wlist: [],
+      allwlist: [],
       from_balance: false,
       from_amount: "",
       from_val: 0,
@@ -173,12 +187,16 @@ export default {
     slipAmount: function (newnum, oldnum) {
       this.slipAmount = newnum;
     },
+    watchCoin: function (newCoin) {
+      console.log("watchCoin", newCoin, this.watchCoin);
+    },
     from_amount: debounce(async function (newa, olda) {
       await this.update_amounts();
     }, 500),
     from_coin: debounce(async function (newc, oldc) {
       await this.update_balance(true, false);
       await this.update_amounts();
+      console.log("watchCoin", this.watchCoin);
     }, 500),
     to_coin: debounce(async function (newc, oldc) {
       await this.update_balance(false, true);
@@ -186,6 +204,16 @@ export default {
     }, 500),
   },
   methods: {
+    watchToken: async function () {
+      console.log("wlist", this.allwlist);
+      for (let i in this.allwlist) {
+        const item = this.allwlist[i];
+        if (item.address == this.from_coin) {
+          console.log("item Info", item);
+          await market.watchToken(item.bsymbol);
+        }
+      }
+    },
     order_swap: function () {
       const old_from_coin = this.from_coin;
       this.from_coin = this.to_coin;
@@ -274,35 +302,54 @@ export default {
     },
     load_wlist: async function () {
       const wsymbols = pbwallet.wcoin_list("bsymbol");
-      this.wlist = [];
-      this.wlist.push({
+      this.allwlist.push({
         bsymbol: "BNB",
         address: ethers.constants.AddressZero,
         decimals: 18,
       });
-      this.wlist.push({
+      this.allwlist.push({
         bsymbol: "PBP",
         address: this.bsc.ctrs.pbp.address,
         decimals: await this.bsc.ctrs.pbp.decimals(),
       });
-      this.wlist.push({
+      this.allwlist.push({
         bsymbol: "USDT",
         address: this.bsc.ctrs.usdt.address,
         decimals: await this.bsc.ctrs.usdt.decimals(),
       });
-      this.wlist.push({
+      this.allwlist.push({
         bsymbol: "BUSD",
         address: this.bsc.ctrs.busd.address,
         decimals: await this.bsc.ctrs.usdt.decimals(),
       });
       for (let i in wsymbols) {
-        this.wlist.push(pbwallet.wcoin_info(wsymbols[i], "bsymbol"));
+        this.allwlist.push(pbwallet.wcoin_info(wsymbols[i], "bsymbol"));
       }
+    },
+    watchlist: function () {
+      const blist = pbwallet.wcoin_list("bsymbol");
+      const coinlist = this.allwlist;
+      const list = {};
+      for (let i in coinlist) {
+        if (coinlist[i].address != ethers.constants.AddressZero) {
+          list[coinlist[i].address] = coinlist[i];
+        }
+      }
+      for (let j in list) {
+        for (let k in blist) {
+          if (list[j] != undefined)
+            if (list[j].bsymbol == blist[k]) delete list[j];
+        }
+      }
+      return list;
     },
   },
 };
 </script>
 <style>
+#swap-add {
+  margin-top: 10px;
+}
 .tooltip {
   font-size: 14px;
 }

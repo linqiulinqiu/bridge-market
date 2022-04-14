@@ -89,7 +89,7 @@ export default {
       console.log("burn res", res);
       await market.waitEventDone(res, function (evt) {
         obj.burn_loading = false;
-        this.$store.commit("setCurrentPbtId", false);
+        obj.$store.commit("setCurrentPbtId", false);
       });
     },
     send: async function () {
@@ -132,7 +132,7 @@ export default {
         await market.waitEventDone(res, async function (evt) {
           obj.set_loading = false;
           obj.sendToMarket = true;
-          this.$store.commit("setCurrentPbtId", false);
+          obj.$store.commit("setCurrentPbtId", false);
         });
         return res;
       } catch (e) {

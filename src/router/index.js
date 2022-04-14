@@ -4,6 +4,7 @@ import Home from "@/views/Home"
 import Bridge from "@/views/Bridge"
 import Market from "@/views/Market"
 import Swap from "@/views/Swap"
+import Stake from "@/views/Stake"
 import Doc from "@/views/Doc"
 import RoadMap from "../components/document/RoadMap"
 import Contact from "../components/document/Contact"
@@ -42,6 +43,11 @@ const routes = [{
     path: '/Swap',
     name: 'Swap',
     component: Swap,
+  }, 
+  {
+    path: '/Stake',
+    name: 'Stake',
+    component: Stake,
   }, {
     path: '/Doc',
     name: 'Doc',
