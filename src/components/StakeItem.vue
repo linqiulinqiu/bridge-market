@@ -38,7 +38,7 @@
         <ApproveButton
           v-if="stk_balance"
           :bsc="bsc"
-          :token="bsc.ctrs.wxcc.address"
+          :token="stakeAddr"
           :spender="bsc.ctrs.staking.address"
           :min-req="stk_balance_bn"
         >
