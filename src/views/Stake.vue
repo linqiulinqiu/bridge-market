@@ -4,7 +4,7 @@
       <el-main>
         <el-col
           class="stake-main"
-          :lg="{ span: 10, offset: 7 }"
+          :lg="{ span: 7, offset: 8 }"
           :md="{ span: 12, offset: 6 }"
           :sm="{ span: 16, offset: 4 }"
           :xs="{ span: 22, offset: 1 }"
@@ -13,12 +13,17 @@
            <h2>Stake</h2>
          </el-col>
          <el-col id="stakeinput">
-           <p>WXCC质押：1000 WXCC</p> <!-- 显示已质押金额 -->
-           <span>WXCC已赚取：99 WXCC</span> <!-- 显示目前的收益 -->
-           <el-button @click="claim">claim</el-button>
+            <el-col>
+              <span>PBP质押：1000 PBP</span> <!-- 显示已质押金额 -->
+              <el-button @click="withdraw" size="small">withdraw</el-button>
+           </el-col>
+           <el-col>
+             <span>PBP已赚取：99 PBP</span> <!-- 显示目前的收益 -->
+             <el-button @click="claim" size="small">claim</el-button>
+           </el-col>
          </el-col>
          <el-col id="stakeapprove"> 
-           <el-button @click="approve">approve</el-button>
+           <el-button @click="approve" >approve</el-button>
            <el-button @click="dia_set_amount = true">stake</el-button>
          </el-col>
         </el-col>
@@ -30,7 +35,7 @@
     <el-dialog :visible.sync="dia_set_amount">
       <el-card>
         <h2>设置质押数量</h2>
-        <p>stake： <span>balance：100WXCC</span></p><!-- 显示钱包中WXCC余额 -->
+        <p>stake： <span>balance：100PBP</span></p><!-- 显示钱包中PBP余额 -->
         <el-input  
         v-model="s_amount"
         clearable></el-input>
@@ -54,13 +59,14 @@ export default {
     }
   },
   methods: {
+    withdraw:function(){console.log('取回本金');},
     approve: function(){console.log('执行授权');},
     claim: function(){console.log('领取收益');},
     stake_token: function(){console.log('执行质押');},
   }
 };
 </script>
-<style>
+<style scoped>
 .stake-main {
   background-color: #373943;
   border-radius: 20px;
@@ -68,10 +74,22 @@ export default {
   box-sizing: border-box;
   margin-top: 100px;
 }
-/* .stake-panel{
-    height: 300px;
-    width: 300px;
-} */
+#stakeinput {
+  position: relative;
+  padding: 30px 30px;
+  border-radius: 20px;
+  margin-top: 25px;
+  background-color: rgba(43, 44, 51, 0.8);
+}
+#stakeinput .el-col{
+  margin: 10px;
+}
+#stakeinput .el-button{
+  position: absolute;
+  right: 10%;
+  /* height: 24px;
+  line-height: 24px; */
+}
 #stake .el-main {
   min-height: 830px;
 }
