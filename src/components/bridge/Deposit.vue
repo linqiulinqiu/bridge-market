@@ -29,7 +29,7 @@
             ></el-button>
           </el-tooltip>
         </el-col>
-        <el-col class="after-get">
+        <el-col class="after-get" v-if="this.depAmount">
           <el-col>
             {{ $t("get") }}
             <span>

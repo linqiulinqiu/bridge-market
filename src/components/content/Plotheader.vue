@@ -227,7 +227,7 @@ export default {
 }
 #menu .el-menu--horizontal > .el-menu-item {
   height: 90px;
-  width: 20%;
+  width: 16%;
   font-size: 15px;
   font-weight: 700;
   padding: 15px 0px;

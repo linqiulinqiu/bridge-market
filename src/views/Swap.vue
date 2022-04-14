@@ -31,7 +31,7 @@ export default {
   }),
 };
 </script>
-<style>
+<style scoped>
 .swap-main {
   background-color: #373943;
   border-radius: 20px;
