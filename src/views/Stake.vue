@@ -46,7 +46,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .stake-main {
   background-color: #373943;
   border-radius: 20px;
@@ -54,10 +54,22 @@ export default {
   box-sizing: border-box;
   margin-top: 100px;
 }
-/* .stake-panel{
-    height: 300px;
-    width: 300px;
-} */
+#stakeinput {
+  position: relative;
+  padding: 30px 30px;
+  border-radius: 20px;
+  margin-top: 25px;
+  background-color: rgba(43, 44, 51, 0.8);
+}
+#stakeinput .el-col{
+  margin: 10px;
+}
+#stakeinput .el-button{
+  position: absolute;
+  right: 10%;
+  /* height: 24px;
+  line-height: 24px; */
+}
 #stake .el-main {
   min-height: 830px;
 }
