@@ -35,10 +35,10 @@ export default {
   },
   methods: {
     refresh: async function () {
-      const tokens = await this.bsc.ctrs.staking.pools();
+      const pools = await this.bsc.ctrs.staking.pools();
       const stk = [];
-      for (let i in tokens) {
-        stk.push({ stakeAddr: tokens[i], pid: i });
+      for (let i in pools[0]) {
+        stk.push({ stakeAddr: pools[0][i], pid: i });
       }
       this.stakeTokens = stk;
       console.log("stake tokens", this.stakeTokens);

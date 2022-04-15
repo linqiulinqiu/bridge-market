@@ -114,14 +114,14 @@ export default {
       }
     },
     claim: async function () {
-      const receipt = await this.bsc.ctrs.staking.claimReward(this.pid);
+      const receipt = await this.bsc.ctrs.staking.withdraw(this.pid, ethers.BigNumber.from(0));
       console.log("claim receipt", receipt);
       console.log("领取收益");
     },
     stake_token: async function () {
       const amount = await tokens.parse(this.stakeAddr, this.stake_amount);
       if (amount.gt(0) && amount.lte(this.stk_balance_bn)) {
-        const receipt = await this.bsc.ctrs.staking.stake(this.pid, amount);
+        const receipt = await this.bsc.ctrs.staking.deposit(this.pid, amount);
         console.log("stake receipt", receipt);
       } else {
         console.log("Invalid amount", amount);
