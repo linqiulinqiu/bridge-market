@@ -93,14 +93,18 @@
         </ApproveButton>
       </el-col>
       <el-col class="swap-add">
-        <el-button
-          @click="watchToken"
-          v-if="this.watchCoin"
-          class="watch-token"
-          >{{
-            $t("add-to-wallet", { coin: this.watchCoin.bsymbol })
-          }}</el-button
-        >
+        <el-button @click="watchToken" v-if="this.watchCoin" class="btn-link">{{
+          $t("add-to-wallet", { coin: this.watchCoin.bsymbol })
+        }}</el-button>
+        <el-button v-if="this.watchCoin.bsymbol == 'PBP'" class="btn-link">
+          <a
+            target="_blank"
+            :href="
+              this.lp_pre + 'add/' + this.BNBaddr + '/' + this.watchCoin.address
+            "
+            >Add LP {{ watchCoin.bsymbol }}
+          </a>
+        </el-button>
       </el-col>
     </el-col>
     <el-dialog :title="this.$t('setting')" :visible.sync="dia_slip">
@@ -172,7 +176,9 @@ export default {
 
   data() {
     return {
+      lp_pre: "https://pancake.kiemtienonline360.com/#/",
       allwlist: [],
+      BNBaddr: ethers.constants.AddressZero,
       from_balance: false,
       from_amount: "",
       from_val: 0,
@@ -352,15 +358,16 @@ export default {
 };
 </script>
 <style>
-.watch-token.el-button {
+.btn-link.el-button {
   background: rgba(43, 44, 51, 0.8);
   color: #38f2af;
   border: 1px solid #38f2af;
   opacity: 0.9;
   margin-top: 15px;
 }
-.watch-token.el-button:hover {
+.btn-link.el-button:hover {
   background: #373943;
+  color: #38f2af;
 }
 #swap-add {
   margin-top: 10px;

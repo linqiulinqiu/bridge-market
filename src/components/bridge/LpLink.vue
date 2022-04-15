@@ -1,15 +1,7 @@
 <template>
   <el-col id="lplink">
-    <!-- <el-button class="lp-style">
-      <router-link to="/Swap">Buy PBP</router-link>
-    </el-button> -->
-    <!-- <el-button class="lp-style" @click="watchPBP">Add PBP To Wallet</el-button> -->
     <el-button v-if="this.coinInfo" class="lp-style">
       <router-link to="/Swap">Buy {{ this.coinInfo.bsymbol }}</router-link>
-
-      <!-- <a :href="this.pre_link + 'swap?outputCurrency=' + this.coinInfo.address"
-        >Buy {{ coinInfo.bsymbol }}</a
-      > -->
     </el-button>
     <el-button v-if="this.coinInfo" class="lp-style">
       <a
