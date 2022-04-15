@@ -99,9 +99,7 @@
         <el-button v-if="this.watchCoin.bsymbol == 'PBP'" class="btn-link">
           <a
             target="_blank"
-            :href="
-              this.lp_pre + 'add/' + this.BNBaddr + '/' + this.watchCoin.address
-            "
+            :href="this.lp_pre + 'add/BNB' + '/' + this.watchCoin.address"
             >Add LP {{ watchCoin.bsymbol }}
           </a>
         </el-button>
