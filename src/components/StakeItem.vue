@@ -43,13 +43,17 @@
           :spender="bsc.ctrs.staking.address"
           :min-req="stk_balance_bn"
         >
-          <el-button @click="stake_token">deposit</el-button>
+          <el-button @click="deposit">deposit</el-button>
         </ApproveButton>
       </el-card>
     </el-dialog>
     <el-dialog :visible.sync="dia_withdraw">
       <el-card>
         <h2>Withdraw</h2>
+        <p>
+         <span>balance：{{ farm_amount }}{{ stk_symbol }}</span>
+          <el-button @click="withdraw_amount = farm_amount">all</el-button>
+         </p>
         <el-input v-model="withdraw_amount" clearable></el-input>
         <el-button @click="withdraw">withdraw</el-button>
       </el-card>
@@ -111,18 +115,20 @@ export default {
       if (amount.gt(0)) {
         const receipt = await this.bsc.ctrs.staking.withdraw(this.pid, amount);
         console.log("withdraw receipt", receipt);
+        console.log("TODO: close withdraw window when done")
       }
     },
     claim: async function () {
       const receipt = await this.bsc.ctrs.staking.withdraw(this.pid, ethers.BigNumber.from(0));
       console.log("claim receipt", receipt);
-      console.log("领取收益");
+      console.log("TODO: close withdraw window when done")
     },
-    stake_token: async function () {
+    deposit: async function () {
       const amount = await tokens.parse(this.stakeAddr, this.stake_amount);
       if (amount.gt(0) && amount.lte(this.stk_balance_bn)) {
         const receipt = await this.bsc.ctrs.staking.deposit(this.pid, amount);
         console.log("stake receipt", receipt);
+        console.log("TODO: close deposit window when done")
       } else {
         console.log("Invalid amount", amount);
       }
