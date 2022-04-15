@@ -11,7 +11,11 @@
         <h2>Earn by Staking</h2>
         <el-button @click="refresh">refresh</el-button>
       </el-col>
-      <el-col id="stakeinput">
+      <el-col id="stakeinput"
+      :lg="22"
+      :md="22"
+      :sm="22"
+      :xs="22">
         <p>质押：{{ farm_amount }}{{ stk_symbol }}</p>
         <!-- 显示已质押金额 -->
         <span>已赚取：{{ earned_amount }}PBP</span>
@@ -136,6 +140,21 @@ export default {
 }
 #stake .el-main {
   min-height: 830px;
+}
+#stakeinput {
+  position: relative;
+  padding: 20px;
+  margin: 20px;
+  background-color: #2b2c33;
+  border-radius: 20px;
+}
+#stakeinput .el-button{
+  position: absolute;
+  right: 15%;
+  top: 45%;
+}
+#stakeapprove {
+  padding: 0 5% 0 55%;
 }
 .info {
   margin-top: 300px;
