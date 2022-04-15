@@ -203,3 +203,8 @@ ul li {
 .el-icon-question {
     font-size: 25px;
 }
+
+.info {
+    text-align: center;
+    margin-top: 300px;
+}

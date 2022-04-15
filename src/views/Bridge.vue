@@ -55,12 +55,3 @@ export default {
   }),
 };
 </script>
-
-<style scoped>
-.info{
-  margin-top: 300px;
-}
-h2 {
-  text-align: center;
-}
-</style>

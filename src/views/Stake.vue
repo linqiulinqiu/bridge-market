@@ -1,10 +1,20 @@
 <template>
   <el-col id="stake">
-    <el-container v-if="stakeTokens.length">
-      <stake-item v-for="item in stakeTokens" :stakeAddr="item.stakeAddr" :pid="item.pid" :key="item.pid">
-      </stake-item>
+    <el-container v-if="bsc.addr">
+      <el-main v-if="stakeTokens.length">
+        <stake-item
+          v-for="item in stakeTokens"
+          :stakeAddr="item.stakeAddr"
+          :pid="item.pid"
+          :key="item.pid"
+        >
+        </stake-item>
+      </el-main>
+      <el-button @click="refresh" v-else>Reload All</el-button>
     </el-container>
-    <el-button @click="refresh" v-else>Reload All</el-button>
+    <el-col v-else class="info">
+      <h2>{{ $t("look-info") }}</h2>
+    </el-col>
   </el-col>
 </template>
 <script>
@@ -16,24 +26,24 @@ export default {
     StakeItem,
   },
   computed: mapState({
-    bsc: "bsc"
+    bsc: "bsc",
   }),
-  data(){
-    return{
-      stakeTokens:[]
-    }
+  data() {
+    return {
+      stakeTokens: [],
+    };
   },
   methods: {
-    refresh: async function(){
-        const tokens = await this.bsc.ctrs.staking.pools()
-        const stk = []
-        for(let i in tokens){
-            stk.push({stakeAddr: tokens[i], pid: i})
-        }
-        this.stakeTokens = stk
-        console.log('stake tokens', this.stakeTokens)
-    }
-  }
+    refresh: async function () {
+      const tokens = await this.bsc.ctrs.staking.pools();
+      const stk = [];
+      for (let i in tokens) {
+        stk.push({ stakeAddr: tokens[i], pid: i });
+      }
+      this.stakeTokens = stk;
+      console.log("stake tokens", this.stakeTokens);
+    },
+  },
 };
 </script>
 <style>
@@ -51,7 +61,7 @@ export default {
 #stake .el-main {
   min-height: 830px;
 }
-.info{
+.info {
   margin-top: 300px;
 }
 h2 {

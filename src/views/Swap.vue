@@ -42,10 +42,4 @@ export default {
 #swap .el-main {
   min-height: 830px;
 }
-.info{
-  margin-top: 300px;
-}
-h2 {
-  text-align: center;
-}
 </style>
