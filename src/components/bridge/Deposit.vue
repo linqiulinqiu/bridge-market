@@ -90,7 +90,7 @@
       </el-col>
     </el-col>
     <el-col v-else>
-      加载中。。。。
+      {{ $t("loading") }}
       <el-skeleton :rows="5" animated></el-skeleton>
     </el-col>
   </el-col>

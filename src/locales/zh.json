@@ -93,6 +93,8 @@
 
 
     "look-info":"查看具体信息请先连接钱包",
+    "loading":"Loading......",
+
     "market":"市场",
     "mintPBT":"Mint PBT",
     "mintable":"目前可以铸造的NFT数目：",

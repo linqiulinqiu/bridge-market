@@ -107,7 +107,7 @@
       </el-col>
     </el-col>
     <el-col v-else>
-      {{ $t("data") }}。。。
+      {{ $t("loading") }}
       <el-skeleton :rows="5" animated></el-skeleton>
     </el-col>
 

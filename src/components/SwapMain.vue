@@ -93,9 +93,14 @@
         </ApproveButton>
       </el-col>
       <el-col class="swap-add">
-        <el-button @click="watchToken" v-if="this.watchCoin">{{
-          $t("add-to-wallet", { coin: this.watchCoin.bsymbol })
-        }}</el-button>
+        <el-button
+          @click="watchToken"
+          v-if="this.watchCoin"
+          class="watch-token"
+          >{{
+            $t("add-to-wallet", { coin: this.watchCoin.bsymbol })
+          }}</el-button
+        >
       </el-col>
     </el-col>
     <el-dialog :title="this.$t('setting')" :visible.sync="dia_slip">
@@ -347,6 +352,16 @@ export default {
 };
 </script>
 <style>
+.watch-token.el-button {
+  background: rgba(43, 44, 51, 0.8);
+  color: #38f2af;
+  border: 1px solid #38f2af;
+  opacity: 0.9;
+  margin-top: 15px;
+}
+.watch-token.el-button:hover {
+  background: #373943;
+}
 #swap-add {
   margin-top: 10px;
 }
