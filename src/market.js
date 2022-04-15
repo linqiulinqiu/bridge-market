@@ -4,7 +4,7 @@ import {
 
 import pbwallet from 'pbwallet'
 import store from "./store"
-import keeper from "pbweb-nftkeeper"
+import tokens from './tokens'
 // 全局变量设置
 var bsc = {}
 const ptAddrs = {
@@ -35,9 +35,10 @@ async function ListenToWCoin(commit) {
     var ctr = {}
     async function updateBalnce() {
         for (let i in coinlist) {
-            ctr[coinlist[i].ctrname] = bsc.ctrs[coinlist[i].ctrname]
-            const balance = await ctr[coinlist[i].ctrname].balanceOf(bsc.addr)
-            wBalance[i] = await keeper.formatToken(ctr[coinlist[i].ctrname].address, balance)
+            const ctrname = coinlist[i].ctrname
+            ctr[ctrname] = bsc.ctrs[ctrname]
+            const balance = await ctr[ctrname].balanceOf(bsc.addr)
+            wBalance[i] = await tokens.format(ctr[ctrname].address, balance)
         }
         console.log("balance", wBalance)
         commit('setWBalance', wBalance)
@@ -63,8 +64,8 @@ async function connect(commit) {
 async function getmintfee() {
     const options = {}
     const fee = await bsc.ctrs.pbt.mintFee();
-    const symbol = await keeper.tokenSymbol(fee[0])
-    options.price = await keeper.formatToken(fee[0], fee[1])
+    const symbol = await tokens.symbol(fee[0])
+    options.price = await tokens.format(fee[0], fee[1])
     options.ptName = symbol
     console.log("options", options)
     return options
@@ -104,8 +105,8 @@ async function mintPBT() {
 }
 async function burnWcoin(amount, coinInfo) {
     const ctr = bsc.ctrs[coinInfo.ctrname]
-    amount = await keeper.parseToken(ctr.address, amount)
-    const wBalance = await keeper.parseToken(ctr.address, store.state.WBalance[coinInfo.index])
+    amount = await tokens.parse(ctr.address, amount)
+    const wBalance = await tokens.parse(ctr.address, store.state.WBalance[coinInfo.index])
     if (amount.gt(wBalance)) {
         return false
     }
@@ -122,8 +123,8 @@ async function waitEventDone(tx, done) {
 async function reBindFee() {
     const rebindFee = await bsc.ctrs.pbpuzzlehash.rebindFee()
     const refee = {}
-    refee.symbol = await keeper.tokenSymbol(rebindFee[0])
-    refee.amount = await keeper.formatToken(rebindFee[0], rebindFee[1])
+    refee.symbol = await tokens.symbol(rebindFee[0])
+    refee.amount = await tokens.format(rebindFee[0], rebindFee[1])
     console.log("rebindfee", rebindFee, refee)
     return refee
 }
@@ -226,7 +227,7 @@ async function setSellInfo(id, ptName, price, desc) {
         console.log("info", ptName, )
         ptAddr = bsc.ctrs[ptName.toLowerCase()].address
     }
-    const nftPrice = await keeper.parseToken(ptAddr, price)
+    const nftPrice = await tokens.parse(ptAddr, price)
     console.log("ptaddr", ptName, ptAddr, nftPrice)
     const res = await bsc.ctrs.pbmarket.onSale(bsc.ctrs.pbt.address, id, ptAddr, nftPrice, desc)
     return res
@@ -253,7 +254,7 @@ async function checkAllowance(priceToken, spender) {
 async function approveAllow(token, spender) {
     const ctr = pbwallet.erc20_contract(token)
     const amount = await ctr.totalSupply()
-    const total = await keeper.formatToken(token, amount)
+    const total = await tokens.format(token, amount)
     console.log("totalsupply", total)
     const res = await ctr.approve(spender, amount)
     res.fn = 'approve'
@@ -261,7 +262,7 @@ async function approveAllow(token, spender) {
 }
 async function buyNFT(nft) {
     const priceToken = nft.market.priceToken
-    const price = await keeper.parseToken(priceToken, nft.market.price)
+    const price = await tokens.parse(priceToken, nft.market.price)
     const id = ethers.BigNumber.from(nft.id)
     const options = {}
     if (priceToken == ethers.constants.AddressZero) {
@@ -290,14 +291,14 @@ async function afterFee(coinInfo, mode, amount) {
     const ctr = bsc.ctrs[coinInfo.ctrname]
     const fees = await getfees(coinInfo.ctrname)
     const nowfee = {}
-    amount = await keeper.parseToken(ctr.address, amount)
+    amount = await tokens.parse(ctr.address, amount)
     if (mode == 'deposit') {
-        nowfee.min = await keeper.parseToken(ctr.address, fees.depositFee)
+        nowfee.min = await tokens.parse(ctr.address, fees.depositFee)
         nowfee.rate = fees.depositFeeRate
     } else if (mode == 'withdraw') {
-        nowfee.min = await keeper.parseToken(ctr.address, fees.withdrawFee)
+        nowfee.min = await tokens.parse(ctr.address, fees.withdrawFee)
         nowfee.rate = fees.withdrawFeeRate
-        if (amount.gt(await keeper.parseToken(ctr.address, store.state.WBalance[coinInfo.index]))) {
+        if (amount.gt(await tokens.parse(ctr.address, store.state.WBalance[coinInfo.index]))) {
             return "fund"
         }
     } else {
@@ -310,7 +311,7 @@ async function afterFee(coinInfo, mode, amount) {
     if (amount.lte(fee)) {
         return false
     }
-    const f = await keeper.formatToken(ctr.address, amount.sub(fee))
+    const f = await tokens.format(ctr.address, amount.sub(fee))
     console.log("return in afterFee", f)
     return f
 }
@@ -319,9 +320,9 @@ async function getfees(ctrname) {
     let fee = {}
     const depfee = await ctr.depositFee()
     const wdfee = await ctr.withdrawFee()
-    fee.depositFee = await keeper.formatToken(ctr.address, depfee[1])
+    fee.depositFee = await tokens.format(ctr.address, depfee[1])
     fee.depositFeeRate = depfee[0]
-    fee.withdrawFee = await keeper.formatToken(ctr.address, wdfee[1])
+    fee.withdrawFee = await tokens.format(ctr.address, wdfee[1])
     fee.withdrawFeeRate = wdfee[0]
     console.log("getfees", fee)
     return fee
@@ -330,8 +331,8 @@ async function getfees(ctrname) {
 async function getLimit(ctrname) {
     const ctr = bsc.ctrs[ctrname]
     let amount = await ctr.cWAmount()
-    const amountMax = await keeper.formatToken(ctr.address, amount[1])
-    const amountMin = await keeper.formatToken(ctr.address, amount[0])
+    const amountMax = await tokens.format(ctr.address, amount[1])
+    const amountMin = await tokens.format(ctr.address, amount[0])
     amount = [amountMin, amountMax]
     return amount
 }
