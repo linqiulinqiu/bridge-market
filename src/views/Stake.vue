@@ -6,6 +6,9 @@
           v-for="item in stakeTokens"
           :stakeAddr="item.stakeAddr"
           :pid="item.pid"
+          :lpamount="item.lpamount"
+          :rpshare="item.rpshare"
+          :locktime="item.locktime"
           :key="item.pid"
         >
         </stake-item>
@@ -38,7 +41,7 @@ export default {
       const pools = await this.bsc.ctrs.staking.pools();
       const stk = [];
       for (let i in pools[0]) {
-        stk.push({ stakeAddr: pools[0][i], pid: i });
+        stk.push({ stakeAddr: pools[0][i], pid: i, lpamount: pools[2][i], rpshare: pools[3][i], locktime: pools[4][i].toNumber() });
       }
       this.stakeTokens = stk;
       console.log("stake tokens", this.stakeTokens);
