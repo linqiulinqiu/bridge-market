@@ -55,7 +55,8 @@
           <el-button @click="withdraw_amount = farm_amount">all</el-button>
          </p>
         <el-input v-model="withdraw_amount" clearable></el-input>
-        <el-button @click="withdraw">withdraw</el-button>
+        <el-button v-if="withdrawable" @click="withdraw">withdraw</el-button>
+        <el-button v-else @click="force_withdraw">force withdraw</el-button>
       </el-card>
     </el-dialog>
   </el-col>
@@ -83,6 +84,7 @@ export default {
       stk_balance_bn: 0,
       stake_amount: 0,
       withdraw_amount: 0,
+      withdrawable: false,
       dia_set_amount: false,
       dia_withdraw: false,
     };
@@ -95,10 +97,16 @@ export default {
         this.stakeAddr,
         this.stk_balance_bn
       );
-      const staked = await this.bsc.ctrs.staking.staked(
+      const stakeds = await this.bsc.ctrs.staking.staked(
         ethers.BigNumber.from(this.pid),
         this.bsc.addr
-      );
+      )
+      const staked = stakeds[0]
+      if(stakeds[1].gt(0)){
+          this.withdrawable = false
+      }else{
+          this.withdrawable = true
+      }
       this.farm_amount = await tokens.format(this.stakeAddr, staked);
       const earnval = await this.bsc.ctrs.staking.earned(
         ethers.BigNumber.from(this.pid),
@@ -115,6 +123,14 @@ export default {
       if (amount.gt(0)) {
         const receipt = await this.bsc.ctrs.staking.withdraw(this.pid, amount);
         console.log("withdraw receipt", receipt);
+        console.log("TODO: close withdraw window when done")
+      }
+    },
+    force_withdraw: async function () {
+      const amount = await tokens.parse(this.stakeAddr, this.withdraw_amount);
+      if (amount.gt(0)) {
+        const receipt = await this.bsc.ctrs.staking.forceWithdraw(this.pid, amount);
+        console.log("force withdraw receipt", receipt);
         console.log("TODO: close withdraw window when done")
       }
     },
