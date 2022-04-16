@@ -18,7 +18,7 @@
       :xs="22">
         <p v-if="locktime>0">锁定时间：{{locktime}}(秒)</p>
         <p>总质押：{{ lp_amount }} {{ stk_symbol }}</p>
-        <p>APY：{{ apy }}</p>
+        <p>APY：{{ apy }} %</p>
         <p>质押中：{{ farm_amount }}{{ stk_symbol }}</p>
         <!-- 显示已质押金额 -->
         <span>已赚取：{{ earned_amount }}PBP</span>
@@ -80,7 +80,7 @@ export default {
   }),
   data() {
     return {
-      apy: "",
+      apy: "-",
       farm_amount: "",
       earned_amount: "",
       lp_amount: "",
@@ -121,6 +121,7 @@ export default {
         this.bsc.ctrs.pbp.address,
         earnval
       );
+      this.apy = ethers.utils.formatEther(this.rpshare.mul(365*86400*100))
       this.lp_amount = await tokens.format(this.stakeAddr, this.lpamount)
       console.log("earned val", earnval);
     },
