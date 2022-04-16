@@ -58,8 +58,11 @@
           <el-button @click="withdraw_amount = farm_amount">all</el-button>
          </p>
         <el-input v-model="withdraw_amount" clearable></el-input>
-        <el-button v-if="withdrawable" @click="withdraw">withdraw</el-button>
-        <el-button v-else @click="force_withdraw">force withdraw</el-button>
+        <el-button v-if="withdraw_wait==0" @click="withdraw">withdraw</el-button>
+        <el-col v-else>
+            <p>锁定中，请等待{{this.withdraw_wait}}秒，或强制提取</p>
+            <el-button @click="force_withdraw">force withdraw</el-button>
+        </el-col>
       </el-card>
     </el-dialog>
   </el-col>
@@ -89,7 +92,7 @@ export default {
       stk_balance_bn: 0,
       stake_amount: 0,
       withdraw_amount: 0,
-      withdrawable: false,
+      withdraw_wait: 0,
       dia_set_amount: false,
       dia_withdraw: false,
     };
@@ -107,11 +110,7 @@ export default {
         this.bsc.addr
       )
       const staked = stakeds[0]
-      if(stakeds[1].gt(0)){
-          this.withdrawable = false
-      }else{
-          this.withdrawable = true
-      }
+      this.withdraw_wait = stakeds[1].toNumber()
       this.farm_amount = await tokens.format(this.stakeAddr, staked);
       const earnval = await this.bsc.ctrs.staking.earned(
         ethers.BigNumber.from(this.pid),
