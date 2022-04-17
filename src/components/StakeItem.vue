@@ -17,11 +17,11 @@
       :sm="22"
       :xs="22">
         <p v-if="locktime>0">锁定时间：{{locktime}}(秒)</p>
-        <p>总质押：{{ lp_amount }} {{ stk_symbol }}</p>
-        <p>APY：{{ apy }} %</p>
-        <p>质押中：{{ farm_amount }}{{ stk_symbol }}</p>
+        <p>总质押：{{ hformat(lp_amount) }} {{ stk_symbol }}</p>
+        <p>APY：{{ hformat(apy) }} %</p>
+        <p>质押中：{{ hformat(farm_amount) }} &nbsp {{ stk_symbol }} <span>{{hformat(farm_amount*100/lp_amount)}} %</span></p>
         <!-- 显示已质押金额 -->
-        <span>已赚取：{{ earned_amount }}PBP</span>
+        <span>已赚取：{{ hformat(earned_amount) }}PBP</span>
         <!-- 显示目前的收益 -->
         <el-button @click="claim">claim</el-button>
       </el-col>
@@ -70,6 +70,7 @@
 <script>
 import tokens from "../tokens";
 import { ethers } from "ethers";
+import hformat from 'human-format';
 import ApproveButton from "./lib/ApproveButton.vue";
 import { mapState } from "vuex";
 export default {
@@ -98,6 +99,18 @@ export default {
     };
   },
   methods: {
+    hformat: function(val){
+        console.log('hformat', val)
+        if(isNaN(val)||val==''){
+            return ''
+        }else if(typeof(val)=='number'){
+            return hformat(val)
+        }else if(typeof(val)=='string'){
+            return hformat(parseFloat(val))
+        }else{
+            return hformat(val.toNumber())
+        }
+    },
     refresh: async function () {
       this.stk_symbol = await tokens.symbol(this.stakeAddr);
       this.stk_balance_bn = await tokens.balance(this.stakeAddr);
