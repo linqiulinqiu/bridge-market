@@ -1,6 +1,9 @@
 <template>
   <el-col id="stake">
     <el-container v-if="bsc.addr">
+      <p v-if="time_msg">
+        质押奖励开始：{{ time_msg }}
+      </p>
       <el-main v-if="stakeTokens.length">
         <stake-item
           v-for="item in stakeTokens"
@@ -23,6 +26,7 @@
 <script>
 import StakeItem from "../components/StakeItem.vue";
 import { mapState } from "vuex";
+import { DateTime } from 'luxon';
 export default {
   name: "Stake",
   components: {
@@ -34,14 +38,19 @@ export default {
   data() {
     return {
       stakeTokens: [],
+      time_msg:''
     };
   },
   methods: {
     refresh: async function () {
+      const stakeStart = await this.bsc.ctrs.pbp.stakeStart()
+      const sstime = DateTime.fromSeconds(stakeStart.toNumber())
+      this.time_msg = sstime.toRelative({locale:'zh'})
       const pools = await this.bsc.ctrs.staking.pools();
       const stk = [];
       for (let i in pools[0]) {
-        stk.push({ stakeAddr: pools[0][i], pid: i, lpamount: pools[2][i], rpshare: pools[3][i], locktime: pools[4][i].toNumber() });
+        const rps = await this.bsc.ctrs.staking.rewardPerShare(i)
+        stk.push({ stakeAddr: pools[0][i], pid: i, lpamount: pools[2][i], rpshare: rps, locktime: pools[4][i].toNumber() });
       }
       this.stakeTokens = stk;
       console.log("stake tokens", this.stakeTokens);
