@@ -14,7 +14,7 @@
       <el-col id="stakeinput" :lg="22" :md="22" :sm="22" :xs="22">
         <p v-if="locktime > 0">锁定时间：{{ locktime }}(秒)</p>
         <p>总质押：{{ hformat(lpamount) }} {{ stk_symbol }}</p>
-        <p>APY：{{ apy }} %</p>
+        <p>APR：{{ apy }} %</p>
         <p>
           质押中：{{ hformat(farm_amount) }} &nbsp; {{ stk_symbol }}
           <span>{{ hformat((farm_amount * 100) / lpamount) }} %</span>
@@ -127,7 +127,7 @@ export default {
       const earnval = await this.bsc.ctrs.staking.earned(pid, this.bsc.addr);
       this.earned_amount = await tokens.format(rewardAddr, earnval);
       console.log("poolreward", this.poolreward);
-      this.apy = this.poolreward * 365 * 86400 * 100;
+      this.apy = (this.poolreward * 365 * 86400 * 100) / this.lpamount;
     },
     withdraw: async function () {
       const amount = await tokens.parse(this.stakeAddr, this.withdraw_amount);

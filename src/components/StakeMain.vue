@@ -48,7 +48,13 @@ export default {
       const stk = [];
       let total_alloc = 0;
       const now = parseInt(DateTime.now().toSeconds());
-      const reward_speed = await this.bsc.ctrs.pbp.stakeRewardIn(now, now + 1);
+      const reward_speed_a = await this.bsc.ctrs.pbp.stakeRewardIn(
+        now,
+        now + 1
+      );
+      const reward_speed = parseFloat(
+        await tokens.format(this.bsc.ctrs.pbp.address, reward_speed_a)
+      );
       for (let i in pools[0]) {
         const lpamount = await tokens.format(pools[0][i], pools[2][i]);
         stk.push({
