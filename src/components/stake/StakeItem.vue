@@ -12,7 +12,7 @@
         <el-button @click="refresh">refresh</el-button>
       </el-col>
       <el-col id="stakeinput" :lg="22" :md="22" :sm="22" :xs="22">
-        <p v-if="locktime > 0">锁定时间：{{ locktime }}(秒)</p>
+        <p v-if="locktime > 0">锁定时间：{{ locktime_str }}</p>
         <p>总质押：{{ hformat(lpamount) }} {{ stk_symbol }}</p>
         <p>APR：{{ apy }} %</p>
         <p>
@@ -33,7 +33,7 @@
       <el-card>
         <h2>设置质押数量</h2>
         <p>
-          <span>balance：{{ stk_balance }}{{ stk_symbol }}</span
+          <span>{{ $t("balance") }}：{{ stk_balance }}{{ stk_symbol }}</span
           ><el-button @click="stake_amount = stk_balance">all</el-button>
         </p>
         <!-- 显示钱包中WXCC余额 -->
@@ -51,18 +51,25 @@
     </el-dialog>
     <el-dialog :visible.sync="dia_withdraw">
       <el-card>
-        <h2>Withdraw</h2>
+        <h2>{{ $t("withdraw") }}</h2>
         <p>
-          <span>balance：{{ farm_amount }}{{ stk_symbol }}</span>
-          <el-button @click="withdraw_amount = farm_amount">all</el-button>
+          <span>{{ $t("balance") }}：{{ farm_amount }}{{ stk_symbol }}</span>
+          <el-button @click="withdraw_amount = farm_amount">{{
+            $t("all")
+          }}</el-button>
         </p>
         <el-input v-model="withdraw_amount" clearable></el-input>
-        <el-button v-if="withdraw_wait == 0" @click="withdraw"
-          >withdraw</el-button
-        >
+        <el-button
+          v-if="withdraw_wait == 0"
+          @click="withdraw"
+          :loading="w_loading"
+          >{{ $t("withdraw") }}
+        </el-button>
         <el-col v-else>
           <p>锁定中，请等待{{ this.withdraw_wait }}秒，或强制提取</p>
-          <el-button @click="force_withdraw">force withdraw</el-button>
+          <el-button @click="force_withdraw" :loading="force_w_loading"
+            >force withdraw</el-button
+          >
         </el-col>
       </el-card>
     </el-dialog>
@@ -74,6 +81,8 @@ import { ethers } from "ethers";
 import hformat from "human-format";
 import ApproveButton from "../lib/ApproveButton.vue";
 import { mapState } from "vuex";
+import { Duration } from "luxon";
+import market from "../../market";
 export default {
   name: "Stake",
   components: {
@@ -82,9 +91,18 @@ export default {
   props: ["pid", "stakeAddr", "locktime", "lpamount", "poolreward"],
   computed: mapState({
     bsc: "bsc",
+    locktime_str() {
+      const lt = Duration.fromObject(
+        { seconds: this.locktime },
+        { locale: "zh" }
+      );
+      const lt_tohuman = lt.toHuman({ unitDisplay: "short" });
+      return lt_tohuman;
+    },
   }),
   mounted() {
     this.refresh();
+    setInterval(this.refresh, 12000);
   },
   data() {
     return {
@@ -99,7 +117,13 @@ export default {
       withdraw_wait: 0,
       dia_set_amount: false,
       dia_withdraw: false,
+      dep_loading: false,
+      w_loading: false,
+      force_w_loading: false,
     };
+  },
+  watch: {
+    locktime: function () {},
   },
   methods: {
     hformat: function (val) {
@@ -130,22 +154,42 @@ export default {
       this.apy = (this.poolreward * 365 * 86400 * 100) / this.lpamount;
     },
     withdraw: async function () {
+      this.w_loading = true;
       const amount = await tokens.parse(this.stakeAddr, this.withdraw_amount);
       if (amount.gt(0)) {
-        const receipt = await this.bsc.ctrs.staking.withdraw(this.pid, amount);
+        const obj = this;
+        try {
+          const receipt = await this.bsc.ctrs.staking.withdraw(
+            this.pid,
+            amount
+          );
+          await market.waitEventDone(receipt, function (e) {
+            obj.w_loading = false;
+            obj.dia_withdraw = false;
+          });
+        } catch (e) {
+          this.w_loading = false;
+        }
         console.log("withdraw receipt", receipt);
-        console.log("TODO: close withdraw window when done");
       }
     },
     force_withdraw: async function () {
+      this.force_w_loading = true;
       const amount = await tokens.parse(this.stakeAddr, this.withdraw_amount);
       if (amount.gt(0)) {
-        const receipt = await this.bsc.ctrs.staking.forceWithdraw(
-          this.pid,
-          amount
-        );
+        try {
+          const receipt = await this.bsc.ctrs.staking.forceWithdraw(
+            this.pid,
+            amount
+          );
+          await market.waitEventDone(receipt, function (e) {
+            obj.force_w_loading = false;
+          });
+        } catch (e) {
+          this.force_w_loading = false;
+          console.log("force withdraw err", e);
+        }
         console.log("force withdraw receipt", receipt);
-        console.log("TODO: close withdraw window when done");
       }
     },
     claim: async function () {
@@ -157,11 +201,21 @@ export default {
       console.log("TODO: close withdraw window when done");
     },
     deposit: async function () {
+      this.dep_loading = true;
       const amount = await tokens.parse(this.stakeAddr, this.stake_amount);
       if (amount.gt(0) && amount.lte(this.stk_balance_bn)) {
-        const receipt = await this.bsc.ctrs.staking.deposit(this.pid, amount);
-        console.log("stake receipt", receipt);
-        console.log("TODO: close deposit window when done");
+        try {
+          const obj = this;
+          const receipt = await this.bsc.ctrs.staking.deposit(this.pid, amount);
+          console.log("stake receipt", receipt);
+          await market.waitEventDone(receipt, function () {
+            obj.dep_loading = false;
+            obj.dia_set_amount = false;
+          });
+        } catch (e) {
+          this.dep_loading = false;
+          console.log("deposit in stake err", e);
+        }
       } else {
         console.log("Invalid amount", amount);
       }
