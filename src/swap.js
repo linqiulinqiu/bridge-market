@@ -1,5 +1,6 @@
 const ethers = require('ethers')
 const pbw = require('pbwallet')
+const tokens = require('./tokens')
 
 // Assume: 
 //  WCoin: all pair with PBP
@@ -50,14 +51,16 @@ async function price(bsc, token){   // price in PBP
     const ctr = pbw.erc20_contract(token)
     const name = await ctr.name()
     if(name=='Pancake LPs'){
-        const pbpamount = ethers.utils.formatUnits(await bsc.ctrs.pbp.balanceOf(token),'gwei')
-        console.log('pbpamount', pbpamount)
-        const supply = ethers.utils.formatUnits(await ctr.totalSupply(), 'gwei')
+        const pbpamount = await tokens.balance(bsc.ctrs.pbp.address, token)
+        const pbpval = await tokens.format(bsc.ctrs.pbp.address, pbpamount)
+        console.log('pbp in lp', pbpval)
+        const supply = await tokens.format(token, await tokens.supply(token))
         console.log('lp supply', supply)
-        return supply/pbpamount/2
+        return parseFloat(pbpval)*2/parseFloat(supply)
     }else{
         const paths = await path_for_pair(bsc, token, bsc.ctrs.pbp.address)
-        const aouts = await bsc.ctrs.router.getAmountsOut(ethers.BigNumber.from(1e9), paths)
+        const aouts = await bsc.ctrs.router.getAmountsOut(await tokens.parse(token,'1'), paths)
+        console.log('aouts', aouts)
         return ethers.utils.formatUnits(aouts[aouts.length - 1],'gwei')
     }
 }

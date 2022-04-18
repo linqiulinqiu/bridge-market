@@ -23,7 +23,6 @@ async function tokenInfo(ctraddr) {
     }
     ctraddr = ethers.utils.getAddress(ctraddr)
     if (!(ctraddr in tokenInfoList)) {
-        console.log('create erc20 for', ctraddr)
         const ctr = pbw.erc20_contract(ctraddr)
         let info = {
             symbol: "invalid",
@@ -54,7 +53,6 @@ async function lpSymbol(ctraddr){
 
 async function tokenSymbol(ctraddr) {
     const info = await tokenInfo(ctraddr)
-    console.log('tokenSymbol', ctraddr, info.symbol)
     return info.symbol
 }
 

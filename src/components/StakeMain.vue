@@ -69,7 +69,7 @@ export default {
       }
       for (let i in stk) {
         const price = await swap.price(this.bsc, stk[i].stakeAddr)
-        console.log('price', price)
+        console.log('price', await tokens.symbol(stk[i].stakeAddr), price)
         stk[i].reward_speed = (stk[i].alloc * reward_speed/price) / total_alloc;
         console.log("stk", i, "reward_speed", stk[i].reward_speed);
       }
