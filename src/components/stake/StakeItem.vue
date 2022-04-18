@@ -15,20 +15,31 @@
         <!-- 显示目前的收益 -->
         <el-button @click="claim">claim</el-button>
       </el-col>
-      <el-col id="stakeapprove">
+      <el-col id="stakeapprove" 
+      :lg="{ span: 14, offset: 12 }"
+      :md="{ span: 14, offset: 12 }"
+      :sm="{ span: 14, offset: 12 }"
+      :xs="{ span: 14, offset: 12 }"
+      >
         <el-button @click="dia_set_amount = true">stake</el-button>
         <el-button @click="dia_withdraw = true">withdraw</el-button>
       </el-col>
     </el-col>
-    <el-dialog :visible.sync="dia_set_amount">
-      <el-card>
+    <el-dialog :visible.sync="dia_set_amount" width="40vw">
+      <el-card class="amount-ipt">
         <h2>设置质押数量</h2>
         <p>
           <span>{{ $t("balance") }}：{{ stk_balance }}{{ stk_symbol }}</span
           ><el-button @click="stake_amount = stk_balance">all</el-button>
         </p>
         <!-- 显示钱包中WXCC余额 -->
-        <el-input v-model="stake_amount" clearable></el-input>
+        <el-input v-model="stake_amount" clearable maxlength="20">
+          
+        </el-input>
+        <el-button 
+          @click="stake_amount = stk_balance"  
+          type="primary">all</el-button>
+      
         <ApproveButton
           v-if="stk_balance"
           :bsc="bsc"
@@ -240,10 +251,16 @@ export default {
   top: 45%;
 }
 #stakeapprove {
-  padding: 0 5% 0 55%;
+  padding-right:0;
 }
 .info {
   margin-top: 300px;
+}
+.amount-ipt .el-input{
+  width: 50%;
+  min-width: 200px;
+  margin: 10px;
+
 }
 h2 {
   text-align: center;
