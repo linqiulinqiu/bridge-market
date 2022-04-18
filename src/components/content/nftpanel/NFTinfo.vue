@@ -92,4 +92,7 @@ export default {
 };
 </script>
 <style>
+.info-img{
+  border-radius: 15px;
+}
 </style>

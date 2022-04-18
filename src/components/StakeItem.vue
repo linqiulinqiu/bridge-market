@@ -19,7 +19,7 @@
         <p v-if="locktime>0">锁定时间：{{locktime}}(秒)</p>
         <p>总质押：{{ hformat(lp_amount) }} {{ stk_symbol }}</p>
         <p>APY：{{ hformat(apy) }} %</p>
-        <p>质押中：{{ hformat(farm_amount) }} &nbsp {{ stk_symbol }} <span>{{hformat(farm_amount*100/lp_amount)}} %</span></p>
+        <p>质押中：{{ hformat(farm_amount) }} &nbsp;{{ stk_symbol }} <span>{{hformat(farm_amount*100/lp_amount)}} %</span></p>
         <!-- 显示已质押金额 -->
         <span>已赚取：{{ hformat(earned_amount) }}PBP</span>
         <!-- 显示目前的收益 -->
