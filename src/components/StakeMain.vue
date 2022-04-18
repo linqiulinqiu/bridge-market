@@ -19,6 +19,7 @@
 import StakeItem from "./stake/StakeItem.vue";
 import { mapState } from "vuex";
 import { DateTime } from "luxon";
+import swap from "../swap";
 import tokens from "../tokens";
 export default {
   name: "StakeMain",
@@ -67,7 +68,9 @@ export default {
         total_alloc += pools[1][i].toNumber();
       }
       for (let i in stk) {
-        stk[i].reward_speed = (stk[i].alloc * reward_speed) / total_alloc;
+        const price = await swap.price(this.bsc, stk[i].stakeAddr)
+        console.log('price', await tokens.symbol(stk[i].stakeAddr), price)
+        stk[i].reward_speed = (stk[i].alloc * reward_speed/price) / total_alloc;
         console.log("stk", i, "reward_speed", stk[i].reward_speed);
       }
       this.stakeTokens = stk;

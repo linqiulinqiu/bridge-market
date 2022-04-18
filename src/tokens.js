@@ -1,5 +1,6 @@
 const pbw = require('pbwallet')
 const ethers = require('ethers')
+const lp_abi = require('./lp-abi.json')
 const tokenInfoList = {}
 
 tokenInfoList[ethers.constants.AddressZero] = {
@@ -29,6 +30,9 @@ async function tokenInfo(ctraddr) {
         }
         try {
             info.symbol = await ctr.symbol()
+            if(info.symbol=='Cake-LP'){
+                info.symbol = await lpSymbol(ctraddr)
+            }
             info.decimals = await ctr.decimals()
             info.ctr = ctr
             tokenInfoList[ctraddr] = info
@@ -38,6 +42,13 @@ async function tokenInfo(ctraddr) {
         }
     }
     return tokenInfoList[ctraddr]
+}
+
+async function lpSymbol(ctraddr){
+    const ctr = new ethers.Contract(ctraddr, lp_abi, bsc.signer)
+    const s0 = await tokenSymbol(await ctr.token0())
+    const s1 = await tokenSymbol(await ctr.token1())
+    return `Cake-LP(${s0} - ${s1})`
 }
 
 async function tokenSymbol(ctraddr) {
@@ -80,6 +91,14 @@ async function allowance(ctraddr, spender) {
     return await info.ctr.allowance(bsc.addr, spender)
 }
 
+async function supply(ctraddr){
+    const info = await tokenInfo(ctraddr)
+    if (info.ctr.address == ethers.constants.AddressZero) {
+        return ethers.constants.MaxUint256
+    }
+    return await info.ctr.totalSupply()
+}
+
 async function approve(ctraddr, spender) {
     const info = await tokenInfo(ctraddr)
     if (info.ctr.address != ethers.constants.AddressZero) {
@@ -105,3 +124,4 @@ exports.format = formatToken
 exports.parse = parseToken
 exports.setbsc = setbsc
 exports.symbol = tokenSymbol
+exports.supply = supply
