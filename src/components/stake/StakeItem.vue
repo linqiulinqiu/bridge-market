@@ -137,6 +137,7 @@ export default {
         return hformat(val.toNumber());
       }
     },
+
     refresh: async function () {
       const pid = ethers.BigNumber.from(this.pid);
       const stakeAddr = this.stakeAddr;
@@ -150,7 +151,7 @@ export default {
       this.farm_amount = await tokens.format(stakeAddr, staked);
       const earnval = await this.bsc.ctrs.staking.earned(pid, this.bsc.addr);
       this.earned_amount = await tokens.format(rewardAddr, earnval);
-      console.log("poolreward", this.poolreward);
+      // console.log("poolreward", this.poolreward);
       this.apy = (this.poolreward * 365 * 86400 * 100) / this.lpamount;
     },
     withdraw: async function () {
