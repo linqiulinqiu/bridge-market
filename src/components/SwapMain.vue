@@ -149,11 +149,16 @@ export default {
   computed: mapState({
     bsc: "bsc",
     watchCoin() {
-      const watchlist = this.watchlist();
+      const pbpaddr = this.bsc.ctrs.pbp.address;
       if (this.from_coin && this.from_coin != "") {
-        for (let j in watchlist) {
-          if (watchlist[j].address == this.from_coin) return watchlist[j];
-        }
+        for (let i in this.allwlist)
+          if (
+            this.allwlist[i].address == pbpaddr &&
+            this.from_coin == pbpaddr
+          ) {
+            return this.allwlist[i];
+          }
+        return false;
       }
       return false;
     },
