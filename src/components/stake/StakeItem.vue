@@ -71,6 +71,7 @@
 <script>
 import tokens from "../../tokens";
 import { ethers } from "ethers";
+import pbwallet from "pbwallet";
 import hformat from "human-format";
 import ApproveButton from "../lib/ApproveButton.vue";
 import { mapState } from "vuex";
@@ -117,7 +118,7 @@ export default {
       const pid = ethers.BigNumber.from(this.pid);
       const stakeAddr = this.stakeAddr;
       const rewardAddr = this.bsc.ctrs.pbp.address;
-      this.stk_symbol = await tokens.symbol(stakeAddr);
+      this.stk_symbol = await tokens.symbol(stakeAddr)
       this.stk_balance_bn = await tokens.balance(stakeAddr);
       this.stk_balance = await tokens.format(stakeAddr, this.stk_balance_bn);
       const stakeds = await this.bsc.ctrs.staking.staked(pid, this.bsc.addr);

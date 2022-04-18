@@ -45,6 +45,23 @@ async function estimate(bsc, from, to, amount_in) {
     return aouts[aouts.length - 1]
 }
 
+async function price(bsc, token){   // price in PBP
+    if(token==bsc.ctrs.pbp.address) return 1
+    const ctr = pbw.erc20_contract(token)
+    const name = await ctr.name()
+    if(name=='Pancake LPs'){
+        const pbpamount = ethers.utils.formatUnits(await bsc.ctrs.pbp.balanceOf(token),'gwei')
+        console.log('pbpamount', pbpamount)
+        const supply = ethers.utils.formatUnits(await ctr.totalSupply(), 'gwei')
+        console.log('lp supply', supply)
+        return supply/pbpamount/2
+    }else{
+        const paths = await path_for_pair(bsc, token, bsc.ctrs.pbp.address)
+        const aouts = await bsc.ctrs.router.getAmountsOut(ethers.BigNumber.from(1e9), paths)
+        return ethers.utils.formatUnits(aouts[aouts.length - 1],'gwei')
+    }
+}
+
 async function swap(bsc, from, to, amount_in, min_out, lasting) {
     const deadline = parseInt((new Date()).getTime() / 1000) + lasting
     const paths = await path_for_pair(bsc, from, to)
@@ -62,3 +79,4 @@ async function swap(bsc, from, to, amount_in, min_out, lasting) {
 }
 exports.estimate = estimate
 exports.swap = swap
+exports.price = price
