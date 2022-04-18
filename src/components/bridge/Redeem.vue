@@ -59,6 +59,7 @@ export default {
   },
   computed: mapState({
     redeemBalance: "redeemBalance",
+    current: "current",
   }),
   data() {
     return {
@@ -77,6 +78,11 @@ export default {
     this.loadRedeems();
   },
   watch: {
+    current: function (newcointy) {
+      if (newcointy) {
+        this.amount = "";
+      }
+    },
     newToken: debounce(function () {
       this.loadPair();
     }, 500),
