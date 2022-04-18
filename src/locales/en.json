@@ -44,6 +44,7 @@
     "doc":"Doc",
     "data":"Data loading",
     "destroy":"Destroy NFT",
+    "dep-rebind":"Unable to rebind deposit address,please refresh the page.",
 
     "function":"Function",
     

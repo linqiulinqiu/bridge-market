@@ -185,7 +185,7 @@ export default {
       const cointy = this.current.coinType;
       try {
         const res = await market.getDepAddr(id, cointy);
-        if (res == false) {
+        if (res == "nothing") {
           console.log("存款地址没有了");
           this.$message(this.$t("getaddr"));
           this.bables = false;
@@ -197,6 +197,9 @@ export default {
       } catch (e) {
         this.getDep_loading = false;
         console.log("deposit addr errr", e.message);
+        if (e.data.code == 3) {
+          this.$message(this.$t("dep-rebind"));
+        }
       }
     },
   },

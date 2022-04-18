@@ -43,6 +43,7 @@
     "dep-rate":"存款费率",
     "dep-minFee":"最小存款手续费",
     "dep-addr":"获取{bcoin}的存款地址",
+    "dep-rebind":"该类型地址已经绑定了，请刷新页面后查看。",
 
     "function":"支持",
     

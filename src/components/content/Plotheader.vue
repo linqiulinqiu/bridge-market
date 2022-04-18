@@ -153,6 +153,8 @@ export default {
         await data.loadAlllists_brief(store);
         await data.loadAlllists_detail(store);
         this.connect_loading = false;
+      } else {
+        this.connect_loading = false;
       }
     },
   },
