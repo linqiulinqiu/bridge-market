@@ -100,13 +100,19 @@
           <a
             target="_blank"
             :href="this.lp_pre + 'add/BNB' + '/' + this.watchCoin.address"
-            >Add LP {{ watchCoin.bsymbol }}
+            >{{ $t("add-lp", { coin: watchCoin.bsymbol }) }}
+          </a>
+        </el-button>
+        <el-button v-if="this.watchBcoin" class="btn-link">
+          <a
+            target="_blank"
+            :href="this.lp_pre + 'add/' + pbpAddr + '/' + watchBcoin.address"
+            >{{ $t("add-lp", { coin: watchBcoin.bsymbol }) }}
           </a>
         </el-button>
       </el-col>
     </el-col>
     <el-dialog :title="this.$t('setting')" :visible.sync="dia_slip">
-      <!-- <span slot="title">{{ $t("setting") }}</span> -->
       <el-card id="slipcard">
         <el-col class="cardheader">
           <h3>{{ $t("slippage") }}</h3>
@@ -148,6 +154,9 @@ export default {
   },
   computed: mapState({
     bsc: "bsc",
+    pbpAddr(state) {
+      return state.bsc.ctrs.pbp.address;
+    },
     watchCoin() {
       const pbpaddr = this.bsc.ctrs.pbp.address;
       if (this.from_coin && this.from_coin != "") {
@@ -159,6 +168,23 @@ export default {
             return this.allwlist[i];
           }
         return false;
+      }
+      return false;
+    },
+    watchBcoin() {
+      const wsymbols = pbwallet.wcoin_list("bsymbol");
+      const blist = [];
+      for (let i in wsymbols) {
+        blist.push(pbwallet.wcoin_info(wsymbols[i], "bsymbol"));
+      }
+      console.log("thissss", blist);
+      if (this.from_coin && this.from_coin != "") {
+        for (let k in blist) {
+          if (this.from_coin == blist[k].address) {
+            return blist[k];
+          }
+          return false;
+        }
       }
       return false;
     },

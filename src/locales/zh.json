@@ -5,6 +5,7 @@
     "approve":"授权",
     "add-token-tip":"添加当前代币信息到metaMask（小狐狸）钱包中",
     "add-to-wallet":"添加{coin}到钱包",
+    "add-lp":"增加{coin}流动性",
 
     "balance":"余额",
     "bridge":"桥梁",
@@ -44,6 +45,8 @@
     "dep-minFee":"最小存款手续费",
     "dep-addr":"获取{bcoin}的存款地址",
     "dep-rebind":"该类型地址已经绑定了，请刷新页面后查看。",
+
+    "earn":"盈利",
 
     "function":"支持",
     
@@ -91,10 +94,9 @@
     "intoduction12":"我们的支出和收益",
     "intoduction13":"- 除了团队正常运行和服务器维护，对于每笔代币的储存，我们需要支付：<br>- 1. WCoin 铸造费用，<br>- 2. WCoin铸币上限调整费用。<br>- 我们收取以下费用：<br>- 1. NFT 铸造，<br>- 2. WCoin存款，<br>- 3. WCoin 提现。",
 
-
-
     "look-info":"查看具体信息请先连接钱包",
-    "loading":"Loading......",
+    "loading":"加载中......",
+    "lock-time":"锁定时间",
 
     "market":"市场",
     "mintPBT":"Mint PBT",

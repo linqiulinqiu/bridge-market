@@ -1,14 +1,16 @@
 <template>
   <el-col id="lplink">
     <el-button v-if="this.coinInfo" class="lp-style">
-      <router-link to="/Swap">Buy {{ this.coinInfo.bsymbol }}</router-link>
+      <router-link to="/Swap"
+        >{{ $t("buy") }} {{ this.coinInfo.bsymbol }}</router-link
+      >
     </el-button>
     <el-button v-if="this.coinInfo" class="lp-style">
       <a
         target="_"
         :href="this.pre_link + 'add/' + pbpAddr + '/' + this.coinInfo.address"
-        >Add LP {{ this.coinInfo.bsymbol }}</a
-      >
+        >{{ $t("add-lp", { coin: this.coinInfo.bsymbol }) }}
+      </a>
     </el-button>
   </el-col>
 </template>

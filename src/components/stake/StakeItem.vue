@@ -1,18 +1,9 @@
 <template>
-  <el-col id="stake">
-    <el-col
-      class="stake-main"
-      :lg="{ span: 10, offset: 7 }"
-      :md="{ span: 12, offset: 6 }"
-      :sm="{ span: 16, offset: 4 }"
-      :xs="{ span: 22, offset: 1 }"
-    >
-      <el-col id="staketitle">
-        <h2>Earn by Staking</h2>
-        <el-button @click="refresh">refresh</el-button>
-      </el-col>
-      <el-col id="stakeinput" :lg="22" :md="22" :sm="22" :xs="22">
-        <p v-if="locktime > 0">锁定时间：{{ locktime_str }}</p>
+  <el-col id="stake" :span="24">
+    <el-col class="stake-main">
+      <el-col id="stakeinput" :lg="22" :span="24">
+        <el-button @click="refresh" icon="el-icon-refresh"></el-button>
+        <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
         <p>总质押：{{ hformat(lpamount) }} {{ stk_symbol }}</p>
         <p>APR：{{ apy }} %</p>
         <p>
@@ -143,7 +134,7 @@ export default {
       const pid = ethers.BigNumber.from(this.pid);
       const stakeAddr = this.stakeAddr;
       const rewardAddr = this.bsc.ctrs.pbp.address;
-      this.stk_symbol = await tokens.symbol(stakeAddr)
+      this.stk_symbol = await tokens.symbol(stakeAddr);
       this.stk_balance_bn = await tokens.balance(stakeAddr);
       this.stk_balance = await tokens.format(stakeAddr, this.stk_balance_bn);
       const stakeds = await this.bsc.ctrs.staking.staked(pid, this.bsc.addr);
@@ -165,6 +156,7 @@ export default {
             this.pid,
             amount
           );
+          console.log("withdraw receipt", receipt);
           await market.waitEventDone(receipt, function (e) {
             obj.w_loading = false;
             obj.dia_withdraw = false;
@@ -172,7 +164,6 @@ export default {
         } catch (e) {
           this.w_loading = false;
         }
-        console.log("withdraw receipt", receipt);
       }
     },
     force_withdraw: async function () {
@@ -184,6 +175,7 @@ export default {
             this.pid,
             amount
           );
+          console.log("force withdraw receipt", receipt);
           await market.waitEventDone(receipt, function (e) {
             obj.force_w_loading = false;
           });
@@ -191,7 +183,6 @@ export default {
           this.force_w_loading = false;
           console.log("force withdraw err", e);
         }
-        console.log("force withdraw receipt", receipt);
       }
     },
     claim: async function () {

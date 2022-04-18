@@ -4,6 +4,7 @@
     "approve":"Approve",
     "add-token-tip":"Add the current token information to the metamask Wallet",
     "add-to-wallet":"Add {coin} to wallet",
+    "add-lp":"Add {coin} Lp",
 
     "balance":"Balance",
     "bridge":"Bridge",
@@ -46,6 +47,8 @@
     "destroy":"Destroy NFT",
     "dep-rebind":"Unable to rebind deposit address,please refresh the page.",
 
+    "earn":"Earn",
+    
     "function":"Function",
     
     "get":"You will get :",
@@ -93,7 +96,8 @@
     "intoduction13":"- Aside for team living and server maintenance. For each coin deposit, we need to pay for:<br>- 1. WCoin mint<br>- 2. WCoin mint limitation adjustment<br>We charge fee on:<br>- 1.NFT mint<br>- 2. WCoin deposit<br>- 3. WCoin withdraw",
 
     "look-info":"More details after connect wallet",
-    "loading":"Loading ...", 
+    "loading":"Loading ...",
+    "lock-time":"Locking time",
     
     "market":"MarketPlace",
     "mintPBT":"Mint PBT",
@@ -131,6 +135,8 @@
     "swap":"Swap",
     "s-swap":"Simple Swap",
     "s-swap1":"Trade common tokens (powered by PancakeSwap)",
+    "stake":"Stake",
+
 
     "to-market":"Go to the market",    
     "tips-amount1":"The amount is too small, you won't receive anything.",

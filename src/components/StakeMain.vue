@@ -1,17 +1,25 @@
 <template>
   <el-col>
     <p v-if="time_msg">质押奖励开始：{{ time_msg }}</p>
-    <el-main v-if="stakeTokens.length">
-      <StakeItem
-        v-for="item in stakeTokens"
-        :stakeAddr="item.stakeAddr"
-        :pid="item.pid"
-        :lpamount="item.lpamount"
-        :poolreward="item.reward_speed"
-        :locktime="item.locktime"
-        :key="item.pid"
-      />
-    </el-main>
+    <ul v-if="stakeTokens.length">
+      <li v-for="item in this.stakeTokens" :key="item.pid">
+        <el-col
+          :lg="{ span: 11, offset: 1 }"
+          :md="{ span: 12 }"
+          :sm="{ span: 16 }"
+          :xs="{ span: 22 }"
+        >
+          <StakeItem
+            :stakeAddr="item.stakeAddr"
+            :pid="item.pid"
+            :lpamount="item.lpamount"
+            :poolreward="item.reward_speed"
+            :locktime="item.locktime"
+            :key="item.pid"
+          />
+        </el-col>
+      </li>
+    </ul>
     <p v-else>{{ $t("data") }}</p>
   </el-col>
 </template>
@@ -68,9 +76,10 @@ export default {
         total_alloc += pools[1][i].toNumber();
       }
       for (let i in stk) {
-        const price = await swap.price(this.bsc, stk[i].stakeAddr)
-        console.log('price', await tokens.symbol(stk[i].stakeAddr), price)
-        stk[i].reward_speed = (stk[i].alloc * reward_speed/price) / total_alloc;
+        const price = await swap.price(this.bsc, stk[i].stakeAddr);
+        console.log("price", await tokens.symbol(stk[i].stakeAddr), price);
+        stk[i].reward_speed =
+          (stk[i].alloc * reward_speed) / price / total_alloc;
         console.log("stk", i, "reward_speed", stk[i].reward_speed);
       }
       this.stakeTokens = stk;
