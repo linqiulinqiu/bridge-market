@@ -180,7 +180,7 @@ async function getDepAddr(pbtId, cointy) {
     const ables = await getBindables(cointy)
     if (parseInt(ables) == 0) {
         console.log("ables", ables)
-        return false
+        return "nothing"
     } else {
         const id = ethers.BigNumber.from(pbtId)
         const res = await bsc.ctrs.pbpuzzlehash.bindDepositPuzzleHash(id, cointy)
