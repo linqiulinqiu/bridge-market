@@ -10,7 +10,7 @@
           :stakeAddr="item.stakeAddr"
           :pid="item.pid"
           :lpamount="item.lpamount"
-          :rpshare="item.rpshare"
+          :poolreward="item.reward_speed"
           :locktime="item.locktime"
           :key="item.pid"
         >
@@ -27,6 +27,7 @@
 import StakeItem from "../components/StakeItem.vue";
 import { mapState } from "vuex";
 import { DateTime } from 'luxon';
+import tokens from '../tokens';
 export default {
   name: "Stake",
   components: {
@@ -38,19 +39,29 @@ export default {
   data() {
     return {
       stakeTokens: [],
-      time_msg:''
+      time_msg:'',
+      total_alloc: 1,
     };
   },
   methods: {
     refresh: async function () {
       const stakeStart = await this.bsc.ctrs.pbp.stakeStart()
+      console.log('stake-start time', stakeStart.toNumber())
       const sstime = DateTime.fromSeconds(stakeStart.toNumber())
       this.time_msg = sstime.toRelative({locale:'zh'})
       const pools = await this.bsc.ctrs.staking.pools();
       const stk = [];
+      let total_alloc = 0
+      const now = parseInt(DateTime.now().toSeconds())
+      const reward_speed = await this.bsc.ctrs.pbp.stakeRewardIn(now, now+1)
       for (let i in pools[0]) {
-        const rps = await this.bsc.ctrs.staking.rewardPerShare(i)
-        stk.push({ stakeAddr: pools[0][i], pid: i, lpamount: pools[2][i], rpshare: rps, locktime: pools[4][i].toNumber() });
+        const lpamount = await tokens.format(pools[0][i], pools[2][i])
+        stk.push({ stakeAddr: pools[0][i], pid: i, alloc: pools[1][i].toNumber(), lpamount: lpamount, locktime: pools[4][i].toNumber() })
+        total_alloc += pools[1][i].toNumber()
+      }
+      for(let i in stk){
+          stk[i].reward_speed = stk[i].alloc*reward_speed/total_alloc
+          console.log('stk', i, 'reward_speed', stk[i].reward_speed)
       }
       this.stakeTokens = stk;
       console.log("stake tokens", this.stakeTokens);

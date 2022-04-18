@@ -17,9 +17,9 @@
       :sm="22"
       :xs="22">
         <p v-if="locktime>0">锁定时间：{{locktime}}(秒)</p>
-        <p>总质押：{{ hformat(lp_amount) }} {{ stk_symbol }}</p>
-        <p>APY：{{ hformat(apy) }} %</p>
-        <p>质押中：{{ hformat(farm_amount) }} &nbsp {{ stk_symbol }} <span>{{hformat(farm_amount*100/lp_amount)}} %</span></p>
+        <p>总质押：{{ hformat(lpamount) }} {{ stk_symbol }}</p>
+        <p>APY：{{ apy }} %</p>
+        <p>质押中：{{ hformat(farm_amount) }} &nbsp {{ stk_symbol }} <span>{{hformat(farm_amount*100/lpamount)}} %</span></p>
         <!-- 显示已质押金额 -->
         <span>已赚取：{{ hformat(earned_amount) }}PBP</span>
         <!-- 显示目前的收益 -->
@@ -78,7 +78,7 @@ export default {
   components: {
     ApproveButton,
   },
-  props: ["pid", "stakeAddr","locktime", "lpamount", "rpshare"],
+  props: ["pid", "stakeAddr","locktime", "lpamount", "poolreward"],
   computed: mapState({
     bsc: "bsc",
   }),
@@ -87,7 +87,6 @@ export default {
       apy: "-",
       farm_amount: "",
       earned_amount: "",
-      lp_amount: "",
       stk_symbol: "-",
       stk_balance: "",
       stk_balance_bn: 0,
@@ -100,7 +99,6 @@ export default {
   },
   methods: {
     hformat: function(val){
-        console.log('hformat', val)
         if(isNaN(val)||val==''){
             return ''
         }else if(typeof(val)=='number'){
@@ -112,30 +110,20 @@ export default {
         }
     },
     refresh: async function () {
-      this.stk_symbol = await tokens.symbol(this.stakeAddr);
-      this.stk_balance_bn = await tokens.balance(this.stakeAddr);
-      this.stk_balance = await tokens.format(
-        this.stakeAddr,
-        this.stk_balance_bn
-      );
-      const stakeds = await this.bsc.ctrs.staking.staked(
-        ethers.BigNumber.from(this.pid),
-        this.bsc.addr
-      )
+      const pid = ethers.BigNumber.from(this.pid)
+      const stakeAddr = this.stakeAddr
+      const rewardAddr = this.bsc.ctrs.pbp.address
+      this.stk_symbol = await tokens.symbol(stakeAddr);
+      this.stk_balance_bn = await tokens.balance(stakeAddr);
+      this.stk_balance = await tokens.format(stakeAddr, this.stk_balance_bn);
+      const stakeds = await this.bsc.ctrs.staking.staked(pid, this.bsc.addr);
       const staked = stakeds[0]
       this.withdraw_wait = stakeds[1].toNumber()
-      this.farm_amount = await tokens.format(this.stakeAddr, staked);
-      const earnval = await this.bsc.ctrs.staking.earned(
-        ethers.BigNumber.from(this.pid),
-        this.bsc.addr
-      );
-      this.earned_amount = await tokens.format(
-        this.bsc.ctrs.pbp.address,
-        earnval
-      );
-      this.apy = ethers.utils.formatEther(this.rpshare.mul(365*86400*100))
-      this.lp_amount = await tokens.format(this.stakeAddr, this.lpamount)
-      console.log("earned val", earnval);
+      this.farm_amount = await tokens.format(stakeAddr, staked);
+      const earnval = await this.bsc.ctrs.staking.earned(pid, this.bsc.addr);
+      this.earned_amount = await tokens.format(rewardAddr, earnval);
+      console.log('poolreward', this.poolreward)
+      this.apy = this.poolreward*365*86400*100
     },
     withdraw: async function () {
       const amount = await tokens.parse(this.stakeAddr, this.withdraw_amount);
