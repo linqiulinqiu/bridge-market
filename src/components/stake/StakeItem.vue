@@ -197,7 +197,8 @@ export default {
       const earnval = await this.bsc.ctrs.staking.earned(pid, this.bsc.addr);
       this.earned_amount = await tokens.format(rewardAddr, earnval);
       // console.log("poolreward", this.poolreward);
-      this.apy = (this.poolreward * 365 * 86400 * 100) / this.lpamount;
+      const ap = (this.poolreward * 365 * 86400 * 100) / this.lpamount;
+      this.apy = ap.toFixed(4);
     },
     withdraw: async function () {
       this.w_loading = true;
