@@ -1,0 +1,12 @@
+<template>
+  <el-col>
+    <p>总计：--</p>
+    <p>价格：--</p>
+    <p>预计价格：--</p>
+    <p>余额：</p>
+    <el-input></el-input>
+    <el-button>购买</el-button>
+  </el-col>
+</template>
+<script>
+</script>

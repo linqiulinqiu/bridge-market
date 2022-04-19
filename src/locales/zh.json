@@ -114,13 +114,15 @@
     "no-selling":"目前没有发现正在售卖的NFT，或者自己铸造一个？",
     "no-mysale":"您没有售卖NFT",
 
-
+    "onSale":"正在售卖",
     "old-balance":"旧代币余额",
     "or":"或者",
     "openNFT":"请先选择一个NFT",
+    
     "price":"价格",   
     "price-tips":"价格为空",
-    "onSale":"正在售卖",
+    "presell":"预售",
+
 
 
     "redeem":"兑换",
