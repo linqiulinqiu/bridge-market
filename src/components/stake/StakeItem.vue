@@ -116,7 +116,7 @@ export default {
   }),
   mounted() {
     this.refresh();
-    // setInterval(this.refresh, 12000);
+    setInterval(this.refresh, 12000);
   },
   data() {
     return {
