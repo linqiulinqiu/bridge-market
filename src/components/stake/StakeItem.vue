@@ -3,8 +3,8 @@
     <el-col class="stake-main">
       <el-row type="flex" justify="space-between" :gutter="20">
         <el-col
-          :lg="{ span: 14 }"
-          :md="{ span: 14 }"
+          :lg="{ span: 17 }"
+          :md="{ span: 17 }"
           :sm="{ span: 18 }"
           :xs="{ span: 18 }"
         >
@@ -16,7 +16,7 @@
           ></el-button>
           <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
           <p>
-            {{$t('total-staked')}}：
+            {{ $t("total-staked") }}：
             <span class="font">{{ hformat(lpamount) }}</span>
             {{ stk_symbol }}
           </p>
@@ -24,14 +24,17 @@
             APR：<span class="font">{{ apy }}</span> %
           </p>
           <p>
-            {{$t('staking')}}：<span class="font">{{ hformat(farm_amount) }} </span> &nbsp;
+            {{ $t("staking") }}：<span class="font"
+              >{{ hformat(farm_amount) }}
+            </span>
+            &nbsp;
             {{ stk_symbol }}
             <span class="font">
               {{ hformat((farm_amount * 100) / lpamount) }} %
             </span>
           </p>
           <span>
-            {{$t('earned')}}：
+            {{ $t("earned") }}：
             <span class="font">{{ hformat(earned_amount) }}</span>
             &nbsp;&nbsp; PBP
           </span>
@@ -42,14 +45,16 @@
           :sm="{ span: 6 }"
           :xs="{ span: 6 }"
         >
-          <el-button @click="claim" class="stake-btn">{{$t('claim')}}</el-button>
+          <el-button @click="claim" class="stake-btn">{{
+            $t("claim")
+          }}</el-button>
           <el-button @click="dia_set_amount = true" class="stake-btn">
             {{ $t("stake") }}
           </el-button>
           <el-button @click="dia_withdraw = true" class="stake-btn">
             {{ $t("withdraw") }}
           </el-button>
-          <el-button @click="open_lplink" class="stake-btn">
+          <el-button @click="open_lplink" class="stake-btn" v-if="this.isLp">
             <a :href="this.lplink" target="_blank">add lp</a>
           </el-button>
         </el-col>
@@ -57,18 +62,14 @@
     </el-col>
     <el-dialog :visible.sync="dia_set_amount" width="40vw">
       <el-card class="amount-ipt">
-        <h2>{{$t('set-s-amount')}}</h2>
+        <h2>{{ $t("set-s-amount") }}</h2>
         <p>
-          <span>{{ $t("balance") }}：{{ stk_balance }}{{ stk_symbol }}</span
-          >
+          <span>{{ $t("balance") }}：{{ stk_balance }}{{ stk_symbol }}</span>
         </p>
         <!-- 显示钱包中WXCC余额 -->
-        <el-input v-model="stake_amount" clearable maxlength="20">
-          
-        </el-input>
-        <el-button 
-          @click="stake_amount = stk_balance">all</el-button>
-      
+        <el-input v-model="stake_amount" clearable maxlength="20"> </el-input>
+        <el-button @click="stake_amount = stk_balance">all</el-button>
+
         <ApproveButton
           v-if="stk_balance"
           :bsc="bsc"
@@ -76,7 +77,7 @@
           :spender="bsc.ctrs.staking.address"
           :min-req="stk_balance_bn"
         >
-          <el-button @click="deposit">{{$t('deposit')}}</el-button>
+          <el-button @click="deposit">{{ $t("deposit") }}</el-button>
         </ApproveButton>
       </el-card>
     </el-dialog>
@@ -134,6 +135,7 @@ export default {
   }),
   mounted() {
     this.refresh();
+    this.loadLp();
     setInterval(this.refresh, 12000);
   },
   data() {
@@ -152,14 +154,12 @@ export default {
       dep_loading: false,
       w_loading: false,
       force_w_loading: false,
-      islp: false,
+      isLp: false,
       lp_prelink: "https://pancake.kiemtienonline360.com/#/add/",
       lplink: "",
     };
   },
-  watch: {
-    locktime: function () {},
-  },
+  watch: {},
   methods: {
     hformat: function (val) {
       if (isNaN(val) || val == "") {
@@ -172,10 +172,12 @@ export default {
         return hformat(val.toNumber());
       }
     },
+    loadLp: async function () {
+      this.isLp = await tokens.islp(this.stakeAddr);
+    },
     open_lplink: async function () {
       const stake_addr = this.stakeAddr;
-      this.lplink = await tokens.islp(stake_addr);
-      if (this.lplink) {
+      if (this.isLp) {
         const token = await tokens.lptokens(stake_addr);
         this.lplink = this.lp_prelink + token[0] + "/" + token[1];
         console.log("lpLink", this.lplink);
@@ -194,7 +196,7 @@ export default {
       this.farm_amount = await tokens.format(stakeAddr, staked);
       const earnval = await this.bsc.ctrs.staking.earned(pid, this.bsc.addr);
       this.earned_amount = await tokens.format(rewardAddr, earnval);
-      console.log("poolreward", this.poolreward);
+      // console.log("poolreward", this.poolreward);
       this.apy = (this.poolreward * 365 * 86400 * 100) / this.lpamount;
     },
     withdraw: async function () {
