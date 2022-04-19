@@ -386,7 +386,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .btn-link.el-button {
   background: rgba(43, 44, 51, 0.8);
   color: #38f2af;

@@ -63,7 +63,7 @@ export default {
   },
 };
 </script>
-<style >
+<style scoped>
 .mk-title {
   height: 80px;
   margin-bottom: 5px;
