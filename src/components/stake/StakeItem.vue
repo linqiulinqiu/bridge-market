@@ -15,13 +15,25 @@
             class="refresh-btn"
           ></el-button>
           <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
-          <p>总质押：{{ hformat(lpamount) }} {{ stk_symbol }}</p>
-          <p>APR：{{ apy }} %</p>
           <p>
-            质押中：{{ hformat(farm_amount) }} &nbsp; {{ stk_symbol }}
-            <span>{{ hformat((farm_amount * 100) / lpamount) }} %</span>
+            总质押：<span class="font">{{ hformat(lpamount) }}</span>
+            {{ stk_symbol }}
           </p>
-          <span>已赚取：{{ hformat(earned_amount) }}PBP</span>
+          <p>
+            APR：<span class="font">{{ apy }}</span> %
+          </p>
+          <p>
+            质押中：<span class="font">{{ hformat(farm_amount) }} </span> &nbsp;
+            {{ stk_symbol }}
+            <span class="font">
+              {{ hformat((farm_amount * 100) / lpamount) }} %
+            </span>
+          </p>
+          <span>
+            已赚取：
+            <span class="font">{{ hformat(earned_amount) }}</span>
+            &nbsp;&nbsp; PBP
+          </span>
         </el-col>
         <el-col
           :lg="{ span: 6 }"
@@ -35,6 +47,9 @@
           </el-button>
           <el-button @click="dia_withdraw = true" class="stake-btn">
             {{ $t("withdraw") }}
+          </el-button>
+          <el-button @click="open_lplink" class="stake-btn">
+            <a :href="this.lplink" target="_blank">add lp</a>
           </el-button>
         </el-col>
       </el-row>
@@ -91,7 +106,6 @@
 <script>
 import tokens from "../../tokens";
 import { ethers } from "ethers";
-import pbwallet from "pbwallet";
 import hformat from "human-format";
 import ApproveButton from "../lib/ApproveButton.vue";
 import { mapState } from "vuex";
@@ -134,6 +148,9 @@ export default {
       dep_loading: false,
       w_loading: false,
       force_w_loading: false,
+      islp: false,
+      lp_prelink: "https://pancake.kiemtienonline360.com/#/add/",
+      lplink: "",
     };
   },
   watch: {
@@ -151,7 +168,15 @@ export default {
         return hformat(val.toNumber());
       }
     },
-
+    open_lplink: async function () {
+      const stake_addr = this.stakeAddr;
+      this.lplink = await tokens.islp(stake_addr);
+      if (this.lplink) {
+        const token = await tokens.lptokens(stake_addr);
+        this.lplink = this.lp_prelink + token[0] + "/" + token[1];
+        console.log("lpLink", this.lplink);
+      }
+    },
     refresh: async function () {
       const pid = ethers.BigNumber.from(this.pid);
       const stakeAddr = this.stakeAddr;
@@ -165,7 +190,7 @@ export default {
       this.farm_amount = await tokens.format(stakeAddr, staked);
       const earnval = await this.bsc.ctrs.staking.earned(pid, this.bsc.addr);
       this.earned_amount = await tokens.format(rewardAddr, earnval);
-      // console.log("poolreward", this.poolreward);
+      console.log("poolreward", this.poolreward);
       this.apy = (this.poolreward * 365 * 86400 * 100) / this.lpamount;
     },
     withdraw: async function () {
@@ -244,6 +269,13 @@ export default {
   margin-left: 0px !important;
   margin-top: 10px;
   min-width: 80px;
+  color: #373943;
+}
+.stake-btn a {
+  color: #373943;
+}
+.stake-btn a:hover {
+  color: #686b68;
 }
 #stake .refresh-btn.el-button {
   color: #38f2af;

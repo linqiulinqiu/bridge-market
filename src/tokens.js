@@ -14,6 +14,14 @@ tokenInfoList[ethers.constants.AddressZero] = {
 
 let bsc = {}
 
+async function isLP(ctraddr) {
+    const info = await tokenInfo(ctraddr)
+    if ('isLP' in info) {
+        if (info.isLP) return true
+    }
+    return false
+}
+
 async function tokenInfo(ctraddr) {
     if (ctraddr == "") {
         ctraddr = ethers.constants.AddressZero
@@ -30,8 +38,10 @@ async function tokenInfo(ctraddr) {
         }
         try {
             info.symbol = await ctr.symbol()
-            if(info.symbol=='Cake-LP'){
-                info.symbol = await lpSymbol(ctraddr)
+            if (info.symbol == 'Cake-LP') {
+                info.isLP = true
+                info.lpTokens = await newLpTokens(ctraddr)
+                info.symbol = await lpSymbol(info.lpTokens)
             }
             info.decimals = await ctr.decimals()
             info.ctr = ctr
@@ -44,10 +54,24 @@ async function tokenInfo(ctraddr) {
     return tokenInfoList[ctraddr]
 }
 
-async function lpSymbol(ctraddr){
+async function newLpTokens(ctraddr) {
     const ctr = new ethers.Contract(ctraddr, lp_abi, bsc.signer)
-    const s0 = await tokenSymbol(await ctr.token0())
-    const s1 = await tokenSymbol(await ctr.token1())
+    const t0 = await ctr.token0()
+    const t1 = await ctr.token1()
+    return [t0, t1]
+}
+
+async function lpTokens(ctraddr) {
+    const info = await tokenInfo(ctraddr)
+    if (info.isLP) {
+        return info.lpTokens
+    }
+    return false
+}
+
+async function lpSymbol(tokens) {
+    const s0 = await tokenSymbol(tokens[0])
+    const s1 = await tokenSymbol(tokens[1])
     return `Cake-LP(${s0} - ${s1})`
 }
 
@@ -91,7 +115,7 @@ async function allowance(ctraddr, spender) {
     return await info.ctr.allowance(bsc.addr, spender)
 }
 
-async function supply(ctraddr){
+async function supply(ctraddr) {
     const info = await tokenInfo(ctraddr)
     if (info.ctr.address == ethers.constants.AddressZero) {
         return ethers.constants.MaxUint256
@@ -124,4 +148,6 @@ exports.format = formatToken
 exports.parse = parseToken
 exports.setbsc = setbsc
 exports.symbol = tokenSymbol
+exports.islp = isLP
+exports.lptokens = lpTokens
 exports.supply = supply

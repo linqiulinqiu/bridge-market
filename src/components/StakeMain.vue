@@ -92,5 +92,6 @@ export default {
 <style>
 .stakeitem {
   margin: 0 2%;
+  font-size: 16px;
 }
 </style>
