@@ -1,45 +1,55 @@
 <template>
   <el-col id="stake" :span="24">
     <el-col class="stake-main">
-      <el-col id="stakeinput" :lg="22" :span="24">
-        <el-button @click="refresh" icon="el-icon-refresh"></el-button>
-        <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
-        <p>总质押：{{ hformat(lpamount) }} {{ stk_symbol }}</p>
-        <p>APR：{{ apy }} %</p>
-        <p>
-          质押中：{{ hformat(farm_amount) }} &nbsp; {{ stk_symbol }}
-          <span>{{ hformat((farm_amount * 100) / lpamount) }} %</span>
-        </p>
-        <!-- 显示已质押金额 -->
-        <span>已赚取：{{ hformat(earned_amount) }}PBP</span>
-        <!-- 显示目前的收益 -->
-        <el-button @click="claim">claim</el-button>
-      </el-col>
-      <el-col id="stakeapprove" 
-      :lg="{ span: 14, offset: 12 }"
-      :md="{ span: 14, offset: 12 }"
-      :sm="{ span: 14, offset: 12 }"
-      :xs="{ span: 14, offset: 12 }"
-      >
-        <el-button @click="dia_set_amount = true">stake</el-button>
-        <el-button @click="dia_withdraw = true">withdraw</el-button>
-      </el-col>
+      <el-row type="flex" justify="space-between" :gutter="20">
+        <el-col
+          :lg="{ span: 14 }"
+          :md="{ span: 14 }"
+          :sm="{ span: 18 }"
+          :xs="{ span: 18 }"
+        >
+          <el-button
+            @click="refresh"
+            icon="el-icon-refresh"
+            circle
+            class="refresh-btn"
+          ></el-button>
+          <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
+          <p>总质押：{{ hformat(lpamount) }} {{ stk_symbol }}</p>
+          <p>APR：{{ apy }} %</p>
+          <p>
+            质押中：{{ hformat(farm_amount) }} &nbsp; {{ stk_symbol }}
+            <span>{{ hformat((farm_amount * 100) / lpamount) }} %</span>
+          </p>
+          <span>已赚取：{{ hformat(earned_amount) }}PBP</span>
+        </el-col>
+        <el-col
+          :lg="{ span: 6 }"
+          :md="{ span: 6 }"
+          :sm="{ span: 6 }"
+          :xs="{ span: 6 }"
+        >
+          <el-button @click="claim" class="stake-btn">claim</el-button>
+          <el-button @click="dia_set_amount = true" class="stake-btn">
+            {{ $t("stake") }}
+          </el-button>
+          <el-button @click="dia_withdraw = true" class="stake-btn">
+            {{ $t("withdraw") }}
+          </el-button>
+        </el-col>
+      </el-row>
     </el-col>
     <el-dialog :visible.sync="dia_set_amount" width="40vw">
       <el-card class="amount-ipt">
         <h2>设置质押数量</h2>
         <p>
-          <span>{{ $t("balance") }}：{{ stk_balance }}{{ stk_symbol }}</span
-          ><el-button @click="stake_amount = stk_balance">all</el-button>
+          <span>{{ $t("balance") }}：{{ stk_balance }} {{ stk_symbol }}</span>
         </p>
         <!-- 显示钱包中WXCC余额 -->
-        <el-input v-model="stake_amount" clearable maxlength="20">
-          
-        </el-input>
-        <el-button 
-          @click="stake_amount = stk_balance"  
-          type="primary">all</el-button>
-      
+        <el-input v-model="stake_amount" clearable maxlength="20"> </el-input>
+        <el-button @click="stake_amount = stk_balance" type="primary">{{
+          $t("all")
+        }}</el-button>
         <ApproveButton
           v-if="stk_balance"
           :bsc="bsc"
@@ -47,31 +57,32 @@
           :spender="bsc.ctrs.staking.address"
           :min-req="stk_balance_bn"
         >
-          <el-button @click="deposit">deposit</el-button>
+          <el-button @click="deposit" type="primary">deposit</el-button>
         </ApproveButton>
       </el-card>
     </el-dialog>
     <el-dialog :visible.sync="dia_withdraw">
-      <el-card>
+      <el-card class="amount-ipt">
         <h2>{{ $t("withdraw") }}</h2>
         <p>
-          <span>{{ $t("balance") }}：{{ farm_amount }}{{ stk_symbol }}</span>
-          <el-button @click="withdraw_amount = farm_amount">{{
-            $t("all")
-          }}</el-button>
+          <span>{{ $t("balance") }}：{{ farm_amount }} {{ stk_symbol }}</span>
         </p>
         <el-input v-model="withdraw_amount" clearable></el-input>
+        <el-button @click="withdraw_amount = farm_amount">{{
+          $t("all")
+        }}</el-button>
         <el-button
           v-if="withdraw_wait == 0"
           @click="withdraw"
           :loading="w_loading"
+          type="primary"
           >{{ $t("withdraw") }}
         </el-button>
         <el-col v-else>
           <p>锁定中，请等待{{ this.withdraw_wait }}秒，或强制提取</p>
-          <el-button @click="force_withdraw" :loading="force_w_loading"
-            >force withdraw</el-button
-          >
+          <el-button @click="force_withdraw" :loading="force_w_loading">
+            force withdraw
+          </el-button>
         </el-col>
       </el-card>
     </el-dialog>
@@ -105,7 +116,7 @@ export default {
   }),
   mounted() {
     this.refresh();
-    setInterval(this.refresh, 12000);
+    // setInterval(this.refresh, 12000);
   },
   data() {
     return {
@@ -227,40 +238,33 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
+.stake-btn {
+  width: 60%;
+  margin-left: 0px !important;
+  margin-top: 10px;
+  min-width: 80px;
+}
+#stake .refresh-btn.el-button {
+  color: #38f2af;
+  background: #373943;
+  border: none;
+  font-size: 24px;
+}
+#stake .refresh-btn.el-button:hover {
+  color: #fff;
+}
 .stake-main {
   background-color: #373943;
   border-radius: 20px;
-  padding: 50px;
-  box-sizing: border-box;
-  margin-top: 100px;
-}
-#stake .el-main {
-  min-height: 830px;
-}
-#stakeinput {
-  position: relative;
   padding: 20px;
-  margin: 20px;
-  background-color: #2b2c33;
-  border-radius: 20px;
+  box-sizing: border-box;
+  margin-top: 50px;
 }
-#stakeinput .el-button {
-  position: absolute;
-  right: 15%;
-  top: 45%;
-}
-#stakeapprove {
-  padding-right:0;
-}
-.info {
-  margin-top: 300px;
-}
-.amount-ipt .el-input{
+.amount-ipt .el-input {
   width: 50%;
   min-width: 200px;
   margin: 10px;
-
 }
 h2 {
   text-align: center;

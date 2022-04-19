@@ -89,7 +89,7 @@ export default {
 };
 </script>
 <style>
-.stake-main {
+/* .stake-main {
   background-color: #373943;
   border-radius: 20px;
   padding: 50px;
@@ -109,8 +109,8 @@ export default {
 #stakeinput .el-button {
   position: absolute;
   right: 10%;
-  /* height: 24px;
-  line-height: 24px; */
+  height: 24px;
+  line-height: 24px; 
 }
 #stake .el-main {
   min-height: 830px;
@@ -119,6 +119,6 @@ export default {
   margin-top: 300px;
 }
 h2 {
-  text-align: center;
-}
+  text-align: center; 
+} */
 </style>
