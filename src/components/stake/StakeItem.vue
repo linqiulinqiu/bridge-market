@@ -16,21 +16,22 @@
           ></el-button>
           <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
           <p>
-            总质押：<span class="font">{{ hformat(lpamount) }}</span>
+            {{$t('total-staked')}}：
+            <span class="font">{{ hformat(lpamount) }}</span>
             {{ stk_symbol }}
           </p>
           <p>
             APR：<span class="font">{{ apy }}</span> %
           </p>
           <p>
-            质押中：<span class="font">{{ hformat(farm_amount) }} </span> &nbsp;
+            {{$t('staking')}}：<span class="font">{{ hformat(farm_amount) }} </span> &nbsp;
             {{ stk_symbol }}
             <span class="font">
               {{ hformat((farm_amount * 100) / lpamount) }} %
             </span>
           </p>
           <span>
-            已赚取：
+            {{$t('earned')}}：
             <span class="font">{{ hformat(earned_amount) }}</span>
             &nbsp;&nbsp; PBP
           </span>
@@ -41,7 +42,7 @@
           :sm="{ span: 6 }"
           :xs="{ span: 6 }"
         >
-          <el-button @click="claim" class="stake-btn">claim</el-button>
+          <el-button @click="claim" class="stake-btn">{{$t('claim')}}</el-button>
           <el-button @click="dia_set_amount = true" class="stake-btn">
             {{ $t("stake") }}
           </el-button>
@@ -56,15 +57,18 @@
     </el-col>
     <el-dialog :visible.sync="dia_set_amount" width="40vw">
       <el-card class="amount-ipt">
-        <h2>设置质押数量</h2>
+        <h2>{{$t('set-s-amount')}}</h2>
         <p>
-          <span>{{ $t("balance") }}：{{ stk_balance }} {{ stk_symbol }}</span>
+          <span>{{ $t("balance") }}：{{ stk_balance }}{{ stk_symbol }}</span
+          >
         </p>
         <!-- 显示钱包中WXCC余额 -->
-        <el-input v-model="stake_amount" clearable maxlength="20"> </el-input>
-        <el-button @click="stake_amount = stk_balance" type="primary">{{
-          $t("all")
-        }}</el-button>
+        <el-input v-model="stake_amount" clearable maxlength="20">
+          
+        </el-input>
+        <el-button 
+          @click="stake_amount = stk_balance">all</el-button>
+      
         <ApproveButton
           v-if="stk_balance"
           :bsc="bsc"
@@ -72,7 +76,7 @@
           :spender="bsc.ctrs.staking.address"
           :min-req="stk_balance_bn"
         >
-          <el-button @click="deposit" type="primary">deposit</el-button>
+          <el-button @click="deposit">{{$t('deposit')}}</el-button>
         </ApproveButton>
       </el-card>
     </el-dialog>

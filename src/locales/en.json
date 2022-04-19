@@ -35,6 +35,7 @@
     "cpright3":"All third party trademarks are the property of their respective owners",
     "contact":"Contact us",
     "contact1":"- Discord: <a href='https://discord.com/invite/xHC9fBfeVW' target='_blank'>https://discord.com/invite/xHC9fBfeVW</a> <br>- Telegram: <a href='https://t.me/PlotBridge' target='_blank'>https://t.me/PlotBridge</a><br>- Twitter: <a href='https://twitter.com/plot_bridge' target='_blank'>https://twitter.com/plot_bridge</a>",
+    "claim":"claim",
 
     "deposit":"Deposit",
     "desc":"description",
@@ -48,6 +49,7 @@
     "dep-rebind":"Unable to rebind deposit address,please refresh the page.",
 
     "earn":"Earn",
+    "earned":"Earned:",
     
     "function":"Function",
     
@@ -136,11 +138,15 @@
     "s-swap":"Simple Swap",
     "s-swap1":"Trade common tokens (powered by PancakeSwap)",
     "stake":"Earn",
+    "staking":"Staking:",
+    "set-s-amount":"Set Stake Amount",
+
 
     "to-market":"Go to the market",    
     "tips-amount1":"The amount is too small, you won't receive anything.",
     "tips-amount2":"The amount is too much, and you don't have enough balance",
     "tips-waddr":"When an account is bound to multiple addresses of multiple wallets, the money may be randomly sent to one of them. Please pay attention to check.",
+    "total-staked":"Total staked:",
 
     "withdraw":"Withdraw",
     "w-rate":"Withdraw rate",

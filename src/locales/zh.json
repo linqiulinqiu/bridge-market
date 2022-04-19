@@ -34,6 +34,7 @@
     "cpright3":"所有的第三方商标的权利属于他们自己",
     "contact":"联系我们",
     "contact1":"- Discord: <a href='https://discord.com/invite/xHC9fBfeVW' target='_blank'>https://discord.com/invite/xHC9fBfeVW</a> <br>- 电报: <a href='https://t.me/PlotBridge' target='_blank'>https://t.me/PlotBridge</a><br>- 推特: <a href='https://twitter.com/plot_bridge' target='_blank'>https://twitter.com/plot_bridge</a>",
+    "claim":"领取",
 
     "deposit":"存款",
     "desc":"描述",
@@ -47,6 +48,7 @@
     "dep-rebind":"该类型地址已经绑定了，请刷新页面后查看。",
 
     "earn":"盈利",
+    "earned":"以赚取：",
 
     "function":"支持",
     
@@ -142,12 +144,15 @@
     "slip-fail":"您的交易可能失败",
     "select":"请选择",
     "stake":"质押",
+    "staking":"质押中：",
+    "set-s-amount":"设置质押数量",
 
 
     "to-market":"去往市场",    
     "tips-amount1":"数额过小，将什么都收不到呢！",
     "tips-amount2":"数额过大，余额不够呢！",
     "tips-waddr":"您已绑定了此币种的取款地址(另一个PBT)，不建议再绑定其他地址了",
+    "total-staked":"总质押：",
 
     "withdraw":"取款",
     "w-rate":"取款费率",
