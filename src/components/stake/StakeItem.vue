@@ -1,29 +1,6 @@
 <template>
   <el-col id="stake" :span="24">
     <el-col class="stake-main">
-      <el-col id="stakeinput" :lg="22" :span="24">
-        <el-button @click="refresh" icon="el-icon-refresh"></el-button>
-        <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
-        <p>{{$t('total-staked')}}{{ hformat(lpamount) }} {{ stk_symbol }}</p>
-        <p>APR：{{ apy }} %</p>
-        <p>
-          {{$t('staking')}}{{ hformat(farm_amount) }} &nbsp; {{ stk_symbol }}
-          <span>{{ hformat((farm_amount * 100) / lpamount) }} %</span>
-        </p>
-        <!-- 显示已质押金额 -->
-        <span>{{$t('earned')}}{{ hformat(earned_amount) }}PBP</span>
-        <!-- 显示目前的收益 -->
-        <el-button @click="claim">{{$t('claim')}}</el-button>
-      </el-col>
-      <el-col id="stakeapprove" 
-      :lg="{ span: 14, offset: 12 }"
-      :md="{ span: 14, offset: 12 }"
-      :sm="{ span: 14, offset: 12 }"
-      :xs="{ span: 14, offset: 12 }"
-      >
-        <el-button @click="dia_set_amount = true">{{$t('stake')}}</el-button>
-        <el-button @click="dia_withdraw = true">{{$t('withdraw')}}</el-button>
-      </el-col>
       <el-row type="flex" justify="space-between" :gutter="20">
         <el-col
           :lg="{ span: 14 }"
@@ -38,13 +15,13 @@
             class="refresh-btn"
           ></el-button>
           <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
-          <p>总质押：{{ hformat(lpamount) }} {{ stk_symbol }}</p>
+          <p>{{$t('total-staked')}}{{ hformat(lpamount) }} {{ stk_symbol }}</p>
           <p>APR：{{ apy }} %</p>
           <p>
-            质押中：{{ hformat(farm_amount) }} &nbsp; {{ stk_symbol }}
+            {{$t('staking')}}{{ hformat(farm_amount) }} &nbsp; {{ stk_symbol }}
             <span>{{ hformat((farm_amount * 100) / lpamount) }} %</span>
           </p>
-          <span>已赚取：{{ hformat(earned_amount) }}PBP</span>
+          <span>{{$t('earned')}}{{ hformat(earned_amount) }}PBP</span>
         </el-col>
         <el-col
           :lg="{ span: 6 }"
@@ -52,7 +29,7 @@
           :sm="{ span: 6 }"
           :xs="{ span: 6 }"
         >
-          <el-button @click="claim" class="stake-btn">claim</el-button>
+          <el-button @click="claim" class="stake-btn">{{$t('claim')}}</el-button>
           <el-button @click="dia_set_amount = true" class="stake-btn">
             {{ $t("stake") }}
           </el-button>
