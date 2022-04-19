@@ -4,9 +4,10 @@
     <ul v-if="stakeTokens.length">
       <li v-for="item in this.stakeTokens" :key="item.pid">
         <el-col
-          :lg="{ span: 11, offset: 1 }"
+          class="stakeitem"
+          :lg="{ span: 7 }"
           :md="{ span: 12 }"
-          :sm="{ span: 16 }"
+          :sm="{ span: 18 }"
           :xs="{ span: 22 }"
         >
           <StakeItem
@@ -89,36 +90,7 @@ export default {
 };
 </script>
 <style>
-/* .stake-main {
-  background-color: #373943;
-  border-radius: 20px;
-  padding: 50px;
-  box-sizing: border-box;
-  margin-top: 100px;
+.stakeitem {
+  margin: 0 2%;
 }
-#stakeinput {
-  position: relative;
-  padding: 30px 30px;
-  border-radius: 20px;
-  margin-top: 25px;
-  background-color: rgba(43, 44, 51, 0.8);
-}
-#stakeinput .el-col {
-  margin: 10px;
-}
-#stakeinput .el-button {
-  position: absolute;
-  right: 10%;
-  height: 24px;
-  line-height: 24px; 
-}
-#stake .el-main {
-  min-height: 830px;
-}
-.info {
-  margin-top: 300px;
-}
-h2 {
-  text-align: center; 
-} */
 </style>
