@@ -431,21 +431,19 @@ export default {
 #swapTitle {
   position: relative;
 }
-#swapTitle .el-icon-setting {
-  color: #38f2af;
-  background: #373943;
-  font-size: 30px;
-}
-#swapTitle .el-icon-setting:hover {
-  color: #fff;
-}
 #swapTitle .el-button {
   background: #373943;
   border: none;
   position: absolute;
   top: 20px;
   right: 20px;
+  color: #38f2af;
+  font-size: 22px;
 }
+#swapTitle .el-button:hover {
+  color: #fff;
+}
+
 .clearfix {
   margin-left: 10px;
 }
