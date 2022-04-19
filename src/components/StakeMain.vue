@@ -6,7 +6,7 @@
         <el-col
           class="stakeitem"
           :lg="{ span: 7 }"
-          :md="{ span: 12 }"
+          :md="{ span: 11 }"
           :sm="{ span: 18 }"
           :xs="{ span: 22 }"
         >
