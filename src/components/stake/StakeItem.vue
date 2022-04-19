@@ -227,7 +227,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .stake-main {
   background-color: #373943;
   border-radius: 20px;
