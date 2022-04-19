@@ -11,8 +11,8 @@
           <el-button
             @click="refresh"
             icon="el-icon-refresh"
-            circle
             class="refresh-btn"
+            circle
           ></el-button>
           <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
           <p>
@@ -270,6 +270,17 @@ export default {
 };
 </script>
 <style scoped>
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(530deg) scale(1.5);
+  }
+  100% {
+    transform: rotate(1060deg) scale(1);
+  }
+}
 .stake-btn {
   width: 60%;
   margin-left: 0px !important;
@@ -283,7 +294,7 @@ export default {
 .stake-btn a:hover {
   color: #686b68;
 }
-#stake .refresh-btn.el-button {
+#stake .refresh-btn {
   color: #38f2af;
   background: #373943;
   border: none;
@@ -291,6 +302,7 @@ export default {
 }
 #stake .refresh-btn.el-button:hover {
   color: #fff;
+  animation: rotate ease-in-out 1s;
 }
 .stake-main {
   background-color: #373943;
