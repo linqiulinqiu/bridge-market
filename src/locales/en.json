@@ -49,11 +49,11 @@
     "dep-rebind":"Unable to rebind deposit address,please refresh the page.",
 
     "earn":"Earn",
-    "earned":"Earned:",
+    "earned":"Earned：",
     
     "function":"Function",
     
-    "get":"You will get :",
+    "get":"You will get：",
     "getaddr":"No address for this type of deposit,please contract us with discord or telegram. ",
     "guide-bridge":"How to run Bridge",
     "guide-bridge1":"How to convert XCC into BSC chain token WXCC",
@@ -138,7 +138,7 @@
     "s-swap":"Simple Swap",
     "s-swap1":"Trade common tokens (powered by PancakeSwap)",
     "stake":"Earn",
-    "staking":"Staking:",
+    "staking":"Staking：",
     "set-s-amount":"Set Stake Amount",
 
 
@@ -146,11 +146,11 @@
     "tips-amount1":"The amount is too small, you won't receive anything.",
     "tips-amount2":"The amount is too much, and you don't have enough balance",
     "tips-waddr":"When an account is bound to multiple addresses of multiple wallets, the money may be randomly sent to one of them. Please pay attention to check.",
-    "total-staked":"Total staked:",
+    "total-staked":"Total staked：",
 
     "withdraw":"Withdraw",
     "w-rate":"Withdraw rate",
     "w-minFee":"Min withdraw fee",
-    "w-limit":"The recommended limit for a single withdraw is :",
+    "w-limit":"The recommended limit for a single withdraw is：",
     "w-addr":"Withdraw {bcoin} will be send to this address"
 }
