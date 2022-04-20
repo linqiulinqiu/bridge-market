@@ -21,17 +21,13 @@
           <p>
             {{ $t("total-staked") }}：
             <span class="font">{{ hformat(lpamount) }}</span>
-            {{ stk_symbol }}
           </p>
           <p>
             APR：<span class="font">{{ apy }}</span> %
           </p>
           <p>
-            {{ $t("staking") }}：<span class="font"
-              >{{ hformat(farm_amount) }}
-            </span>
-            &nbsp;
-            {{ stk_symbol }}
+            {{ $t("staking") }}：
+            <span class="font">{{ hformat(farm_amount) }}</span>
             <span class="font">
               {{ hformat((farm_amount * 100) / lpamount) }} %
             </span>
@@ -127,9 +123,9 @@ export default {
   props: ["pid", "stakeAddr", "locktime", "lpamount", "poolreward"],
   computed: mapState({
     bsc: "bsc",
-    locktime_str: function(){
-        return times.formatD(this.locktime, false)
-    }
+    locktime_str: function () {
+      return times.formatD(this.locktime, false);
+    },
   }),
   mounted() {
     this.refresh();

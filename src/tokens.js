@@ -109,9 +109,11 @@ async function balance(ctraddr, owner) {
 
 async function allowance(ctraddr, spender) {
     const info = await tokenInfo(ctraddr)
+    console.log("info", info)
     if (info.ctr.address == ethers.constants.AddressZero) {
         return ethers.constants.MaxUint256
     }
+    console.log('allowance res', await info.ctr.allowance(bsc.addr, spender))
     return await info.ctr.allowance(bsc.addr, spender)
 }
 

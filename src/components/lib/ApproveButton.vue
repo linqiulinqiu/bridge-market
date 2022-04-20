@@ -46,9 +46,10 @@ export default {
       this.checking = true;
       let minReq = this.minReq;
       if (isNaN(minReq)) minReq = 0;
+      console.log("minreq", minReq);
       console.log("token allowance", this.token, this.spender);
       const allow = await tokens.allowance(this.token, this.spender);
-      console.log("allow", allow, allow.gte(this.minReq), this.minReq);
+      console.log("allow=", allow, allow.gte(this.minReq), this.minReq);
       if (allow && allow.gte(this.minReq)) {
         this.needApprove = false;
       } else {

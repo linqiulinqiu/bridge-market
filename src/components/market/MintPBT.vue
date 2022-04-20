@@ -13,30 +13,54 @@
         <span>{{ $t("mintable") }}{{ mintAbles }}</span>
       </p>
       <p>
-        <el-button
-          @click="mintNFT"
-          type="primary"
-          v-if="this.mintAbles > 0"
-          :loading="mint_loading"
-          >{{ $t("mintPBT") }}</el-button
+        <ApproveButton
+          :bsc="bsc"
+          :token="mintFee.tokenAddr"
+          :spender="bsc.ctrs.pbp.address"
+          :minReq="balance"
         >
-        <span v-else>{{ $t("none") }}</span>
+          <el-button
+            @click="mintNFT"
+            type="primary"
+            v-if="this.mintAbles > 0"
+            :loading="mint_loading"
+            >{{ $t("mintPBT") }}</el-button
+          >
+          <span v-else>{{ $t("none") }}</span>
+        </ApproveButton>
       </p>
     </el-col>
   </el-row>
 </template>
 <script>
 import market from "../../market";
+import ApproveButton from "../lib/ApproveButton.vue";
+import { mapState } from "vuex";
+import tokens from "../../tokens";
 export default {
   name: "MintPBT",
   props: ["mintAbles", "mintFee"],
+  components: {
+    ApproveButton,
+  },
+  computed: mapState({
+    bsc: "bsc",
+  }),
   data() {
     return {
       mint_loading: false,
+      balance: "",
     };
   },
-
+  mounted() {
+    this.getBalance();
+  },
   methods: {
+    getBalance: async function () {
+      this.balance = await tokens.balance(this.mintFee.tokenAddr);
+      // console.log(bl);
+      // this.balance = await tokens.format(this.mintFee.tokenAddr, bl);
+    },
     mintNFT: async function () {
       this.mint_loading = true;
       try {

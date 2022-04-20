@@ -6,8 +6,9 @@
         @click="getMintfee"
         size="small"
         class="btn"
-        v-if="baddr"
+        v-if="bsc.addr"
         type="primary"
+        :loading="open_loading"
         >{{ $t("mintPBT") }}
       </el-button>
     </el-col>
@@ -63,8 +64,7 @@ export default {
   },
   props: ["myList", "pageSize", "curNFT"],
   computed: mapState({
-    baddr: "baddr",
-    bcoin: "bcoin",
+    bsc: "bsc",
     current: "current",
     nftlist(state) {
       let pageSize = this.pageSize;
@@ -86,12 +86,14 @@ export default {
   data() {
     return {
       pageNum: 1,
+      open_loading: false,
       market: "/Market",
       mintNumber: "--",
       mintVisible: false,
       mintFee: {
         price: 0,
         token: "BNB",
+        tokenAddr: "",
       },
     };
   },
@@ -100,13 +102,17 @@ export default {
       this.$store.commit("setCurrentPbtId", id);
     },
     getMintfee: async function () {
+      this.open_loading = true;
       const fee = await market.getmintfee();
+      console.log("mintfee", fee);
       this.mintFee.price = fee.price;
       this.mintFee.token = fee.ptName;
+      this.mintFee.tokenAddr = fee.tokenAddr;
       const number = await market.getMintAbles();
       console.log("mint number", number);
       this.mintNumber = number;
       this.mintVisible = true;
+      this.open_loading = false;
     },
     handleCurrentChange(newPage) {
       this.pageNum = newPage;
