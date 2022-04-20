@@ -105,6 +105,7 @@
     "mintable":"目前可以铸造的NFT数目：",
     "my-nfts":"我的NFT",
     "my-sale":"我的正在售卖的",
+    "max":"最大",
 
     "none":"目前可铸造数为0,不可铸造NFT，请等待",
     "no-waddr":"未绑定取款地址",
@@ -121,7 +122,9 @@
     
     "price":"价格",   
     "price-tips":"价格为空",
-    "presell":"预售",
+    "presale":"预售",
+    "prepay":"预计支付",
+    "purchase":"可购买",
 
 
 
@@ -130,6 +133,7 @@
     "rd-rate":"发送 {amount} {oldsymbol}，可收到 {amount} {newsymbol}",
     "road-map":"路线图",
     "retreat":"从市场撤回",
+    "remainder":"剩余",
 
 
     "select-coin":"选择币种",
@@ -148,6 +152,7 @@
     "stake":"质押",
     "staking":"质押中：",
     "set-s-amount":"设置质押数量",
+    "stage":"阶段",
 
 
     "to-market":"去往市场",    

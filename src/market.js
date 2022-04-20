@@ -67,6 +67,7 @@ async function getmintfee() {
     const symbol = await tokens.symbol(fee[0])
     options.price = await tokens.format(fee[0], fee[1])
     options.ptName = symbol
+    options.tokenAddr = fee[0]
     console.log("options", options)
     return options
 }

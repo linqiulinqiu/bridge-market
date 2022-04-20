@@ -106,6 +106,7 @@
     "mintable":"NFT's currently available for minting :",
     "my-nfts":"My NFTs",
     "my-sale":"My Selling",
+    "max":"Max",
     
     "none":"The number of mintable NFTs is 0 currently, no NFTs can be minted, please wait.",
     "no-waddr":"Unbound withdrawal address",
@@ -122,13 +123,16 @@
     
     "price":"Price",
     "price-tips":"Price is Empty",
-    "presell":"Presell",
+    "presale":"Presale",
+    "prepay":"Expected payment",
+    "purchase":"Avaliable for purchase",
    
     "redeem":"Upgrade",
     "rd-info":"Tokens in previous version of PlotBridge can be upgraded here.",
     "rd-rate":"send {amount} {oldsymbol}, then {amount} {newsymbol} will be received",
     "road-map":"RoadMap",
     "retreat":"Retreat from market",
+    "remainder":"Remainder",
 
     "select-coin":"Select Coin",
     "sell":"Sell",
@@ -141,6 +145,7 @@
     "stake":"Earn",
     "staking":"Staking:",
     "set-s-amount":"Set Stake Amount",
+    "stage":"Stage",
 
 
     "to-market":"Go to the market",    

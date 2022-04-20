@@ -13,7 +13,7 @@ import GuideforWallet from "@/components/document/GuideforWallet"
 import GuideforBridge from "@/components/document/GuideforBridge"
 import Introduction from "@/components/document/Introduction"
 import MintPBT from "@/components/market/MintPBT"
-import Presell from "@/views/Presell"
+import Presale from "@/views/Presale"
 
 Vue.use(VueRouter)
 
@@ -51,9 +51,9 @@ const routes = [{
     component: Stake,
   },
   {
-    path: '/Presell',
-    name: "presell",
-    component: Presell
+    path: '/Presale',
+    name: "presale",
+    component: Presale
   },
   {
     path: '/Doc',

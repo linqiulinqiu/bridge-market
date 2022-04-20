@@ -115,7 +115,7 @@ export default {
         { tag: this.$t("market"), link: "/Market" },
         { tag: this.$t("swap"), link: "/Swap" },
         { tag: this.$t("stake"), link: "/Stake" },
-        { tag: this.$t("presell"), link: "/Presell" },
+        { tag: this.$t("presale"), link: "/Presale" },
         { tag: this.$t("doc"), link: "/Doc" },
       ];
     },

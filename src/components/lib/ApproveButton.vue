@@ -12,7 +12,7 @@
       >
         {{ this.$t("approve") }}
       </el-button>
-      <slot v-else>000</slot>
+      <slot v-else></slot>
     </el-col>
   </el-col>
 </template>
@@ -45,7 +45,7 @@ export default {
     checkAllowance: async function () {
       this.checking = true;
       let minReq = this.minReq;
-      if(isNaN(minReq)) minReq=0;
+      if (isNaN(minReq)) minReq = 0;
       console.log("token allowance", this.token, this.spender);
       const allow = await tokens.allowance(this.token, this.spender);
       console.log("allow", allow, allow.gte(this.minReq), this.minReq);

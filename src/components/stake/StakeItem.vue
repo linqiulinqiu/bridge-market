@@ -1,6 +1,15 @@
 <template>
   <el-col id="stake" :span="24">
     <el-col class="stake-main">
+      <h3>
+        {{ stk_symbol }} Pool
+        <el-button
+          @click="refresh"
+          icon="el-icon-refresh"
+          class="refresh-btn"
+          circle
+        ></el-button>
+      </h3>
       <el-row type="flex" justify="space-between" :gutter="20">
         <el-col
           :lg="{ span: 17 }"
@@ -8,12 +17,6 @@
           :sm="{ span: 18 }"
           :xs="{ span: 18 }"
         >
-          <el-button
-            @click="refresh"
-            icon="el-icon-refresh"
-            class="refresh-btn"
-            circle
-          ></el-button>
           <p v-if="locktime > 0">{{ $t("lock-time") }}：{{ locktime_str }}</p>
           <p>
             {{ $t("total-staked") }}：
@@ -273,13 +276,10 @@ export default {
 <style scoped>
 @keyframes rotate {
   0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    transform: rotate(530deg) scale(1.5);
+    transform: rotate(0deg);
   }
   100% {
-    transform: rotate(1060deg) scale(1);
+    transform: rotate(1800deg);
   }
 }
 .stake-btn {
@@ -317,7 +317,8 @@ export default {
   min-width: 200px;
   margin: 10px;
 }
-h2 {
+h2,
+h3 {
   text-align: center;
 }
 </style>
