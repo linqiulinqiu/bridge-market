@@ -27,9 +27,9 @@
 <script>
 import StakeItem from "./stake/StakeItem.vue";
 import { mapState } from "vuex";
-import { DateTime } from "luxon";
 import swap from "../swap";
 import tokens from "../tokens";
+import times from "../times";
 export default {
   name: "StakeMain",
   components: {
@@ -52,12 +52,11 @@ export default {
     refresh: async function () {
       const stakeStart = await this.bsc.ctrs.pbp.stakeStart();
       console.log("stake-start time", stakeStart.toNumber());
-      const sstime = DateTime.fromSeconds(stakeStart.toNumber());
-      this.time_msg = sstime.toRelative({ locale: "zh" });
+      this.time_msg = times.formatRelTS(stakeStart);
       const pools = await this.bsc.ctrs.staking.pools();
       const stk = [];
       let total_alloc = 0;
-      const now = parseInt(DateTime.now().toSeconds());
+      const now = Math.floor(Date.now()/1000);
       const reward_speed_a = await this.bsc.ctrs.pbp.stakeRewardIn(
         now,
         now + 1

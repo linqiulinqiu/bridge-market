@@ -34,7 +34,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { DateTime } from "luxon";
+import times from "../times";
 import tokens from "../tokens";
 import market from "../market";
 export default {
@@ -77,7 +77,7 @@ export default {
     refresh: async function () {
       const token = this.bsc.ctrs.pbp.address;
       const toend = (await this.bsc.ctrs.presale.timeRemains()).toNumber();
-      this.time_msg = `还剩 ${toend} 秒`;
+      this.time_msg = times.formatRelTS(Math.floor(Date.now()/1000)+toend)
       const pkgs = await this.bsc.ctrs.presale.pkgs();
       for (let i in pkgs[0]) {
         const remain = pkgs[0][i].sub(pkgs[1][i]);

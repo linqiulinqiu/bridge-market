@@ -117,7 +117,7 @@ import { ethers } from "ethers";
 import hformat from "human-format";
 import ApproveButton from "../lib/ApproveButton.vue";
 import { mapState } from "vuex";
-import { Duration } from "luxon";
+import times from "../../times";
 import market from "../../market";
 export default {
   name: "Stake",
@@ -127,14 +127,9 @@ export default {
   props: ["pid", "stakeAddr", "locktime", "lpamount", "poolreward"],
   computed: mapState({
     bsc: "bsc",
-    locktime_str() {
-      const lt = Duration.fromObject(
-        { seconds: this.locktime },
-        { locale: "zh" }
-      );
-      const lt_tohuman = lt.toHuman({ unitDisplay: "short" });
-      return lt_tohuman;
-    },
+    locktime_str: function(){
+        return times.formatD(this.locktime, false)
+    }
   }),
   mounted() {
     this.refresh();

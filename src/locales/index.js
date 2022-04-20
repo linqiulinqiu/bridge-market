@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 
+import moment from 'moment'
+
 Vue.use(VueI18n)
 
 const LKEY = 'localeLang'
@@ -31,6 +33,11 @@ export const setup = function (lang) {
     document.body.setAttribute('lang', lang)
     Vue.config.lang = lang
     i18n.locale = lang
+    if(lang=='zh'){
+        moment.locale('zh-cn')
+    }else{
+        moment.locale(lang)
+    }
 }
 
 setup()
