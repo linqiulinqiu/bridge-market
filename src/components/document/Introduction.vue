@@ -3,6 +3,11 @@
     <h1>{{$t('intoduction')}}</h1>
     <el-col>
       <p v-html="$t('intoduction1')"></p>
+      <p>
+        <li v-for="winfo in winfos" key='winfo.symbol'>
+            {{ winfo.name }} ({{winfo.symbol}}) <a :href="winfo.url"  target='_blank'>{{winfo.bsymbol}}</a>
+        </li>
+      </p>
     </el-col>
     <h2>FAQ：</h2>
     <el-col>
@@ -18,29 +23,31 @@
       <p v-html="$t('intoduction11')"></p>
       <h3 v-html="$t('intoduction12')"></h3>
       <p v-html="$t('intoduction13')"></p>
-      <!-- <h3>我们是谁?</h3>
-      <p>- 我们是Chia和分叉农民。我们致力于开发一款应用程序来服务其他农民，让我们的工作和生活更轻松。</p>
-      <h3>我们遇到了什么问题?</h3>
-      <p>- 难用：还没有 DeFi、游戏或其他应用；<br> - 难以保留大量全节点钱包；<br> - Chia 的生态系统要解决这些问题，可能还需要几年时间的发展才能做到。</p>
-      <h3>PlotBridge 都做了些什么?</h3>
-      <p>- 它将 Chia 和分叉连接到 币安智能链(BSC)，甚至更多的链。<br> - Chia 和分叉（如 Chia、Chives、HDDcoin、Profit 等）可以在 BSC 上 1:1 转换为BSC代币，反之亦然。我们还计划为农民制作更多的应用程序，例如轻钱包。</p>
-      <h3>对用户的好处?</h3>
-      <p>- 作为 BSC 中的代币，代币可以在 DeFi 系统中使用，例如：<br> - 1. 即时兑换其他代币或 BNB，<br> - 2. 提供流动性并获得回报，<br> - 3. 储蓄，<br> -  4. 借贷。<br>-  因此，这些沉寂的代币可以轻松的使用或出售。人们也更容易购买代币并通过桥回到Chia 和分叉原生链。</p>
-      <h3>风险和解决方案</h3>
-      <p>- 风险：代币丢失。代币需要存放在 PlotBridge 钱包中作为保管。如果我们被黑客入侵，或者我们“退出诈骗”，代币就会丢失。<br>
-        - 解决：每个币有 2 个 PlotBridge 运营钱包：<br>
-        - 1. 支票账户：日常充提币使用，账户保管人可以在不超过上限的情况下铸造WCoin。<br>
-        - 2. 储蓄账户：不经常使用。保留大部分托管币，控制铸币上限。<br>-  储蓄账户和保管人可以在防火墙内运行全节点的计算机上运行，​​在更值得信赖的团队（例如硬币官方团队）的管理员下，所以如果我们的支票账户被黑，或者我们“退出诈骗”，储蓄账户中的硬币仍然可以保留。这样可以降低风险。</p>
-      <h3>我们的支出和收益</h3>
-      <p>- 除了团队正常运行和服务器维护，对于每笔代币的储存，我们需要支付：1. WCoin 铸造费用，2. WCoin铸币上限调整费用。<br>- 我们收取以下费用：<br>- 1. NFT 铸造，<br>- 2. WCoin存款，<br>- 3. WCoin 提现。</p> -->
     </el-col>
   </el-col>
 </template>
 
 <script>
+import pbw from 'pbwallet';
+
 export default {
   name: "Introduction",
+  data() {
+    const symbols = pbw.wcoin_list('symbol')
+    const winfos = {}
+    for(let i in symbols){
+        const s = symbols[i]
+        winfos[s] = pbw.wcoin_info(s, 'symbol')
+        //TODO: URL should be different for "testnet" and "mainnet"
+        winfos[s].url = 'https://testnet.bscscan.com/token/'+winfos[s].ctraddr
+    }
+    return {
+        winfos: winfos
+    }
+  },
+
 };
+
 </script>
 <style scoped>
 .el-col {
