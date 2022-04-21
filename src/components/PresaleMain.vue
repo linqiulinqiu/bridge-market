@@ -45,6 +45,9 @@ export default {
   mounted() {
     this.refresh();
   },
+  beforeUpdate() {
+    this.loadtime_msg();
+  },
   data() {
     return {
       coinName: "PBP",
@@ -59,6 +62,7 @@ export default {
       payment: "--",
       buy_loading: false,
       balance: "",
+      toend: false,
     };
   },
   watch: {
@@ -74,10 +78,15 @@ export default {
     },
   },
   methods: {
+    loadtime_msg: async function () {
+      this.toend = (await this.bsc.ctrs.presale.timeRemains()).toNumber();
+      this.time_msg = times.formatRelTS(
+        Math.floor(Date.now() / 1000) + this.toend
+      );
+      return this.time_msg;
+    },
     refresh: async function () {
       const token = this.bsc.ctrs.pbp.address;
-      const toend = (await this.bsc.ctrs.presale.timeRemains()).toNumber();
-      this.time_msg = times.formatRelTS(Math.floor(Date.now()/1000)+toend)
       const pkgs = await this.bsc.ctrs.presale.pkgs();
       for (let i in pkgs[0]) {
         const remain = pkgs[0][i].sub(pkgs[1][i]);
