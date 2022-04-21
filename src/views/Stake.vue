@@ -48,8 +48,6 @@ export default {
 #stakeinput .el-button {
   position: absolute;
   right: 10%;
-  /* height: 24px;
-  line-height: 24px; */
 }
 #stake .el-main {
   min-height: 830px;

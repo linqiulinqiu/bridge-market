@@ -1,6 +1,6 @@
 <template>
   <el-col>
-    <p v-if="time_msg">质押奖励开始：{{ time_msg }}</p>
+    <p v-if="time_msg">{{ $t("stake-start") }}：{{ time_msg }}</p>
     <ul v-if="stakeTokens.length">
       <li v-for="item in this.stakeTokens" :key="item.pid">
         <el-col
@@ -51,12 +51,11 @@ export default {
   methods: {
     refresh: async function () {
       const stakeStart = await this.bsc.ctrs.pbp.stakeStart();
-      console.log("stake-start time", stakeStart.toNumber());
       this.time_msg = times.formatRelTS(stakeStart);
       const pools = await this.bsc.ctrs.staking.pools();
       const stk = [];
       let total_alloc = 0;
-      const now = Math.floor(Date.now()/1000);
+      const now = Math.floor(Date.now() / 1000);
       const reward_speed_a = await this.bsc.ctrs.pbp.stakeRewardIn(
         now,
         now + 1
@@ -77,13 +76,10 @@ export default {
       }
       for (let i in stk) {
         const price = await swap.price(this.bsc, stk[i].stakeAddr);
-        console.log("price", await tokens.symbol(stk[i].stakeAddr), price);
         stk[i].reward_speed =
           (stk[i].alloc * reward_speed) / price / total_alloc;
-        console.log("stk", i, "reward_speed", stk[i].reward_speed);
       }
       this.stakeTokens = stk;
-      console.log("stake tokens", this.stakeTokens);
     },
   },
 };

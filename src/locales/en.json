@@ -83,7 +83,7 @@
     "id":"Id",
     "img":"Anything is possible.",
     "intoduction":"Intoduction",
-    "intoduction1":"PlotBridge is a gateway/bridge between various plot-based blockchain networks (PoST networks like Chia, Chives, etc.) and mature smart blockchain networks (Binance Smart Chain, etc.) It can be used to wrap native coins like Chia(XCH), Chives(XCC) into corresponding tokens like WXCH, WXCC, and, course, unwrap tokens back into corresponding native coins.<br>Currently supported coins:<br>- Chia(XCH)→ <a href='https://testnet.bscscan.com/token/0xF61BfA36440f468F07ed04374966B8FD0d4eEfeF' target='_blank'>WXCH</a><br>- Chives(XCC)→<a href='https://testnet.bscscan.com/token/0x0B9a236d70F380E4aA06AFA47A38a0Ef8182F21F' target='_blank'>WXCC</a> <br>- HDD→<a href='https://testnet.bscscan.com/token/0xCD2B399704316672Cdf53330B6AD77D846cd618C' target='_blank'>WHDD</a> <br>Currently supported smart chains:<br>- Binance Smart Chain (BSC)",
+    "intoduction1":"PlotBridge is a gateway/bridge between various plot-based blockchain networks (PoST networks like Chia, Chives, etc.) and mature smart blockchain networks (Binance Smart Chain, etc.) It can be used to wrap native coins like Chia(XCH), Chives(XCC) into corresponding tokens like WXCH, WXCC, and, course, unwrap tokens back into corresponding native coins.<br>Currently supported smart chains:<br>- Binance Smart Chain (BSC)</br>Currently supported coins:<br>",
     "intoduction2":"Who are we?",
     "intoduction3":"- We are Chia and forks farmers. We are working on develop apps to serve other farmers, to make our work and life a little easier.",
     "intoduction4":"What problem we met?",
@@ -146,6 +146,7 @@
     "staking":"Staking：",
     "set-s-amount":"Set Stake Amount",
     "stage":"Stage",
+    "stake-start":"Pledge bonus start time",
 
 
     "to-market":"Go to the market",    

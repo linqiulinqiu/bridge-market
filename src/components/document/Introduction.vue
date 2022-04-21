@@ -4,7 +4,7 @@
     <el-col>
       <p v-html="$t('intoduction1')"></p>
       <p>
-        <li v-for="winfo in winfos" key='winfo.symbol'>
+        <li v-for="winfo in winfos" :key='winfo.symbol'>
             {{ winfo.name }} ({{winfo.symbol}}) <a :href="winfo.url"  target='_blank'>{{winfo.bsymbol}}</a>
         </li>
       </p>

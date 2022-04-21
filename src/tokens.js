@@ -64,6 +64,12 @@ async function newLpTokens(ctraddr) {
 async function lpTokens(ctraddr) {
     const info = await tokenInfo(ctraddr)
     if (info.isLP) {
+        for (let i in info.lpTokens) {
+            if (info.lpTokens[i] == bsc.ctrs.wbnb.address) {
+                info.lpTokens[i] = "BNB"
+            }
+        }
+        console.log("lptokens", info)
         return info.lpTokens
     }
     return false

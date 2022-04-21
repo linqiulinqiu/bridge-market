@@ -48,7 +48,7 @@
             $t("claim")
           }}</el-button>
           <el-button @click="dia_set_amount = true" class="stake-btn">
-            {{ $t("stake") }}
+            {{ $t("deposit") }}
           </el-button>
           <el-button @click="dia_withdraw = true" class="stake-btn">
             {{ $t("withdraw") }}
@@ -171,8 +171,15 @@ export default {
     },
     open_lplink: async function () {
       const stake_addr = this.stakeAddr;
+      console.log("stake_addr", this.stakeAddr, typeof false, typeof "false");
       if (this.isLp) {
         const token = await tokens.lptokens(stake_addr);
+        console.log("toekn[0]", token[0]);
+        // if (token[0] == this.bsc.ctrs.wbnb.address) {
+        //   token[0] = "BNB";
+        // } else if (token[1] == this.bsc.ctrs.wbnb.address) {
+        //   token[1] = "BNB";
+        // }
         this.lplink = this.lp_prelink + token[0] + "/" + token[1];
         console.log("lpLink", this.lplink);
       }
@@ -190,7 +197,6 @@ export default {
       this.farm_amount = await tokens.format(stakeAddr, staked);
       const earnval = await this.bsc.ctrs.staking.earned(pid, this.bsc.addr);
       this.earned_amount = await tokens.format(rewardAddr, earnval);
-      // console.log("poolreward", this.poolreward);
       const ap = (this.poolreward * 365 * 86400 * 100) / this.lpamount;
       this.apy = ap.toFixed(4);
     },
@@ -204,7 +210,6 @@ export default {
             this.pid,
             amount
           );
-          console.log("withdraw receipt", receipt);
           await market.waitEventDone(receipt, function (e) {
             obj.w_loading = false;
             obj.dia_withdraw = false;
