@@ -12,29 +12,34 @@
         >{{ $t("mintPBT") }}
       </el-button>
     </el-col>
-    <el-col v-if="Object.keys(this.myList).length > 0" class="nftarea">
-      <el-col class="nftlist">
-        <MylistPage
-          v-bind:nftlist="nftlist"
-          v-bind:open="openNFT"
-          v-bind:current="current"
-        />
+    <el-col v-if="loadDown">
+      <el-col v-if="Object.keys(this.myList).length > 0" class="nftarea">
+        <el-col class="nftlist">
+          <MylistPage
+            v-bind:nftlist="nftlist"
+            v-bind:open="openNFT"
+            v-bind:current="current"
+          />
+        </el-col>
+        <el-col class="btn-bar">
+          <el-pagination
+            background
+            :total="Object.keys(this.myList).length"
+            layout="prev,pager,next"
+            @current-change="handleCurrentChange"
+            :current-page="this.pageNum"
+            :page-size="this.pageSize"
+          ></el-pagination>
+        </el-col>
       </el-col>
-      <el-col class="btn-bar">
-        <el-pagination
-          background
-          :total="Object.keys(this.myList).length"
-          layout="prev,pager,next"
-          @current-change="handleCurrentChange"
-          :current-page="this.pageNum"
-          :page-size="this.pageSize"
-        ></el-pagination>
+      <el-col v-else class="content">
+        <el-col>
+          {{ $t("no-nft") }}
+        </el-col>
       </el-col>
     </el-col>
-    <el-col v-else class="content">
-      <el-col>
-        {{ $t("no-nft") }}
-      </el-col>
+    <el-col v-else class="load">
+      {{ $t("data") }}
     </el-col>
     <el-col class="bottom-box" v-if="isMarket">
       <router-link class="bottom" :to="this.market"
@@ -44,7 +49,11 @@
 
     <el-dialog :visible.sync="mintVisible">
       <el-card>
-        <MintPBT :mintAbles="this.mintNumber" :mintFee="this.mintFee" />
+        <MintPBT
+          :mintAbles="this.mintNumber"
+          :mintFee="this.mintFee"
+          :showMint="this.showMint"
+        />
       </el-card>
     </el-dialog>
   </el-col>
@@ -66,6 +75,7 @@ export default {
   computed: mapState({
     bsc: "bsc",
     current: "current",
+    loadDown: "loadDown",
     nftlist(state) {
       let pageSize = this.pageSize;
       const start = this.pageNum * pageSize - pageSize;
@@ -98,18 +108,19 @@ export default {
     };
   },
   methods: {
+    showMint: function () {
+      this.mintVisible = !this.mintVisible;
+    },
     openNFT: async function (id) {
       this.$store.commit("setCurrentPbtId", id);
     },
     getMintfee: async function () {
       this.open_loading = true;
       const fee = await market.getmintfee();
-      console.log("mintfee", fee);
       this.mintFee.price = fee.price;
       this.mintFee.token = fee.ptName;
       this.mintFee.tokenAddr = fee.tokenAddr;
       const number = await market.getMintAbles();
-      console.log("mint number", number);
       this.mintNumber = number;
       this.mintVisible = true;
       this.open_loading = false;
@@ -129,6 +140,9 @@ export default {
   padding-bottom: 20px;
   font-size: 18px;
   font-weight: 600;
+}
+.load {
+  padding: 50px;
 }
 i {
   margin-right: 8px;

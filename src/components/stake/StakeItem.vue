@@ -171,17 +171,9 @@ export default {
     },
     open_lplink: async function () {
       const stake_addr = this.stakeAddr;
-      console.log("stake_addr", this.stakeAddr, typeof false, typeof "false");
       if (this.isLp) {
         const token = await tokens.lptokens(stake_addr);
-        console.log("toekn[0]", token[0]);
-        // if (token[0] == this.bsc.ctrs.wbnb.address) {
-        //   token[0] = "BNB";
-        // } else if (token[1] == this.bsc.ctrs.wbnb.address) {
-        //   token[1] = "BNB";
-        // }
         this.lplink = this.lp_prelink + token[0] + "/" + token[1];
-        console.log("lpLink", this.lplink);
       }
     },
     refresh: async function () {
@@ -228,7 +220,6 @@ export default {
             this.pid,
             amount
           );
-          console.log("force withdraw receipt", receipt);
           await market.waitEventDone(receipt, function (e) {
             obj.force_w_loading = false;
           });
@@ -244,7 +235,6 @@ export default {
         ethers.BigNumber.from(0)
       );
       console.log("claim receipt", receipt);
-      console.log("TODO: close withdraw window when done");
     },
     deposit: async function () {
       this.dep_loading = true;
@@ -253,7 +243,6 @@ export default {
         try {
           const obj = this;
           const receipt = await this.bsc.ctrs.staking.deposit(this.pid, amount);
-          console.log("stake receipt", receipt);
           await market.waitEventDone(receipt, function () {
             obj.dep_loading = false;
             obj.dia_set_amount = false;

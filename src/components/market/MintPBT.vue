@@ -1,16 +1,17 @@
 <template>
-  <el-row type="flex" justify="center">
-    <el-col :sapn="10">
+  <el-row type="flex" justify="space-bewteen">
+    <el-col :sapn="8">
       <el-empty :description="this.$t('img')"></el-empty>
     </el-col>
-    <el-col :span="12">
+    <el-col :span="13">
       <p>
-        {{ $t("price") }}
+        {{ $t("price") }} :&nbsp;
         <span>{{ this.mintFee.price }}</span>
+        &nbsp;
         <span>{{ this.mintFee.token }}</span>
       </p>
       <p>
-        <span>{{ $t("mintable") }}{{ mintAbles }}</span>
+        <span>{{ $t("mintable") }} &nbsp;{{ mintAbles }}</span>
       </p>
       <p>
         <ApproveButton
@@ -39,7 +40,7 @@ import { mapState } from "vuex";
 import tokens from "../../tokens";
 export default {
   name: "MintPBT",
-  props: ["mintAbles", "mintFee"],
+  props: ["mintAbles", "mintFee", "showMint"],
   components: {
     ApproveButton,
   },
@@ -58,8 +59,6 @@ export default {
   methods: {
     getBalance: async function () {
       this.balance = await tokens.balance(this.mintFee.tokenAddr);
-      // console.log(bl);
-      // this.balance = await tokens.format(this.mintFee.tokenAddr, bl);
     },
     mintNFT: async function () {
       this.mint_loading = true;
@@ -68,10 +67,11 @@ export default {
         const res = await market.mintPBT();
         await market.waitEventDone(res, async function (evt) {
           obj.mint_loading = false;
+          obj.showMint();
         });
       } catch (e) {
         this.mint_loading = false;
-        this.$message(e.data.message);
+        // this.$message(e.data.message);
         console.log("mint err", e.message);
       }
     },

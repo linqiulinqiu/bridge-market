@@ -14,14 +14,18 @@ export default new Vuex.Store({
         marketList: {},
         mySaleList: {},
         WBalance: 0,
+        loadDown: false
     },
     mutations: {
         setBsc(state, bsc) {
-            tokens.setbsc(bsc)  // TODO: remove this injection later
+            tokens.setbsc(bsc) // TODO: remove this injection later
             state.bsc = bsc
         },
         setBaddr(state, baddr) {
             state.baddr = baddr
+        },
+        setLoadDown(state, boolean) {
+            state.loadDown = boolean
         },
         setCurrentPbtId(state, pbtId) {
             if (pbtId != state.current.pbtId) {
@@ -30,7 +34,6 @@ export default new Vuex.Store({
             }
         },
         setCurrentCoinType(state, coinType) {
-            console.log('setCurrentCoinType', coinType)
             if (coinType != state.current.coinType) {
                 state.current.coinType = coinType
                 state.current = Object.assign({}, state.current);
@@ -38,7 +41,6 @@ export default new Vuex.Store({
             }
         },
         setMylist(state, list) {
-            console.log('set-my-list', list)
             state.myList = Object.assign({}, list)
         },
         setMarketlist(state, list) {

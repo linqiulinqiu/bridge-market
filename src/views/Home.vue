@@ -3,8 +3,6 @@
     <div class="notice">
       <h2>{{$t('home1')}}</h2>
       <p>{{$t('home2')}}</p>
-     <!-- <h2> PlotBridge新版本测试中~</h2>
-     <p>欢迎在本站测试功能，如需反馈请联系我们。</p> -->
     </div>
   </el-col>
 </template>
@@ -24,7 +22,8 @@ export default {
   color: #fff;
   height: 85vh;
   width: 100%;
-  background: url("../assets/image/banner.jpg") center ;
+  background: url("../assets/image/banner.jpg") center no-repeat;
+  background-size: cover;
  position: relative;
 }
 .notice{

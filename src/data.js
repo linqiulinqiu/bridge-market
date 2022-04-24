@@ -15,10 +15,13 @@ ptInfos[ethers.constants.AddressZero] = {
 
 async function connect(commit) {
     bsc = await market.connect(commit)
-    console.log("bsc in connect", bsc)
-    if (bsc) {
-        commit("setBsc", bsc)
+    if (typeof (bsc) == 'string') {
         return bsc
+    } else {
+        if (bsc) {
+            commit("setBsc", bsc)
+            return bsc
+        }
     }
     return false
 }
@@ -181,14 +184,13 @@ async function loadmarketlist_detail(marketList, store) {
 async function loadAlllists_brief(store) {
     await loadMyList_brief(store)
     await loadMarketList_brief(store)
+    return "down"
 }
 async function loadAlllists_detail(store) {
     await loadmarketlist_detail(marketList, store)
     await loadmylist_detail(myList, store)
     const commit = store.commit
     keeper.startKeeper(bsc, commit, marketList, myList)
-    // const cnt = await keeper.preload(commit, myList)
-    // console.log('user owns', cnt.toString(), 'PBT')
 
 }
 export default {

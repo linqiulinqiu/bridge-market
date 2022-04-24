@@ -50,6 +50,7 @@
 
     "earn":"Earn",
     "earned":"Earned：",
+    "ending":"Ending time",
     
     "function":"Function",
     
@@ -57,7 +58,7 @@
     "getaddr":"No address for this type of deposit,please contract us with discord or telegram. ",
     "guide-bridge":"How to run Bridge",
     "guide-bridge1":"How to convert XCC into BSC chain token WXCC",
-    "guide-bridge2":"1. It is recommended to use Chrome to visit PlotBridge.<br>2. Before visit PlotBridge, you need install Chrome extension of MeteMask wallet, and register an account for the wallet.<br>3. Login MetaMask wallet, connect to Binance Smart Chain Mainnet.<br>4. Run PlotBridge at url: <a href='https://bridgemarket.onrender.com/#/Bridge' target='_blank'>https://bridgemarket.onrender.com/#/Bridge</a><br>5. Click “Connect Wallet”， will pop up a window let you confirm for the connect.<br>6. The address of the wallet will displayed on top if wallet connection succeed.<br>7. You need at least one NFT to run bridge,one NFT can bind every the type of coins,you can mint NFT by yourself or choose buy NFT on marketpalce,you also can sell your own NFT on marketplace.<br>8. Select one NFT that you have，and select the coin type that you want to convert(here we select XCC as a demo),then click the ‘Get deposit address for XCC’button.<br>9. On the middle of the page, shows the bridge address which can receive tokens (e.g., Chives). Each NFT has a unique bridge address. You can send tokens from your wallet or your exchange account. <br>10. Click the address, it will be kept in the system clipboard and used as a receiving address for you to send coins.<br>11. The PlotBridge will convert received chives tokens(xcc) coins to BEP20 token PXCC and save them in your MetaMask wallet. You may swap the tokens to other tokens (e.g., BNB) in PancakeSwap website.<br>",
+    "guide-bridge2":"1. It is recommended to use Chrome to visit PlotBridge.<br>2. Before visit PlotBridge, you need install Chrome extension of MeteMask wallet, and register an account for the wallet.<br>3. Login MetaMask wallet, connect to Binance Smart Chain Mainnet.<br>4. Run PlotBridge at url: <a href='https://bridgemarket.onrender.com/#/Bridge' target='_blank'>https://app.plotbridge.io/#/Bridge</a><br>5. Click “Connect Wallet”， will pop up a window let you confirm for the connect.<br>6. The address of the wallet will displayed on top if wallet connection succeed.<br>7. You need at least one NFT to run bridge,one NFT can bind every the type of coins,you can mint NFT by yourself or choose buy NFT on marketpalce,you also can sell your own NFT on marketplace.<br>8. Select one NFT that you have，and select the coin type that you want to convert(here we select XCC as a demo),then click the ‘Get deposit address for XCC’button.<br>9. On the middle of the page, shows the bridge address which can receive tokens (e.g., Chives). Each NFT has a unique bridge address. You can send tokens from your wallet or your exchange account. <br>10. Click the address, it will be kept in the system clipboard and used as a receiving address for you to send coins.<br>11. The PlotBridge will convert received chives tokens(xcc) coins to BEP20 token PXCC and save them in your MetaMask wallet. You may swap the tokens to other tokens (e.g., BNB) in PancakeSwap website.<br>",
     "guide-bridge3":"How to convert WXCC back to XCC",
     "guide-bridge4":"1. In Withdraw page, you need to bind your Chives wallet address first where you want to draw back and save the Chives token(xcc) to.<br>2. Input the amount of PXCC, click “Withdraw” button, certain amount of XCC will transfer to your Chives wallet. <br>3. The bridge will charge little transaction fee.",
     "guide-bridge5":"What should i do with my PXCC token?",
@@ -74,8 +75,8 @@
     "guide-wallet7":"- If you are temporarily unable to access Binance Smart Chain Explorer (bscscan.com), you can also manually configure the wallet.<br>- Let’s change that. We need to access Settings to point the wallet towards Binance Smart Chain nodes.<br>- On the Settings page, click the Networks.<br>- Click Add Network in the top-right corner to manually add Binance Smart Chain Mainnet.<br>- Network Name: Binance Smart Chain<br>- New RPC URL: https://bsc-dataseed.binance.org/<br>- ChainID: 56<br>- Symbol: BNB<br>- Block Explorer URL: https://bscscan.com<br>- Once you Save the Network and return to the main view, you’ll notice two things: the network has automatically been set to the one you just entered, and the units are no longer denominated in ETH, but in BNB.<br>- For all recent announcements and updates, connect with us.",
 
     "home":"Home",
-    "home1":"PlotBridge new website is testing now~",
-    "home2":"Welcome to visit the PlotBridge beta version,Any problem  please contact us.",
+    "home1":"Welcome to the PlotBridge beta version",
+    "home2":"Any questions? We'd love to hear from you",
 
     "inbsc":"In your BSC wallet",
     "input-addr":"Input your withdrawal address below",
@@ -93,11 +94,11 @@
     "intoduction8":"Advantage for users?",
     "intoduction9":"- As tokens in BSC, tokens can be used in DeFi systems, such as:<br>- Instant swap to other tokens or BNB<br>- Provide liquidity and get reward<br>- Saving<br>- Lending<br>- So, these sleeping coins can be used, or sold easily. It’s also easier for people to buy coins and bridge back to Chia and forks native chain.",
     "intoduction10":"Risk and our resolution",
-    "intoduction11":"- Risk: Loss of coins,Coins need to be stored in PlotBridge wallets as custody. If we got hacked, or we “exit-scam”, coins will be lost.<br>- Resolution: For each coin, there are 2 PlotBridge operation wallets:<br>- 1.Checking account:Daily use for deposit and withdraw, keeper can mint WCoin without exceed the limitation.- 2.Saving account:Not used so often. Keeps most part of the custodial coins, controls the minting limitation.- The saving account and keeper can run in a computer running full-node inside firewall, under the admin of a more trustworthy team (such as the coin official team), so: If our checking account got hacked, or we “exit-scam”, coins in the saving account can still keep. The loss are limited.",
+    "intoduction11":"- Risk: Loss of coins,Coins need to be stored in PlotBridge wallets as custody. If we got hacked, or we “exit-scam”, coins will be lost.<br>- Resolution: For each coin, there are 2 PlotBridge operation wallets:<br>- 1.Checking account:Daily use for deposit and withdraw, keeper can mint WCoin without exceed the limitation.<br>- 2.Saving account:Not used so often. Keeps most part of the custodial coins, controls the minting limitation.<br>- The saving account and keeper can run in a computer running full-node inside firewall, under the admin of a more trustworthy team (such as the coin official team), so: If our checking account got hacked, or we “exit-scam”, coins in the saving account can still keep. The loss are limited.",
     "intoduction12":"What we pay and earn",
     "intoduction13":"- Aside for team living and server maintenance. For each coin deposit, we need to pay for:<br>- 1. WCoin mint<br>- 2. WCoin mint limitation adjustment<br>We charge fee on:<br>- 1.NFT mint<br>- 2. WCoin deposit<br>- 3. WCoin withdraw",
 
-    "look-info":"More details after connect wallet",
+    "look-info":"Please connect wallet",
     "loading":"Loading ...",
     "lock-time":"Locking time",
     
@@ -108,13 +109,15 @@
     "my-sale":"My Selling",
     "max":"Max",
     
-    "none":"The number of mintable NFTs is 0 currently, no NFTs can be minted, please wait.",
+    "none":"Currently no NFTs can be minted , please wait.",
     "no-waddr":"Unbound withdrawal address",
     "no-redeem":"There is no such exchange",
     "no-desc":"No Description",
-    "no-nft":"No NFT in your wallet,please go to the market，or mint one",
-    "no-selling":"Selling NFT not found yet... How about mint one?",
-    "no-mysale":"You don't selling any NFT",
+    "no-nft":"No PBT found in your wallet. You can buy in market, or mint a new one",
+    "no-selling":"Buyable PBT not found yet... How about mint one?",
+    "no-mysale":"Can't find any of your selling PBT",
+    "not-start":"This feature will be available after pre-sale completed, please stay tuned",
+    "not-start-pre":"Pre-sale is expected to start on April 24th, all the BNB received in this pre-sale will be used to provide official PBP-BNB liquidity on pancakes. We guarantee this official liquidity pool will be locked up for at least 3 months, and the initial price of PBP will be higher than the highest pre-sale price. Please stay tuned.",
 
     "old-balance":"Old Token Balance",
     "or":"OR",
@@ -133,6 +136,8 @@
     "road-map":"RoadMap",
     "retreat":"Retreat from market",
     "remainder":"Remainder",
+    "redeem-notice":"Upgrade function will online soon",
+
 
     "select-coin":"Select Coin",
     "sell":"Sell",
@@ -146,7 +151,7 @@
     "staking":"Staking：",
     "set-s-amount":"Set Stake Amount",
     "stage":"Stage",
-    "stake-start":"Pledge bonus start time",
+    "stake-start":"Staking start time",
 
 
     "to-market":"Go to the market",    
