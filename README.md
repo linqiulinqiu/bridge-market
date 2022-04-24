@@ -1,4 +1,4 @@
-# poltnetwork
+# plotnetwork
 
 ## Project setup
 ```
